@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/04/05/newt/</loc>
+    <lastmod>2018-04-05T03:31:38.914Z</lastmod>
+    <data>
+        <display>
+        <title>newt</title>
+        <pubTime>2018-04-05T02:22:44.000Z</pubTime>
+        
+        <tag>测试博客</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/04/03/hello-world/</loc>
+    <lastmod>2018-04-03T05:27:48.063Z</lastmod>
+    <data>
+        <display>
+        <title>Hello World</title>
+        <pubTime>2018-04-03T05:27:48.062Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+</urlset>

@@ -626,14 +626,15 @@
 
   <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
   <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src=" https://github.com/blueimp/JavaScript-MD5/blob/master/js/md5.min.js"></script>
    <script type="text/javascript">
         var gitalk = new Gitalk({
           clientID: '3497074f49f8bad9e334',
           clientSecret: '651e2ff95f17db16f05844f60a7748f050812d7f',
           repo: 'yuegs.github.io',
           owner: 'yuegs',
-          admin: [''],
-          id: location.pathname,
+          admin: ['yuegs'],
+          id: md5(location.pathname),
           distractionFreeMode: 'true'
         })
         gitalk.render('gitalk-container')           

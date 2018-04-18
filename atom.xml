@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.yuegs.com/"/>
-  <updated>2018-04-06T03:59:30.378Z</updated>
+  <updated>2018-04-03T05:27:48.063Z</updated>
   <id>http://blog.yuegs.com/</id>
   
   <author>
@@ -15,31 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>newt</title>
-    <link href="http://blog.yuegs.com/2018/04/05/newt/"/>
-    <id>http://blog.yuegs.com/2018/04/05/newt/</id>
-    <published>2018-04-05T02:22:44.000Z</published>
-    <updated>2018-04-06T03:59:30.378Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="这里是标题"><a href="#这里是标题" class="headerlink" title="这里是标题"></a>这里是标题</h3><h6 id="这里是子标题"><a href="#这里是子标题" class="headerlink" title="这里是子标题"></a>这里是子标题</h6><ul><li>列表</li><li>2</li><li>3</li></ul><blockquote><p>这里是引用</p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;这里是标题&quot;&gt;&lt;a href=&quot;#这里是标题&quot; class=&quot;headerlink&quot; title=&quot;这里是标题&quot;&gt;&lt;/a&gt;这里是标题&lt;/h3&gt;&lt;h6 id=&quot;这里是子标题&quot;&gt;&lt;a href=&quot;#这里是子标题&quot; class=&quot;headerlink&quot; title=&quot;这
-      
-    
-    </summary>
-    
-      <category term="android view 自定义" scheme="http://blog.yuegs.com/categories/android-view-%E8%87%AA%E5%AE%9A%E4%B9%89/"/>
-    
-    
-      <category term="测试博客" scheme="http://blog.yuegs.com/tags/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/"/>
-    
-  </entry>
   
   <entry>
     <title>Hello World</title>

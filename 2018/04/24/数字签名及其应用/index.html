@@ -142,7 +142,8 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/servercrt.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/unsafe.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/cer-keystore-metainf.PNG">
-<meta property="og:updated_time" content="2018-05-03T09:24:23.412Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/APK%20%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%E8%BF%87%E7%A8%8B.png">
+<meta property="og:updated_time" content="2018-05-03T09:42:39.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字签名及其应用">
 <meta name="twitter:description" content="&amp;emsp;家长签名，领导签名，合同签名，这些签名实际上都是在说明一件事：签名人通过签署自己名字的方式，向公众表示他们已经审核过这个文档，并对文档内容负责。&amp;emsp;在计算机领域，也有这样一套签名机制，称之为数字签名，或电子签章。它的作用也是如此：对一段信息进行签署，对这段信息的完整性、正确性负责。最初了解这个概念是在使用 Https 的时候。Android 的打包过程肯定也遇到了，但是并没有过">
@@ -437,7 +438,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,176
+                  4,242
                 </span>
               
 
@@ -505,7 +506,7 @@
 <p>&emsp;在没有打包签名之前，apk 包里是没有 META-INF 文件夹的，而在打包过后，多了这个文件夹，里面包含了验证文件完整性的文件。同样，如果里面已经有了这个文件夹，即已经进行过签名，是无法重复签名的。<br>&emsp;用 apksigner 进行签名，其实也就是一句话的事：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apksigner sign --ks my-release-key.jks --out signed.apk unsigned.apk</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;注意，apksigner 这个命令是在 “sdk\build-tools\xxx” (xxx 为 android 版本号)文件夹下面。签名之后，META-INF 文件夹中会出现文件 MY-ALIAS.RSA。我们比较一下该文件和 my-release-key.jks 中的信息：</p>
 <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/cer-keystore-metainf.PNG" alt=""></p>
-<p>&emsp;下面，我们对两种工具做个比较。<br>&emsp;jarsiger 是用 JAR 文件设计的，所以它对 APK 文件结构一无所知，它只会把 APK 当做一个 JAR 文件（原因： apk 实际上是个 zip 压缩包，而 zip 压缩包可以被认为是一个 jar 包）。而 apksigner 是专门为 APK 文件设计的。比如，jarsigner 不知道怎样生成在 Android Nougat 中引入的 Scheme v2 类型的签名，但是 apksigner 可以这么做。jarsigner 对于需要在 API 17 或者以下运行时，不能使用 sha-256 的数字签名，但是 apksigner 知道。<br>&emsp;上面已经提到，当前的签名有两种 Scheme，分别是 v1 和 v2 。这里再做一个简单的介绍。在 Android 7.0 中，可以根据 APK 签名方案 v2（v2 方案）或 JAR 签名（v1 方案）验证 APK。更低版本的平台会忽略 v2 签名，仅验证 v1 签名。</p>
+<p>&emsp;下面，我们对两种工具做个比较。<br>&emsp;jarsiger 是用 JAR 文件设计的，所以它对 APK 文件结构一无所知，它只会把 APK 当做一个 JAR 文件（原因： apk 实际上是个 zip 压缩包，而 zip 压缩包可以被认为是一个 jar 包）。而 apksigner 是专门为 APK 文件设计的。比如，jarsigner 不知道怎样生成在 Android Nougat 中引入的 Scheme v2 类型的签名，但是 apksigner 可以这么做。jarsigner 对于需要在 API 17 或者以下运行时，不能使用 sha-256 的数字签名，但是 apksigner 知道。<br>&emsp;上面已经提到，当前的签名有两种 Scheme，分别是 v1 和 v2 。这里再做一个简单的介绍。在 Android 7.0 中，可以根据 APK 签名方案 v2（v2 方案）或 JAR 签名（v1 方案）验证 APK。更低版本的平台会忽略 v2 签名，仅验证 v1 签名。v1 和 v2 的区别，根据官网的说法，大概就是 v2 能够提供对整个 apk 签名（v1 对于 metainf 文件夹下的文件是没有验证的），而且 v2 更加验证过程更快（v1 需要解压 apk 逐条验证）。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/APK%20%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%E8%BF%87%E7%A8%8B.png" alt="APK 签名过程"></p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;这篇文章写的有点久，主要是这一块平时接触的也比较少，所以需要查的资料也比较多。原本想写 Android 中的签名验证机制，后面才发现光是签名部分能说的都太多了。<br>&emsp;签名的底层，是非对称加密，密码学的范畴，非专业人士就不展开了。信任链那部分，我觉得还是挺有意思的。如果 A 是绝对可信的，那么 A 相信并签署的 B 也是可信的，那么 B 相信并签署的 C 也是可信的，以此类推。我们的证书被 Z 相信并签署，因此，也在这条信任链中，也是可信的。</p>
 <p>参考<br><a href="http://console.chinapay.com/NetPayClient/new/netpayClient.doc" target="_blank" rel="noopener">netpayClient.doc</a><br><a href="https://developer.android.com/studio/publish/app-signing.html#certificates-keystores" target="_blank" rel="noopener">签署您的应用</a><br><a href="https://tools.ietf.org/html/rfc5280#section-4.1" target="_blank" rel="noopener">Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a><br><a href="https://stackoverflow.com/questions/44153144/what-is-the-difference-between-jar-signer-and-apk-signer" target="_blank" rel="noopener">what-is-the-difference-between-jar-signer-and-apk-signer</a><br><a href="https://stackoverflow.com/questions/35706687/why-jarsigner-can-sign-android-apk" target="_blank" rel="noopener">https://stackoverflow.com/questions/35706687/why-jarsigner-can-sign-android-apk</a><br><a href="https://source.android.com/security/apksigning/v2#verification" target="_blank" rel="noopener">APK 验证</a></p>
 
@@ -776,7 +777,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">13.7k</span>
+    <span title="Site words total count">13.8k</span>
   
 </div>
 

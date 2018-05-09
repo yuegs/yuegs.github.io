@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/05/02/Android-draw-a-custom-view/</loc>
+    <lastmod>2018-05-09T06:43:41.654Z</lastmod>
+    <data>
+        <display>
+        <title>Android:自定义 View 过程 [译]</title>
+        <pubTime>2018-05-02T15:57:29.000Z</pubTime>
+        
+        <tag>自定义View</tag>
+         
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/04/24/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</loc>
     <lastmod>2018-05-03T09:44:00.222Z</lastmod>
     <data>
@@ -11,13 +33,13 @@
         <title>数字签名及其应用</title>
         <pubTime>2018-04-24T13:40:05.000Z</pubTime>
         
+        <tag>Android</tag>
+         
         <tag>数字签名</tag>
          
         <tag>证书</tag>
          
         <tag>非对称加密</tag>
-         
-        <tag>Android</tag>
          
         <tag>签名</tag>
          

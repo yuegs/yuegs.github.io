@@ -130,16 +130,16 @@
 <meta name="description" content="&amp;emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。">
 <meta name="keywords" content="View,源码分析,setContentView">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[源码分析] Android 之 setContentView">
-<meta property="og:url" content="http://blog.yuegs.com/2017/10/15/[源码分析] Android 之 setContentView/index.html">
+<meta property="og:title" content="Android 之 setContentView">
+<meta property="og:url" content="http://blog.yuegs.com/2017/10/15/Android 之 setContentView/index.html">
 <meta property="og:site_name" content="风雪围城">
 <meta property="og:description" content="&amp;emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/setContent%E6%B5%81%E7%A8%8B.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/view%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB.png">
-<meta property="og:updated_time" content="2018-04-23T13:53:45.964Z">
+<meta property="og:updated_time" content="2018-05-11T06:58:31.270Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[源码分析] Android 之 setContentView">
+<meta name="twitter:title" content="Android 之 setContentView">
 <meta name="twitter:description" content="&amp;emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/setContent%E6%B5%81%E7%A8%8B.png">
 
@@ -171,13 +171,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/2017/10/15/[源码分析] Android 之 setContentView/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2017/10/15/Android 之 setContentView/"/>
 
 
 
 
 
-  <title>[源码分析] Android 之 setContentView | 风雪围城</title>
+  <title>Android 之 setContentView | 风雪围城</title>
   
 
 
@@ -338,7 +338,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/10/15/[源码分析] Android 之 setContentView/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/10/15/Android 之 setContentView/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -355,7 +355,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">[源码分析] Android 之 setContentView</h1>
+          <h1 class="post-title" itemprop="name headline">Android 之 setContentView</h1>
         
 
         <div class="post-meta">
@@ -407,7 +407,7 @@
 
           
           
-             <span id="/2017/10/15/[源码分析] Android 之 setContentView/" class="leancloud_visitors" data-flag-title="[源码分析] Android 之 setContentView">
+             <span id="/2017/10/15/Android 之 setContentView/" class="leancloud_visitors" data-flag-title="Android 之 setContentView">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>

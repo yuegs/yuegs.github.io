@@ -4,16 +4,40 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/10/15/Android%20%E4%B9%8B%20setContentView/</loc>
+    <lastmod>2018-05-11T06:58:31.270Z</lastmod>
+    <data>
+        <display>
+        <title>Android 之 setContentView</title>
+        <pubTime>2017-10-15T08:22:44.000Z</pubTime>
+        
+        <tag>View</tag>
+         
+        <tag>源码分析</tag>
+         
+        <tag>setContentView</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/05/11/from-view-to-window/</loc>
-    <lastmod>2018-05-11T06:50:40.624Z</lastmod>
+    <lastmod>2018-05-11T06:58:07.750Z</lastmod>
     <data>
         <display>
         <title>从 View 到 Window</title>
         <pubTime>2018-05-11T06:17:29.000Z</pubTime>
         
-        <tag>Window</tag>
-         
         <tag>View</tag>
+         
+        <tag>Window</tag>
          
         <tag>WindowManagerService</tag>
          
@@ -24,7 +48,7 @@
          
            
              
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
           
         </display>
     </data>
@@ -101,30 +125,6 @@
            
              
               <breadCrumb title="网络通信" url="http://blog.yuegs.com/categories/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/10/15/%5B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%5D%20Android%20%E4%B9%8B%20setContentView/</loc>
-    <lastmod>2018-04-23T13:53:45.964Z</lastmod>
-    <data>
-        <display>
-        <title>[源码分析] Android 之 setContentView</title>
-        <pubTime>2017-10-15T08:22:44.000Z</pubTime>
-        
-        <tag>View</tag>
-         
-        <tag>源码分析</tag>
-         
-        <tag>setContentView</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
           
         </display>
     </data>

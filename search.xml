@@ -23,8 +23,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>自定义View</tag>
         <tag>Android</tag>
+        <tag>自定义View</tag>
       </tags>
   </entry>
   <entry>
@@ -35,10 +35,10 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>数字签名</tag>
         <tag>证书</tag>
         <tag>非对称加密</tag>
+        <tag>Android</tag>
         <tag>签名</tag>
       </tags>
   </entry>

@@ -35,9 +35,9 @@
         <title>从 View 到 Window</title>
         <pubTime>2018-05-11T06:17:29.000Z</pubTime>
         
-        <tag>View</tag>
-         
         <tag>Window</tag>
+         
+        <tag>View</tag>
          
         <tag>WindowManagerService</tag>
          

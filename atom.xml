@@ -64,9 +64,9 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
-    
       <category term="自定义View" scheme="http://blog.yuegs.com/tags/%E8%87%AA%E5%AE%9A%E4%B9%89View/"/>
+    
+      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
   </entry>
   
@@ -88,13 +88,13 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
+      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
+    
       <category term="数字签名" scheme="http://blog.yuegs.com/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"/>
     
       <category term="证书" scheme="http://blog.yuegs.com/tags/%E8%AF%81%E4%B9%A6/"/>
     
       <category term="非对称加密" scheme="http://blog.yuegs.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/"/>
-    
-      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
       <category term="签名" scheme="http://blog.yuegs.com/tags/%E7%AD%BE%E5%90%8D/"/>
     

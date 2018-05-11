@@ -8,10 +8,11 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>View</tag>
         <tag>Window</tag>
+        <tag>View</tag>
         <tag>WindowManagerService</tag>
         <tag>Surface</tag>
+        <tag>硬件加速</tag>
       </tags>
   </entry>
   <entry>

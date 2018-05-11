@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="View,Window,WindowManagerService,Surface," />
+  <meta name="keywords" content="Window,View,WindowManagerService,Surface,硬件加速," />
 
 
 
@@ -128,7 +128,7 @@
 
 
 <meta name="description" content="&amp;emsp;有点好奇，布局是如何显示在屏幕上的。setContentView 的过程已经说过了，本节就打算更加深入一些，从 DecorView 往下，聊一些 Window 层面的东西。">
-<meta name="keywords" content="View,Window,WindowManagerService,Surface">
+<meta name="keywords" content="Window,View,WindowManagerService,Surface,硬件加速">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从 View 到 Window">
 <meta property="og:url" content="http://blog.yuegs.com/2018/05/11/from-view-to-window/index.html">
@@ -139,7 +139,8 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/relation-android-window/activity-window-surface.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/relation-android-window/layout-hierarchy.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/relation-android-window/invoke.png">
-<meta property="og:updated_time" content="2018-05-11T06:47:20.772Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/from-view-to-window/performTraversals.png">
+<meta property="og:updated_time" content="2018-05-11T06:50:40.624Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 View 到 Window">
 <meta name="twitter:description" content="&amp;emsp;有点好奇，布局是如何显示在屏幕上的。setContentView 的过程已经说过了，本节就打算更加深入一些，从 DecorView 往下，聊一些 Window 层面的东西。">
@@ -480,6 +481,7 @@
 <p>&emsp;win.attach() 方法最终会调用 Session 中的方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">void windowAddedLocked(String packageName) &#123;</span><br><span class="line">       mPackageName = packageName;</span><br><span class="line">       mRelayoutTag = &quot;relayoutWindow: &quot; + mPackageName;</span><br><span class="line">       if (mSurfaceSession == null) &#123;</span><br><span class="line">           if (WindowManagerService.localLOGV) Slog.v(</span><br><span class="line">               TAG_WM, &quot;First window added to &quot; + this + &quot;, creating SurfaceSession&quot;);</span><br><span class="line">           mSurfaceSession = new SurfaceSession();</span><br><span class="line">           if (SHOW_TRANSACTIONS) Slog.i(</span><br><span class="line">                   TAG_WM, &quot;  NEW SURFACE SESSION &quot; + mSurfaceSession);</span><br><span class="line">           mService.mSessions.add(this);</span><br><span class="line">           if (mLastReportedAnimatorScale != mService.getCurrentAnimatorScale()) &#123;</span><br><span class="line">               mService.dispatchNewAnimatorScaleLocked(this);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       mNumWindow++;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;SurfaceSession 中主要是一些本地方法，通过 SurfaceFlinger 的代理SurfaceComposerClient 和 SurfaceFlinger 打交道，申请并管理 Surface。<br>&emsp;ok，现在我们可以回过头来看看 <strong><em>requestLayout()</em></strong> 方法了，上面我们说了，它很重要。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// ViewRootImpl.java 文件中</span><br><span class="line">// requestLayout 实际上会执行下面的函数</span><br><span class="line">void scheduleTraversals() &#123;</span><br><span class="line">        if (!mTraversalScheduled) &#123;</span><br><span class="line">            mTraversalScheduled = true;</span><br><span class="line">            // 添加一个挡板，阻塞一切同步事件，因为此时 UI 还没有绘制</span><br><span class="line">            mTraversalBarrier = mHandler.getLooper().getQueue().postSyncBarrier();</span><br><span class="line">            // 执行异步事件 mTraversalRunnable</span><br><span class="line">            mChoreographer.postCallback(</span><br><span class="line">                    Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);</span><br><span class="line">            if (!mUnbufferedInputDispatch) &#123;</span><br><span class="line">                scheduleConsumeBatchedInput();</span><br><span class="line">            &#125;</span><br><span class="line">            notifyRendererOfFramePending();</span><br><span class="line">            pokeDrawLockIfNeeded();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;上面同步和异步消息其实区别不大，但是主要也是最重要的区别，就是可以设置 挡板，这是后续发来的消息会被阻塞，直到取消挡板，但是不会影响异步消息。ok，让我们再来看看 mTraversalRunnable。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// mTraversalRunnable 是一个 Runable，执行的关键函数如下，摘要主要过程</span><br><span class="line">private void performTraversals() &#123;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line">    // 请求 surface，如果没有则创建，这里就用到了我们上面看到的那个 SurfaceSession，真正的请求由 WMS 完成，SurfaceSession 是在 WMS 中创建的。</span><br><span class="line">	relayoutResult = relayoutWindow(params, viewVisibility, insetsPending);</span><br><span class="line">    // Ask host how big it wants to be</span><br><span class="line">	performMeasure(childWidthMeasureSpec, childHeightMeasureSpec);</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">    performLayout(lp, mWidth, mHeight);</span><br><span class="line">    ...</span><br><span class="line">    //</span><br><span class="line">    performDraw();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/from-view-to-window/performTraversals.png" alt="performTraversals"></p>
 <p>&emsp;由上图可以看到，在这里面，就会涉及到具体 View 的绘制了，绘制流程可以参见 <a href="https://blog.yuegs.com/2018/05/02/Android-draw-a-custom-view/">Android:自定义 View 过程 </a></p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;本节到此为止，也算是对以前所写的 activity 启动分析、setContentView 分析等相关内容的一个串联。WMS 和 SurfaceFlinger 之间，是如何申请 Surface、又是如何回传和 App 的内容，目前还没有展开；还有就是这其中事件的传递机制是如何展开的，这两部分可以作为后续章节。</p>
 <p>参考链接：<br><a href="https://stackoverflow.com/questions/9451755/what-is-an-android-window" target="_blank" rel="noopener">https://stackoverflow.com/questions/9451755/what-is-an-android-window</a><br><a href="http://gityuan.com/2017/04/16/activity-with-window/" target="_blank" rel="noopener">http://gityuan.com/2017/04/16/activity-with-window/</a><br><a href="https://www.jianshu.com/p/40776c123adb" target="_blank" rel="noopener">https://www.jianshu.com/p/40776c123adb</a><br><a href="http://blog.csdn.net/yhaolpz/article/details/68936932penGL" target="_blank" rel="noopener">http://blog.csdn.net/yhaolpz/article/details/68936932penGL</a></p>
@@ -529,13 +531,15 @@
       
         <div class="post-tags">
           
-            <a href="/tags/View/" rel="tag"># View</a>
-          
             <a href="/tags/Window/" rel="tag"># Window</a>
+          
+            <a href="/tags/View/" rel="tag"># View</a>
           
             <a href="/tags/WindowManagerService/" rel="tag"># WindowManagerService</a>
           
             <a href="/tags/Surface/" rel="tag"># Surface</a>
+          
+            <a href="/tags/硬件加速/" rel="tag"># 硬件加速</a>
           
         </div>
       
@@ -659,7 +663,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -4,6 +4,32 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
+    <lastmod>2018-05-14T16:25:45.995Z</lastmod>
+    <data>
+        <display>
+        <title>Android AIDL 详解</title>
+        <pubTime>2017-09-24T17:11:29.000Z</pubTime>
+        
+        <tag>Binder</tag>
+         
+        <tag>Android</tag>
+         
+        <tag>AIDL</tag>
+         
+        <tag>跨进程通信</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
     <lastmod>2018-05-14T14:55:43.855Z</lastmod>
     <data>
@@ -11,9 +37,9 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>跨进程通信</tag>
          
@@ -91,9 +117,9 @@
         <title>Android:自定义 View 过程 [译]</title>
         <pubTime>2018-05-02T15:57:29.000Z</pubTime>
         
-        <tag>自定义View</tag>
-         
         <tag>Android</tag>
+         
+        <tag>自定义View</tag>
          
          
            

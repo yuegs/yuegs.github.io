@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="View,源码分析,setContentView," />
+  <meta name="keywords" content="Binder,Android,AIDL,跨进程通信," />
 
 
 
@@ -127,21 +127,18 @@
 
 
 
-<meta name="description" content="&amp;emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。">
-<meta name="keywords" content="View,源码分析,setContentView">
+<meta name="description" content="AIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。">
+<meta name="keywords" content="Binder,Android,AIDL,跨进程通信">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 之 setContentView">
-<meta property="og:url" content="http://blog.yuegs.com/2017/10/15/Android 之 setContentView/index.html">
+<meta property="og:title" content="Android AIDL 详解">
+<meta property="og:url" content="http://blog.yuegs.com/2017/09/25/Android-AIDL/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="&amp;emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。">
+<meta property="og:description" content="AIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/setContent%E6%B5%81%E7%A8%8B.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/view%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB.png">
-<meta property="og:updated_time" content="2018-05-11T06:58:31.270Z">
+<meta property="og:updated_time" content="2018-05-14T16:25:45.995Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 之 setContentView">
-<meta name="twitter:description" content="&amp;emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/setContent%E6%B5%81%E7%A8%8B.png">
+<meta name="twitter:title" content="Android AIDL 详解">
+<meta name="twitter:description" content="AIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。">
 
 
 
@@ -171,13 +168,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/2017/10/15/Android 之 setContentView/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2017/09/25/Android-AIDL/"/>
 
 
 
 
 
-  <title>Android 之 setContentView | 风雪围城</title>
+  <title>Android AIDL 详解 | 风雪围城</title>
   
 
 
@@ -338,7 +335,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/10/15/Android 之 setContentView/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/09/25/Android-AIDL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -355,7 +352,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android 之 setContentView</h1>
+          <h1 class="post-title" itemprop="name headline">Android AIDL 详解</h1>
         
 
         <div class="post-meta">
@@ -367,8 +364,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T16:22:44+08:00">
-                2017-10-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T01:11:29+08:00">
+                2017-09-25
               </time>
             
 
@@ -390,8 +387,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
-                    <span itemprop="name">Android源码分析</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -408,8 +405,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/15/Android 之 setContentView/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/10/15/Android 之 setContentView/" itemprop="commentsCount"></span>
+                <a href="/2017/09/25/Android-AIDL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/09/25/Android-AIDL/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -417,7 +414,7 @@
 
           
           
-             <span id="/2017/10/15/Android 之 setContentView/" class="leancloud_visitors" data-flag-title="Android 之 setContentView">
+             <span id="/2017/09/25/Android-AIDL/" class="leancloud_visitors" data-flag-title="Android AIDL 详解">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -442,7 +439,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,332
+                  2,513
                 </span>
               
 
@@ -467,36 +464,27 @@
       
 
       
-        <p>&emsp;在每个 Activity 中，通常为了操作各种 view ，首先要做的就是 setContentView。我们总是在使用它，但是实际上它运作的背后到底发生了什么呢？一直想找时间深入了解一下，多读读源码，学习下别人优秀的表达。碰巧遇到视频在view上的播放问题，趁机走一波（源码版本，Android-25.）。<br><a id="more"></a></p>
-<h3 id="setContentView"><a href="#setContentView" class="headerlink" title="setContentView"></a>setContentView</h3><p>&emsp;通过下面的图，我们来看看这个方法到底做了些什么：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/setContent%E6%B5%81%E7%A8%8B.png" alt="setContentView"><br>&emsp;对照实际关系，如下图所示：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android%E4%B9%8BsetContentView/view%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB.png" alt="实例"><br>&emsp;上图中所set进去的mContentView布局文件为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;</span><br><span class="line">    android:orientation=&quot;vertical&quot;</span><br><span class="line">    android:background=&quot;@android:color/holo_blue_light&quot;</span><br><span class="line">    android:gravity=&quot;center&quot;</span><br><span class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:layout_width=&quot;80dp&quot;</span><br><span class="line">        android:layout_height=&quot;80dp&quot;</span><br><span class="line">        android:background=&quot;@android:color/holo_red_light&quot;</span><br><span class="line">        android:text=&quot;Hello\nWorld&quot;</span><br><span class="line">        android:textStyle=&quot;bold&quot;</span><br><span class="line">        android:textSize=&quot;20sp&quot;</span><br><span class="line">        android:gravity=&quot;center&quot;</span><br><span class="line">        android:layout_gravity=&quot;center&quot;/&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;是不是对“神秘button”有点好奇？布局文件中根本没有这个控件啊？是的。此处插播一个小曲，简单说明下这个button的来历，是用了addContentView方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addContentView(btn, new FrameLayout.LayoutParams(params));</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;该方法的源码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">   public void addContentView(View view, ViewGroup.LayoutParams params) &#123;</span><br><span class="line">       if (mContentParent == null) &#123;</span><br><span class="line">           installDecor();</span><br><span class="line">       &#125;</span><br><span class="line">       if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">           // TODO Augment the scenes/transitions API to support this.</span><br><span class="line">           Log.v(TAG, &quot;addContentView does not support content transitions&quot;);</span><br><span class="line">       &#125;</span><br><span class="line">      //直接添加到mContentParent，与mContentView同级</span><br><span class="line">       mContentParent.addView(view, params);</span><br><span class="line">       mContentParent.requestApplyInsets();</span><br><span class="line">       final Callback cb = getCallback();</span><br><span class="line">       if (cb != null &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">           cb.onContentChanged();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<h5 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h5><p>&emsp;回到主题，在一个window中，所有view共同的祖先，是 decorview。先有 decorview，然后在 decorview上进行层层绘制。</p>
-<h3 id="setContentView前后，更进一步，更多细节"><a href="#setContentView前后，更进一步，更多细节" class="headerlink" title="setContentView前后，更进一步，更多细节"></a>setContentView前后，更进一步，更多细节</h3><hr>
-<p>&emsp;setContentView是在onCreate中执行的。在此之前，谁在调用onCreate呢？<br>在ActivityThread的performLaunchActivity方法中，有几个关键步骤：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">//创建Activity</span><br><span class="line">java.lang.ClassLoader cl = r.packageInfo.getClassLoader();</span><br><span class="line">            activity = mInstrumentation.newActivity(</span><br><span class="line">                    cl, component.getClassName(), r.intent);</span><br><span class="line">...</span><br><span class="line">//创建该Activity的PhoneWindow对象</span><br><span class="line">activity.attach(appContext, this, getInstrumentation(), r.token,</span><br><span class="line">                        r.ident, app, r.intent, r.activityInfo, title, r.parent,</span><br><span class="line">                        r.embeddedID, r.lastNonConfigurationInstances, config,</span><br><span class="line">                        r.referrer, r.voiceInteractor, window);</span><br><span class="line">...</span><br><span class="line">//执行onCreate回调，同时，在该回调方法的setContentView中，decorView被set进PhoneWindow中</span><br><span class="line">if (r.isPersistable()) &#123;</span><br><span class="line">       mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">       mInstrumentation.callActivityOnCreate(activity, r.state);</span><br><span class="line"> &#125;</span><br><span class="line">...</span><br><span class="line">//执行onStart回调</span><br><span class="line">if (!r.activity.mFinished) &#123;</span><br><span class="line">       activity.performStart();</span><br><span class="line">       r.stopped = false;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;到此，我们可以看到：</p>
-<ol>
-<li>首先activity将会被创建；</li>
-<li>activity中创建Window（实际上是PhoneWindow）对象；</li>
-<li>在OnCreate的setContentView中，将我们的布局放置到decorView中，然后，将decorView set进了Window中；</li>
-<li>onStart回调执行。</li>
-</ol>
-<p>此时，其实我们仍然不清楚，setContentView之后，我们的布局该如何显示给用户呢？<br>其实，performLaunchActivity执行后，还有一个重要的方法将要执行，那就是handleResumeActivity，我们接着看它的细节。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">//执行onResume回调</span><br><span class="line">r = performResumeActivity(token, clearHide, reason);</span><br><span class="line">...</span><br><span class="line">r.window = r.activity.getWindow();</span><br><span class="line">//拿出decorView</span><br><span class="line">View decor = r.window.getDecorView();</span><br><span class="line">decor.setVisibility(View.INVISIBLE);</span><br><span class="line">//拿出WindowManager</span><br><span class="line">ViewManager wm = a.getWindowManager();</span><br><span class="line">WindowManager.LayoutParams l = r.window.getAttributes();</span><br><span class="line">a.mDecor = decor;</span><br><span class="line">l.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;</span><br><span class="line">l.softInputMode |= forwardBit;</span><br><span class="line">if (r.mPreserveWindow) &#123;</span><br><span class="line">    a.mWindowAdded = true;</span><br><span class="line">    r.mPreserveWindow = false;</span><br><span class="line">    ViewRootImpl impl = decor.getViewRootImpl();</span><br><span class="line">    if (impl != null) &#123;</span><br><span class="line">                 impl.notifyChildRebuilt();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">if (a.mVisibleFromClient &amp;&amp; !a.mWindowAdded) &#123;</span><br><span class="line">  a.mWindowAdded = true;</span><br><span class="line">  //将decorView 放置到WindowManager中</span><br><span class="line">  wm.addView(decor, l);</span><br><span class="line"> &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;由上面一些列过程，可知最终，decorView交给了WindowManager处理。这个关键的交接节点，就是上面的wm.addView方法。<br>&emsp;该方法的执行，内部充斥这本地进程和服务进程的跨进程通信过程。最终，在WindowManagerGlobal实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">root = new ViewRootImpl(view.getContext(), display);</span><br><span class="line">...</span><br><span class="line">//decorView被交给了WindowManagerGlobal中的ViewRoot</span><br><span class="line">root.setView(view, wparams, panelParentView);</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;此后，decorView被装进了ViewRoot中。而在ViewRoot里包含了一个Surface，decorView将被绘制在这个Surface中。</p>
-<h3 id="用户感知和性能提升"><a href="#用户感知和性能提升" class="headerlink" title="用户感知和性能提升"></a>用户感知和性能提升</h3><hr>
-<p>&emsp;先来说明下帧率和刷新率。<br>&emsp;所谓帧率，是对于GPU而言，每秒钟能够绘制的帧数，单位是FPS(帧数/秒)，Android设备的标准帧率是60FPS；<br>&emsp;所谓刷新率，是指每秒钟屏幕更新的次数，单位是赫兹（Hz），大部分Android设备的刷新率是60Hz。<br>&emsp;其实当每秒钟帧数（帧率）达到10-12帧，人们就可以感知到运动，但是这会产生运动模糊。我们都知道，在Android设备上，App的帧率是60FPS,这就意味着每一帧必须在16.667ms内完成绘制，否则会出现丢帧。丢帧如果很严重，将会导致的糟糕的交互体验，更严重的是，由于资源消耗严重，造成卡顿。<br>&emspp;就上面提到的View 的层次关系，是否存在改善性能的空间呢？<br>&emsp;首先需要尽可能减少布局层次，然后，再从每个view的绘制上下功夫。<br>&emsp;SDK文档中指出：</p>
+        <h3 id="AIDL简介"><a href="#AIDL简介" class="headerlink" title="AIDL简介"></a>AIDL简介</h3><p>&emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。<br><a id="more"></a><br>&emsp;既然还是以针对跨进程访问，不过就是客户端进程和服务端服务进程，且最好的使用场景是客户端进程和服务端进程不在同一个进程中。而访问和通信基础实际上来自于 Binder 机制。下面，首先我们针对上面这些语言中出现的关键词进行解析，即客户端进程，服务进程，Binder。</p>
+<h5 id="客户端进程"><a href="#客户端进程" class="headerlink" title="客户端进程"></a>客户端进程</h5><p>&emsp;客户端，我们都知道这是一个相对于服务端而言的概念。<br>&emsp;客户端通常并不处理具体逻辑，而只是请求向服务端请求结果，然后对结果进行处理。即，向服务端发出 request，然后有服务端进行业务逻辑处理，然后返回给客户端response，客户端拿到 response ，做进一步处理（比如 UI 展示等）。<br>&emsp;在Android应用开发过程中，客户端可以是任何组件，我们常用的 activity，service（相对于另外一个 service 而言，它就是一个客户端）等。</p>
+<h5 id="服务端进程"><a href="#服务端进程" class="headerlink" title="服务端进程"></a>服务端进程</h5><p>&emsp;说到服务端，下意识会想到服务器。服务端的优点在于，拥有强大的业务处理能力，实现了业务处理的集中管理，同时还可能增加更多的安全屏障。<br>&emsp;在Android应用开发中，各种 xxxServiceManager 都是服务端进程，或者我们实现的Service，也可以作为服务端进程。<br>说到 Service，提一点题外话，来自于官网对 Service 的说明：</p>
 <blockquote>
-<p>Draw traversal performs several drawing steps which must be executed<br>          in the appropriate order:</p>
-<pre><code>1. Draw the background
-2. If necessary, save the canvas&apos; layers to prepare for fading
-3. Draw view&apos;s content
-4. Draw children
-5. If necessary, draw the fading edges and restore layers
-6. Draw decorations (scrollbars for instance)
-</code></pre></blockquote>
-<p>&emsp;在绘制View的时候，首先将要绘制的就是背景。实际上，这么多View的层次关系，我们需要的只有一个背景，其他的对于GPU来说都是毫无意义的负担。<br>所以，对于一个Window来说，注意设置一个背景就够了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getWindow().getDecorView().setBackground(null);</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;或者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view.setBackground(null);</span><br></pre></td></tr></table></figure></p>
+<p>Service(服务)基本上分为两种形式：<br>启动<br>当应用组件（如 Activity）通过调用 <a href="https://developer.android.com/reference/android/content/Context.html#startService(android.content.Intent" target="_blank" rel="noopener">startService()</a>)<br> 启动服务时，服务即处于“启动”状态。一旦启动，服务即可在后台无限期运行，即使启动服务的组件已被销毁也不受影响。 已启动的服务通常是执行单一操作，而且不会将结果返回给调用方。例如，它可能通过网络下载或上传文件。 操作完成后，服务会自行停止运行。<br>绑定<br>当应用组件通过调用 <a href="https://developer.android.com/reference/android/content/Context.html#bindService(android.content.Intent,android.content.ServiceConnection,int" target="_blank" rel="noopener">bindService()</a>)<br> 绑定到服务时，服务即处于“绑定”状态。绑定服务提供了一个客户端-服务器接口，允许组件与服务进行交互、发送请求、获取结果，甚至是利用进程间通信 (IPC) 跨进程执行这些操作。 仅当与另一个应用组件绑定时，绑定服务才会运行。 多个组件可以同时绑定到该服务，但全部取消绑定后，该服务即会被销毁。</p>
+</blockquote>
+<p>&emsp;通过上面，我们应该可以看到 bindService 的优势和使用场景，这也就是为什么有时候我们需要定义客户端，定义服务端，<strong><em>主要还是便于交互啊。</em></strong>当然，你说我不使用这种方式，就不能实现和服务的交互了吗？当然不是啊，实现方式肯定不止一种，但是这种方式无疑是最方便的吧。</p>
+<h5 id="IBinder"><a href="#IBinder" class="headerlink" title="IBinder"></a>IBinder</h5><p>&emsp;根据官方文档[译]：</p>
+<blockquote>
+<p>接口IBinder 是轻量级高性能远程调用机制的核心部分。<br>该接口描述了和远程对象交互的抽象协议，但是通常我们都不会直接实现它，而是继承自 Binder。<br>IBinder 接口中关键 API 就是 transact()，与之相对的是 Binder.onTransact() 方法。其中，transact 方法将允许你发送一个调用到 IBinder 对象；Binder.onTransact()方法用以接收并处理调用。transact方法是一个同步方法，它会一直等到onTransact处理完成返回之后，才会返回。<br><strong>通过 transact() 发送的数据是 Parcel，本质上，Parcel是一般的缓冲区，持有内容以及内容元数据，而这些元数据被用来管理缓冲区中 IBinder 对象的引用。</strong><br>这种机制确保了，当一个IBinder 被写入到Parcel并发送到另外一个进程中，然后又从另外一个进程中发回来时，原来的进程能收到同样的IBinder对象。这种语法，还允许IBinder、Binder对象使用一个唯一的id（可以作为token或者其他目的）以便进行跨进程管理。<br>每个运行的进程中，都有一个用于 transaction 的线程池。这些线程池被用来处理所有的来自于其它进程的IPC。举个例子，从进程A向进程B进行IPC，A中的线程阻塞在 transact（）当它将事务发送到进程B 时。<br>B中的线程池接收到该事务，在目标对象上调用Binder.onTransact()，接着回复一个Parcel作为结果。收到结果之后，进程A继续执行。在效果上，就像是在同一个进程中创建一个线程执行。</p>
+</blockquote>
+<h5 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h5><p>根据官方文档[译]：</p>
+<blockquote>
+<p>实现了IBinder接口，是轻量级跨进程访问机制的核心。对于很多开发者而言，不需要直接使用这个类，而是描述好希望的接口，然后由 aidl 工具生成合适的 Binder 子类。</p>
+</blockquote>
+<p>关于Binder的进一步解释，可以参考我的另外一篇文章图说<a href="https://blog.yuegs.com/2017/09/19/android-binder-mechanism/">Android Binder机制</a></p>
+<h3 id="AIDL使用"><a href="#AIDL使用" class="headerlink" title="AIDL使用"></a>AIDL使用</h3><hr>
+<p>关于aidl在 android studio 中操作方式，网上教程有很多很多，这里就不再描述具体该怎么在项目中使用了，而是直接上代码，代码中有注释，描述了关键步骤。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line">public interface IRemoteService extends android.os.IInterface &#123;</span><br><span class="line">    /**</span><br><span class="line">     * Local-side IPC implementation stub class.</span><br><span class="line">     */</span><br><span class="line">    //在服务端将实现该类，并在onTransact中处理客户端发送过来的实体</span><br><span class="line">    public static abstract class Stub extends android.os.Binder implements com.test.server.IRemoteService &#123;</span><br><span class="line">        private static final java.lang.String DESCRIPTOR = &quot;com.test.server.IRemoteService&quot;;</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Construct the stub at attach it to the interface.</span><br><span class="line">         */</span><br><span class="line">        public Stub() &#123;</span><br><span class="line">            this.attachInterface(this, DESCRIPTOR);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Cast an IBinder object into an com.test.server.IRemoteService interface,</span><br><span class="line">         * generating a proxy if needed.</span><br><span class="line">         */</span><br><span class="line">        public static com.test.server.IRemoteService asInterface(android.os.IBinder obj) &#123;</span><br><span class="line">            if ((obj == null)) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);</span><br><span class="line">            if (((iin != null) &amp;&amp; (iin instanceof com.test.server.IRemoteService))) &#123;</span><br><span class="line">                return ((com.test.server.IRemoteService) iin);</span><br><span class="line">            &#125;</span><br><span class="line">            //在客户端将使用的是代理类，即这个Proxy</span><br><span class="line">            return new com.test.server.IRemoteService.Stub.Proxy(obj);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public android.os.IBinder asBinder() &#123;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 服务端会在 onTransact 中处理来自客户端的Parcel</span><br><span class="line">        @Override</span><br><span class="line">        public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException &#123;</span><br><span class="line">            //根据 code 判断，客户端是想调用哪个方法</span><br><span class="line">            switch (code) &#123;</span><br><span class="line">                case INTERFACE_TRANSACTION: &#123;</span><br><span class="line">                    reply.writeString(DESCRIPTOR);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_basicTypes: &#123;</span><br><span class="line">                    data.enforceInterface(DESCRIPTOR);</span><br><span class="line">                    int _arg0;</span><br><span class="line">                    //获取调用参数</span><br><span class="line">                    _arg0 = data.readInt();</span><br><span class="line">                    long _arg1;</span><br><span class="line">                    //获取调用参数</span><br><span class="line">                    _arg1 = data.readLong();</span><br><span class="line">                    boolean _arg2;</span><br><span class="line">                    _arg2 = (0 != data.readInt());</span><br><span class="line">                    float _arg3;</span><br><span class="line">                    _arg3 = data.readFloat();</span><br><span class="line">                    double _arg4;</span><br><span class="line">                    _arg4 = data.readDouble();</span><br><span class="line">                    java.lang.String _arg5;</span><br><span class="line">                    _arg5 = data.readString();</span><br><span class="line">                    this.basicTypes(_arg0, _arg1, _arg2, _arg3, _arg4, _arg5);</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_addUser: &#123;</span><br><span class="line">                    data.enforceInterface(DESCRIPTOR);</span><br><span class="line">                    com.test.server.User _arg0;</span><br><span class="line">                    if ((0 != data.readInt())) &#123;</span><br><span class="line">                       //获取调用参数</span><br><span class="line">                        _arg0 = com.teset.server.User.CREATOR.createFromParcel(data);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _arg0 = null;</span><br><span class="line">                    &#125;</span><br><span class="line">                    //该addUser方法就是在服务端自己实现的</span><br><span class="line">                    this.addUser(_arg0);</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return super.onTransact(code, data, reply, flags);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private static class Proxy implements com.ugym.server.IRemoteService &#123;</span><br><span class="line">            private android.os.IBinder mRemote;</span><br><span class="line"></span><br><span class="line">            Proxy(android.os.IBinder remote) &#123;</span><br><span class="line">                mRemote = remote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public android.os.IBinder asBinder() &#123;</span><br><span class="line">                return mRemote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            public java.lang.String getInterfaceDescriptor() &#123;</span><br><span class="line">                return DESCRIPTOR;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            /**</span><br><span class="line">             * Demonstrates some basic types that you can use as parameters</span><br><span class="line">             * and return values in AIDL.</span><br><span class="line">             */</span><br><span class="line">            @Override</span><br><span class="line">            public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, java.lang.String aString) throws android.os.RemoteException &#123;</span><br><span class="line">                android.os.Parcel _data = android.os.Parcel.obtain();</span><br><span class="line">                android.os.Parcel _reply = android.os.Parcel.obtain();</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    _data.writeInt(anInt);</span><br><span class="line">                    _data.writeLong(aLong);</span><br><span class="line">                    _data.writeInt(((aBoolean) ? (1) : (0)));</span><br><span class="line">                    _data.writeFloat(aFloat);</span><br><span class="line">                    _data.writeDouble(aDouble);</span><br><span class="line">                    _data.writeString(aString);</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_basicTypes, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void addUser(com.ugym.server.User user) throws android.os.RemoteException &#123;</span><br><span class="line">                //获取Parcel对象，调用参数</span><br><span class="line">                android.os.Parcel _data = android.os.Parcel.obtain();</span><br><span class="line">                //获取Parcel对象，返回结果</span><br><span class="line">                android.os.Parcel _reply = android.os.Parcel.obtain();</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    if ((user != null)) &#123;</span><br><span class="line">                        _data.writeInt(1);</span><br><span class="line">                        user.writeToParcel(_data, 0);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _data.writeInt(0);</span><br><span class="line">                    &#125;</span><br><span class="line">                    //客户端通过 transact 进行远程调用</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_addUser, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        //为每个函数进行编号</span><br><span class="line">        static final int TRANSACTION_basicTypes = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);</span><br><span class="line">        //addUser 函数的编号</span><br><span class="line">        static final int TRANSACTION_addUser = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Demonstrates some basic types that you can use as parameters</span><br><span class="line">     * and return values in AIDL.</span><br><span class="line">     */</span><br><span class="line">    public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, java.lang.String aString) throws android.os.RemoteException;</span><br><span class="line">// in 表示传入数据， out 表示传出数据， inout 表示双向传递。注意含有 out 时 User 类需要实现 readFromParcel() 方法</span><br><span class="line"></span><br><span class="line">    public void addUser(com.test.server.User user) throws android.os.RemoteException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;在服务端做代码实现，进行业务逻辑处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class RemoteService extends Service &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private IBinder mIBinder = new IRemoteService.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void addUser(User user) throws RemoteException &#123;</span><br><span class="line">            Log.d(&quot;RemoteService&quot;,&quot;addUser&quot;) ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public RemoteService() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            mIBinder.linkToDeath(new IBinder.DeathRecipient() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void binderDied() &#123;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,0);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return mIBinder ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;当进行bindService后，所有映射关系将被建立好。最终，客户端将得到服务端Binder的句柄，以此，通过Binder驱动和服务端通信。</p>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>&emsp;最后，还是那句话，AIDL 说白了，从上层看，就是一个通信协议。协议，就是规矩，就是约定，就是结构，就是架构。亦如 Http， 亦如 TCP，亦如IP。具体体现形式并不重要，重要的是 思路， 是结构化。</p>
 
       
     </div>
@@ -543,11 +531,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/View/" rel="tag"># View</a>
+            <a href="/tags/Binder/" rel="tag"># Binder</a>
           
-            <a href="/tags/源码分析/" rel="tag"># 源码分析</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/setContentView/" rel="tag"># setContentView</a>
+            <a href="/tags/AIDL/" rel="tag"># AIDL</a>
+          
+            <a href="/tags/跨进程通信/" rel="tag"># 跨进程通信</a>
           
         </div>
       
@@ -560,8 +550,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/25/Android-AIDL/" rel="next" title="Android AIDL 详解">
-                <i class="fa fa-chevron-left"></i> Android AIDL 详解
+              <a href="/2017/09/19/android-binder-mechanism/" rel="next" title="图说 Android Binder 机制">
+                <i class="fa fa-chevron-left"></i> 图说 Android Binder 机制
               </a>
             
           </div>
@@ -570,8 +560,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/26/TCP、Socket、Http以及WebSocket/" rel="prev" title="TCP、Socket、Http以及WebSocket">
-                TCP、Socket、Http以及WebSocket <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/15/Android 之 setContentView/" rel="prev" title="Android 之 setContentView">
+                Android 之 setContentView <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -738,7 +728,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#setContentView"><span class="nav-number">1.</span> <span class="nav-text">setContentView</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#结论"><span class="nav-number">1.0.1.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setContentView前后，更进一步，更多细节"><span class="nav-number">2.</span> <span class="nav-text">setContentView前后，更进一步，更多细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户感知和性能提升"><span class="nav-number">3.</span> <span class="nav-text">用户感知和性能提升</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL简介"><span class="nav-number">1.</span> <span class="nav-text">AIDL简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#客户端进程"><span class="nav-number">1.0.1.</span> <span class="nav-text">客户端进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务端进程"><span class="nav-number">1.0.2.</span> <span class="nav-text">服务端进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IBinder"><span class="nav-number">1.0.3.</span> <span class="nav-text">IBinder</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Binder"><span class="nav-number">1.0.4.</span> <span class="nav-text">Binder</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL使用"><span class="nav-number">2.</span> <span class="nav-text">AIDL使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
             
 
           </div>
@@ -934,7 +924,7 @@
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
-            id: 'Android 之 setContentView', 
+            id: 'Android AIDL 详解', 
             owner: 'yuegs',
             repo: 'yuegs.github.io',
             

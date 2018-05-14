@@ -4,18 +4,22 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2017/10/15/Android%20%E4%B9%8B%20setContentView/</loc>
-    <lastmod>2018-05-11T06:58:31.270Z</lastmod>
+    <loc>http://blog.yuegs.com/2018/05/11/from-view-to-window/</loc>
+    <lastmod>2018-05-14T06:30:55.617Z</lastmod>
     <data>
         <display>
-        <title>Android 之 setContentView</title>
-        <pubTime>2017-10-15T08:22:44.000Z</pubTime>
+        <title>从 Window 到 View</title>
+        <pubTime>2018-05-11T06:17:29.000Z</pubTime>
         
+        <tag>Window</tag>
+         
         <tag>View</tag>
          
-        <tag>源码分析</tag>
+        <tag>WindowManagerService</tag>
          
-        <tag>setContentView</tag>
+        <tag>Surface</tag>
+         
+        <tag>硬件加速</tag>
          
          
            
@@ -28,22 +32,18 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2018/05/11/from-view-to-window/</loc>
-    <lastmod>2018-05-11T06:58:07.750Z</lastmod>
+    <loc>http://blog.yuegs.com/2017/10/15/Android%20%E4%B9%8B%20setContentView/</loc>
+    <lastmod>2018-05-11T06:58:31.270Z</lastmod>
     <data>
         <display>
-        <title>从 View 到 Window</title>
-        <pubTime>2018-05-11T06:17:29.000Z</pubTime>
+        <title>Android 之 setContentView</title>
+        <pubTime>2017-10-15T08:22:44.000Z</pubTime>
         
         <tag>View</tag>
          
-        <tag>Window</tag>
+        <tag>源码分析</tag>
          
-        <tag>WindowManagerService</tag>
-         
-        <tag>Surface</tag>
-         
-        <tag>硬件加速</tag>
+        <tag>setContentView</tag>
          
          
            

@@ -5,15 +5,15 @@
     
   <url>
     <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
-    <lastmod>2018-05-14T14:45:31.157Z</lastmod>
+    <lastmod>2018-05-14T14:55:43.855Z</lastmod>
     <data>
         <display>
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
+         
+        <tag>Binder</tag>
          
         <tag>跨进程通信</tag>
          
@@ -91,9 +91,9 @@
         <title>Android:自定义 View 过程 [译]</title>
         <pubTime>2018-05-02T15:57:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>自定义View</tag>
+         
+        <tag>Android</tag>
          
          
            

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
+    
+    <lastmod>2018-05-14T14:45:31.157Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/05/11/from-view-to-window/</loc>
     
     <lastmod>2018-05-14T06:30:55.617Z</lastmod>

@@ -8,8 +8,8 @@
         <category>Android源码分析</category>
       </categories>
       <tags>
-        <tag>View</tag>
         <tag>Window</tag>
+        <tag>View</tag>
         <tag>WindowManagerService</tag>
         <tag>Surface</tag>
         <tag>硬件加速</tag>
@@ -23,8 +23,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>自定义View</tag>
+        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
@@ -102,8 +102,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
+        <tag>Binder</tag>
         <tag>AIDL</tag>
         <tag>跨进程通信</tag>
       </tags>
@@ -116,8 +116,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
+        <tag>Binder</tag>
         <tag>跨进程通信</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>

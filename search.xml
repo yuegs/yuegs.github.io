@@ -8,8 +8,8 @@
         <category>Android源码分析</category>
       </categories>
       <tags>
-        <tag>Window</tag>
         <tag>View</tag>
+        <tag>Window</tag>
         <tag>WindowManagerService</tag>
         <tag>Surface</tag>
         <tag>硬件加速</tag>

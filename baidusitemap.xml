@@ -4,6 +4,60 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
+    <lastmod>2018-05-16T01:33:18.792Z</lastmod>
+    <data>
+        <display>
+        <title>图说 Android Binder 机制</title>
+        <pubTime>2017-09-19T15:31:29.000Z</pubTime>
+        
+        <tag>Binder</tag>
+         
+        <tag>Android</tag>
+         
+        <tag>IPC</tag>
+         
+        <tag>序列化</tag>
+         
+        <tag>反序列化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
+    <lastmod>2018-05-16T01:32:48.059Z</lastmod>
+    <data>
+        <display>
+        <title>Android AIDL 详解</title>
+        <pubTime>2017-09-24T17:11:29.000Z</pubTime>
+        
+        <tag>Binder</tag>
+         
+        <tag>Android</tag>
+         
+        <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/05/11/from-view-to-window/</loc>
     <lastmod>2018-05-15T08:23:54.706Z</lastmod>
     <data>
@@ -25,60 +79,6 @@
            
              
               <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
-    <lastmod>2018-05-14T16:25:45.995Z</lastmod>
-    <data>
-        <display>
-        <title>Android AIDL 详解</title>
-        <pubTime>2017-09-24T17:11:29.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Binder</tag>
-         
-        <tag>AIDL</tag>
-         
-        <tag>跨进程通信</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
-    <lastmod>2018-05-14T14:55:43.855Z</lastmod>
-    <data>
-        <display>
-        <title>图说 Android Binder 机制</title>
-        <pubTime>2017-09-19T15:31:29.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Binder</tag>
-         
-        <tag>跨进程通信</tag>
-         
-        <tag>序列化</tag>
-         
-        <tag>反序列化</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
           
         </display>
     </data>
@@ -117,9 +117,9 @@
         <title>Android:自定义 View 过程 [译]</title>
         <pubTime>2018-05-02T15:57:29.000Z</pubTime>
         
-        <tag>自定义View</tag>
-         
         <tag>Android</tag>
+         
+        <tag>自定义View</tag>
          
          
            

@@ -23,8 +23,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>自定义View</tag>
         <tag>Android</tag>
+        <tag>自定义View</tag>
       </tags>
   </entry>
   <entry>
@@ -102,10 +102,10 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>AIDL</tag>
-        <tag>跨进程通信</tag>
+        <tag>IPC</tag>
       </tags>
   </entry>
   <entry>
@@ -116,9 +116,9 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
-        <tag>跨进程通信</tag>
+        <tag>Android</tag>
+        <tag>IPC</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
       </tags>

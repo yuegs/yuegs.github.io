@@ -181,6 +181,34 @@
   </entry>
   
   <entry>
+    <title>Android 进程介绍</title>
+    <link href="http://blog.yuegs.com/2017/12/12/Android-process-intro/"/>
+    <id>http://blog.yuegs.com/2017/12/12/Android-process-intro/</id>
+    <published>2017-12-11T16:54:32.000Z</published>
+    <updated>2018-05-16T13:44:32.810Z</updated>
+    
+    <content type="html"><![CDATA[<p>&emsp;Android进程，是各个组件（四大组件）运行的容器，进一步讲，组件将运行在进程中的线程里。然而，操作系统是以进程为单位管理应用的。在开发中，我们都知道，系统有杀死进程的“习惯”。当系统资源紧张，它会根据 LRU （最近最小使用）策略，杀死进程。</p><h3 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h3><p>&emsp;通常，在一个进程的生命周期中，会经历这样几个状态：</p><ul><li>前台进程：表示该进程位于栈的最顶端，正在与用户交互。</li><li>可见进程：进程是可见的，但是没有与用户交互。</li><li>服务进程：仅仅运行着一个服务的进程。</li><li>后台进程：组件于用户而言不再可见。</li><li>空进程： 不包含任何组件，它的出现是处于缓存的目的，当再次打开应用的时候，会更加快速。它处于栈的最低端，当资源紧张时，是最先被回收的对象。</li></ul><h3 id="将组件运行在进程中"><a href="#将组件运行在进程中" class="headerlink" title="将组件运行在进程中"></a>将组件运行在进程中</h3><p>&emsp;在应用启动的时候，会创建一个默认的进程。进程名为包名，默认情况下，所有的组件都运行在这个进程中。如果希望指定的组件运行在特定的进程中，可以在配置文件 manifest.xml 中这样配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;service</span><br><span class="line">    android:name=&quot;.MyService&quot;</span><br><span class="line">    android:process=&quot;com.MyProcess&quot;&gt;</span><br><span class="line">&lt;/service&gt;</span><br></pre></td></tr></table></figure></p><p>&emsp;进程名以 冒号 开头，例如这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:process = &quot;:MyProcess&quot;</span><br></pre></td></tr></table></figure></p><p>&emsp;表示这是应用私有的进程，不可以和其他应用共享。<br>&emsp;进程名以字母开头，表示该进程可以和其他应用共享。<br>&emsp;不同apk中的组件运行在同一个进程中，这个需求来源于节省更多的资源。它们需要 进程名 相同和 sharedUserId 相同：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">android:process=&quot;com.MyProcess&quot;</span><br><span class="line">android:sharedUserId=&quot;android.uid.shared&quot;</span><br></pre></td></tr></table></figure></p><h3 id="那些年走过的坑"><a href="#那些年走过的坑" class="headerlink" title="那些年走过的坑"></a>那些年走过的坑</h3><p>&emsp;在开发过程中，通常我们都会创建一个自己的 Application，并在 onCreate 中进程一些初始化操作。<br>&emsp;这里有个很难察觉的坑：<strong><em>应用中有多少个进程，Application 中的 onCreate 方法就会被执行多少遍。 实际上，有多个进程，就会同样运行多少个 Application。</em></strong><br>这样所带来的问题就是，如果你在 onCreate 中初始化了重要的数据，比如和服务器之间的长连接，如果不进行任何处理，这就意味着有多少个进程，就会建立多少个长连接。<br>&emsp;通常，其实我们也不会刻意让组件运行在新的进程中，但是挡不住我们引用的别人的 sdk（比如某定位sdk）需要将自己的服务运行在新的进程中。一不留意，会让你觉得简直是莫名其妙多出来一些东西（连接）。<br>尝试过在 Application 的 onCreate 中打 log，然而并没有什么卵用，在新进程中的 log 信息根本不会出现在控制台。索性最终一点一点排查出来了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//继承自Application的 onCreate 方法</span><br><span class="line">@Override</span><br><span class="line">public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        String processName = Utils.getProcessName(this);</span><br><span class="line">        if (processName != null &amp;&amp; processName.equals(getPackageName())) &#123;</span><br><span class="line">            //只在默认进程中进行初始化</span><br><span class="line">            init();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static String getProcessName(Context context) &#123;</span><br><span class="line">      ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);</span><br><span class="line">      List&lt;ActivityManager.RunningAppProcessInfo&gt; runningApps = am.getRunningAppProcesses();</span><br><span class="line">      if (runningApps == null) &#123;</span><br><span class="line">          return null;</span><br><span class="line">      &#125;</span><br><span class="line">      for (ActivityManager.RunningAppProcessInfo proInfo : runningApps) &#123;</span><br><span class="line">          if (proInfo.pid == android.os.Process.myPid()) &#123;</span><br><span class="line">              if (proInfo.processName != null) &#123;</span><br><span class="line">                  return proInfo.processName;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      return null;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&amp;emsp;Android进程，是各个组件（四大组件）运行的容器，进一步讲，组件将运行在进程中的线程里。然而，操作系统是以进程为单位管理应用的。在开发中，我们都知道，系统有杀死进程的“习惯”。当系统资源紧张，它会根据 LRU （最近最小使用）策略，杀死进程。&lt;/p&gt;
+&lt;h3
+      
+    
+    </summary>
+    
+      <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
+    
+    
+      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
+    
+      <category term="Process" scheme="http://blog.yuegs.com/tags/Process/"/>
+    
+  </entry>
+  
+  <entry>
     <title>TCP、Socket、Http以及WebSocket</title>
     <link href="http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/"/>
     <id>http://blog.yuegs.com/2017/10/26/TCP、Socket、Http以及WebSocket/</id>

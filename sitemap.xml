@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/12/12/Android-process-intro/</loc>
+    
+    <lastmod>2018-05-16T13:44:32.810Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/01/06/Android-Multi-Process/</loc>
     
     <lastmod>2018-05-16T01:47:51.570Z</lastmod>

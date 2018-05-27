@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/05/15/Android-AIDL/</loc>
+    
+    <lastmod>2018-05-27T12:12:52.629Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
     
     <lastmod>2018-05-27T12:11:30.043Z</lastmod>
@@ -47,13 +54,6 @@
     <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
     
     <lastmod>2018-05-16T01:33:18.792Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
-    
-    <lastmod>2018-05-16T01:32:48.059Z</lastmod>
     
   </url>
   

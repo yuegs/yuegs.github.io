@@ -4,6 +4,21 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/05/15/Android-AIDL/</loc>
+    <lastmod>2018-05-27T12:12:52.629Z</lastmod>
+    <data>
+        <display>
+        <title></title>
+        <pubTime>2018-05-14T16:21:43.410Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
     <lastmod>2018-05-27T12:11:30.043Z</lastmod>
     <data>
@@ -129,9 +144,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Process</tag>
+         
+        <tag>IPC</tag>
          
         <tag>Messenger</tag>
          
@@ -155,41 +170,15 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
          
         <tag>序列化</tag>
          
         <tag>反序列化</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
-    <lastmod>2018-05-16T01:32:48.059Z</lastmod>
-    <data>
-        <display>
-        <title>Android AIDL 详解</title>
-        <pubTime>2017-09-24T17:11:29.000Z</pubTime>
-        
-        <tag>Binder</tag>
-         
-        <tag>Android</tag>
-         
-        <tag>AIDL</tag>
-         
-        <tag>IPC</tag>
          
          
            

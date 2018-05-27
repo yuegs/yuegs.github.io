@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Binder,Android,AIDL,IPC," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -127,18 +127,17 @@
 
 
 
-<meta name="description" content="AIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。">
-<meta name="keywords" content="Binder,Android,AIDL,IPC">
+<meta name="description" content="title: Android AIDL 详解date: 2017-09-25 01:11:29tags: [Binder,Android,AIDL,IPC]categories: Android comments: trueAIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android AIDL 详解">
-<meta property="og:url" content="http://blog.yuegs.com/2017/09/25/Android-AIDL/index.html">
+<meta property="og:title" content="风雪围城">
+<meta property="og:url" content="http://blog.yuegs.com/2018/05/15/Android-AIDL/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="AIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。">
+<meta property="og:description" content="title: Android AIDL 详解date: 2017-09-25 01:11:29tags: [Binder,Android,AIDL,IPC]categories: Android comments: trueAIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-16T01:32:48.059Z">
+<meta property="og:updated_time" content="2018-05-27T12:12:52.629Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android AIDL 详解">
-<meta name="twitter:description" content="AIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。">
+<meta name="twitter:title" content="风雪围城">
+<meta name="twitter:description" content="title: Android AIDL 详解date: 2017-09-25 01:11:29tags: [Binder,Android,AIDL,IPC]categories: Android comments: trueAIDL简介&amp;emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑">
 
 
 
@@ -168,13 +167,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/2017/09/25/Android-AIDL/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2018/05/15/Android-AIDL/"/>
 
 
 
 
 
-  <title>Android AIDL 详解 | 风雪围城</title>
+  <title> | 风雪围城</title>
   
 
 
@@ -335,7 +334,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/09/25/Android-AIDL/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2018/05/15/Android-AIDL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -352,7 +351,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android AIDL 详解</h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -364,8 +363,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T01:11:29+08:00">
-                2017-09-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T00:21:43+08:00">
+                2018-05-15
               </time>
             
 
@@ -375,28 +374,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -405,8 +382,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/25/Android-AIDL/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/09/25/Android-AIDL/" itemprop="commentsCount"></span>
+                <a href="/2018/05/15/Android-AIDL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/05/15/Android-AIDL/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -414,7 +391,7 @@
 
           
           
-             <span id="/2017/09/25/Android-AIDL/" class="leancloud_visitors" data-flag-title="Android AIDL 详解">
+             <span id="/2018/05/15/Android-AIDL/" class="leancloud_visitors" data-flag-title="">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -439,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,513
+                  2,339
                 </span>
               
 
@@ -464,7 +441,9 @@
       
 
       
-        <h3 id="AIDL简介"><a href="#AIDL简介" class="headerlink" title="AIDL简介"></a>AIDL简介</h3><p>&emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。<br><a id="more"></a><br>&emsp;既然还是以针对跨进程访问，不过就是客户端进程和服务端服务进程，且最好的使用场景是客户端进程和服务端进程不在同一个进程中。而访问和通信基础实际上来自于 Binder 机制。下面，首先我们针对上面这些语言中出现的关键词进行解析，即客户端进程，服务进程，Binder。</p>
+        <hr>
+<p>title: Android AIDL 详解<br>date: 2017-09-25 01:11:29<br>tags: [Binder,Android,AIDL,IPC]<br>categories: Android</p>
+<h2 id="comments-true"><a href="#comments-true" class="headerlink" title="comments: true"></a>comments: true</h2><h3 id="AIDL简介"><a href="#AIDL简介" class="headerlink" title="AIDL简介"></a>AIDL简介</h3><p>&emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。<br><a id="more"></a><br>&emsp;既然还是以针对跨进程访问，不过就是客户端进程和服务端服务进程，且最好的使用场景是客户端进程和服务端进程不在同一个进程中。而访问和通信基础实际上来自于 Binder 机制。下面，首先我们针对上面这些语言中出现的关键词进行解析，即客户端进程，服务进程，Binder。</p>
 <h5 id="客户端进程"><a href="#客户端进程" class="headerlink" title="客户端进程"></a>客户端进程</h5><p>&emsp;客户端，我们都知道这是一个相对于服务端而言的概念。<br>&emsp;客户端通常并不处理具体逻辑，而只是请求向服务端请求结果，然后对结果进行处理。即，向服务端发出 request，然后有服务端进行业务逻辑处理，然后返回给客户端response，客户端拿到 response ，做进一步处理（比如 UI 展示等）。<br>&emsp;在Android应用开发过程中，客户端可以是任何组件，我们常用的 activity，service（相对于另外一个 service 而言，它就是一个客户端）等。</p>
 <h5 id="服务端进程"><a href="#服务端进程" class="headerlink" title="服务端进程"></a>服务端进程</h5><p>&emsp;说到服务端，下意识会想到服务器。服务端的优点在于，拥有强大的业务处理能力，实现了业务处理的集中管理，同时还可能增加更多的安全屏障。<br>&emsp;在Android应用开发中，各种 xxxServiceManager 都是服务端进程，或者我们实现的Service，也可以作为服务端进程。<br>说到 Service，提一点题外话，来自于官网对 Service 的说明：</p>
 <blockquote>
@@ -481,9 +460,204 @@
 </blockquote>
 <p>关于Binder的进一步解释，可以参考我的另外一篇文章图说<a href="https://blog.yuegs.com/2017/09/19/android-binder-mechanism/">Android Binder机制</a></p>
 <h3 id="AIDL使用"><a href="#AIDL使用" class="headerlink" title="AIDL使用"></a>AIDL使用</h3><hr>
-<p>关于aidl在 android studio 中操作方式，网上教程有很多很多，这里就不再描述具体该怎么在项目中使用了，而是直接上代码，代码中有注释，描述了关键步骤。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line">public interface IRemoteService extends android.os.IInterface &#123;</span><br><span class="line">    /**</span><br><span class="line">     * Local-side IPC implementation stub class.</span><br><span class="line">     */</span><br><span class="line">    //在服务端将实现该类，并在onTransact中处理客户端发送过来的实体</span><br><span class="line">    public static abstract class Stub extends android.os.Binder implements com.test.server.IRemoteService &#123;</span><br><span class="line">        private static final java.lang.String DESCRIPTOR = &quot;com.test.server.IRemoteService&quot;;</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Construct the stub at attach it to the interface.</span><br><span class="line">         */</span><br><span class="line">        public Stub() &#123;</span><br><span class="line">            this.attachInterface(this, DESCRIPTOR);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Cast an IBinder object into an com.test.server.IRemoteService interface,</span><br><span class="line">         * generating a proxy if needed.</span><br><span class="line">         */</span><br><span class="line">        public static com.test.server.IRemoteService asInterface(android.os.IBinder obj) &#123;</span><br><span class="line">            if ((obj == null)) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);</span><br><span class="line">            if (((iin != null) &amp;&amp; (iin instanceof com.test.server.IRemoteService))) &#123;</span><br><span class="line">                return ((com.test.server.IRemoteService) iin);</span><br><span class="line">            &#125;</span><br><span class="line">            //在客户端将使用的是代理类，即这个Proxy</span><br><span class="line">            return new com.test.server.IRemoteService.Stub.Proxy(obj);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public android.os.IBinder asBinder() &#123;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 服务端会在 onTransact 中处理来自客户端的Parcel</span><br><span class="line">        @Override</span><br><span class="line">        public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException &#123;</span><br><span class="line">            //根据 code 判断，客户端是想调用哪个方法</span><br><span class="line">            switch (code) &#123;</span><br><span class="line">                case INTERFACE_TRANSACTION: &#123;</span><br><span class="line">                    reply.writeString(DESCRIPTOR);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_basicTypes: &#123;</span><br><span class="line">                    data.enforceInterface(DESCRIPTOR);</span><br><span class="line">                    int _arg0;</span><br><span class="line">                    //获取调用参数</span><br><span class="line">                    _arg0 = data.readInt();</span><br><span class="line">                    long _arg1;</span><br><span class="line">                    //获取调用参数</span><br><span class="line">                    _arg1 = data.readLong();</span><br><span class="line">                    boolean _arg2;</span><br><span class="line">                    _arg2 = (0 != data.readInt());</span><br><span class="line">                    float _arg3;</span><br><span class="line">                    _arg3 = data.readFloat();</span><br><span class="line">                    double _arg4;</span><br><span class="line">                    _arg4 = data.readDouble();</span><br><span class="line">                    java.lang.String _arg5;</span><br><span class="line">                    _arg5 = data.readString();</span><br><span class="line">                    this.basicTypes(_arg0, _arg1, _arg2, _arg3, _arg4, _arg5);</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_addUser: &#123;</span><br><span class="line">                    data.enforceInterface(DESCRIPTOR);</span><br><span class="line">                    com.test.server.User _arg0;</span><br><span class="line">                    if ((0 != data.readInt())) &#123;</span><br><span class="line">                       //获取调用参数</span><br><span class="line">                        _arg0 = com.teset.server.User.CREATOR.createFromParcel(data);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _arg0 = null;</span><br><span class="line">                    &#125;</span><br><span class="line">                    //该addUser方法就是在服务端自己实现的</span><br><span class="line">                    this.addUser(_arg0);</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return super.onTransact(code, data, reply, flags);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private static class Proxy implements com.ugym.server.IRemoteService &#123;</span><br><span class="line">            private android.os.IBinder mRemote;</span><br><span class="line"></span><br><span class="line">            Proxy(android.os.IBinder remote) &#123;</span><br><span class="line">                mRemote = remote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public android.os.IBinder asBinder() &#123;</span><br><span class="line">                return mRemote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            public java.lang.String getInterfaceDescriptor() &#123;</span><br><span class="line">                return DESCRIPTOR;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            /**</span><br><span class="line">             * Demonstrates some basic types that you can use as parameters</span><br><span class="line">             * and return values in AIDL.</span><br><span class="line">             */</span><br><span class="line">            @Override</span><br><span class="line">            public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, java.lang.String aString) throws android.os.RemoteException &#123;</span><br><span class="line">                android.os.Parcel _data = android.os.Parcel.obtain();</span><br><span class="line">                android.os.Parcel _reply = android.os.Parcel.obtain();</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    _data.writeInt(anInt);</span><br><span class="line">                    _data.writeLong(aLong);</span><br><span class="line">                    _data.writeInt(((aBoolean) ? (1) : (0)));</span><br><span class="line">                    _data.writeFloat(aFloat);</span><br><span class="line">                    _data.writeDouble(aDouble);</span><br><span class="line">                    _data.writeString(aString);</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_basicTypes, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void addUser(com.ugym.server.User user) throws android.os.RemoteException &#123;</span><br><span class="line">                //获取Parcel对象，调用参数</span><br><span class="line">                android.os.Parcel _data = android.os.Parcel.obtain();</span><br><span class="line">                //获取Parcel对象，返回结果</span><br><span class="line">                android.os.Parcel _reply = android.os.Parcel.obtain();</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    if ((user != null)) &#123;</span><br><span class="line">                        _data.writeInt(1);</span><br><span class="line">                        user.writeToParcel(_data, 0);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _data.writeInt(0);</span><br><span class="line">                    &#125;</span><br><span class="line">                    //客户端通过 transact 进行远程调用</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_addUser, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        //为每个函数进行编号</span><br><span class="line">        static final int TRANSACTION_basicTypes = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);</span><br><span class="line">        //addUser 函数的编号</span><br><span class="line">        static final int TRANSACTION_addUser = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Demonstrates some basic types that you can use as parameters</span><br><span class="line">     * and return values in AIDL.</span><br><span class="line">     */</span><br><span class="line">    public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, java.lang.String aString) throws android.os.RemoteException;</span><br><span class="line">// in 表示传入数据， out 表示传出数据， inout 表示双向传递。注意含有 out 时 User 类需要实现 readFromParcel() 方法</span><br><span class="line"></span><br><span class="line">    public void addUser(com.test.server.User user) throws android.os.RemoteException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;在服务端做代码实现，进行业务逻辑处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class RemoteService extends Service &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private IBinder mIBinder = new IRemoteService.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void addUser(User user) throws RemoteException &#123;</span><br><span class="line">            Log.d(&quot;RemoteService&quot;,&quot;addUser&quot;) ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public RemoteService() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            mIBinder.linkToDeath(new IBinder.DeathRecipient() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void binderDied() &#123;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,0);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return mIBinder ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;当进行bindService后，所有映射关系将被建立好。最终，客户端将得到服务端Binder的句柄，以此，通过Binder驱动和服务端通信。</p>
+<p>关于aidl在 android studio 中操作方式，网上教程有很多很多，这里就不再描述具体该怎么在项目中使用了，而是直接上代码，代码中有注释，描述了关键步骤。</p>
+<pre><code>public interface IRemoteService extends android.os.IInterface {
+    /**
+     * Local-side IPC implementation stub class.
+     */
+    //在服务端将实现该类，并在onTransact中处理客户端发送过来的实体
+    public static abstract class Stub extends android.os.Binder implements com.test.server.IRemoteService {
+        private static final java.lang.String DESCRIPTOR = &quot;com.test.server.IRemoteService&quot;;
+
+        /**
+         * Construct the stub at attach it to the interface.
+         */
+        public Stub() {
+            this.attachInterface(this, DESCRIPTOR);
+        }
+
+        /**
+         * Cast an IBinder object into an com.test.server.IRemoteService interface,
+         * generating a proxy if needed.
+         */
+        public static com.test.server.IRemoteService asInterface(android.os.IBinder obj) {
+            if ((obj == null)) {
+                return null;
+            }
+            android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            if (((iin != null) &amp;&amp; (iin instanceof com.test.server.IRemoteService))) {
+                return ((com.test.server.IRemoteService) iin);
+            }
+            //在客户端将使用的是代理类，即这个Proxy
+            return new com.test.server.IRemoteService.Stub.Proxy(obj);
+        }
+
+        @Override
+        public android.os.IBinder asBinder() {
+            return this;
+        }
+
+        // 服务端会在 onTransact 中处理来自客户端的Parcel
+        @Override
+        public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException {
+            //根据 code 判断，客户端是想调用哪个方法
+            switch (code) {
+                case INTERFACE_TRANSACTION: {
+                    reply.writeString(DESCRIPTOR);
+                    return true;
+                }
+                case TRANSACTION_basicTypes: {
+                    data.enforceInterface(DESCRIPTOR);
+                    int _arg0;
+                    //获取调用参数
+                    _arg0 = data.readInt();
+                    long _arg1;
+                    //获取调用参数
+                    _arg1 = data.readLong();
+                    boolean _arg2;
+                    _arg2 = (0 != data.readInt());
+                    float _arg3;
+                    _arg3 = data.readFloat();
+                    double _arg4;
+                    _arg4 = data.readDouble();
+                    java.lang.String _arg5;
+                    _arg5 = data.readString();
+                    this.basicTypes(_arg0, _arg1, _arg2, _arg3, _arg4, _arg5);
+                    reply.writeNoException();
+                    return true;
+                }
+                case TRANSACTION_addUser: {
+                    data.enforceInterface(DESCRIPTOR);
+                    com.test.server.User _arg0;
+                    if ((0 != data.readInt())) {
+                       //获取调用参数
+                        _arg0 = com.teset.server.User.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg0 = null;
+                    }
+                    //该addUser方法就是在服务端自己实现的
+                    this.addUser(_arg0);
+                    reply.writeNoException();
+                    return true;
+                }
+            }
+            return super.onTransact(code, data, reply, flags);
+        }
+
+        private static class Proxy implements com.ugym.server.IRemoteService {
+            private android.os.IBinder mRemote;
+
+            Proxy(android.os.IBinder remote) {
+                mRemote = remote;
+            }
+
+            @Override
+            public android.os.IBinder asBinder() {
+                return mRemote;
+            }
+
+            public java.lang.String getInterfaceDescriptor() {
+                return DESCRIPTOR;
+            }
+
+            /**
+             * Demonstrates some basic types that you can use as parameters
+             * and return values in AIDL.
+             */
+            @Override
+            public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, java.lang.String aString) throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeInt(anInt);
+                    _data.writeLong(aLong);
+                    _data.writeInt(((aBoolean) ? (1) : (0)));
+                    _data.writeFloat(aFloat);
+                    _data.writeDouble(aDouble);
+                    _data.writeString(aString);
+                    mRemote.transact(Stub.TRANSACTION_basicTypes, _data, _reply, 0);
+                    _reply.readException();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
+
+            @Override
+            public void addUser(com.ugym.server.User user) throws android.os.RemoteException {
+                //获取Parcel对象，调用参数
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                //获取Parcel对象，返回结果
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    if ((user != null)) {
+                        _data.writeInt(1);
+                        user.writeToParcel(_data, 0);
+                    } else {
+                        _data.writeInt(0);
+                    }
+                    //客户端通过 transact 进行远程调用
+                    mRemote.transact(Stub.TRANSACTION_addUser, _data, _reply, 0);
+                    _reply.readException();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
+        }
+        //为每个函数进行编号
+        static final int TRANSACTION_basicTypes = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        //addUser 函数的编号
+        static final int TRANSACTION_addUser = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+    }
+
+    /**
+     * Demonstrates some basic types that you can use as parameters
+     * and return values in AIDL.
+     */
+    public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, java.lang.String aString) throws android.os.RemoteException;
+// in 表示传入数据， out 表示传出数据， inout 表示双向传递。注意含有 out 时 User 类需要实现 readFromParcel() 方法
+
+    public void addUser(com.test.server.User user) throws android.os.RemoteException;
+}
+</code></pre><p>&emsp;在服务端做代码实现，进行业务逻辑处理：</p>
+<pre><code>public class RemoteService extends Service {
+
+
+    private IBinder mIBinder = new IRemoteService.Stub() {
+        @Override
+        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
+
+        }
+
+        @Override
+        public void addUser(User user) throws RemoteException {
+            Log.d(&quot;RemoteService&quot;,&quot;addUser&quot;) ;
+        }
+    };
+
+    public RemoteService() {
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+
+        try {
+            mIBinder.linkToDeath(new IBinder.DeathRecipient() {
+                @Override
+                public void binderDied() {
+
+                }
+            },0);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return mIBinder ;
+    }
+}
+</code></pre><p>&emsp;当进行bindService后，所有映射关系将被建立好。最终，客户端将得到服务端Binder的句柄，以此，通过Binder驱动和服务端通信。</p>
 <h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>&emsp;最后，还是那句话，AIDL 说白了，从上层看，就是一个通信协议。协议，就是规矩，就是约定，就是结构，就是架构。亦如 Http， 亦如 TCP，亦如IP。具体体现形式并不重要，重要的是 思路， 是结构化。</p>
 
       
@@ -529,18 +703,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Binder/" rel="tag"># Binder</a>
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/AIDL/" rel="tag"># AIDL</a>
-          
-            <a href="/tags/IPC/" rel="tag"># IPC</a>
-          
-        </div>
-      
 
       
       
@@ -550,8 +712,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/19/android-binder-mechanism/" rel="next" title="图说 Android Binder 机制">
-                <i class="fa fa-chevron-left"></i> 图说 Android Binder 机制
+              <a href="/2018/05/11/from-view-to-window/" rel="next" title="从 Window 到 View">
+                <i class="fa fa-chevron-left"></i> 从 Window 到 View
               </a>
             
           </div>
@@ -560,8 +722,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/15/Android 之 setContentView/" rel="prev" title="Android 之 setContentView">
-                Android 之 setContentView <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/26/create-simple-blockchain-java-tutorial-1/" rel="prev" title="Part1 ：使用 Java 创建你的第一个区块链[译]">
+                Part1 ：使用 Java 创建你的第一个区块链[译] <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -672,7 +834,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -728,7 +890,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL简介"><span class="nav-number">1.</span> <span class="nav-text">AIDL简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#客户端进程"><span class="nav-number">1.0.1.</span> <span class="nav-text">客户端进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务端进程"><span class="nav-number">1.0.2.</span> <span class="nav-text">服务端进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IBinder"><span class="nav-number">1.0.3.</span> <span class="nav-text">IBinder</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Binder"><span class="nav-number">1.0.4.</span> <span class="nav-text">Binder</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL使用"><span class="nav-number">2.</span> <span class="nav-text">AIDL使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#comments-true"><span class="nav-number">1.</span> <span class="nav-text">comments: true</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL简介"><span class="nav-number">1.1.</span> <span class="nav-text">AIDL简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#客户端进程"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">客户端进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务端进程"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">服务端进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IBinder"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">IBinder</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Binder"><span class="nav-number">1.1.0.4.</span> <span class="nav-text">Binder</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL使用"><span class="nav-number">1.2.</span> <span class="nav-text">AIDL使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写在最后"><span class="nav-number">1.3.</span> <span class="nav-text">写在最后</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -762,7 +924,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">33.8k</span>
+    <span title="Site words total count">33.6k</span>
   
 </div>
 
@@ -924,7 +1086,7 @@
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
-            id: 'Android AIDL 详解', 
+            id: '', 
             owner: 'yuegs',
             repo: 'yuegs.github.io',
             

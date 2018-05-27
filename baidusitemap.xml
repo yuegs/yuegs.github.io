@@ -4,8 +4,34 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
+    <lastmod>2018-05-27T12:40:20.329Z</lastmod>
+    <data>
+        <display>
+        <title>Android AIDL 详解</title>
+        <pubTime>2017-09-24T17:11:29.000Z</pubTime>
+        
+        <tag>Binder</tag>
+         
+        <tag>Android</tag>
+         
+        <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/10/15/java8-new-feature/</loc>
-    <lastmod>2018-05-27T12:35:14.708Z</lastmod>
+    <lastmod>2018-05-27T12:37:04.107Z</lastmod>
     <data>
         <display>
         <title>Java8 中的新特性 [译]</title>
@@ -46,21 +72,6 @@
              
               <breadCrumb title="区块链" url="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/05/15/Android-AIDL/</loc>
-    <lastmod>2018-05-27T12:12:52.629Z</lastmod>
-    <data>
-        <display>
-        <title></title>
-        <pubTime>2018-05-14T16:21:43.410Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>
@@ -144,9 +155,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -170,11 +181,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
+        <tag>Binder</tag>
+         
         <tag>Android</tag>
          
         <tag>IPC</tag>
-         
-        <tag>Binder</tag>
          
         <tag>序列化</tag>
          
@@ -250,9 +261,9 @@
         <title>Android:自定义 View 过程 [译]</title>
         <pubTime>2018-05-02T15:57:29.000Z</pubTime>
         
-        <tag>自定义View</tag>
-         
         <tag>Android</tag>
+         
+        <tag>自定义View</tag>
          
          
            

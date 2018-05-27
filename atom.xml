@@ -61,11 +61,11 @@
       <category term="区块链" scheme="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
     
+      <category term="java" scheme="http://blog.yuegs.com/tags/java/"/>
+    
       <category term="区块链" scheme="http://blog.yuegs.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
       <category term="sha256" scheme="http://blog.yuegs.com/tags/sha256/"/>
-    
-      <category term="java" scheme="http://blog.yuegs.com/tags/java/"/>
     
   </entry>
   
@@ -223,9 +223,9 @@
     
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
-      <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
-    
       <category term="Process" scheme="http://blog.yuegs.com/tags/Process/"/>
+    
+      <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
     
       <category term="Messenger" scheme="http://blog.yuegs.com/tags/Messenger/"/>
     
@@ -355,13 +355,13 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
-    
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
-      <category term="AIDL" scheme="http://blog.yuegs.com/tags/AIDL/"/>
-    
       <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
+    
+      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
+    
+      <category term="AIDL" scheme="http://blog.yuegs.com/tags/AIDL/"/>
     
   </entry>
   
@@ -383,11 +383,11 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
-    
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
       <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
+    
+      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
     
       <category term="序列化" scheme="http://blog.yuegs.com/tags/%E5%BA%8F%E5%88%97%E5%8C%96/"/>
     

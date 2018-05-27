@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="java,并发,同步," />
 
 
 
@@ -127,16 +127,18 @@
 
 
 
-<meta name="description" content="“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”">
-<meta property="og:type" content="website">
-<meta property="og:title" content="风雪围城">
-<meta property="og:url" content="http://blog.yuegs.com/tags/Process/index.html">
+<meta name="description" content="&amp;emsp;并发，实际上是多个程序之间或者同一个程序内不同部分之间能够并行执行的一种能力。&amp;emsp;它极大的提升了CPU的吞吐量，特别是对于多核CPU尤为明显。（随着并发量的增加会达到性能上限，并发量过大，致使运行上下文切换过于频繁，甚至有可能会降低性能）同时，也提升了程序的交互性，比如在App开发过程中，同一个页面需要若干线程同时执行，绘制UI线程，后台线程等等，分工提供高质量的用户交互需求。">
+<meta name="keywords" content="java,并发,同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 中的并发与同步">
+<meta property="og:url" content="http://blog.yuegs.com/2017/08/01/java-concurrency/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”">
+<meta property="og:description" content="&amp;emsp;并发，实际上是多个程序之间或者同一个程序内不同部分之间能够并行执行的一种能力。&amp;emsp;它极大的提升了CPU的吞吐量，特别是对于多核CPU尤为明显。（随着并发量的增加会达到性能上限，并发量过大，致使运行上下文切换过于频繁，甚至有可能会降低性能）同时，也提升了程序的交互性，比如在App开发过程中，同一个页面需要若干线程同时执行，绘制UI线程，后台线程等等，分工提供高质量的用户交互需求。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-27T14:17:07.369Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="风雪围城">
-<meta name="twitter:description" content="“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”">
+<meta name="twitter:title" content="Java 中的并发与同步">
+<meta name="twitter:description" content="&amp;emsp;并发，实际上是多个程序之间或者同一个程序内不同部分之间能够并行执行的一种能力。&amp;emsp;它极大的提升了CPU的吞吐量，特别是对于多核CPU尤为明显。（随着并发量的增加会达到性能上限，并发量过大，致使运行上下文切换过于频繁，甚至有可能会降低性能）同时，也提升了程序的交互性，比如在App开发过程中，同一个页面需要若干线程同时执行，绘制UI线程，后台线程等等，分工提供高质量的用户交互需求。">
 
 
 
@@ -166,13 +168,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/tags/Process/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2017/08/01/java-concurrency/"/>
 
 
 
 
 
-  <title>标签: Process | 风雪围城</title>
+  <title>Java 中的并发与同步 | 风雪围城</title>
   
 
 
@@ -191,7 +193,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -319,82 +321,274 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Process<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/08/01/java-concurrency/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YueGs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风雪围城">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/06/Android-Multi-Process/" itemprop="url">
-              
-                <span itemprop="name">Android 多进程实践</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Java 中的并发与同步</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-06T18:05:29+08:00"
-              content="2018-01-06" >
-          01-06
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T23:32:44+08:00">
+                2017-08-01
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/01/java-concurrency/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/08/01/java-concurrency/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/01/java-concurrency/" class="leancloud_visitors" data-flag-title="Java 中的并发与同步">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,467
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/12/Android-process-intro/" itemprop="url">
-              
-                <span itemprop="name">Android 进程介绍</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-12T00:54:32+08:00"
-              content="2017-12-12" >
-          12-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <p>&emsp;并发，实际上是多个程序之间或者同一个程序内不同部分之间能够并行执行的一种能力。<br>&emsp;它极大的提升了CPU的吞吐量，特别是对于多核CPU尤为明显。（随着并发量的增加会达到性能上限，并发量过大，致使运行上下文切换过于频繁，甚至有可能会降低性能）<br>同时，也提升了程序的交互性，比如在App开发过程中，同一个页面需要若干线程同时执行，绘制UI线程，后台线程等等，分工提供高质量的用户交互需求。<br>&emsp;然而，并发同时带来了一个问题，那就是有些资源本身是无法允许多个线程并发访问的，比如对同一个集合的访问。<br><a id="more"></a></p>
+<h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><h4 id="进程并发和线程并发"><a href="#进程并发和线程并发" class="headerlink" title="进程并发和线程并发"></a>进程并发和线程并发</h4><p>&emsp;多个程序之间的并发，表现为进程的并发，这一点很普遍，也不会存在什么问题。并发的进程之间，一般不会相互影响，它们是相互独立的，相互不可见，进程的资源比如内存和CPU时间被操作系统管理。在应用层的表现，在电脑上，你可以在听音乐的同时打字。<br>线程也被称为是轻量级的进程。同一个进程可以拥有多个线程，每个线程有自己的本地内存（调用栈和缓冲内存等）。它的控制，是由进程管理的，并且，重要的是多个线程之间可以共享进程中的变量以达到通信的目的。</p>
+<h4 id="线程并发中的问题"><a href="#线程并发中的问题" class="headerlink" title="线程并发中的问题"></a>线程并发中的问题</h4><p>&emsp;根据JVM的内存模型，一个线程访问主内存中的共享变量的步骤是：</p>
+<ol>
+<li>总是先将该内存变量的内容副本拷贝进自己的本地内存中；</li>
+<li>对于基础类型的变量，在更改了副本中之后，会将更改后的值同步刷新到主内存；引用类型则不存在这种同步操作。</li>
+</ol>
+<p>&emsp;同时，我们知道：</p>
+<ol>
+<li>对一个变量的基本操作，哪怕是简单的变量自增操作，虽然代码上只有一行，但其实CPU是分几步完成的：得到变量副本，加一，生成临时变量接收结果，然后将结果写会到主内存刷新变量值。<strong>Java中原子操作包括：除了long和double之外的赋值操作（long和double是64位的，在32位机器上将分两次进行操作）；对于引用的赋值操作）</strong></li>
+<li>JVM在不影响最终执行结果的情况下，会进行优化，完成指令重排，这对同一个线程不会产生什么影响，但是在不同的线程之间就不同了。<br>因此，最终会产生的问题是：</li>
+<li>如何在高层级上保证操作的原子性，对于加一操作而言，最终目的就是保证这句代码已经完成之后，再允许其他线程访问该变量，否则可能导致的结果是加一操作并没有完成，其他线程读取到了未进行该操作之前的值；</li>
+<li>当一个线程更改了变量（基础类型变量）的值后，如何保证立刻对其他线程是可见性，即当其他线程再访问该变量的时候，获取到的是最新的该变量的副本；</li>
+<li>如何消除由于指令重排引发的多线程问题？<br>总结起来，其实就是三个方面：变量操作的原子性、可见性（对其它线程）、顺序执行。<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3></li>
+</ol>
+<p>&emsp;每个Java程序默认运行在它自己进程的线程中，Java同时支持多个线程并发执行，这一点是通过Thread对象实现的。Java应用可以通过Thread类实现多线程开发。在使用过程中，为了保证程序的正常运行，它同时提供了一些安全机制，来实现线程操作的原子性、可见性和顺序性。</p>
+<h4 id="锁和线程同步"><a href="#锁和线程同步" class="headerlink" title="锁和线程同步"></a>锁和线程同步</h4><p>&emsp;Java提供了锁来控制某段代码在不同线程之间的互斥执行。使用锁的一个最简单的方式，是通过 synchronized 关键字修饰方法或者代码块。<br>&emsp;synchronized 关键字保证了：</p>
+<ol>
+<li>同时只能由一个线程执行代码块，实现多个线程对同一代码块或者方法的互斥访问；（对于自增操作而言，实际上仍然并非是原子的，但是通过互斥访问达到了这样的目的）</li>
+<li>每个线程在进入同步代码块之后，会看到先前所有对代码块中变量的修改。（保证可见性和顺序）</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//同步方法</span><br><span class="line">public synchronized void add() &#123;</span><br><span class="line">&#125;</span><br><span class="line">public void delete() &#123;</span><br><span class="line">  //同步代码块</span><br><span class="line">  syschronized(this)&#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;上述在使用 synchronized 时，使用的锁实际上是通过该类实例化出来的对象。当然，也可以使用其他对象作为锁。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">private Object lock = new Object();</span><br><span class="line">public void add()&#123;</span><br><span class="line">  synchronized(lock)&#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;对于静态方法，需要使用类对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Test&#123;</span><br><span class="line">	    	</span><br><span class="line">&#125;</span><br><span class="line">public static void add()&#123;</span><br><span class="line">	synchronized(Test.class)&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;综上，使用锁进行操作无疑是最安全最可靠的做法。但是它最大的弊端在于对CPU资源的消耗。</p>
+<h4 id="Volatile使用"><a href="#Volatile使用" class="headerlink" title="Volatile使用"></a>Volatile使用</h4><p>&emsp;Volatile的特点就是在，任何一个线程读取主内存的变量时，将读取的是该变量最新的值。即满足线程对变量修改后，在其他线程中的可见性。即如果A和B同时读取了变量param的值为1，此时如果在A中设置param为2.<br>&emsp;下面一段代码可以证明(<a href="https://stackoverflow.com/questions/34311600/relationship-between-threads-and-println-statements" target="_blank" rel="noopener">代码来源</a>)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class Test extends Thread &#123;</span><br><span class="line">	 boolean keepRunning = true;</span><br><span class="line">	    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">	    	Test t = new Test();</span><br><span class="line">	        t.start();</span><br><span class="line">	        Thread.sleep(1000);</span><br><span class="line">	        t.keepRunning = false;</span><br><span class="line">	        System.out.println(&quot;keepRunning is false&quot;);</span><br><span class="line">	    &#125;</span><br><span class="line">	    public void run() &#123;</span><br><span class="line">	        int x = 10;</span><br><span class="line">	        while (keepRunning) </span><br><span class="line">	        &#123;</span><br><span class="line">	            x++;</span><br><span class="line">	        &#125;</span><br><span class="line">	        System.out.println(&quot;x:&quot;+x);</span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">实测结果：</span><br><span class="line">执行 x++ 的while循环一直没有停下来过。</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;我对于一直处于while死循环也感到有点不解。可以肯定是，这一定和共享变量的可变性有关。查了一些<a href="https://www.zhihu.com/question/23614549" target="_blank" rel="noopener">资料</a>，一个可以接受的说法是：<br>由于对keepRunning变量没有使用任何同步措施，比如volatile和synchronized，编译器认为这个变量不会被多个线程共享，从而进行了循环不变式的优化，优化结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if(keepRunning)&#123;</span><br><span class="line">  while(true)&#123;</span><br><span class="line">    x++ ;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;而这种优化实际上跟具体的运行环境有关。也就是说，在有些设备上，不一定会出现这种死循环。<br>&emsp;使用volatile是可以保证共享变量的可见性，然而这并不能完全解决线程之间的同步问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">static volatile int counter = 0;</span><br><span class="line">for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">			new Thread() &#123;</span><br><span class="line">				public void run() &#123;</span><br><span class="line">					for (int j = 0; j &lt; 1000; j++)</span><br><span class="line">						counter++;</span><br><span class="line">				&#125;;</span><br><span class="line">			&#125;.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;预计结果应该是 10000，然而实际上，运行结果每次都不一样，最终的结果很少有到10000的。问题就在于，多个线程同时对 counter 进行了修改，只是保证了 counter 在每个线程中的可见性，但是并不能保证它的同步。<br>&emsp;以上，我们开了十个线程同时修改 counter 值。<br>&emsp;综上，volatile只能作为一个轻量级的synchronized，而不能完全替代synchronized。volatile适用于那些只会在一个线程中进行更改数据的情况，因为大多数情况下对数据变量的操作 都不是原子的。更加安全的做法是使用synchronized，但是synchronized由于需要使用锁，这将更加消耗CPU资源。</p>
+<h4 id="AtomicInteger"><a href="#AtomicInteger" class="headerlink" title="AtomicInteger"></a>AtomicInteger</h4><p>&emsp;这是java.util.concurrent.atomic种的类，其中还包括：  AtomicBoolean; AtomicLong;AtomicReference等。具体我们来看一看AtomicInteger，其他的大同小异。<br>&emsp;AtomicInteger内部其实有一个volatile的value。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private volatile int value;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;而它内部的操作，大都使用了 sun.misc.Unsafe 这个类。这个类被称为魔术类，会绕过Java的安全检查机制，直接操作内存以获取高性能，而对于它的set、get、compareAndSet操作都是原子性的。<br>&emsp;对于这个类有多强大，可以看<a href="http://blog.csdn.net/fenglibing/article/details/17138079#comments" target="_blank" rel="noopener">这篇文章</a>，这是个强大到即将在JDK9中不被支持。太强大的东西往往都是一把双刃剑，用不好就是灾难。<br>&emsp;综上，AtomicX中借用volatile和Unsafe实现了对共享变量操作的互斥性。是一种很安全的使用方式。注意，单纯的AtomicInteger的set和get方法仅仅是返回上面的value，并没有使用Unsafe操作。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;在项目过程中由于使用了多线程操作，涉及到多线程同步的问题，所以对此进行了一次梳理，记录在此。<br>&emsp;其实在使用过程中，更多的是使用synchronized，这也是非常安全的一个做法，但是问题就在于性能消耗大，但是对于多线程读写共享变量时，又不得不这么做。<br>&emsp;后来查看RxJava的源码实现，发现其使用AtomicX（AtomicInteger、AtomicReference等）实现了一个多线程共享的队列，它借此完全做到了对变量原子性、可见性、顺序性的功能，同时性能消耗比synchronized要低。我觉得对于不需要复杂同步操作时，使用AtomicX是一种很好的选择。<br>&emsp;当然，volatile的性能相对于synchronized和AtomicX应该是最高的，它不涉及到锁的操作。但是却只能保证共享变量的可见性，而无法保证原子性。所以，它的应用场景在于那些只有一个线程需要对共享变量做复合赋值操作的情况。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="YueGs 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="YueGs 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+            <a href="/tags/同步/" rel="tag"># 同步</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/13/how-to-stop-thread/" rel="prev" title="如何正确停止线程">
+                如何正确停止线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -402,6 +596,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -422,8 +627,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -510,6 +724,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发"><span class="nav-number">1.</span> <span class="nav-text">并发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程并发和线程并发"><span class="nav-number">1.1.</span> <span class="nav-text">进程并发和线程并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程并发中的问题"><span class="nav-number">1.2.</span> <span class="nav-text">线程并发中的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步"><span class="nav-number">2.</span> <span class="nav-text">同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁和线程同步"><span class="nav-number">2.1.</span> <span class="nav-text">锁和线程同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Volatile使用"><span class="nav-number">2.2.</span> <span class="nav-text">Volatile使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AtomicInteger"><span class="nav-number">2.3.</span> <span class="nav-text">AtomicInteger</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -646,6 +876,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -692,6 +926,30 @@
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: 'Java 中的并发与同步', 
+            owner: 'yuegs',
+            repo: 'yuegs.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0779f5554c26bb7658afd45111bcc1ecd6010d54',
+            
+                client_id: '3497074f49f8bad9e334'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 

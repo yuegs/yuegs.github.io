@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/10/15/java8-new-feature/</loc>
+    
+    <lastmod>2018-05-27T12:35:14.708Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
     
     <lastmod>2018-05-27T12:20:55.137Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
     
     <lastmod>2018-05-27T12:11:30.043Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/10/15/java8-new-feature/</loc>
-    
-    <lastmod>2018-05-27T12:05:35.780Z</lastmod>
     
   </url>
   

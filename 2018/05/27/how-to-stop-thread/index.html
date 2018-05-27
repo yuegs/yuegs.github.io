@@ -127,16 +127,17 @@
 
 
 
-<meta name="description" content="“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”">
-<meta property="og:type" content="website">
+<meta name="description" content="title: 如何正确停止线程date: 2017-08-13 18:20:01tags: [java,thread]categories: Javacomments: true  &amp;emsp;这里将着重描述如何停止一个线程，同时，顺带对其他线程方法如join、yield、wait方法也做一个总结。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="风雪围城">
-<meta property="og:url" content="http://blog.yuegs.com/tags/thread/index.html">
+<meta property="og:url" content="http://blog.yuegs.com/2018/05/27/how-to-stop-thread/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”">
+<meta property="og:description" content="title: 如何正确停止线程date: 2017-08-13 18:20:01tags: [java,thread]categories: Javacomments: true  &amp;emsp;这里将着重描述如何停止一个线程，同时，顺带对其他线程方法如join、yield、wait方法也做一个总结。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-27T13:13:07.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="风雪围城">
-<meta name="twitter:description" content="“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”">
+<meta name="twitter:description" content="title: 如何正确停止线程date: 2017-08-13 18:20:01tags: [java,thread]categories: Javacomments: true  &amp;emsp;这里将着重描述如何停止一个线程，同时，顺带对其他线程方法如join、yield、wait方法也做一个总结。">
 
 
 
@@ -166,13 +167,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/tags/thread/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2018/05/27/how-to-stop-thread/"/>
 
 
 
 
 
-  <title>标签: thread | 风雪围城</title>
+  <title> | 风雪围城</title>
   
 
 
@@ -191,7 +192,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -319,54 +320,399 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>thread<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2018/05/27/how-to-stop-thread/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YueGs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风雪围城">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/08/13/how-to-stop-thread/" itemprop="url">
-              
-                <span itemprop="name">如何正确停止线程</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-13T18:20:01+08:00"
-              content="2017-08-13" >
-          08-13
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-27T20:11:51+08:00">
+                2018-05-27
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/27/how-to-stop-thread/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/05/27/how-to-stop-thread/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/05/27/how-to-stop-thread/" class="leancloud_visitors" data-flag-title="">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,776
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    </div>
+      
 
+      
+        <hr>
+<p>title: 如何正确停止线程<br>date: 2017-08-13 18:20:01<br>tags: [java,thread]<br>categories: Java<br>comments: true</p>
+<hr>
+<p>&emsp;这里将着重描述如何停止一个线程，同时，顺带对其他线程方法如join、yield、wait方法也做一个总结。<br><a id="more"></a></p>
+<h3 id="1-stop方法"><a href="#1-stop方法" class="headerlink" title="1. stop方法"></a>1. stop方法</h3><p>&emsp;这个方法其实很暴力。有点像站在命运掌控者的视角，让一个国家皇帝立刻马上去死。后事还没有安排，皇帝老爷就忽然驾崩了，导致后续皇权可能会平稳过度，也可能让国家陷入战乱。<br>&emsp;我们来看一个生产消费者模型的实例：</p>
+<pre><code>    public static void main(String args[]) {
+        Queue&lt;Integer&gt; buffer = new LinkedList&lt;&gt;();
+        int maxSize = 10;
+        Thread producer = new Producer(buffer, maxSize, &quot;PRODUCER&quot;);
+        Thread consumer = new Consumer(buffer, maxSize, &quot;CONSUMER&quot;);
+        new Thread(()-&gt;{
+            try {
+                Thread.sleep(300);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            producer.stop();
+        }).start();
+        producer.start();
+        consumer.start();
+    }
+}
+
+class Producer extends Thread {
+    private Queue&lt;Integer&gt; queue;
+    private int maxSize;
+    int counter =0 ;
+
+    public Producer(Queue&lt;Integer&gt; queue, int maxSize, String name) {
+        super(name);
+        this.queue = queue;
+        this.maxSize = maxSize;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (queue) {
+                while (queue.size() == maxSize) {
+                    try {
+                        System.out.println(&quot;Queue is full.&quot;);
+                        queue.wait();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                try {
+                    System.out.println(&quot;Producing value : &quot; + ++counter);
+                    //通过睡眠，模拟生产过程
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                queue.add(counter);
+                queue.notifyAll();
+            }
+        }
+    }
+}
+
+
+class Consumer extends Thread {
+    private Queue&lt;Integer&gt; queue;
+    private int maxSize;
+
+    public Consumer(Queue&lt;Integer&gt; queue, int maxSize, String name) {
+        super(name);
+        this.queue = queue;
+        this.maxSize = maxSize;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (queue) {
+                while (queue.isEmpty()) {
+                    System.out.println(&quot;Queue is empty.&quot;);
+                    try {
+                        queue.wait();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                System.out.println(&quot;Consuming value : &quot; + queue.remove());
+                queue.notifyAll();
+            }
+        }
+    }
+</code></pre><p>&emsp;说明：</p>
+<ol>
+<li>生产过程需要假设需要500毫秒左右，然而我们在300毫秒左右的时候，关掉了生产者线程，这个时候，生产过程已经开始但是并没有完成；</li>
+<li>当关闭生产者线程时，它会释放自己所持有的所有锁，此时消费者线程获取了queue锁，当进入消费过程，却发现队列是空的；</li>
+<li>假设这样的场景：生产者线程是意外关掉的，而生产过程执行的是一件很重要的任务，数据很敏感，这时候通过stop这种暴力手段将可能带来一场灾难，所产生的后果是未知的。</li>
+</ol>
+<p>&emsp;JDK文档中说：</p>
+<blockquote>
+<p>这个方法天生就是不安全的。通过这种方式停止一个线程，将导致该线程解锁所有的监视器对象（即上面中的queue）。如果某一对象（queue）的一致性受到该监视器的保护，暴力停止线程所造成的对对象的破坏对其他线程是可见的。</p>
+</blockquote>
+<p>&emsp;其实，不仅仅是锁的问题，又比如读写文件的过程，在文件写入过程中，随便stop的线程，将导致写入内容无法被预测，即我们无法知道它写入了多少。</p>
+<h5 id="1-1-使用条件变量停止一个线程"><a href="#1-1-使用条件变量停止一个线程" class="headerlink" title="1.1 使用条件变量停止一个线程"></a>1.1 使用条件变量停止一个线程</h5><p>&emsp;一种比较安全的停止线程的方式是：告诉想要停止的线程，我想要关闭你，有些后事赶紧处理下。<br>&emsp;比如，我们可以添加一个条件变量flag：</p>
+<pre><code>class TerminateClassByFlag extends Thread {
+    private volatile boolean terminateFlag;
+    private int counter;
+
+    public void terminate() {
+        terminateFlag = true;
+    }
+
+    @Override
+    public void run() {
+        while (!terminateFlag) {
+            try {
+                Thread.sleep(1000);
+                System.out.println(&quot;counter:&quot; + counter++);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+</code></pre><p>&emsp;在需要停止该线程的时候，调用terminate方法即可。但是，该方法存在一个问题，即在收到terminate指令之后，并不会立刻停止，比如它正在休眠当中。必须是在检查循环条件时，才会因不满足循环条件而退出。</p>
+<h5 id="1-2-使用线程的intercept方法停止线程"><a href="#1-2-使用线程的intercept方法停止线程" class="headerlink" title="1.2 使用线程的intercept方法停止线程"></a>1.2 使用线程的intercept方法停止线程</h5><p>&emsp;如果希望能够立刻退出线程，可以使用intercept方法。</p>
+<pre><code>public static void main(String[] args) {
+        Thread a = new Thread(()-&gt;{
+            int counter =0;
+             while(!Thread.currentThread().isInterrupted()){
+                 try {
+                    Thread.sleep(1000);
+                    System.out.println(&quot;cuonter:&quot;+counter++);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                                        //注意这里，需要再次调用intercept
+                    Thread.currentThread().interrupt();
+                }
+             }
+        });
+        a.start();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        a.interrupt();
+    }
+</code></pre><p>&emsp;intercept方法会中断该线程，中断过程又分了4种情况，JDK文档中说：</p>
+<blockquote>
+<ol>
+<li>If this thread is blocked in an invocation of the wait(), wait(long), or wait(long, int) methods of the Object class, or of the join(), join(long), join(long, int), sleep(long), or sleep(long, int), methods of this class, then its interrupt status will be cleared and it will receive an InterruptedException.<br>如果调用了Object对象的wait,wait(long),wait(long,int)等方法阻塞了线程，或者调用join(),join(long),join(long,int),sleep(long),sleep(long,int)等线程方法，中断标志将被清除，同时会收到一个中断异常。（注意，这就是我在上面的代码中为什么要在catch中重新intercept）。</li>
+<li>If this thread is blocked in an I/O operation upon an InterruptibleChannel then the channel will be closed, the thread’s interrupt status will be set, and the thread will receive a ClosedByInterruptException.<br>如果该线程正阻塞于interruptible channel上的I/O操作，则该通道将被关闭，同时该线程的中断状态被设置，并收到一个java.nio.channels.ClosedByInterruptException。</li>
+<li>If this thread is blocked in a Selector then the thread’s interrupt status will be set and it will return immediately from the selection operation, possibly with a non-zero value, just as if the selector’s wakeup method were invoked.<br>如果该线程正阻塞于一个java.nio.channels.Selector操作，则该线程的中断状态被设置，它将立即从选择操作返回，并可能带有一个非零值，就好像调用java.nio.channels.Selector.wakeup()方法一样。</li>
+<li>If none of the previous conditions hold then this thread’s interrupt status will be set.<br>如果上述条件都不成立，则该线程的中断状态将被设置。</li>
+</ol>
+</blockquote>
+<p>&emsp;那么，该如何获取中断状态呢？就是通过isInterrupted()方法或者interrupted()方法。其中前者属于对象的方法，后者是静态方法。并且后者在读取中断状态后，会清除中断状态。</p>
+<h3 id="2-join方法"><a href="#2-join方法" class="headerlink" title="2.join方法"></a>2.join方法</h3><p>&emsp;join(), 对于线程A和线程B两个线程，如果在线程B中调用线程A的join方法，则B由wait方法进入阻塞状态，直到A执行完之后notifyAll重新唤醒B。<br>&emsp;join实现源码为：</p>
+<pre><code>public final synchronized void join(long millis)    throws InterruptedException {  
+    long base = System.currentTimeMillis();  
+    long now = 0;  
+
+    if (millis &lt; 0) {  
+        throw new IllegalArgumentException(&quot;timeout value is negative&quot;);  
+    }  
+
+    if (millis == 0) {  
+        while (isAlive()) {  
+            wait(0);  
+        }  
+    } else {  
+        while (isAlive()) {  
+            long delay = millis - now;  
+            if (delay &lt;= 0) {  
+                break;  
+            }  
+            wait(delay);  
+            now = System.currentTimeMillis() - base;  
+        }  
+    }  
+}  
+</code></pre><h3 id="3-yield"><a href="#3-yield" class="headerlink" title="3. yield"></a>3. yield</h3><p>&emsp;JDK文档中指出：</p>
+<blockquote>
+<p>该方法实际上是一个暗示，表明它希望放弃当前的处理器。这种暗示，可能被调度器忽略。</p>
+</blockquote>
+<p>&emsp;即它会重新进入到可执行状态，但是由于线程优先级缘故，调度器可能选择该线程继续执行。事实上，我没有使用过该方法。JDK文档中也说该方法非常少用 ，主要是帮助进行极少情况的bug重现。</p>
+<p>###4. wait<br>&emsp;进入到监视器对象的阻塞队列中，直到调用了该对象的notify或者notifyAll方法，被唤醒从而拥有了获取监视器主权的条件。<br>&emsp;其实，就是排队过独木桥，当一个对象过完独木桥，会调用notify方法，从队列中选取另外一个对象过桥，而notifyAll会唤醒所有等待过桥的对象，让它们去抢这个多桥的机会。</p>
+<pre><code>synchronized (obj) {
+      while (&lt;condition does not hold&gt;)
+          obj.wait();
+      ... // Perform action appropriate to condition
+  }
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="YueGs 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="YueGs 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/26/create-simple-blockchain-java-tutorial-1/" rel="next" title="Part1 ：使用 Java 创建你的第一个区块链[译]">
+                <i class="fa fa-chevron-left"></i> Part1 ：使用 Java 创建你的第一个区块链[译]
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -374,6 +720,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -394,8 +751,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -425,7 +791,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -436,7 +802,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -483,6 +849,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-stop方法"><span class="nav-number">1.</span> <span class="nav-text">1. stop方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-使用条件变量停止一个线程"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 使用条件变量停止一个线程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-使用线程的intercept方法停止线程"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 使用线程的intercept方法停止线程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-join方法"><span class="nav-number">2.</span> <span class="nav-text">2.join方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-yield"><span class="nav-number">3.</span> <span class="nav-text">3. yield</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -510,7 +892,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">34.4k</span>
+    <span title="Site words total count">34.3k</span>
   
 </div>
 
@@ -618,6 +1000,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -664,6 +1050,30 @@
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '', 
+            owner: 'yuegs',
+            repo: 'yuegs.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0779f5554c26bb7658afd45111bcc1ecd6010d54',
+            
+                client_id: '3497074f49f8bad9e334'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 

@@ -4,22 +4,15 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
-    <lastmod>2018-05-27T13:08:24.600Z</lastmod>
+    <loc>http://blog.yuegs.com/2018/05/27/how-to-stop-thread/</loc>
+    <lastmod>2018-05-27T13:13:07.877Z</lastmod>
     <data>
         <display>
-        <title>如何正确停止线程</title>
-        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
+        <title></title>
+        <pubTime>2018-05-27T12:11:51.375Z</pubTime>
         
-        <tag>java</tag>
-         
-        <tag>thread</tag>
-         
          
            
-             
-              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
-          
         </display>
     </data>
     </url>
@@ -81,13 +74,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
          
+        <tag>Android</tag>
+         
         <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
          
          
            
@@ -155,9 +148,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -181,11 +174,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
+        <tag>Binder</tag>
+         
         <tag>Android</tag>
          
         <tag>IPC</tag>
-         
-        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

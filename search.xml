@@ -8,9 +8,9 @@
         <category>区块链</category>
       </categories>
       <tags>
+        <tag>java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
-        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -36,8 +36,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>自定义View</tag>
         <tag>Android</tag>
+        <tag>自定义View</tag>
       </tags>
   </entry>
   <entry>
@@ -155,8 +155,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>AIDL</tag>
         <tag>IPC</tag>
       </tags>
@@ -169,8 +169,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>IPC</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>

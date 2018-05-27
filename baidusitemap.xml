@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
+    <lastmod>2018-05-27T13:24:31.025Z</lastmod>
+    <data>
+        <display>
+        <title>如何正确停止线程</title>
+        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>thread</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/12/08/java8-new-feature/</loc>
     <lastmod>2018-05-27T13:18:29.940Z</lastmod>
     <data>
@@ -22,21 +44,6 @@
              
               <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/05/27/how-to-stop-thread/</loc>
-    <lastmod>2018-05-27T13:13:07.877Z</lastmod>
-    <data>
-        <display>
-        <title></title>
-        <pubTime>2018-05-27T12:11:51.375Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>

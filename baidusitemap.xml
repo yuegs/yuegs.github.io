@@ -4,8 +4,32 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/12/08/java8-new-feature/</loc>
+    <lastmod>2018-05-27T13:04:29.031Z</lastmod>
+    <data>
+        <display>
+        <title>Java8 中的新特性 [译]</title>
+        <pubTime>2017-12-08T08:22:09.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>λ</tag>
+         
+        <tag>stream</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://blog.yuegs.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
-    <lastmod>2018-05-27T13:00:12.799Z</lastmod>
+    <lastmod>2018-05-27T13:04:17.961Z</lastmod>
     <data>
         <display>
         <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
@@ -28,23 +52,21 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2017/12/08/java8-new-feature/</loc>
-    <lastmod>2018-05-27T12:49:50.874Z</lastmod>
+    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
+    <lastmod>2018-05-27T13:04:10.238Z</lastmod>
     <data>
         <display>
-        <title>Java8 中的新特性 [译]</title>
-        <pubTime>2017-12-08T08:22:09.000Z</pubTime>
+        <title>如何正确停止线程</title>
+        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
         
-        <tag>Java</tag>
+        <tag>java</tag>
          
-        <tag>λ</tag>
-         
-        <tag>stream</tag>
+        <tag>thread</tag>
          
          
            
              
-              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+              <breadCrumb title="java" url="http://blog.yuegs.com/categories/java/"/>
           
         </display>
     </data>
@@ -71,28 +93,6 @@
            
              
               <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
-    <lastmod>2018-05-27T12:11:30.043Z</lastmod>
-    <data>
-        <display>
-        <title>如何正确停止线程</title>
-        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-        <tag>thread</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
           
         </display>
     </data>

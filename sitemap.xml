@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
+    <loc>http://blog.yuegs.com/2017/12/08/java8-new-feature/</loc>
     
-    <lastmod>2018-05-27T13:00:12.799Z</lastmod>
+    <lastmod>2018-05-27T13:04:29.031Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.yuegs.com/2017/12/08/java8-new-feature/</loc>
+    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
     
-    <lastmod>2018-05-27T12:49:50.874Z</lastmod>
+    <lastmod>2018-05-27T13:04:17.961Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
+    
+    <lastmod>2018-05-27T13:04:10.238Z</lastmod>
     
   </url>
   
@@ -19,13 +26,6 @@
     <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
     
     <lastmod>2018-05-27T12:46:18.722Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
-    
-    <lastmod>2018-05-27T12:11:30.043Z</lastmod>
     
   </url>
   

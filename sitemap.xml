@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/10/15/java8-new-feature/</loc>
+    
+    <lastmod>2018-05-27T11:56:16.142Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
     
     <lastmod>2018-05-26T05:20:35.870Z</lastmod>

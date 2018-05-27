@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/10/15/java8-new-feature/</loc>
+    <lastmod>2018-05-27T11:56:16.142Z</lastmod>
+    <data>
+        <display>
+        <title>Java8 中的新特性 [译]</title>
+        <pubTime>2017-10-15T08:22:44.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>λ</tag>
+         
+        <tag>stream</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://blog.yuegs.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
     <lastmod>2018-05-26T05:20:35.870Z</lastmod>
     <data>

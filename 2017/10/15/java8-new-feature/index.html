@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Binder,Android,IPC,序列化,反序列化," />
+  <meta name="keywords" content="java,λ,stream," />
 
 
 
@@ -127,27 +127,20 @@
 
 
 
-<meta name="description" content="&amp;emsp;Binder机制，是Android系统跨进程协作的核心。我们知道，每个应用独立地运行在自己的进程虚拟地址空间中，就像是独自占有CPU、内存等资源，相互之间不可见。Android系统中的一个个应用，亦如一个个信息孤岛。正是Binder这样的跨进程访问机制，提供了孤岛之间沟通的桥梁。">
-<meta name="keywords" content="Binder,Android,IPC,序列化,反序列化">
+<meta name="description" content="&amp;emsp;距离 java 8 发布，都快四年了。现在回过头来，系统地整理一下零零散散的知识点。本章是对Java 8 中新特性的一些总结。原文链接">
+<meta name="keywords" content="java,λ,stream">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图说 Android Binder 机制">
-<meta property="og:url" content="http://blog.yuegs.com/2017/09/19/android-binder-mechanism/index.html">
+<meta property="og:title" content="Java8 中的新特性 [译]">
+<meta property="og:url" content="http://blog.yuegs.com/2017/10/15/java8-new-feature/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="&amp;emsp;Binder机制，是Android系统跨进程协作的核心。我们知道，每个应用独立地运行在自己的进程虚拟地址空间中，就像是独自占有CPU、内存等资源，相互之间不可见。Android系统中的一个个应用，亦如一个个信息孤岛。正是Binder这样的跨进程访问机制，提供了孤岛之间沟通的桥梁。">
+<meta property="og:description" content="&amp;emsp;距离 java 8 发布，都快四年了。现在回过头来，系统地整理一下零零散散的知识点。本章是对Java 8 中新特性的一些总结。原文链接">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/Binder-is-a-bridge.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/userspace-kernalspace.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/addr-transaction.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/data-copy.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/transmit.png">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5297002-a12030633a9064d1.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/binder-progress.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/binder-process-detail.png">
-<meta property="og:updated_time" content="2018-05-16T01:33:18.792Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java8-new-features/reduce.png">
+<meta property="og:updated_time" content="2018-05-27T11:56:16.142Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图说 Android Binder 机制">
-<meta name="twitter:description" content="&amp;emsp;Binder机制，是Android系统跨进程协作的核心。我们知道，每个应用独立地运行在自己的进程虚拟地址空间中，就像是独自占有CPU、内存等资源，相互之间不可见。Android系统中的一个个应用，亦如一个个信息孤岛。正是Binder这样的跨进程访问机制，提供了孤岛之间沟通的桥梁。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/Binder-is-a-bridge.png">
+<meta name="twitter:title" content="Java8 中的新特性 [译]">
+<meta name="twitter:description" content="&amp;emsp;距离 java 8 发布，都快四年了。现在回过头来，系统地整理一下零零散散的知识点。本章是对Java 8 中新特性的一些总结。原文链接">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java8-new-features/reduce.png">
 
 
 
@@ -177,13 +170,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/2017/09/19/android-binder-mechanism/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2017/10/15/java8-new-feature/"/>
 
 
 
 
 
-  <title>图说 Android Binder 机制 | 风雪围城</title>
+  <title>Java8 中的新特性 [译] | 风雪围城</title>
   
 
 
@@ -344,7 +337,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/09/19/android-binder-mechanism/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/10/15/java8-new-feature/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -361,7 +354,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">图说 Android Binder 机制</h1>
+          <h1 class="post-title" itemprop="name headline">Java8 中的新特性 [译]</h1>
         
 
         <div class="post-meta">
@@ -373,8 +366,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T23:31:29+08:00">
-                2017-09-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T16:22:44+08:00">
+                2017-10-15
               </time>
             
 
@@ -396,8 +389,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
                   </a>
                 </span>
 
@@ -414,8 +407,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/19/android-binder-mechanism/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/09/19/android-binder-mechanism/" itemprop="commentsCount"></span>
+                <a href="/2017/10/15/java8-new-feature/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/10/15/java8-new-feature/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -423,7 +416,7 @@
 
           
           
-             <span id="/2017/09/19/android-binder-mechanism/" class="leancloud_visitors" data-flag-title="图说 Android Binder 机制">
+             <span id="/2017/10/15/java8-new-feature/" class="leancloud_visitors" data-flag-title="Java8 中的新特性 [译]">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -448,7 +441,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,421
+                  3,221
                 </span>
               
 
@@ -473,48 +466,115 @@
       
 
       
-        <p>&emsp;Binder机制，是Android系统跨进程协作的核心。我们知道，每个应用独立地运行在自己的进程虚拟地址空间中，就像是独自占有CPU、内存等资源，相互之间不可见。Android系统中的一个个应用，亦如一个个信息孤岛。正是Binder这样的跨进程访问机制，提供了孤岛之间沟通的桥梁。<br><a id="more"></a><br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/Binder-is-a-bridge.png" alt="Binder是应用之间沟通的桥梁"><br>&emsp;如上图所示，鉴于安全和效率的考虑，Android系统服务提供是一种典型的C/S架构，如果希望获取系统服务，就必须进程IPC请求，而Binder正是数据交互的核心。<br>&emsp;平时做应用开发，其实很少会操心这种底层机制，但是设计思想却是通用的，为了学习它的这种思想，同时弄懂Binder机制，更好地进行应用开发，这几天找了很多资料。现在开始，才有那么点绕出来的感觉。这里，不谈源码实现，通过对各种资料的汇集，更多的以图的形式通俗展现Binder的内部机制。</p>
-<h3 id="Binder通信基础"><a href="#Binder通信基础" class="headerlink" title="Binder通信基础"></a>Binder通信基础</h3><p>&emsp;就整个通信过程，将围绕着数据传递的前提，数据如何传递，以及传递背后的协议来展开。</p>
-<h5 id="用户空间和内核空间—谁来中转数据"><a href="#用户空间和内核空间—谁来中转数据" class="headerlink" title="用户空间和内核空间—谁来中转数据"></a>用户空间和内核空间—谁来中转数据</h5><p>&emsp;我们知道，进程运行在虚拟地址空间，鉴于安全考虑，这块空间被分为用户空间和内核空间。其中，用户空间的执行权限较低，凡是需要访问物理设备、IO等，都需要通过系统调用的方式，由内核代码在内核空间运行。如下图所示：</p>
-<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/userspace-kernalspace.jpg" alt="用户空间和内核空间的关系"><br>&emsp;由上图可知，每个进程通过系统调用进入内核，Linux内核空间由系统内的所有进程共享。从进程的角度看，每个进程拥有4G的虚拟空间。每个进程有各自的私有用户空间（0-3G），这个空间对系统的其他进程是不可见的。最高的1G内核空间则为所有进程以及内核所共享。<strong>这段共享的内核空间，就构成了传统Linux系统中数据不同进程之间数据交换的基础。</strong>更进一步，是依赖两个函数：</p>
-<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/addr-transaction.jpg" alt="进程空间、内核空间与物理地址之间的转换关系"><br>&emsp;数据通过 copy_from_user 来到内核空间，通过copy_to_user 返回给用户空间。<br>&emsp;由上可知，数据的传输过程至少需要对数据进行两次拷贝，但是在 Android 中又有不同，<strong>为了数据的高效传输，它对数据的拷贝仅需要一次</strong>，原因在于：<strong>Server 进程在通过 open 打开 Binder 驱动（在此处传入了进程信息，即 binder_proc），使用 mmap 进行内存映射的时候，映射出的物理内存同时存在于内核空间和 Server 所运行的 Binder 进程的用户空间。而内核空间和用户空间都是虚拟逻辑空间。这样，当数据 copy_from_user 之后存在内核空间，这页内存空间所在的实际物理空间实际上也对应于用户空间。这样，就无需在执行 copy_to_user的操作。</strong></p>
-<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/data-copy.png" alt="Android 数据跨进程传输过程"></p>
-<h5 id="序列化与反序列化—什么样的数据完成进程穿透"><a href="#序列化与反序列化—什么样的数据完成进程穿透" class="headerlink" title="序列化与反序列化—什么样的数据完成进程穿透"></a>序列化与反序列化—什么样的数据完成进程穿透</h5><p>&emsp;那么，什么样的数据，能够方便、安全地穿透进程间壁垒，完成进程间通信呢？<br>&emsp;序列化数据。在应用层，就是一个Parcel对象。<br>&emsp;关于序列化和反序列化，下面的这张图，描述的很清楚。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/transmit.png" alt="数据的转换过程"><br>&emsp;如上图所示，我们都做过将一张纸裁剪成正方体的游戏。现在将正方体拆开，还原成平面的纸，然后通过传真机发送到远端，在远端接收后，安装纸面上的轨迹，还原这个正方体。<br>&emsp;实际上，这给了我们启示，在面向对象的世界里，一个复杂的对象该如何在不同进程中传递的思路，这是说我们需要把一个复杂的对象的简化了，变得平滑，转换成基础数据结构（int ,float,long等），发送到远端后，再从远端复原成复杂对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class MyParcelable implements Parcelable &#123;</span><br><span class="line">    private int mData;</span><br><span class="line"></span><br><span class="line">    public int describeContents() &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">    //转换成Parcel对象，完成序列化</span><br><span class="line">    public void writeToParcel(Parcel out, int flags) &#123;</span><br><span class="line">        out.writeInt(mData);</span><br><span class="line">    &#125;</span><br><span class="line">    //从Parcel转换成原对象，完成反序列化</span><br><span class="line">    public static final Parcelable.Creator&lt;MyParcelable&gt; CREATOR</span><br><span class="line">            = new Parcelable.Creator&lt;MyParcelable&gt;() &#123;</span><br><span class="line">        public MyParcelable createFromParcel(Parcel in) &#123;</span><br><span class="line">            return new MyParcelable(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public MyParcelable[] newArray(int size) &#123;</span><br><span class="line">            return new MyParcelable[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    private MyParcelable(Parcel in) &#123;</span><br><span class="line">        mData = in.readInt();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h5 id="来一发服务请求—协议保证"><a href="#来一发服务请求—协议保证" class="headerlink" title="来一发服务请求—协议保证"></a>来一发服务请求—协议保证</h5><p>&emsp;<strong>什么是协议？协议就是双方的约定，就是规矩，就是格式 </strong> 下面，我们来看看一个实际远程调用过程的数据穿透协议。<br><img src="http://upload-images.jianshu.io/upload_images/5297002-a12030633a9064d1.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨进程调用"></p>
-<p>&emsp;上图实际执行了系统服务MediaPlayer的setVolume(float,float)函数调用过程，而执行的实体实际上是远端的服务进程。<br>&emsp;数据write_buffer实际上是通过copy_from_user传递到内核空间。传递的内容，在上图中一目了然，主要包括类（android.media.IMediaPlayer），方法（通过数字26映射），参数（1.0,1.0）。以上，就是函数调用从用户空间被传递到内核空间，通过Binder驱动发送到实际执行的远程服务进程完成执行操作。</p>
-<h3 id="Binder通信机制"><a href="#Binder通信机制" class="headerlink" title="Binder通信机制"></a>Binder通信机制</h3><p>&emsp;上面，我们该对整个通信过程有了一个大概的印象，应该已经清楚，数据从哪里来，如何穿透进程壁垒以及穿透的基础。接下来，我们先来通过下图澄清几个概念。</p>
-<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/binder-progress.png" alt="Binder通信的粗略过程"></p>
+        <p>&emsp;距离 java 8 发布，都快四年了。现在回过头来，系统地整理一下零零散散的知识点。本章是对Java 8 中新特性的一些总结。<a href="https://www.techempower.com/blog/2013/03/26/everything-about-java-8/" target="_blank" rel="noopener">原文链接</a><br><a id="more"></a></p>
+<h3 id="接口改进"><a href="#接口改进" class="headerlink" title="接口改进"></a>接口改进</h3><p>&emsp;现在我们可以在接口中定义静态方法了。比如，在 java.util.Comparator 中就定义了静态方法 naturalOrder:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T extends Comparable&lt;? super T&gt;&gt;</span><br><span class="line">Comparator&lt;T&gt; naturalOrder() &#123;</span><br><span class="line">    return (Comparator&lt;T&gt;)</span><br><span class="line">        Comparators.NaturalOrderComparator.INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;另外，现在在接口中可以定义 default 方法。例如， java.lang.Iterable 中的 forEach 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public default void forEach(Consumer&lt;? super T&gt; action) &#123;</span><br><span class="line">    Objects.requireNonNull(action);</span><br><span class="line">    for (T t : this) &#123;</span><br><span class="line">        action.accept(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;在过去，这基本上是不可能的。<br>&emsp;在Java 8 中，大量的 default 方法被添加进核心的 JDK 接口中，后面我会进一步讨论他们。</p>
+<h5 id="为什么不同使用-default-方法重写-equals-、hashCode、toString-方法？"><a href="#为什么不同使用-default-方法重写-equals-、hashCode、toString-方法？" class="headerlink" title="为什么不同使用 default 方法重写 equals 、hashCode、toString 方法？"></a>为什么不同使用 default 方法重写 equals 、hashCode、toString 方法？</h5><p>&emsp;接口中并不能通过默认实现（default implementation）的方式重写Object类中的任何方法。这就意味着不能通过这种方式重写equals 、 hashCode 以及 toString方法。<br>&emsp;一开始看起来这有点奇怪，Brian Goetz在 Lambda项目中的邮件列出了四个冗长的理由，这里我只讲一个，因为这一个理由足够说服我：<br>&emsp;所有接口实例本身都是Object，这使得它原本就有关于equals/hashCode/toString 等方法的 non-default 实现，因此，再提供一个default版本的实现就显得毫无用户。</p>
+<h3 id="函数接口-Functional-interfaces"><a href="#函数接口-Functional-interfaces" class="headerlink" title="函数接口( Functional interfaces)"></a>函数接口( Functional interfaces)</h3><p>&emsp;在 Java 8 中引入的一个核心概念就是函数接口。<strong>一个接口是函数接口，就意味着，它有且仅有一个抽象方法。</strong><br>&emsp;正如 java.lang.Runnable 就是一个函数接口。唯一的抽象方法就是 run 方法。<br>&emsp;接口中的 default 方法并不是抽象的，所有函数接口中可以定义任意多的 default 方法。<br>&emsp;一个新的注解 @FunctionalInterface 也被引入了，用于标注函数接口。类似于@Override 注解，它声明这个接口是一个函数接口，如果不是，它会拒绝编译。</p>
+<h3 id="lambdas"><a href="#lambdas" class="headerlink" title="lambdas"></a>lambdas</h3><p>&emsp;<strong>关于函数接口，一个非常有价值的性质在于，它可以被通过 lambdas表达式的方式进行实例化</strong>。下面将给出一些例子：<br>&emsp;在左边使用逗号分隔的具有指定类型的输入列表，在右边是带有返回值的代码块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(int x, int y) -&gt; &#123; return x + y; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;左边是可以推断出类型的以逗号分隔的输入列表，右边是返回值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x, y) -&gt; x + y</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;左边是可以推断出类型的单个参数，右边是返回值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x-&gt; x*x</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;没有输入，但是有返回值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">()-&gt;x</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;左边是可以推断出类型的单个参数，右边是代码块，但是没有返回值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x-&gt;&#123;System.out.println(x);&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;静态方法引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String::valueOf</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;非静态方法引用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object::toString</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;捕获方法引用（capturing method reference）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x::toString</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;构造器引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList::new</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;事实上，你可以把方法应用看做是lamdba的速记形式。<br>&emsp;方法引用和lambda表达式是等价的。</p>
 <ul>
-<li>Binder驱动：一个内核层级的驱动，促成了进程间通信。有人把它比作网络通信中的路由器，而路由器的作用，就是从原地址存储转发数据目的地址，很贴切。</li>
-<li>Binder对象：是IBinder接口的实现。实际上就是远程服务动作的实际执行者。</li>
-<li>BinderToken：也有叫 handler 的。实际上就是一个32位的整型值，唯一的代表了一个远端Binder对象。</li>
-<li>Binder Service：实际持有Binder对象，处理业务逻辑。</li>
-<li>Binder Client：请求Binder服务者。</li>
-<li>Proxy：实现了AIDL接口，能够序列化/反序列化数据结构，同时能够通过Binder引用进行远程调用。</li>
-<li>Stub：能够序列化和反序列化数据，并把转换过程映射到实际的服务端的方法调用。</li>
-<li>Context Manager：一个注册 handler（句柄）为0的特殊Binder对象。通过name到handler的映射关系，注册和查找别的Binder对象。也有人把它对应为DNS服务器。DNS服务器的作用，就是通过IP地质到域名的映射，提供查找和注册。即我们向DNS服务器注册自己的IP，并把它映射到一个域名；这样，别人就可以通过域名来访问我们的主机，因为DNS服务器将把这个域名转换为IP。</li>
+<li>String::valueOf 等价于 x-&gt;String.valueOf(x);</li>
+<li>Object::toString 等价于 x-&gt;x.toString();</li>
+<li>x::toString 等价于 ()-&gt;x.toString();</li>
+<li>ArrayList::new 等价于 ()-&gt; new ArrayList();</li>
 </ul>
-<p>&emsp;把上图再细致一点，放大，如下图所示：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/binder-mechanism/binder-process-detail.png" alt="Binder通信详细过程"></p>
-<p>Client：</p>
+<p>&emsp;当然，方法是可以被重载的。对于同一个方法名，类中可能有多个不同参数的方法。一个 ArrayList::new 可以指向它三个构造器中的任意一个，具体的指向，取决于到底使用哪个函数接口。<br>&emsp;lambda表达式和函数接口在“形状”是匹配的。也就是说，它们的输入列表、输出列表以及声明的检查期异常都是一样的。<br>比如说<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Comparator&lt;String&gt; c = (a, b) -&gt; Integer.compare(a.length(),</span><br><span class="line">                                                 b.length());</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;Comparator接口中的compare方法有两个 String 类型的输入，返回一个 int 值，这和 lambda 表达式的左右输入、返回是一致的。<br>在比如说：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Runnable r = () -&gt; &#123; System.out.println(&quot;Running!&quot;); &#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;Runnable 中的 run 方法，没有输入，没做返回这和它的 lambda表达式也应该是一致的。</p>
+<h5 id="捕获式和非捕获式-lambda"><a href="#捕获式和非捕获式-lambda" class="headerlink" title="捕获式和非捕获式 lambda"></a>捕获式和非捕获式 lambda</h5><p>&emsp;所谓捕获，是指 lambda表达式中访问了在 lambda 函数体非静态的变量或者对象。举个栗子，下面 lambda 捕获了变量x：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int x = 5;</span><br><span class="line">return y -&gt; x + y;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;为了使这种 lambda 声明变得合理，它所捕获的变量必须是“有效的 final”类型。即，要么被标记为 final，或者在之后不可以被赋值。<br>非捕获的 lambda 通常会比捕获 lambda 效率高，虽然并没有任何证据指明这一点（据我所知）。（译注：前者通常比后者的依赖少）。比如，下面的 isFunActivity 依赖于 this，因为 isFun 是对象方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class FunDetector &#123;</span><br><span class="line">      private boolean isFun(Activity activity) &#123; ... &#125;</span><br><span class="line"> </span><br><span class="line">       public Predicate&lt;Activity&gt; isFunAcitivity() &#123;</span><br><span class="line">        return activity -&gt; isFun(activity);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="lambda-不能做什么"><a href="#lambda-不能做什么" class="headerlink" title="lambda 不能做什么"></a>lambda 不能做什么</h5><p>&emsp;有些特性，是 lambda 并没有提供。</p>
+<ul>
+<li><p><strong>非 final 变量的捕获</strong> 如果外部变量会赋新值，那就不应该被用在 lambda 中。当然，final 修饰不是必须的，但是肯定不能再 lambda 之后修改，否则代码不会被编译。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int count = 0;</span><br><span class="line">List&lt;String&gt; strings = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);</span><br><span class="line">strings.forEach(s -&gt; &#123;</span><br><span class="line">    count++; // 错误：不能修改 count</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>异常透明度</strong> 如果一个编译期异常被 lambda 抛出来了，那么，它所对应的函数接口必须声明了这个异常可以被抛出来，否则，异常是不会向上传播的。下面这段代码不会被编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void appendAll(Iterable&lt;String&gt; values, Appendable out)</span><br><span class="line">        throws IOException &#123; // doesn&apos;t help with the error</span><br><span class="line">    values.forEach(s -&gt; &#123;</span><br><span class="line">        out.append(s); //错误：无法抛出IO异常，因为它所对应的Consumer.accept 没有允许，所以，forEach是不会收到抛出的异常的</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>控制流(break,return)</strong> 在上面的 forEach 栗子中，如果想在 lambda 中返回true，并停止循环，这样是不行的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">final String secret = &quot;foo&quot;;</span><br><span class="line">boolean containsSecret(Iterable&lt;String&gt; values) &#123;</span><br><span class="line">    values.forEach(s -&gt; &#123;</span><br><span class="line">        if (secret.equals(s)) &#123;</span><br><span class="line">            ??? // want to end the loop and return true, but can&apos;t</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="为什么抽象方法不能通过-lambda-实例化"><a href="#为什么抽象方法不能通过-lambda-实例化" class="headerlink" title="为什么抽象方法不能通过 lambda 实例化"></a>为什么抽象方法不能通过 lambda 实例化</h5><p>&emsp;在一个抽象类中，哪怕只有一个抽象方法，都不能使用 lambda 进行实例化。<br>两个原因，其一是，这么做，隐藏了构造方法的执行；另外一个原因，是 lambda 未来的优化方向。以后， lambda 可能不需要被计算进一个实例化对象中。</p>
+<h3 id="java-util-function"><a href="#java-util-function" class="headerlink" title="java.util.function"></a>java.util.function</h3><p>这里有一些通用的函数接口被广泛使用，这些接口都是新增的。这里列举一些：</p>
+<ul>
+<li>Function&lt;T,R&gt; - T是输入，R作为输出</li>
+<li>Predicate<t> - T作为输入，输出boolean</t></li>
+<li>Consumer<t> - T作为输入，执行一些动作，但是没有输出</t></li>
+<li>Supplier<t> - 没有输入，返回 T</t></li>
+<li>BinaryOperator<t> - 由两个T作为输入，返回一个T。该接口对于“reduce”操作很有用。<br>出于性能考虑，在使用基础类型作为输入输出时，为了避免装包解包，会提供专用的函数接口，比如：</t></li>
+<li>intConsumer - 使用一个int类型作为输入，执行一些操作，而不做返回。</li>
+</ul>
+<h3 id="java-util-stream"><a href="#java-util-stream" class="headerlink" title="java.util.stream"></a>java.util.stream</h3><p>&emsp;新的 java.util.stream 包提供了工具集以支持面向函数的编程。通常，我们会从一个 collection 集合中获取 stream：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;T&gt; stream = collection.stream();</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;stream 就像一个 iterator.类比水流，一个 stream 只能被遍历一次，一次就用完了。 Stream 可能是无线流。<br>&emsp;stream 可以是串行的或者并行的 。串行流执行在一个线程中，并行流执行在多个线程中。<br>&emsp;这里，给出一些实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int sumOfWeights = blocks.stream().filter(b -&gt; b.getColor() == RED)</span><br><span class="line">                                  .mapToInt(b -&gt; b.getWeight())</span><br><span class="line">                                  .sum();</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;stream 提供了丰富的 API 来转换流和执行动作。这些操作包括：中间操作(intermediate)和终止操作(terminal)。</p>
+<ul>
+<li>中间操作：一个中间操作会允许在流的基础上做进一步操作，然后接着返回这个流。就像上面的 filter 和 map，就是中间操作，它们返回当前 stream，以允许操作链上的处理继续进行。</li>
+<li>终止操作：一个终止操作意味在在这个stream会最后被调用。一旦终止操作被调用，stream 就被“消费”完了，不能再被使用。上面的 sum 方法就是一个终止操作。</li>
+</ul>
+<p>&emsp;通常，处理 stream 会按照下面的步骤进行调用：</p>
 <ol>
-<li>首先，客户端从ContextManager中通过服务名，拿到远程服务的handler（句柄），也就是binder token。</li>
-<li>调用远程服务的 foo 方法，然后序列化参数；</li>
-<li>通过 transact 把调用相关的资料提交给 libbinder处理；</li>
-<li>由 libbinder 通过ioctl进程系统调用，将foo调用请求提交给binder驱动；</li>
-<li>binder驱动通过handler找到真正的远端服务进程，然后通过ioctl函数将foo调用传递给远端服务进程的 libbinder；</li>
-<li>远端libbinder将调用交给Stub；</li>
-<li>在Stub中，反序列化调用信息，还原；</li>
-<li>Stub找到实际服务提供者，执行客户端的请求；</li>
-<li>将结果序列化<br>……<br>&emsp;再通过Binder驱动，返回给客户端。</li>
+<li>从数据源获得一个 stream；</li>
+<li>执行一个或者多个中间操作；</li>
+<li>执行一个终止操作。</li>
 </ol>
-<p>Server：<br>&emsp;主要是在ContextManager中完成注册（name -&gt; handler）；等待接收Binder驱动发来的请求。</p>
-<h3 id="Binder限制"><a href="#Binder限制" class="headerlink" title="Binder限制"></a>Binder限制</h3><p>&emsp;在使用Binder进程跨进程调用的时候，有两个重要的限制需要注意：</p>
+<p>&emsp;这里有两个通用属性需要考虑：</p>
 <ul>
-<li>一个服务进程中最多同时支持15个binder线程处理请求；</li>
-<li>一个进程中用户交互穿透数据的缓存大小最多为1M，这就意味着，在传递的数据是有限的，如果资源耗尽，会抛出异常。</li>
+<li>状态（Stateful ）：中间操作分为有状态的和无状态的。通常有状态的要比无状态的实现代价更高。（译注：有状态意味着要解决更多依赖问题）</li>
+<li>短路（short-circuiting）:终止操作分为短路和非短路的。所谓短路，意味着允许流处理提前结束，而不需要检查所有元素。</li>
 </ul>
-<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>&emsp;作为一个应用开发者，对本质对底层的C实现机制，有些技痒，但是久未使用过C，想从源码的角度深入分析，需要花费更多精力，目前似乎又没有这个必要，那么，就先浅尝辄止，不求甚解。如有不对的地方，还请指出。<br>&emsp;收获，就在于对序列化、反序列化的认识；对数据结构化的认识；从Binder框架的认识；以后再读源码的时候，不会被各种服务调用搞的晕头转向；再有就是对AIDL的使用上，不用再死记硬背如何通过AIDL进程跨进程调用了。<br>后面，会写一下AIDL跨进程调用过程。</p>
-<p>本文参考链接：<br><a href="https://blog.checkpoint.com/wp-content/uploads/2015/02/Man-In-The-Binder-He-Who-Controls-IPC-Controls-The-Droid-wp.pdf" target="_blank" rel="noopener">https://blog.checkpoint.com/wp-content/uploads/2015/02/Man-In-The-Binder-He-Who-Controls-IPC-Controls-The-Droid-wp.pdf</a><br><a href="https://events.linuxfoundation.org/images/stories/slides/abs2013_gargentas.pdf" target="_blank" rel="noopener">https://events.linuxfoundation.org/images/stories/slides/abs2013_gargentas.pdf</a><br><a href="https://www.dre.vanderbilt.edu/~schmidt/cs282/PDFs/android-binder-ipc.pdf" target="_blank" rel="noopener">https://www.dre.vanderbilt.edu/~schmidt/cs282/PDFs/android-binder-ipc.pdf</a><br>想要深入源码和数据结构的同学，可以参考以下链接：<br><a href="http://gityuan.com/2015/11/01/binder-driver/" target="_blank" rel="noopener">http://gityuan.com/2015/11/01/binder-driver/</a><br><a href="http://www.cloudchou.com/android/post-507.html" target="_blank" rel="noopener">http://www.cloudchou.com/android/post-507.html</a><br><a href="http://www.jianshu.com/p/1050ce12bc1e" target="_blank" rel="noopener">http://www.jianshu.com/p/1050ce12bc1e</a><br><a href="http://blog.csdn.net/universus/article/details/6211589#comments" target="_blank" rel="noopener">http://blog.csdn.net/universus/article/details/6211589#comments</a><br><a href="https://github.com/xdtianyu/SourceAnalysis/blob/master/Binder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.md" target="_blank" rel="noopener">https://github.com/xdtianyu/SourceAnalysis/blob/master/Binder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.md</a><br>或者，自己去找binder.c 和 binder.h 这两个文件来看吧。</p>
+<p>&emsp;中间操作：</p>
+<ul>
+<li>filter ： 排除所有不匹配 Predicate 的元素；</li>
+<li>map ：通过Function 对所有元素进行一一映射；</li>
+<li>flatMap ：通过flatMap，可以使用一个Stream替换某个值，然后把所有的Stream合并起来。map操作将值替换一个新的值，但是有时候我们想替换为一个新的Stream对象，更常见的是把多个Stream和合并为一个Stream.下面假设order是购物清单<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//函数原型</span><br><span class="line">&lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;? super T,? extends Stream&lt;? extends R&gt;&gt; mapper)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">orders.flatMap(order -&gt; order.getLineItems().stream())...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>peek ：对当当前流中的每一个元素做一些操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot;)</span><br><span class="line">         .filter(e -&gt; e.length() &gt; 3)</span><br><span class="line">         .peek(e -&gt; System.out.println(&quot;Filtered value: &quot; + e))</span><br><span class="line">         .map(String::toUpperCase)</span><br><span class="line">         .peek(e -&gt; System.out.println(&quot;Mapped value: &quot; + e))</span><br><span class="line">         .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>distinct ：通过 .equals 行为排除所有相同的元素。这是一个有状态的操作。</p>
+</li>
+<li>sorted ：通过输入进去的 Comparator，确保流中的元素是有序的。这是一个有状态的操作。</li>
+<li>limit ：确保序列操作只能访问查阅到最大的数量。这是一个有状态的、短路操作。</li>
+<li>skip ：跳过前面 n 个元素。</li>
+</ul>
+<p>&emsp;终止操作：</p>
+<ul>
+<li>forEach : 遍历 stream 中的每个元素，进行操作。</li>
+<li>toArray ：把 stream 中的元素转为数组。</li>
+<li>reduce ： 通过 BinaryOperator 将 stream 中的元素聚合成 1 个；（译注：这种聚合是针对不可变类型数据的聚合，将问题变成了f(g(x，y))的问题，这里，g(x，y)即是上面的BinaryOperator。下面我以代码举个例子）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(1, 2, 3, 4).reduce(100, (sum, item) -&gt; sum +item);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java8-new-features/reduce.png" alt="上述代码中的reduce过程"></p>
+<ul>
+<li><p>collect ：将流中的元素聚合到一些容器中，比如Collection或者Map（译注：以下示例来自官方文档）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; asList = stringStream.collect(Collectors.toList());</span><br><span class="line">Map&lt;String, List&lt;Person&gt;&gt; peopleByCity</span><br><span class="line">         = personStream.collect(Collectors.groupingBy(Person::getCity));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>min ：根据 Comparator 找到流中的最小元素。</p>
+</li>
+<li>max ：根据 Comparator 找到流中的最大元素。</li>
+<li>count ：算出流中元素的个数；</li>
+<li>anyMatch ：根据 Predicate 查找时候至少有一个元素是匹配的。这是一个短路操作，意味着一旦找到一个，就停止寻找过程。</li>
+<li>allMatch ：根据 Predicate 判断是否所有元素都满足匹配，这也是一个短路操作，一旦发现有一个不匹配，就停止这个过程。</li>
+<li>noneMatch ：查找是否没有元素匹配。</li>
+<li>findFirst ：查找流中的第一个元素，这是一个短路操作。</li>
+<li>findAny ：查找一些元素。通常它会比 findFirst 效率高些。 这是一个短路操作。</li>
+</ul>
+<p>&emsp;这些中间操作，都是懒加载的。也就是说，只有终止操作才能开始这个流对元素的处理过程。<br>&emsp;Stream 会尽量做更少的工作以提升效率。它会做一些优化处理，比如当它确定元素已经是顺序时，sorted() 会被省略执行。在一些操作例如 limit(x) 或者 substream(x,y)中，stream 通常会避免执行一些不必要的 map 操作（译注：显然它没必要对流中的所有操作进行map，如果中间操作中有 map 的话）。<br>&emsp;回到并行流（parallel stream）的概念，很重要的一点是，它将消耗更多的性能，同时，并不能保证结果的一致性。所以，在使用前，需要注意这些问题：这是排序问题吗？函数是无状态的吗？数据量太大、操作太复杂而只能使用并行机制吗？等等等等。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;先到这里吧，以上，都是比较常用的功能。后面，还有些关于集合新增函数、同步API、IO这些，与我不是特别常用[捂脸]，立个flag，有时间接着写。<br>&emsp;让我觉得最好用的就是 lambda 表达式的使用。同时还有 stream 的概念，面向函数式编程，我觉得最大的优势，就是简洁、可读性高。</p>
 
       
     </div>
@@ -561,15 +621,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Binder/" rel="tag"># Binder</a>
+            <a href="/tags/java/" rel="tag"># java</a>
           
-            <a href="/tags/Android/" rel="tag"># Android</a>
+            <a href="/tags/λ/" rel="tag"># λ</a>
           
-            <a href="/tags/IPC/" rel="tag"># IPC</a>
-          
-            <a href="/tags/序列化/" rel="tag"># 序列化</a>
-          
-            <a href="/tags/反序列化/" rel="tag"># 反序列化</a>
+            <a href="/tags/stream/" rel="tag"># stream</a>
           
         </div>
       
@@ -582,14 +638,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/09/25/Android-AIDL/" rel="next" title="Android AIDL 详解">
+                <i class="fa fa-chevron-left"></i> Android AIDL 详解
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/25/Android-AIDL/" rel="prev" title="Android AIDL 详解">
-                Android AIDL 详解 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/15/Android 之 setContentView/" rel="prev" title="Android 之 setContentView">
+                Android 之 setContentView <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -756,7 +816,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder通信基础"><span class="nav-number">1.</span> <span class="nav-text">Binder通信基础</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#用户空间和内核空间—谁来中转数据"><span class="nav-number">1.0.1.</span> <span class="nav-text">用户空间和内核空间—谁来中转数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#序列化与反序列化—什么样的数据完成进程穿透"><span class="nav-number">1.0.2.</span> <span class="nav-text">序列化与反序列化—什么样的数据完成进程穿透</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#来一发服务请求—协议保证"><span class="nav-number">1.0.3.</span> <span class="nav-text">来一发服务请求—协议保证</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder通信机制"><span class="nav-number">2.</span> <span class="nav-text">Binder通信机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder限制"><span class="nav-number">3.</span> <span class="nav-text">Binder限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#接口改进"><span class="nav-number">1.</span> <span class="nav-text">接口改进</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么不同使用-default-方法重写-equals-、hashCode、toString-方法？"><span class="nav-number">1.0.1.</span> <span class="nav-text">为什么不同使用 default 方法重写 equals 、hashCode、toString 方法？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数接口-Functional-interfaces"><span class="nav-number">2.</span> <span class="nav-text">函数接口( Functional interfaces)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lambdas"><span class="nav-number">3.</span> <span class="nav-text">lambdas</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#捕获式和非捕获式-lambda"><span class="nav-number">3.0.1.</span> <span class="nav-text">捕获式和非捕获式 lambda</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#lambda-不能做什么"><span class="nav-number">3.0.2.</span> <span class="nav-text">lambda 不能做什么</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么抽象方法不能通过-lambda-实例化"><span class="nav-number">3.0.3.</span> <span class="nav-text">为什么抽象方法不能通过 lambda 实例化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-util-function"><span class="nav-number">4.</span> <span class="nav-text">java.util.function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-util-stream"><span class="nav-number">5.</span> <span class="nav-text">java.util.stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
@@ -952,7 +1012,7 @@
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
-            id: '图说 Android Binder 机制', 
+            id: 'Java8 中的新特性 [译]', 
             owner: 'yuegs',
             repo: 'yuegs.github.io',
             

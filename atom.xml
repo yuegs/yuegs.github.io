@@ -40,11 +40,11 @@
       <category term="区块链" scheme="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
     
-      <category term="java" scheme="http://blog.yuegs.com/tags/java/"/>
-    
       <category term="区块链" scheme="http://blog.yuegs.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
       <category term="sha256" scheme="http://blog.yuegs.com/tags/sha256/"/>
+    
+      <category term="java" scheme="http://blog.yuegs.com/tags/java/"/>
     
   </entry>
   
@@ -96,9 +96,9 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
-    
       <category term="自定义View" scheme="http://blog.yuegs.com/tags/%E8%87%AA%E5%AE%9A%E4%B9%89View/"/>
+    
+      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
   </entry>
   
@@ -334,9 +334,9 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
-    
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
+    
+      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
     
       <category term="AIDL" scheme="http://blog.yuegs.com/tags/AIDL/"/>
     
@@ -362,9 +362,9 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
-    
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
+    
+      <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
     
       <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
     
@@ -421,6 +421,32 @@
       <category term="并发" scheme="http://blog.yuegs.com/tags/%E5%B9%B6%E5%8F%91/"/>
     
       <category term="同步" scheme="http://blog.yuegs.com/tags/%E5%90%8C%E6%AD%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>值传递、引用传递、共享传递</title>
+    <link href="http://blog.yuegs.com/2017/07/27/java-pass-by/"/>
+    <id>http://blog.yuegs.com/2017/07/27/java-pass-by/</id>
+    <published>2017-07-26T17:28:01.000Z</published>
+    <updated>2018-05-27T14:30:51.620Z</updated>
+    
+    <content type="html"><![CDATA[<p>&emsp;最近在写代码的过程中，逐渐体会到模块化、对象化、结构化、独立化对于整个项目工程是多么重要和迫切的一件事。<br>&emsp;保持逻辑的清晰，保证各个模块灵活可拆卸，提升工程的解耦能力，拒绝臃肿，避免模块内部的强关联，真的很优雅。<br>&emsp;结构构成了系统的骨骼，数据在不同对象，不同组件，不同模块之间传递，像血液一样流动起来，这样系统才能活动起来。然而，不同的编程语言之间，对于数据的传递也有这自己的方式，对于开发者而言可能就会造成疑惑。查了一些资料，下面我想总结一下。<br><a id="more"></a></p><h3 id="值传递"><a href="#值传递" class="headerlink" title="值传递"></a>值传递</h3><p>&emsp;值传递有这样的特点：<strong>实际上传递进方法或者对象实例的是要传递内容（基础类型变量或者对象的引用）的副本，因此，在方法或者实例内部改变传递进来的值，对于外部是不可见的，并不会造成什么影响</strong><br>&emsp;<strong>对于Java来说，从本质上来讲，所有的传递都是值传递</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   public static void main(String [] args)&#123;</span><br><span class="line"> Dog myDog = new Dog(&quot;Rover&quot;);      //---1</span><br><span class="line"> foo(myDog);                                       //---2</span><br><span class="line">&#125;</span><br><span class="line">   public void foo(Dog someDog) &#123;</span><br><span class="line">  someDog.setName(&quot;Max&quot;);                     //---3</span><br><span class="line">  someDog = new Dog(&quot;Fifi&quot;);                    //---4</span><br><span class="line">  someDog.setName(&quot;Rowlf&quot;);                   //---5</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java-pass-by/pass-by-value-1.png" alt=""><br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java-pass-by/pass-by-value-2.png" alt=""></p><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java-pass-by/pass-by-value-3.png" alt=""></p><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/java/java-pass-by/pass-by-value-4.png" alt=""></p><h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>&emsp;myDog变量在内存中占有空间，这段空间中有指向一个Dog实例或者说Dog对象的指针。<br>&emsp;在传递过程中，myDog这个内存中的<strong>值</strong>被拷贝然后传递到方法中，并赋值到someDog，此时myDog和someDog这两个内存空间的值都有指向同一个Dog实例，因此此时均可以修改Dog实例的属性。<br>&emsp;当给someDog赋值新的Dog对象，改变的只是someDog变量的值，也就是someDog所占内存空间的值，指向了一个新的Dog对象，对myDog并没有任何影响。</p><h3 id="引用传递"><a href="#引用传递" class="headerlink" title="引用传递"></a>引用传递</h3><p>&emsp;引用传递的特点是：<strong>这里的引用，相当于一个别名，所以，传递到方法或者对象中，对该变量的修改在外部是可见的。</strong>就像在某个qq群中，名字叫张三，同一个qq号，现在又进了另外一个qq群，起名李四，然而，不管是张三还是李四，本质上来说，指向的是同一个qq号。<br>&emsp;在C++中存在引用传递。不太熟悉C++，这里不细说。</p><h3 id="共享传递-Call-by-sharing"><a href="#共享传递-Call-by-sharing" class="headerlink" title="共享传递(Call by sharing)"></a>共享传递(Call by sharing)</h3><p>&emsp;在JavaScript中看到这个概念。<br>&emsp;维基百科上说：</p><blockquote><p>However, the term “call by sharing” is not in common use; the terminology is inconsistent across different sources. For example, in the Java community, they say that Java is call by value.</p></blockquote><p>&emsp;可见，这跟java中的值传递是同一个概念。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&amp;emsp;最近在写代码的过程中，逐渐体会到模块化、对象化、结构化、独立化对于整个项目工程是多么重要和迫切的一件事。&lt;br&gt;&amp;emsp;保持逻辑的清晰，保证各个模块灵活可拆卸，提升工程的解耦能力，拒绝臃肿，避免模块内部的强关联，真的很优雅。&lt;br&gt;&amp;emsp;结构构成了系统的骨骼，数据在不同对象，不同组件，不同模块之间传递，像血液一样流动起来，这样系统才能活动起来。然而，不同的编程语言之间，对于数据的传递也有这自己的方式，对于开发者而言可能就会造成疑惑。查了一些资料，下面我想总结一下。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://blog.yuegs.com/categories/Java/"/>
+    
+    
+      <category term="java" scheme="http://blog.yuegs.com/tags/java/"/>
+    
+      <category term="值传递" scheme="http://blog.yuegs.com/tags/%E5%80%BC%E4%BC%A0%E9%80%92/"/>
+    
+      <category term="引用传递" scheme="http://blog.yuegs.com/tags/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92/"/>
     
   </entry>
   

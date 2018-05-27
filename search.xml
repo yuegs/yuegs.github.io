@@ -8,9 +8,9 @@
         <category>区块链</category>
       </categories>
       <tags>
-        <tag>java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -36,8 +36,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>自定义View</tag>
+        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
@@ -155,8 +155,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
+        <tag>Binder</tag>
         <tag>AIDL</tag>
         <tag>IPC</tag>
       </tags>
@@ -169,8 +169,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
+        <tag>Binder</tag>
         <tag>IPC</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
@@ -199,6 +199,19 @@
         <tag>java</tag>
         <tag>并发</tag>
         <tag>同步</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[值传递、引用传递、共享传递]]></title>
+    <url>%2F2017%2F07%2F27%2Fjava-pass-by%2F</url>
+    <content type="text"><![CDATA[&emsp;最近在写代码的过程中，逐渐体会到模块化、对象化、结构化、独立化对于整个项目工程是多么重要和迫切的一件事。&emsp;保持逻辑的清晰，保证各个模块灵活可拆卸，提升工程的解耦能力，拒绝臃肿，避免模块内部的强关联，真的很优雅。&emsp;结构构成了系统的骨骼，数据在不同对象，不同组件，不同模块之间传递，像血液一样流动起来，这样系统才能活动起来。然而，不同的编程语言之间，对于数据的传递也有这自己的方式，对于开发者而言可能就会造成疑惑。查了一些资料，下面我想总结一下。 值传递&emsp;值传递有这样的特点：实际上传递进方法或者对象实例的是要传递内容（基础类型变量或者对象的引用）的副本，因此，在方法或者实例内部改变传递进来的值，对于外部是不可见的，并不会造成什么影响&emsp;对于Java来说，从本质上来讲，所有的传递都是值传递123456789 public static void main(String [] args)&#123; Dog myDog = new Dog(&quot;Rover&quot;); //---1 foo(myDog); //---2&#125; public void foo(Dog someDog) &#123; someDog.setName(&quot;Max&quot;); //---3 someDog = new Dog(&quot;Fifi&quot;); //---4 someDog.setName(&quot;Rowlf&quot;); //---5&#125; 说明&emsp;myDog变量在内存中占有空间，这段空间中有指向一个Dog实例或者说Dog对象的指针。&emsp;在传递过程中，myDog这个内存中的值被拷贝然后传递到方法中，并赋值到someDog，此时myDog和someDog这两个内存空间的值都有指向同一个Dog实例，因此此时均可以修改Dog实例的属性。&emsp;当给someDog赋值新的Dog对象，改变的只是someDog变量的值，也就是someDog所占内存空间的值，指向了一个新的Dog对象，对myDog并没有任何影响。 引用传递&emsp;引用传递的特点是：这里的引用，相当于一个别名，所以，传递到方法或者对象中，对该变量的修改在外部是可见的。就像在某个qq群中，名字叫张三，同一个qq号，现在又进了另外一个qq群，起名李四，然而，不管是张三还是李四，本质上来说，指向的是同一个qq号。&emsp;在C++中存在引用传递。不太熟悉C++，这里不细说。 共享传递(Call by sharing)&emsp;在JavaScript中看到这个概念。&emsp;维基百科上说： However, the term “call by sharing” is not in common use; the terminology is inconsistent across different sources. For example, in the Java community, they say that Java is call by value. &emsp;可见，这跟java中的值传递是同一个概念。]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>值传递</tag>
+        <tag>引用传递</tag>
       </tags>
   </entry>
 </search>

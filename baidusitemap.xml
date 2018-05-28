@@ -4,8 +4,54 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/01/27/Android-proguard/</loc>
+    <lastmod>2018-05-28T09:13:19.041Z</lastmod>
+    <data>
+        <display>
+        <title>使用 ProGuard 进行代码混淆</title>
+        <pubTime>2018-01-27T07:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>ProGuard</tag>
+         
+        <tag>混淆</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
+    <lastmod>2018-05-27T14:57:16.760Z</lastmod>
+    <data>
+        <display>
+        <title>如何正确停止线程</title>
+        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>thread</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/06/25/java-annotation/</loc>
-    <lastmod>2018-05-27T14:49:13.170Z</lastmod>
+    <lastmod>2018-05-27T14:51:02.167Z</lastmod>
     <data>
         <display>
         <title>Java 中的注解 [译]</title>
@@ -62,28 +108,6 @@
         <tag>并发</tag>
          
         <tag>同步</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
-    <lastmod>2018-05-27T13:34:16.246Z</lastmod>
-    <data>
-        <display>
-        <title>如何正确停止线程</title>
-        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
-        
-        <tag>java</tag>
-         
-        <tag>thread</tag>
          
          
            

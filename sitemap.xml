@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/01/27/Android-proguard/</loc>
+    
+    <lastmod>2018-05-28T09:13:19.041Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
+    
+    <lastmod>2018-05-27T14:57:16.760Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2017/06/25/java-annotation/</loc>
     
-    <lastmod>2018-05-27T14:49:13.170Z</lastmod>
+    <lastmod>2018-05-27T14:51:02.167Z</lastmod>
     
   </url>
   
@@ -19,13 +33,6 @@
     <loc>http://blog.yuegs.com/2017/08/01/java-concurrency/</loc>
     
     <lastmod>2018-05-27T14:20:50.361Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
-    
-    <lastmod>2018-05-27T13:34:16.246Z</lastmod>
     
   </url>
   

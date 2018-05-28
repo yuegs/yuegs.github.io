@@ -135,7 +135,7 @@
 <meta property="og:site_name" content="风雪围城">
 <meta property="og:description" content="&amp;emsp;这里将着重描述如何停止一个线程，同时，顺带对其他线程方法如join、yield、wait方法也做一个总结。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-27T13:34:16.246Z">
+<meta property="og:updated_time" content="2018-05-27T14:57:16.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何正确停止线程">
 <meta name="twitter:description" content="&amp;emsp;这里将着重描述如何停止一个线程，同时，顺带对其他线程方法如join、yield、wait方法也做一个总结。">
@@ -523,8 +523,7 @@
 <p>该方法实际上是一个暗示，表明它希望放弃当前的处理器。这种暗示，可能被调度器忽略。</p>
 </blockquote>
 <p>&emsp;即它会重新进入到可执行状态，但是由于线程优先级缘故，调度器可能选择该线程继续执行。事实上，我没有使用过该方法。JDK文档中也说该方法非常少用 ，主要是帮助进行极少情况的bug重现。</p>
-<p>###4. wait</p>
-<p>&emsp;进入到监视器对象的阻塞队列中，直到调用了该对象的notify或者notifyAll方法，被唤醒从而拥有了获取监视器主权的条件。</p>
+<h3 id="4-wait"><a href="#4-wait" class="headerlink" title="4. wait"></a>4. wait</h3><p>&emsp;进入到监视器对象的阻塞队列中，直到调用了该对象的notify或者notifyAll方法，被唤醒从而拥有了获取监视器主权的条件。</p>
 <p>&emsp;其实，就是排队过独木桥，当一个对象过完独木桥，会调用notify方法，从队列中选取另外一个对象过桥，而notifyAll会唤醒所有等待过桥的对象，让它们去抢这个多桥的机会。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">synchronized (obj) &#123;</span><br><span class="line"></span><br><span class="line">      while (&lt;condition does not hold&gt;)</span><br><span class="line"></span><br><span class="line">          obj.wait();</span><br><span class="line"></span><br><span class="line">      ... // Perform action appropriate to condition</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
       
@@ -687,7 +686,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -709,7 +708,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -765,7 +764,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-stop方法"><span class="nav-number">1.</span> <span class="nav-text">1. stop方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-使用条件变量停止一个线程"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 使用条件变量停止一个线程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-使用线程的intercept方法停止线程"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 使用线程的intercept方法停止线程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-join方法"><span class="nav-number">2.</span> <span class="nav-text">2.join方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-yield"><span class="nav-number">3.</span> <span class="nav-text">3. yield</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-stop方法"><span class="nav-number">1.</span> <span class="nav-text">1. stop方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-使用条件变量停止一个线程"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 使用条件变量停止一个线程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-使用线程的intercept方法停止线程"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 使用线程的intercept方法停止线程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-join方法"><span class="nav-number">2.</span> <span class="nav-text">2.join方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-yield"><span class="nav-number">3.</span> <span class="nav-text">3. yield</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-wait"><span class="nav-number">4.</span> <span class="nav-text">4. wait</span></a></li></ol></div>
             
 
           </div>
@@ -799,7 +798,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">39.2k</span>
+    <span title="Site words total count">41.3k</span>
   
 </div>
 

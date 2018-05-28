@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/01/17/Android-gradle/</loc>
+    <lastmod>2018-05-28T09:32:20.893Z</lastmod>
+    <data>
+        <display>
+        <title>Gradle 之创建 Build Variants</title>
+        <pubTime>2018-01-17T15:46:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>gradle</tag>
+         
+        <tag>BuildVariants</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/01/27/Android-proguard/</loc>
     <lastmod>2018-05-28T09:13:19.041Z</lastmod>
     <data>
@@ -175,13 +199,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
-        <tag>AIDL</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
+         
+        <tag>AIDL</tag>
          
          
            
@@ -249,9 +273,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Process</tag>
+         
+        <tag>IPC</tag>
          
         <tag>Messenger</tag>
          
@@ -275,11 +299,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

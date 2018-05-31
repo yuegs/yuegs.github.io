@@ -96,9 +96,9 @@
       <category term="Android" scheme="http://blog.yuegs.com/categories/Android/"/>
     
     
-      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
-    
       <category term="自定义View" scheme="http://blog.yuegs.com/tags/%E8%87%AA%E5%AE%9A%E4%B9%89View/"/>
+    
+      <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
   </entry>
   
@@ -279,9 +279,9 @@
     
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
-      <category term="Process" scheme="http://blog.yuegs.com/tags/Process/"/>
-    
       <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
+    
+      <category term="Process" scheme="http://blog.yuegs.com/tags/Process/"/>
     
       <category term="Messenger" scheme="http://blog.yuegs.com/tags/Messenger/"/>
     
@@ -413,11 +413,11 @@
     
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
-      <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
-    
       <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
     
       <category term="AIDL" scheme="http://blog.yuegs.com/tags/AIDL/"/>
+    
+      <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
     
   </entry>
   
@@ -441,9 +441,9 @@
     
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
-      <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
-    
       <category term="Binder" scheme="http://blog.yuegs.com/tags/Binder/"/>
+    
+      <category term="IPC" scheme="http://blog.yuegs.com/tags/IPC/"/>
     
       <category term="序列化" scheme="http://blog.yuegs.com/tags/%E5%BA%8F%E5%88%97%E5%8C%96/"/>
     

@@ -223,11 +223,11 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
          
         <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
          
          
            
@@ -295,9 +295,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -323,9 +323,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>IPC</tag>
          
         <tag>序列化</tag>
          
@@ -401,9 +401,9 @@
         <title>Android:自定义 View 过程 [译]</title>
         <pubTime>2018-05-02T15:57:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>自定义View</tag>
+         
+        <tag>Android</tag>
          
          
            

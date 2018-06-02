@@ -1745,7 +1745,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/09/25/Android-AIDL/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/10/13/Android-activity-launch-process-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -1764,7 +1764,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/25/Android-AIDL/" itemprop="url">Android AIDL 详解</a></h1>
+                <a class="post-title-link" href="/2017/10/13/Android-activity-launch-process-3/" itemprop="url">Android Activity启动三部曲(三)</a></h1>
         
 
         <div class="post-meta">
@@ -1776,8 +1776,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T01:11:29+08:00">
-                2017-09-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-13T14:06:15+08:00">
+                2017-10-13
               </time>
             
 
@@ -1799,8 +1799,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码分析</span>
                   </a>
                 </span>
 
@@ -1816,7 +1816,7 @@
 
           
           
-             <span id="/2017/09/25/Android-AIDL/" class="leancloud_visitors" data-flag-title="Android AIDL 详解">
+             <span id="/2017/10/13/Android-activity-launch-process-3/" class="leancloud_visitors" data-flag-title="Android Activity启动三部曲(三)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1841,7 +1841,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,098
+                  1,418
                 </span>
               
 
@@ -1867,10 +1867,10 @@
 
       
         
-          <h3 id="AIDL简介"><a href="#AIDL简介" class="headerlink" title="AIDL简介"></a>AIDL简介</h3><p>&emsp;AIDL是对以 Binder 为核心的跨进程通信机制的进一步封装，使得这个过程更加简化，只暴露出非常必要的开发者需要实现的接口，让开发人员实现业务逻辑。顾名思义，Android 接口定义语言。</p>
+          <p><em>　　</em>本章作为Activity 启动过程的最后一章，主要探讨Activity如何在进程中运行起来。<br><em>　　</em>先来回顾一下前面两章的内容。<a href="">Android Activity启动过程（一）</a> 中，主要描述了从源Activity启动一个应用，启动过程截止到ActivityManagerService，主要包括跨进程通信，调用AMS执行启动请求；<a href="">Android Activity启动过程（二）</a>主要描述了为了进行Activity管理，AMS中的数据结构，以及AMS对启动请求的处理，直至AMS将启动一个新的进程。本节接着探究，如何运行Activity线程。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/25/Android-AIDL/#more" rel="contents">
+            <a class="btn" href="/2017/10/13/Android-activity-launch-process-3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1921,7 +1921,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/09/19/android-binder-mechanism/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/10/11/Android-activity-launch-process-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -1940,7 +1940,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/19/android-binder-mechanism/" itemprop="url">图说 Android Binder 机制</a></h1>
+                <a class="post-title-link" href="/2017/10/11/Android-activity-launch-process-2/" itemprop="url">Android Activity启动三部曲(二)</a></h1>
         
 
         <div class="post-meta">
@@ -1952,8 +1952,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T23:31:29+08:00">
-                2017-09-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T19:22:01+08:00">
+                2017-10-11
               </time>
             
 
@@ -1975,8 +1975,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码分析</span>
                   </a>
                 </span>
 
@@ -1992,7 +1992,7 @@
 
           
           
-             <span id="/2017/09/19/android-binder-mechanism/" class="leancloud_visitors" data-flag-title="图说 Android Binder 机制">
+             <span id="/2017/10/11/Android-activity-launch-process-2/" class="leancloud_visitors" data-flag-title="Android Activity启动三部曲(二)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -2017,7 +2017,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,421
+                  1,809
                 </span>
               
 
@@ -2043,10 +2043,10 @@
 
       
         
-          <p>&emsp;Binder机制，是Android系统跨进程协作的核心。我们知道，每个应用独立地运行在自己的进程虚拟地址空间中，就像是独自占有CPU、内存等资源，相互之间不可见。Android系统中的一个个应用，亦如一个个信息孤岛。正是Binder这样的跨进程访问机制，提供了孤岛之间沟通的桥梁。<br>
+          <p><em>　　</em>在上一篇<a href="">Android Activity启动过程（一）</a>中，我们的探究过程截止到了通过 Binder 机制向 ActivityManagerService（以下简称AMS） 发出 startActivity 请求，本节，我们将接着讨论 AMS 对 start 请求的处理过程。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/19/android-binder-mechanism/#more" rel="contents">
+            <a class="btn" href="/2017/10/11/Android-activity-launch-process-2/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2138,7 +2138,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2160,7 +2160,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2234,7 +2234,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">49.7k</span>
+    <span title="Site words total count">53.5k</span>
   
 </div>
 

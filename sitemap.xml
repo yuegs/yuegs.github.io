@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/12/13/Android-room-1/</loc>
+    
+    <lastmod>2018-06-02T03:23:52.243Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/13/Android-room-2/</loc>
+    
+    <lastmod>2018-06-02T03:23:47.626Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/17/Android-room-3/</loc>
+    
+    <lastmod>2018-06-02T03:23:39.479Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/26/Android-room-action/</loc>
+    
+    <lastmod>2018-06-02T03:23:30.374Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/01/14/Android-memeory-leak/</loc>
     
     <lastmod>2018-05-28T13:49:15.457Z</lastmod>

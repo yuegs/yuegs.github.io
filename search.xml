@@ -127,10 +127,62 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>IPC</tag>
         <tag>Process</tag>
+        <tag>IPC</tag>
         <tag>Messenger</tag>
         <tag>Service</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Android 中使用 Room 实践]]></title>
+    <url>%2F2017%2F12%2F26%2FAndroid-room-action%2F</url>
+    <content type="text"><![CDATA[&emsp;前面讲述了 Room 库的一些概念，这里记录一下自己的实践部分。 0. 添加依赖12implementation &quot;android.arch.persistence.room:runtime:1.0.0&quot;annotationProcessor &quot;android.arch.persistence.room:compiler:1.0.0&quot; 1. 设置 Schema 的位置&emsp;在开始使用的时候，并没有注意 Schema 的问题，所以它就抛出了警告，希望我们指定 Schema 的输出位置，以更好的表明数据库的结构信息。这是，你需要在 build.gradle 中添加：12345678910111213141516defaultConfig &#123; applicationId &quot;com.yuegs.test&quot; minSdkVersion 19 targetSdkVersion 26 versionCode 1 versionName &quot;1.0&quot; multiDexEnabled true //********注意这里********** javaCompileOptions &#123; annotationProcessorOptions &#123; arguments = [&quot;room.schemaLocation&quot;: &quot;$projectDir/schemas&quot;.toString()] //************************* &#125; &#125; ......&#125; &emsp;然后，编译运行之后，你就可以看到工程目录下的 schemas 问价夹。每个数据库，会对应一个自己的 schema。打开文件夹里面的 json 文件，你就能清楚看到自己定义的由Room 实际完成的数据库 schema 了。 2. 在数据库中存图片&emsp;遇到的第一个问题，就是如何使用 Room 库在数据库中存储图片。虽然，在数据库中存储图片实际上一般是不推荐的，但是还要看具体的使用场景和需求。&emsp;比如，我的需求主要来源于：将图片从服务器下载之后，持久化存储到本地；图片主要是一些勋章图片，大小在50k下；在需要的时候，需要快速检索出图片然后显示给用户；存储的时候，还需要记录图片的md5、勋章名称等。查了下资料，SQLite 可以存储的内容，在 TB 量级上，所以不需要担心数据库存不下你的内容，只要磁盘空间足够，就不存在问题。 （我使用模拟器，测试插入了1万张图片，在插入6千多图片后，大约2G，因为模拟器磁盘空间不足而抛出异常）。12345678910@Entityclass User &#123; @PrimaryKey(autoGenerate = true) public int id; public String firstName; @ColumnInfo(typeAffinity = ColumnInfo.BLOB) private byte[] headImage;&#125; &emsp;使用数据库存储图片，和直接在存储卡上存储文件相比，肯定往往不如直接存储文件效率高（文件搜索查询功能非常单纯），然而，数据库中存储了更多的结构性信息。最后，为了以防万一，还是把图片再处理下，使用 OkHttp 下载图片，处理，插入数据库：12345678910111213141516171819202122232425OkHttpUtils.get(url, new Callback() &#123; @Override public void onFailure(Call call, IOException e) &#123; &#125; @Override public void onResponse(Call call, Response response) throws IOException &#123; byte [] data = response.body().bytes() ; //以 50k 作为基准,50k以内不做处理，大于50k时，将压缩到50-100k之间 float compressTimes = data.length / 1024.0f /50 ; ByteArrayOutputStream baos ; Bitmap bitmap ; if(compressTimes &gt; 1)&#123; baos = new ByteArrayOutputStream(); bitmap = BitmapFactory.decodeByteArray(data,0,data.length) ; bitmap.compress(Bitmap.CompressFormat.JPEG, Math.round(100 /compressTimes), baos); data = baos.toByteArray(); &#125; User user1 = new User(); user1.setFirstName(&quot;compress&quot;); user1.setImage(data); db.userDao().insertAll(user1); &#125; &#125;); 3. 将引用类型转换为基础类型存储&emsp;在 Room 中，是不支持引用类型的存储的（主要考虑到效率问题，往往我们在查询的时候想要查出的内容仅仅是一个属性，而不是一个对象），那么，我想存储时间 Date ，该怎么办呢？&emsp;需要提供一种转换，将引用类型转换为它可以存储的基础类型。1234567891011public class DateConverter &#123; @TypeConverter public static Date fromTimestamp(Long value) &#123; return value == null ? null : new Date(value); &#125; @TypeConverter public static Long dateToTimestamp(Date date) &#123; return date == null ? null : date.getTime(); &#125;&#125; &emsp;上述代码块 ，将 Date 类型数据，转换为 long 类型的数据，可以存储在数据库中。&emsp;转换方法写完了，下面需要告诉数据库这个转换方法，否则它仍然无法完成转换，会报错告诉你它无法识别这个类型。12345@Database(entities = &#123; LogEntity.class&#125;,version = 1)@TypeConverters(&#123;DateConverter.class&#125;)public abstract class LogDatabase extends RoomDatabase &#123; public abstract LogDao logEntityDao() ;&#125; &emsp;如上述代码块所示，在数据库上添加 @TypeConverters 注解。 4. 数据库导出与查看&emsp;我是在模拟器（系统4.4）中做的测试，那么直接使用 Android Studio 将数据库文件导出，使用 SQLite Expert 打开查看。]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>数据库</tag>
+        <tag>组件库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用 Room 的 DAO 访问数据---Room 系列（2）[译]]]></title>
+    <url>%2F2017%2F12%2F17%2FAndroid-room-3%2F</url>
+    <content type="text"><![CDATA[&emsp;本文翻译自官网 &emsp;我们可以使用 DAO (data access object 数据访问对象) 来访问数据。 一系列的 Dao 对象组成了 Room 的主要部分。每个 DAO 对象包含了访问应用中数据库的方法。&emsp;我们在使用的时候，可以将DAO 定义为一个接口或者抽象类。如果是抽象类，它可以选择带有且仅有一个 RoomDatabase 参数的构造函数。我们无需自己实现DAO , Room 将在编译时创建这个 DAO 的实现。&emsp;需要注意的是，Room 不支持在主线程中访问数据库，除非在构建的时候调用了 allowMainThreadQueries() 方法。因为在它的将是非常耗时的。 定义方法&emsp;你可以在 DAO 类中，使用很多方便的数据库操作。 Insert&emsp;当我们创建一个以 @Insert 注解的 DAO 方法的时候，Room 将在一个事务中产生一个插入它所有参数到数据库实现1234567891011@Daopublic interface MyDao &#123; @Insert(onConflict = OnConflictStrategy.REPLACE) public void insertUsers(User... users); @Insert public void insertBothUsers(User user1, User user2); @Insert public void insertUsersAndFriends(User user, List&lt;User&gt; friends);&#125; &emsp;如果 @Insert 方法仅仅接收一个参数，它可以访问一个long 类型数据，代表了插入项的 rowId。以此类推，如果参数是一个数组或者集合，返回的将是 long [] 后者 List. Update&emsp;Update 用以通过指定参数修改 entity 。&emsp;它首先会根据 entity 的主键匹配数据，然后修改对应行的数据。12345@Daopublic interface MyDao &#123; @Update public void updateUsers(User... users);&#125; &emsp;当然，你也可以让这些方法返回一个 int 值，代表更新的行号。 Delete&emsp;Delete 代表着从数据库中删除一系列的 entity(译注：一个entity对应着数据库table中一个数据行)。它将使用主键找到那些需要被删除的 entity。12345@Daopublic interface MyDao &#123; @Delete public void deleteUsers(User... users);&#125; Query&emsp;@Query 是 DAO 类中的主要注解。它允许在数据库中执行读写操作。查询操作在编译的时候就已经确定了，如果这个查询是有问题的，将会发生编译错误而不用等待运行时报错。&emsp;Room 也检查了查询操作的返回值。如果返回对象的成员和相应的 列 名不匹配，Room 将通过下面两种方式给出警告： 给出一个相关成员不匹配的的警告 给出一个 error######简单的查询操作12345@Daopublic interface MyDao &#123; @Query(&quot;SELECT * FROM user&quot;) public User[] loadAllUsers();&#125; &emsp;上述是一个非常简单的查询操作，将得到所有的 User 。在编译的时候，Room 就知道它是查询所有 user 表中的列，所以如果包含一些语法错误，亦或者 user 并不存在，Room 显示报错信息。 在查询语句中添加参数&emsp;常常我们的查询都是带参数的，以进行数据过滤，比如说只找到那些年龄大于某个数值的用户。12345@Daopublic interface MyDao &#123; @Query(&quot;SELECT * FROM user WHERE age &gt; :minAge&quot;) public User[] loadAllUsersOlderThan(int minAge);&#125; &emsp;在进行编译处理的时候，Room 会将方法中的 minAge 和 :minAge 进行匹配设置。同样，如果无法匹配（译注：比如方法中不带参数，但是上面的查询语句中却带有参数），就是显示错误信息。&emsp;当然，你也可以传递多个参数：123456789@Daopublic interface MyDao &#123; @Query(&quot;SELECT * FROM user WHERE age BETWEEN :minAge AND :maxAge&quot;) public User[] loadAllUsersBetweenAges(int minAge, int maxAge); @Query(&quot;SELECT * FROM user WHERE first_name LIKE :search &quot; + &quot;OR last_name LIKE :search&quot;) public List&lt;User&gt; findUserWithName(String search);&#125; 返回某些列&emsp;很多时候，我们只需要一个 entity(一个数据行) 中的某些列。举例而言，在 UI 中，你可能只需要展示用户的姓和名，而不是关于用户的所有信息。只查询必要的信息，查询完成的速度会更快。&emsp;Room 允许从查询中返回一个 Java 对象，只要这些列可以被映射为一个对象。举例而言，你可以创建一个下面的 Java 对象仅仅获取用户的姓和名：1234567public class NameTuple &#123; @ColumnInfo(name=&quot;first_name&quot;) public String firstName; @ColumnInfo(name=&quot;last_name&quot;) public String lastName;&#125; &emsp;现在，可以在查询方法中返回这个 POJO :12345@Daopublic interface MyDao &#123; @Query(&quot;SELECT first_name, last_name FROM user&quot;) public List&lt;NameTuple&gt; loadFullName();&#125; &emsp;Room 可以感知到返回的 first_name 和 last_name 列中的值可以被映射到 NameTuple 类中的属性中。如果返回的太多列，或者返回的列中 NameTuple 类中并不存在这个属性，Room 会给出警告。 传递一个集合参数&emsp;有些查询操作可能需要传递的参数的个数是不确定的，只有在运行的时候才知道具体的数量。举个栗子，现在我们需要检索出某几个区域的用户信息：12345@Daopublic interface MyDao &#123; @Query(&quot;SELECT first_name, last_name FROM user WHERE region IN (:regions)&quot;) public List&lt;NameTuple&gt; loadUsersFromRegions(List&lt;String&gt; regions);&#125;]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>数据库</tag>
+        <tag>组件库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[通过 Room entities 定义数据 ---Room 系列(1) [译]]]></title>
+    <url>%2F2017%2F12%2F13%2FAndroid-room-2%2F</url>
+    <content type="text"><![CDATA[&emsp;本文翻译自官网 &emsp;当使用 Room 持久化库 的时候，我们需要定义一系列相关的成员作为 entities 。每个 entity 将被映射为一个 Database 中的 table。&emsp;默认情况下，Room 会为 Entity 中的每个成员创建一个 column。如果你不想对其中的某些成员进行持久化，可以使用 @Ingore 注解。&emsp;下面代码块，展示了怎样定义一个 entity：1234567891011@Entityclass User &#123; @PrimaryKey public int id; public String firstName; public String lastName; @Ignore Bitmap picture;&#125; &emsp;持久化成员之后，Room 必须有能力能够访问到它们。这就意味着需要把该成员设置为 public ，或者提供 getter、setter 方法能够访问到。 使用主键（primary key）&emsp;每个 entity 必须至少定义一个成员作为主键。也就是说，当仅有一个成员的时候，需要使用 @PrimaryKey 对该成员进程注解。如果你希望 Room 给 entity 设置一个自增的 id ， 可以设置 @PrimaryKey 的 autoGenerate 属性。如果一个 entity 需要复合主键（译注：多个字段共同构成主键，主要是考虑到没有id作为你主键，但是又要保证主键唯一性的问题），你可以使用 @Entity 注解的 primaryKeys 属性。12345678@Entity(primaryKeys = &#123;&quot;firstName&quot;, &quot;lastName&quot;&#125;)class User &#123; public String firstName; public String lastName; @Ignore Bitmap picture;&#125; 1234567891011121314@Entitypublic class User &#123; @PrimaryKey(autoGenerate = true) private int uid; @ColumnInfo(name = &quot;first_name&quot;) private String firstName; @ColumnInfo(name = &quot;last_name&quot;) private String lastName; // Getters and setters are ignored for brevity, // but they&apos;re required for Room to work.&#125; &emsp;默认情况下， Room 将使用类名作为 table 的名字，当然，你也可以自己设定名字：1234@Entity(tableName = &quot;users&quot;)class User &#123; ...&#125; &emsp;注意，table 名字在 SQLite 中是大小写不敏感的。&emsp;类似于上面的 tableName 属性，Room 默认使用成员名作为列名，当然，你也可以通过 @ColumnInfo 自己设定：1234567891011121314@Entity(tableName = &quot;users&quot;)class User &#123; @PrimaryKey public int id; @ColumnInfo(name = &quot;first_name&quot;) public String firstName; @ColumnInfo(name = &quot;last_name&quot;) public String lastName; @Ignore Bitmap picture;&#125; 注解索引和设置唯一性&emsp;为了在 entity 中建立索引，需要在 @Entity 注解中添加 indices 属性，列出需要索引的列名。123456789101112131415@Entity(indices = &#123;@Index(&quot;name&quot;), @Index(value = &#123;&quot;last_name&quot;, &quot;address&quot;&#125;)&#125;)class User &#123; @PrimaryKey public int id; public String firstName; public String address; @ColumnInfo(name = &quot;last_name&quot;) public String lastName; @Ignore Bitmap picture;&#125; &emsp;有时，对一些成员需要保证唯一性。你可以在 @Index 注解中设置 unique 属性为 true。123456789101112131415@Entity(indices = &#123;@Index(value = &#123;&quot;first_name&quot;, &quot;last_name&quot;&#125;, unique = true)&#125;)class User &#123; @PrimaryKey public int id; @ColumnInfo(name = &quot;first_name&quot;) public String firstName; @ColumnInfo(name = &quot;last_name&quot;) public String lastName; @Ignore Bitmap picture;&#125; 定义对象之间的关系&emsp;SQLite 是一种关系型数据库。你可以指定 对象 之间的关系。虽然很多 ORM 库（对象关系映射库）允许 entity 对象相互引用，但是这在 Room 是明确禁止的。即使你不能直接使用这些直接关系，但是 Room 允许你定义在 entity 之间的外键。举个栗子，假如这里有另外一个叫做 Book 的 entity，你可以通过 @ForeignKey 定义它和 User 实体的关系。123456789101112@Entity(foreignKeys = @ForeignKey(entity = User.class, parentColumns = &quot;id&quot;, childColumns = &quot;user_id&quot;))class Book &#123; @PrimaryKey public int bookId; public String title; @ColumnInfo(name = &quot;user_id&quot;) public int userId;&#125; &emsp;外键是很强大的，它们允许你指定 当引用的 entity 发生更新的时候会发生什么。比如，你可以通过在 @ForeignKey 注解中，添加 onDelete = CASCADE ,以告诉SQLite，如果一个 User 实体被删除的时候，删除他所有的书籍。 创建嵌套对象&emsp;以上，我们在成员都是基础类型或者 string 类型的数据。 但是有时，在逻辑上，我们希望将某某些成员封装一个紧密结合的内部实体。此时可以使用 @Embedded 注解表达这一类内部嵌套的实体。&emsp;在进行查询访问的时候，内部实体的每个成员还是需要作为一个单独的列来访问它们。12345678910111213141516171819class Address &#123; public String street; public String state; public String city; @ColumnInfo(name = &quot;post_code&quot;) public int postCode;&#125;@Entityclass User &#123; @PrimaryKey public int id; public String firstName; @Embedded public Address address;&#125; &emsp;上述表中，有一下列：id, firstName, street, state, city, and post_code。&emsp;注意，嵌套之中还可以添加嵌套。&emsp;如果在 entity 中包含多个同类型的嵌套，这时候可以通过设置 prefix 属性的方式加以区分：1234@Embedded(prefix = &quot;addr1&quot;)public Address address1;@Embedded(prefix = &quot;addr2&quot;)public Address address2; Room 会把这个 prefix 作为前缀添加到每个列名前面。（译注：通过insert方法插入嵌套结构数据之后示意图如下）]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>数据库</tag>
+        <tag>组件库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用Room进行持久化存储---综述[译]]]></title>
+    <url>%2F2017%2F12%2F13%2FAndroid-room-1%2F</url>
+    <content type="text"><![CDATA[&emsp;本文翻译自官网 &emsp;Room 提供了一个建立在 SQLite 之上的抽象层，使得我们能够更流畅的进行数据库访问。对于处理大量结构化数据的应用来说，将数据持久化存储到本地处理是一种较好的方式。 通常，我们会缓存相关的数据，当用户没有网络的时候，可以进行离线浏览，当设备在线之后，在同步数据。&emsp;而 Room 实际上就专注于这种方式。我们强烈推荐你使用 Room 替代 SQLite。当然，如果你更喜欢使用 SQLite API，Android仍然支持直接使用 SQLite 进行数据库访问。&emsp;在 Room 中，有三个主要概念： Database：数据库的实际持有者，底层连接的主要访问点。以 @Database 进行注解的类，应该满足以下几个条件：1. 这是一个抽象类，继承自 RoomDatabase；2. 包含一系列与该数据库相关的 entity ；3. 至少有一个方法返回以 @Dao 进行注解的对象，同时，该方法没有参数。在运行的时候，可以通过调用 Room.databaseBuilder() 或者 Room.inMemoryDatabaseBuilder() 方法请求一个 Database 实例。 12345678910// User and Book are classes annotated with @Entity.@Database(version = 1, entities = &#123;User.class, Book.class&#125;)abstract class AppDatabase extends RoomDatabase() &#123; // BookDao is a class annotated with @Dao. abstract public BookDao bookDao(); // UserDao is a class annotated with @Dao. abstract public UserDao userDao(); // UserBookDao is a class annotated with @Dao. abstract public UserBookDao userBookDao();&#125; Entity:代表了 database 中的一张 table 。 DAO:包含有访问数据库的方法。 &emsp;User.java1234567891011121314@Entitypublic class User &#123; @PrimaryKey private int uid; @ColumnInfo(name = &quot;first_name&quot;) private String firstName; @ColumnInfo(name = &quot;last_name&quot;) private String lastName; // Getters and setters are ignored for brevity, // but they&apos;re required for Room to work.&#125; &emsp;UserDao.java123456789101112131415161718@Daopublic interface UserDao &#123; @Query(&quot;SELECT * FROM user&quot;) List&lt;User&gt; getAll(); @Query(&quot;SELECT * FROM user WHERE uid IN (:userIds)&quot;) List&lt;User&gt; loadAllByIds(int[] userIds); @Query(&quot;SELECT * FROM user WHERE first_name LIKE :first AND &quot; + &quot;last_name LIKE :last LIMIT 1&quot;) User findByName(String first, String last); @Insert void insertAll(User... users); @Delete void delete(User user);&#125; &emsp;AppDatabase.java1234@Database(entities = &#123;User.class&#125;, version = 1)public abstract class AppDatabase extends RoomDatabase &#123; public abstract UserDao userDao();&#125; &emsp;创建了上述的文件之后，通过下面代码获取一个数据库实例：12AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, &quot;database-name&quot;).build(); &emsp;注意，通常，我们应该以单例模式实例化 AppDatabase 对象，因为每个 RoomDatabase 实例花销比较大，而我们往往不需要这么多的实例化对象。]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>数据库</tag>
+        <tag>组件库</tag>
       </tags>
   </entry>
   <entry>
@@ -193,10 +245,10 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
-        <tag>AIDL</tag>
         <tag>IPC</tag>
+        <tag>Binder</tag>
+        <tag>AIDL</tag>
       </tags>
   </entry>
   <entry>
@@ -207,9 +259,9 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
         <tag>IPC</tag>
+        <tag>Binder</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
       </tags>

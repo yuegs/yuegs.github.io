@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/04/25/Android-databinding/</loc>
+    <lastmod>2018-06-02T04:36:09.948Z</lastmod>
+    <data>
+        <display>
+        <title>Data Binding[译]</title>
+        <pubTime>2017-04-25T06:53:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>组件库</tag>
+         
+        <tag>DataBinding</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/10/13/Android-activity-launch-process-3/</loc>
     <lastmod>2018-06-02T04:02:44.546Z</lastmod>
     <data>
@@ -79,9 +103,9 @@
         
         <tag>Android</tag>
          
-        <tag>数据库</tag>
-         
         <tag>组件库</tag>
+         
+        <tag>数据库</tag>
          
          
            
@@ -103,9 +127,9 @@
         
         <tag>Android</tag>
          
-        <tag>数据库</tag>
-         
         <tag>组件库</tag>
+         
+        <tag>数据库</tag>
          
          
            
@@ -127,9 +151,9 @@
         
         <tag>Android</tag>
          
-        <tag>数据库</tag>
-         
         <tag>组件库</tag>
+         
+        <tag>数据库</tag>
          
          
            
@@ -151,9 +175,9 @@
         
         <tag>Android</tag>
          
-        <tag>数据库</tag>
-         
         <tag>组件库</tag>
+         
+        <tag>数据库</tag>
          
          
            

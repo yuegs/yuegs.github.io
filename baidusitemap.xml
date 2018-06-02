@@ -4,6 +4,72 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/03/04/Android-opengl-2d/</loc>
+    <lastmod>2018-06-02T09:28:56.694Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---绘制二维图形</title>
+        <pubTime>2018-03-04T02:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/06/Android-opengl-matrix/</loc>
+    <lastmod>2018-06-02T09:23:40.722Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---矩阵变换</title>
+        <pubTime>2018-03-06T08:28:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
+    <lastmod>2018-06-02T09:13:28.603Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---纹理</title>
+        <pubTime>2018-03-19T06:47:36.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
     <lastmod>2018-06-02T08:51:29.903Z</lastmod>
     <data>
@@ -501,13 +567,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
-        <tag>AIDL</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
+         
+        <tag>AIDL</tag>
          
          
            
@@ -575,9 +641,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Process</tag>
+         
+        <tag>IPC</tag>
          
         <tag>Messenger</tag>
          
@@ -601,11 +667,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

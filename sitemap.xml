@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/03/04/Android-opengl-2d/</loc>
+    
+    <lastmod>2018-06-02T09:28:56.694Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/06/Android-opengl-matrix/</loc>
+    
+    <lastmod>2018-06-02T09:23:40.722Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
+    
+    <lastmod>2018-06-02T09:13:28.603Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
     
     <lastmod>2018-06-02T08:51:29.903Z</lastmod>

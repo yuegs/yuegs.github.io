@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
+    
+    <lastmod>2018-06-02T10:13:19.745Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/07/MongoDB-crud/</loc>
+    
+    <lastmod>2018-06-02T10:12:58.257Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/12/MongoDB-update/</loc>
+    
+    <lastmod>2018-06-02T10:12:38.234Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/06/MongoDB-selector/</loc>
+    
+    <lastmod>2018-06-02T10:12:00.848Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/06/MongoDB-basic/</loc>
+    
+    <lastmod>2018-06-02T10:06:28.781Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2017/11/21/android-ui-adapte/</loc>
     
     <lastmod>2018-06-02T09:47:25.738Z</lastmod>
@@ -33,13 +68,6 @@
     <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
     
     <lastmod>2018-06-02T09:13:28.603Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
-    
-    <lastmod>2018-06-02T08:51:29.903Z</lastmod>
     
   </url>
   

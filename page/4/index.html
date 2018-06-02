@@ -1160,30 +1160,720 @@
 
       
         
-          
-            <p>&emsp;最近在做Https和wss安全连接，它们都是基于安全套接字SSLSocket的。<br>&emsp;我们知道，网络协议是分层次的，从HTTP -&gt;TCP/UDP -&gt;IP -&gt;MAC层，实现了对数据的封装和分发。而套接字Socket，实际上是以门面模式实现对TCP/IP协议的封装。所谓安全Socket，即在Socket上实现身份认证和网络通道加密。在建立连接的过程中，可以使用<strong>证书进行身份验证</strong>（客户端对服务器的身份验证，或者相互验证），并生成后续连接通道上对称加密的密钥（通过在握手过程中产生的三个随机数和约定好的密钥算法），从而建立安全的连接。而这个安全连接，实际上，就是http区别https，ws区别wss的重点和关键。</p>
-<h3 id="运行机制"><a href="#运行机制" class="headerlink" title="运行机制"></a>运行机制</h3><p>&emsp;基于安全套接字的通信，它背后的运行机制是这样的：</p>
-<ul>
-<li>生成公钥和私钥对。通常，服务器对保存私钥，并保证它不会被窃取，然后将公钥分发给客户端。客户端使用公钥对内容进行加密，然后服务器使用私钥进行解密。非堆成加密方式是十分安全的，并且，只要私钥能够对公钥加密过的内容解密。</li>
-<li>公钥通常存储在证书中，服务器以证书的方式分发。一般的证书格式为X509标准。这个证书，可以是自制的，也可以是机构颁发的。自己颁发的证书会存在安全隐患，即在分发的过程中，可能被中间服务器拦截，同时中间服务器向客户端分发了自己的证书，代替正常服务器和客户端通信。这就是“中间人攻击”。所以，通常我们会选择可信机构颁发的证书。 这样，客户端会从可信机构查询验证证书的有效性和安全性。</li>
-<li>在握手过程中，会产生三个随机数。第一个随机数是客户端发给服务器的；第二个随机数是客户端通过公钥进行加密后发给服务器的；第三个随机数是在服务器上生成发给客户端的，这样客户端和服务器将使用这个三个随机数和加密算法，生成后续通信过程中要使用的对称加密密匙。至于为啥最终要使用进行对称加密，原因我想有二：1. 非对称加密，是CPU密集型运算，耗费资源，同时拖慢访问速度；2.后面再约定好对称加密密钥，该密钥是根据算法和随机参数生成的，具有临时性，随机性，能够有效保证安全，同时，相对非对称加密会快很多。</li>
-</ul>
-<h3 id="获取安全Socket"><a href="#获取安全Socket" class="headerlink" title="获取安全Socket"></a>获取安全Socket</h3><p>&emsp;SSLContext这个类是对安全套接字协议的实现，并扮演了一个安全套接字工厂的角色。我们可以通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SSLContext context = SSLContext.getInstance(String protocol)</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;来获得一个SSLContext实例，其中参数为protocol，即要使用的协议名。这些协议名可以是SSL,TLS（其中TLS是SSL的继任者，TLS1.0相当于SSL3.1）等。<br>&emsp;通过SSLContext实例，我们可以得到SSLSocketFactory或者SSLServerSocketFactory, 从而最终获取客户端使用的SSLSocket和相对应的服务器所使用的SSLServerSocket。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SSLContext context = SSLContext.getInstance(String protocol)</span><br><span class="line">//初始化context</span><br><span class="line">context.init((KeyManager[] km, TrustManager[] tm,</span><br><span class="line">                                SecureRandom random));</span><br><span class="line">//在服务器端，需要获取安全的ServerSocket</span><br><span class="line">SSLServerSocketFactory serverFactory = context.getServerSocketFactory();</span><br><span class="line">SSLServerSocket serverSocket = serverFactory.getServerSocket(···) ;</span><br><span class="line">//在客户端，需要获取安全的Socket</span><br><span class="line">SSLSocketFactory clientFactory= context.getSocketFactory();</span><br><span class="line">SSLSocket clientSocket= clientFactory.createSocket(···);</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;拿到SSLSocket和SSLServerSocket，实际上我们已经可以直接在服务器和客户端之间进行通信了。<br>&emsp;重点关注上面的 init 过程。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">context.init((KeyManager[] km, TrustManager[] tm,</span><br><span class="line">                                SecureRandom random));</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>km：用于管理自己的key，包括证书和私钥。用途一般就是身份验证和信息加密。</li>
-<li>tm : 主要用于处理身份验证。即验证是否为我们需要进行通信的服务器。如果我们在本地存有公钥，那么从服务器获取证书后，从证书中取出公钥和本地存的公钥对比，即可验证服务器，而非中间攻击服务器。通常，继承该类，重新其中的重要方法checkServerTrusted。</li>
-<li>random ：随机数生成器。</li>
-</ul>
-<h3 id="单向认证和双向认证"><a href="#单向认证和双向认证" class="headerlink" title="单向认证和双向认证"></a>单向认证和双向认证</h3><p>&emsp;如果服务器不需要根据证书验证客户端身份的合法性，那么通常在客户端中，km设置为null，主要通过tm验证服务器的合法性；<br>&emsp;如果需要设置双向认证，则需要在本地km管理本地key，即不为空。<br>&emsp;无论如何对tm和km设置，我们注意到它们的工厂类初始化过程，都需要传入keystore，但是这两个KeyStore是有区别的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//得到TrustManager</span><br><span class="line">KeyStore trustKeyStore= KeyStore.getInstance(KeyStore.getDefaultType());</span><br><span class="line">trustKeyStore.setCertificateEntry(certificateAlias,</span><br><span class="line">            certificateFactory.generateCertificate(certificate));</span><br><span class="line">trustManagerFactory.init(trustKeyStore);</span><br><span class="line">trustManager = trustManagerFactory.getTrustManagers()；</span><br><span class="line">//得到KeyManager</span><br><span class="line">clientKeyStore = KeyStore.getInstance(&quot;BKS&quot;);</span><br><span class="line">clientKeyStore.load(mContext.getAssets().open(&quot;client.bks&quot;),</span><br><span class="line">            &quot;123456&quot;.toCharArray());</span><br><span class="line">KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(</span><br><span class="line">            KeyManagerFactory.</span><br><span class="line">            getDefaultAlgorithm());</span><br><span class="line">keyManagerFactory.init(clientKeyStore, &quot;123456&quot;.toCharArray());</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;KeyManager实际上管理的是自己的KeyStore，而TrustManager管理的是对方的KeyStore。自己的KeyStore可以用来让对方验证自己的身份，而对方的KeyStore用来验证对方身份的合法性。</p>
-<h3 id="应用于OkHttp3中"><a href="#应用于OkHttp3中" class="headerlink" title="应用于OkHttp3中"></a>应用于OkHttp3中</h3><p>&emsp;客户端单向验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sslContext.init(</span><br><span class="line">                null,</span><br><span class="line">                trustManagerFactory.getTrustManagers(),</span><br><span class="line">                new SecureRandom()</span><br><span class="line">                 );</span><br><span class="line">defaultSslSocketFactory = sslContext.getSocketFactory() ;</span><br><span class="line">okHttpClient = new OkHttpClient.Builder()</span><br><span class="line">                .readTimeout(10,TimeUnit.SECONDS)</span><br><span class="line">                .writeTimeout(10,TimeUnit.SECONDS)</span><br><span class="line">                .connectTimeout(10,TimeUnit.SECONDS)</span><br><span class="line">                .cache(cache)</span><br><span class="line">                .sslSocketFactory(defaultSslSocketFactory)</span><br><span class="line">        //        .addInterceptor(new LoggingInterceptor())</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;证书生成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -alias server -keyalg RSA </span><br><span class="line">        -keystore server.jks -validity 3600 </span><br><span class="line">        -storepass 123456 </span><br><span class="line">        -ext san=ip:10.2.10.26（服务器ip）</span><br><span class="line">	</span><br><span class="line">keytool -export -alias server </span><br><span class="line">        -file server.cer </span><br><span class="line">        -keystore server.jks </span><br><span class="line">        -storepass 123456</span><br></pre></td></tr></table></figure></p>
-<h3 id="Tomcat服务器端配置"><a href="#Tomcat服务器端配置" class="headerlink" title="Tomcat服务器端配置"></a>Tomcat服务器端配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line"></span><br><span class="line">import javax.websocket.OnClose;</span><br><span class="line">import javax.websocket.OnMessage;</span><br><span class="line">import javax.websocket.OnOpen;</span><br><span class="line">import javax.websocket.Session;</span><br><span class="line">import javax.websocket.server.ServerEndpoint;</span><br><span class="line"></span><br><span class="line">@ServerEndpoint(value = &quot;/wschat&quot;)</span><br><span class="line">public class WebSocketServlet &#123;</span><br><span class="line">    //notice:not thread-safe</span><br><span class="line">    private static ArrayList&lt;Session&gt; sessionList = new ArrayList&lt;Session&gt;();</span><br><span class="line">    </span><br><span class="line">    @OnOpen</span><br><span class="line">    public void onOpen(Session session)&#123;</span><br><span class="line">    	System.out.println(&quot;WebSocket Obj:&quot;+this.toString());</span><br><span class="line">    	System.out.println(&quot;---onOpen---&quot;);</span><br><span class="line">        try&#123;</span><br><span class="line">            sessionList.add(session);</span><br><span class="line">            //asynchronous communication</span><br><span class="line">            session.getBasicRemote().sendText(&quot;Hello!&quot;);</span><br><span class="line">        &#125;catch(IOException e)&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    @OnClose</span><br><span class="line">    public void onClose(Session session)&#123;</span><br><span class="line">        sessionList.remove(session);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    @OnMessage</span><br><span class="line">    public void onMessage(String msg)&#123;</span><br><span class="line">    	System.out.println(&quot;---onMsg---&quot;+msg);</span><br><span class="line">        try&#123;</span><br><span class="line">            for(Session session : sessionList)&#123;</span><br><span class="line">                //asynchronous communication</span><br><span class="line">                session.getBasicRemote().sendText(msg);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;catch(IOException e)&#123;</span><br><span class="line">        	System.out.println(&quot;exception onMsg&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>&emsp;server.xml中connector配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector</span><br><span class="line">           protocol=&quot;org.apache.coyote.http11.Http11NioProtocol&quot;</span><br><span class="line">           port=&quot;8443&quot; maxThreads=&quot;200&quot;</span><br><span class="line">		   maxHttpHeaderSize=&quot;8192&quot;</span><br><span class="line">           scheme=&quot;https&quot; secure=&quot;true&quot; SSLEnabled=&quot;true&quot;</span><br><span class="line">           keystoreFile=&quot;D:\\apache-tomcat-8.5.15-windows-x64\\apache-tomcat-8.5.15\\conf\\server.jks&quot; keystorePass=&quot;123456&quot;</span><br><span class="line">           clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;/&gt;</span><br></pre></td></tr></table></figure></p>
+          <p>&emsp;最近在做Https和wss安全连接，它们都是基于安全套接字SSLSocket的。<br>&emsp;我们知道，网络协议是分层次的，从HTTP -&gt;TCP/UDP -&gt;IP -&gt;MAC层，实现了对数据的封装和分发。而套接字Socket，实际上是以门面模式实现对TCP/IP协议的封装。所谓安全Socket，即在Socket上实现身份认证和网络通道加密。在建立连接的过程中，可以使用<strong>证书进行身份验证</strong>（客户端对服务器的身份验证，或者相互验证），并生成后续连接通道上对称加密的密钥（通过在握手过程中产生的三个随机数和约定好的密钥算法），从而建立安全的连接。而这个安全连接，实际上，就是http区别https，ws区别wss的重点和关键。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/14/Net-https/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/06/12/MongoDB-update/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YueGs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风雪围城">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/12/MongoDB-update/" itemprop="url">MongoDB之update[译]</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T21:22:01+08:00">
+                2017-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MongoDB/" itemprop="url" rel="index">
+                    <span itemprop="name">MongoDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/12/MongoDB-update/" class="leancloud_visitors" data-flag-title="MongoDB之update[译]">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  663
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>&emsp;<a href="http://openmymind.net/mongodb.pdf" target="_blank" rel="noopener">原文地址</a><br>&emsp;<strong>update：replace VS $ set</strong><br>&emsp;update最简单的使用方式，就是使用两个参数。selector 和将要进行更新的 field。如果Rooooooodles 的重量增加了，可以这样做：<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/12/MongoDB-update/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/06/07/MongoDB-crud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YueGs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风雪围城">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/07/MongoDB-crud/" itemprop="url">MongoDB CRUD操作[译]</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-07T22:42:01+08:00">
+                2017-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MongoDB/" itemprop="url" rel="index">
+                    <span itemprop="name">MongoDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/07/MongoDB-crud/" class="leancloud_visitors" data-flag-title="MongoDB CRUD操作[译]">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  457
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>&emsp;CRUD操作即对文档进行create，read，update 和 update 。<br>&emsp;<strong>创建（create）操作</strong><br>&emsp;创建或者插入都是添加一个新的文档（document）到集合（collection）中。如果集合不存在，插入操作将创建该集合。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/07/MongoDB-crud/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/06/06/MongoDB-selector/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YueGs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风雪围城">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/06/MongoDB-selector/" itemprop="url">MongoDB之Selector[译]</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T23:19:01+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MongoDB/" itemprop="url" rel="index">
+                    <span itemprop="name">MongoDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/06/MongoDB-selector/" class="leancloud_visitors" data-flag-title="MongoDB之Selector[译]">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,032
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>&emsp;<a href="http://openmymind.net/mongodb.pdf" target="_blank" rel="noopener">原文地址</a></p>
+<p>&emsp;除了上面我们提到的6个概念，在开始一些高级topic之前，你应该好好理解查询选择器。比如你可以在find，count，update，remove 文档的时候使用。一个选择器(selector)本质上是一个JSON对象，最简单的选择器就是{}，这将匹配所有的文档。如果想找到所有雌性unicorns，我们可以使用{gendar:’f’}。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/06/MongoDB-selector/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/06/06/MongoDB-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YueGs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风雪围城">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/06/MongoDB-basic/" itemprop="url">MongoDB基础[译]</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T00:30:01+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MongoDB/" itemprop="url" rel="index">
+                    <span itemprop="name">MongoDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/06/MongoDB-basic/" class="leancloud_visitors" data-flag-title="MongoDB基础[译]">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,330
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>&emsp;<a href="http://openmymind.net/mongodb.pdf" target="_blank" rel="noopener">原文地址</a></p>
+<p>&emsp;首先，我们要了解MongoDB的基本运行机制。这将有助于我们理解MongoDB的核心。<br>在此之前，我们需要明白六个简单的概念：<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/06/MongoDB-basic/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1393,187 +2083,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/04/25/Android-databinding/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="YueGs">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风雪围城">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/25/Android-databinding/" itemprop="url">Data Binding[译]</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-25T14:53:01+08:00">
-                2017-04-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/04/25/Android-databinding/" class="leancloud_visitors" data-flag-title="Data Binding[译]">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,903
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>&emsp;本文为官网文章翻译 <a href="https://developer.android.com/topic/libraries/data-binding/index.html" target="_blank" rel="noopener">原文地址</a><br>&emsp;这篇文档将展示如何使用 Data Binding 库<strong>声明布局以及如何最低化应用逻辑和布局之间的耦合。</strong><br>&emsp;Data Binding Library 非常灵活并且具有很高的兼容性—对于这个兼容库，你可以使用Android2.1以上的所有版本的Android平台。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/25/Android-databinding/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1623,7 +2137,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1634,7 +2148,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1645,7 +2159,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1719,7 +2233,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">71.5k</span>
+    <span title="Site words total count">75.0k</span>
   
 </div>
 

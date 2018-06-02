@@ -619,11 +619,11 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
          
         <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
          
          
            
@@ -691,9 +691,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -719,9 +719,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>IPC</tag>
          
         <tag>序列化</tag>
          

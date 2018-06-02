@@ -136,7 +136,7 @@
 <meta property="og:description" content="本章作为Activity启动流程的第一篇，将对调用过程到ActivityManagerService（以下简称AMS）之前的工作做以说明，并对下一篇执行过程做铺垫。　　计划在第二篇讲解到启动新进程中，为启动Activity做准备(已完成)。　　在第三篇，主要讲解如何在新进程中启动Activity，以及Activity各种声明周期的回调(已完成)。　　使用源码：Nougat - 7.0.0_r1">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/yuegs/yuegs.github.io/raw/master/images/android/Amdroid-acitvity-launch-processs/Activity%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B-1.png">
-<meta property="og:updated_time" content="2018-06-02T03:57:20.980Z">
+<meta property="og:updated_time" content="2018-06-02T04:02:12.896Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Activity启动三部曲（一）">
 <meta name="twitter:description" content="本章作为Activity启动流程的第一篇，将对调用过程到ActivityManagerService（以下简称AMS）之前的工作做以说明，并对下一篇执行过程做铺垫。　　计划在第二篇讲解到启动新进程中，为启动Activity做准备(已完成)。　　在第三篇，主要讲解如何在新进程中启动Activity，以及Activity各种声明周期的回调(已完成)。　　使用源码：Nougat - 7.0.0_r1">
@@ -466,7 +466,7 @@
       
 
       
-        <p><em>　　</em>本章作为Activity启动流程的第一篇，将对调用过程到ActivityManagerService（以下简称AMS）之前的工作做以说明，并对下一篇执行过程做铺垫。<br><em>　　</em><a href="">计划在第二篇讲解到启动新进程中，为启动Activity做准备(已完成)</a>。<br><em>　　</em><a href="">在第三篇，主要讲解如何在新进程中启动Activity，以及Activity各种声明周期的回调(已完成)</a>。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1</p>
+        <p><em>　　</em>本章作为Activity启动流程的第一篇，将对调用过程到ActivityManagerService（以下简称AMS）之前的工作做以说明，并对下一篇执行过程做铺垫。<br><em>　　</em><a href="https://blog.yuegs.com/2017/10/11/Android-activity-launch-process-2/">计划在第二篇讲解到启动新进程中，为启动Activity做准备(已完成)</a>。<br><em>　　</em><a href="https://blog.yuegs.com/2017/10/13/Android-activity-launch-process-3/">在第三篇，主要讲解如何在新进程中启动Activity，以及Activity各种声明周期的回调(已完成)</a>。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1</p>
 <a id="more"></a>
 <h3 id="Activity启动（一）"><a href="#Activity启动（一）" class="headerlink" title="Activity启动（一）"></a>Activity启动（一）</h3><p>&emsp;首先来通过一张大图，看看Activity的启动过程，在这一部分中，将调用过程先截止到AMS。</p>
 <p><img src="https://github.com/yuegs/yuegs.github.io/raw/master/images/android/Amdroid-acitvity-launch-processs/Activity%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B-1.png" alt="Activity启动过程（一）"></p>

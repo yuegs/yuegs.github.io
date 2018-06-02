@@ -1867,7 +1867,7 @@
 
       
         
-          <p><em>　　</em>本章作为Activity 启动过程的最后一章，主要探讨Activity如何在进程中运行起来。<br><em>　　</em>先来回顾一下前面两章的内容。<a href="">Android Activity启动过程（一）</a> 中，主要描述了从源Activity启动一个应用，启动过程截止到ActivityManagerService，主要包括跨进程通信，调用AMS执行启动请求；<a href="">Android Activity启动过程（二）</a>主要描述了为了进行Activity管理，AMS中的数据结构，以及AMS对启动请求的处理，直至AMS将启动一个新的进程。本节接着探究，如何运行Activity线程。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1<br>
+          <p><em>　　</em>本章作为Activity 启动过程的最后一章，主要探讨Activity如何在进程中运行起来。<br><em>　　</em>先来回顾一下前面两章的内容。<a href="https://blog.yuegs.com/2017/10/11/Android-activity-launch-process-1/">Android Activity启动过程（一）</a> 中，主要描述了从源Activity启动一个应用，启动过程截止到ActivityManagerService，主要包括跨进程通信，调用AMS执行启动请求；<a href="https://blog.yuegs.com/2017/10/11/Android-activity-launch-process-2/">Android Activity启动过程（二）</a>主要描述了为了进行Activity管理，AMS中的数据结构，以及AMS对启动请求的处理，直至AMS将启动一个新的进程。本节接着探究，如何运行Activity线程。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/10/13/Android-activity-launch-process-3/#more" rel="contents">
@@ -2043,7 +2043,7 @@
 
       
         
-          <p><em>　　</em>在上一篇<a href="">Android Activity启动过程（一）</a>中，我们的探究过程截止到了通过 Binder 机制向 ActivityManagerService（以下简称AMS） 发出 startActivity 请求，本节，我们将接着讨论 AMS 对 start 请求的处理过程。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1<br>
+          <p><em>　　</em>在上一篇<a href="https://blog.yuegs.com/2017/10/11/Android-activity-launch-process-1/">Android Activity启动过程（一）</a>中，我们的探究过程截止到了通过 Binder 机制向 ActivityManagerService（以下简称AMS） 发出 startActivity 请求，本节，我们将接着讨论 AMS 对 start 请求的处理过程。<br><em>　　</em>使用源码：Nougat - 7.0.0_r1<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/10/11/Android-activity-launch-process-2/#more" rel="contents">

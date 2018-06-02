@@ -8,9 +8,9 @@
         <category>区块链</category>
       </categories>
       <tags>
-        <tag>java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -281,8 +281,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>AIDL</tag>
         <tag>IPC</tag>
       </tags>
@@ -295,8 +295,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>IPC</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
@@ -376,6 +376,18 @@
         <tag>Android</tag>
         <tag>开源框架</tag>
         <tag>RxJava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Https之安全Socket]]></title>
+    <url>%2F2017%2F06%2F14%2FNet-https%2F</url>
+    <content type="text"><![CDATA[&emsp;最近在做Https和wss安全连接，它们都是基于安全套接字SSLSocket的。&emsp;我们知道，网络协议是分层次的，从HTTP -&gt;TCP/UDP -&gt;IP -&gt;MAC层，实现了对数据的封装和分发。而套接字Socket，实际上是以门面模式实现对TCP/IP协议的封装。所谓安全Socket，即在Socket上实现身份认证和网络通道加密。在建立连接的过程中，可以使用证书进行身份验证（客户端对服务器的身份验证，或者相互验证），并生成后续连接通道上对称加密的密钥（通过在握手过程中产生的三个随机数和约定好的密钥算法），从而建立安全的连接。而这个安全连接，实际上，就是http区别https，ws区别wss的重点和关键。 运行机制&emsp;基于安全套接字的通信，它背后的运行机制是这样的： 生成公钥和私钥对。通常，服务器对保存私钥，并保证它不会被窃取，然后将公钥分发给客户端。客户端使用公钥对内容进行加密，然后服务器使用私钥进行解密。非堆成加密方式是十分安全的，并且，只要私钥能够对公钥加密过的内容解密。 公钥通常存储在证书中，服务器以证书的方式分发。一般的证书格式为X509标准。这个证书，可以是自制的，也可以是机构颁发的。自己颁发的证书会存在安全隐患，即在分发的过程中，可能被中间服务器拦截，同时中间服务器向客户端分发了自己的证书，代替正常服务器和客户端通信。这就是“中间人攻击”。所以，通常我们会选择可信机构颁发的证书。 这样，客户端会从可信机构查询验证证书的有效性和安全性。 在握手过程中，会产生三个随机数。第一个随机数是客户端发给服务器的；第二个随机数是客户端通过公钥进行加密后发给服务器的；第三个随机数是在服务器上生成发给客户端的，这样客户端和服务器将使用这个三个随机数和加密算法，生成后续通信过程中要使用的对称加密密匙。至于为啥最终要使用进行对称加密，原因我想有二：1. 非对称加密，是CPU密集型运算，耗费资源，同时拖慢访问速度；2.后面再约定好对称加密密钥，该密钥是根据算法和随机参数生成的，具有临时性，随机性，能够有效保证安全，同时，相对非对称加密会快很多。 获取安全Socket&emsp;SSLContext这个类是对安全套接字协议的实现，并扮演了一个安全套接字工厂的角色。我们可以通过1SSLContext context = SSLContext.getInstance(String protocol) &emsp;来获得一个SSLContext实例，其中参数为protocol，即要使用的协议名。这些协议名可以是SSL,TLS（其中TLS是SSL的继任者，TLS1.0相当于SSL3.1）等。&emsp;通过SSLContext实例，我们可以得到SSLSocketFactory或者SSLServerSocketFactory, 从而最终获取客户端使用的SSLSocket和相对应的服务器所使用的SSLServerSocket。12345678910SSLContext context = SSLContext.getInstance(String protocol)//初始化contextcontext.init((KeyManager[] km, TrustManager[] tm, SecureRandom random));//在服务器端，需要获取安全的ServerSocketSSLServerSocketFactory serverFactory = context.getServerSocketFactory();SSLServerSocket serverSocket = serverFactory.getServerSocket(···) ;//在客户端，需要获取安全的SocketSSLSocketFactory clientFactory= context.getSocketFactory();SSLSocket clientSocket= clientFactory.createSocket(···); &emsp;拿到SSLSocket和SSLServerSocket，实际上我们已经可以直接在服务器和客户端之间进行通信了。&emsp;重点关注上面的 init 过程。12context.init((KeyManager[] km, TrustManager[] tm, SecureRandom random)); km：用于管理自己的key，包括证书和私钥。用途一般就是身份验证和信息加密。 tm : 主要用于处理身份验证。即验证是否为我们需要进行通信的服务器。如果我们在本地存有公钥，那么从服务器获取证书后，从证书中取出公钥和本地存的公钥对比，即可验证服务器，而非中间攻击服务器。通常，继承该类，重新其中的重要方法checkServerTrusted。 random ：随机数生成器。 单向认证和双向认证&emsp;如果服务器不需要根据证书验证客户端身份的合法性，那么通常在客户端中，km设置为null，主要通过tm验证服务器的合法性；&emsp;如果需要设置双向认证，则需要在本地km管理本地key，即不为空。&emsp;无论如何对tm和km设置，我们注意到它们的工厂类初始化过程，都需要传入keystore，但是这两个KeyStore是有区别的。1234567891011121314//得到TrustManagerKeyStore trustKeyStore= KeyStore.getInstance(KeyStore.getDefaultType());trustKeyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));trustManagerFactory.init(trustKeyStore);trustManager = trustManagerFactory.getTrustManagers()；//得到KeyManagerclientKeyStore = KeyStore.getInstance(&quot;BKS&quot;);clientKeyStore.load(mContext.getAssets().open(&quot;client.bks&quot;), &quot;123456&quot;.toCharArray());KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance( KeyManagerFactory. getDefaultAlgorithm());keyManagerFactory.init(clientKeyStore, &quot;123456&quot;.toCharArray()); &emsp;KeyManager实际上管理的是自己的KeyStore，而TrustManager管理的是对方的KeyStore。自己的KeyStore可以用来让对方验证自己的身份，而对方的KeyStore用来验证对方身份的合法性。 应用于OkHttp3中&emsp;客户端单向验证1234567891011121314sslContext.init( null, trustManagerFactory.getTrustManagers(), new SecureRandom() );defaultSslSocketFactory = sslContext.getSocketFactory() ;okHttpClient = new OkHttpClient.Builder() .readTimeout(10,TimeUnit.SECONDS) .writeTimeout(10,TimeUnit.SECONDS) .connectTimeout(10,TimeUnit.SECONDS) .cache(cache) .sslSocketFactory(defaultSslSocketFactory) // .addInterceptor(new LoggingInterceptor()) .build(); &emsp;证书生成123456789keytool -genkey -alias server -keyalg RSA -keystore server.jks -validity 3600 -storepass 123456 -ext san=ip:10.2.10.26（服务器ip） keytool -export -alias server -file server.cer -keystore server.jks -storepass 123456 Tomcat服务器端配置1234567891011121314151617181920212223242526272829303132333435363738394041424344import java.io.IOException;import java.util.ArrayList;import javax.websocket.OnClose;import javax.websocket.OnMessage;import javax.websocket.OnOpen;import javax.websocket.Session;import javax.websocket.server.ServerEndpoint;@ServerEndpoint(value = &quot;/wschat&quot;)public class WebSocketServlet &#123; //notice:not thread-safe private static ArrayList&lt;Session&gt; sessionList = new ArrayList&lt;Session&gt;(); @OnOpen public void onOpen(Session session)&#123; System.out.println(&quot;WebSocket Obj:&quot;+this.toString()); System.out.println(&quot;---onOpen---&quot;); try&#123; sessionList.add(session); //asynchronous communication session.getBasicRemote().sendText(&quot;Hello!&quot;); &#125;catch(IOException e)&#123;&#125; &#125; @OnClose public void onClose(Session session)&#123; sessionList.remove(session); &#125; @OnMessage public void onMessage(String msg)&#123; System.out.println(&quot;---onMsg---&quot;+msg); try&#123; for(Session session : sessionList)&#123; //asynchronous communication session.getBasicRemote().sendText(msg); &#125; &#125;catch(IOException e)&#123; System.out.println(&quot;exception onMsg&quot;); &#125; &#125;&#125; &emsp;server.xml中connector配置：1234567&lt;Connector protocol=&quot;org.apache.coyote.http11.Http11NioProtocol&quot; port=&quot;8443&quot; maxThreads=&quot;200&quot; maxHttpHeaderSize=&quot;8192&quot; scheme=&quot;https&quot; secure=&quot;true&quot; SSLEnabled=&quot;true&quot; keystoreFile=&quot;D:\\apache-tomcat-8.5.15-windows-x64\\apache-tomcat-8.5.15\\conf\\server.jks&quot; keystorePass=&quot;123456&quot; clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;/&gt;]]></content>
+      <categories>
+        <category>网络通信</category>
+      </categories>
+      <tags>
+        <tag>http</tag>
+        <tag>数字签名</tag>
       </tags>
   </entry>
   <entry>

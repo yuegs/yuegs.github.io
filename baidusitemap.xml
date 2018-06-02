@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
+    <lastmod>2018-06-02T08:51:29.903Z</lastmod>
+    <data>
+        <display>
+        <title>Https之安全Socket</title>
+        <pubTime>2017-06-14T15:50:01.000Z</pubTime>
+        
+        <tag>http</tag>
+         
+        <tag>数字签名</tag>
+         
+         
+           
+             
+              <breadCrumb title="网络通信" url="http://blog.yuegs.com/categories/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/06/18/Android-rx-flowable/</loc>
     <lastmod>2018-06-02T08:41:33.709Z</lastmod>
     <data>
@@ -455,11 +477,11 @@
         <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
         <pubTime>2018-05-26T05:02:00.000Z</pubTime>
         
-        <tag>java</tag>
-         
         <tag>区块链</tag>
          
         <tag>sha256</tag>
+         
+        <tag>java</tag>
          
          
            
@@ -479,9 +501,9 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>AIDL</tag>
          
@@ -579,9 +601,9 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>IPC</tag>
          

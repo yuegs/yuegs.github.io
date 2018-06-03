@@ -8,9 +8,9 @@
         <category>区块链</category>
       </categories>
       <tags>
+        <tag>java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
-        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -177,8 +177,8 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>IPC</tag>
         <tag>Process</tag>
+        <tag>IPC</tag>
         <tag>Messenger</tag>
         <tag>Service</tag>
       </tags>
@@ -344,10 +344,10 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
-        <tag>AIDL</tag>
         <tag>IPC</tag>
+        <tag>Binder</tag>
+        <tag>AIDL</tag>
       </tags>
   </entry>
   <entry>
@@ -358,9 +358,9 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
         <tag>IPC</tag>
+        <tag>Binder</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
       </tags>
@@ -375,6 +375,19 @@
       <tags>
         <tag>java</tag>
         <tag>thread</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[AndroidThings-GPIO]]></title>
+    <url>%2F2017%2F08%2F02%2FAndroidThing-GPIO%2F</url>
+    <content type="text"><![CDATA[&emsp;今天在项目中使用了一波AndroidThings，这是一个Google专门针对物联网的系统，结合硬件树莓派3b，还是有点意思。&emsp;物联网的概念提出了很多年，智慧城市，智慧家居，智慧xx。。。早已不在新鲜，只是今日，于我而言，才算是有了那么一点点的尝试。&emsp;回到对AndroidThings的讨论。以往总是觉得操作硬件、直接和硬件进行交互都是C、C+ +程序员的事。当然，使用Java也做过一些和硬件通信的项目。具体还是通过C实现的动态库来访问串口。&emsp;AndroidThings给Java程序员提供了一个更加友好的和硬件打交道的方式。尽管从本质上来讲，具体的操作执行还是依靠C或者C++来执行，但是个人感觉，它是一个集成，更加有针对性，更加标准化，从高层上提供了外围 I/O API对底层实现进行了封装和抽象。&emsp;外围 I/O 又包括了GPIO、PWM等等，它们的应用场景各不相同。这次项目中主要就使用了GPIO。&emsp;GPIO（General Purpose Input/Output）通用输入输出接口。它提供了一个可编程的的接口用于读取二元设备（比如开关按钮）或者输出到二元设备（比如LED灯）。&emsp;GPIO针脚作为输入时，它的状态自然取决于外部设备，然后app在输入状态变化的基础上作出响应；GPIO针脚作为输出时，就是通过app来控制针脚的状态。 连接&emsp;我们的app要想管理GPIO针脚，和它通信，首先要能和它连上。&emsp;为了能够连上它，首先，你需要知道这个针脚或者说端口的唯一名字。 &emsp;图片来源。上面的BCM4，BCM17等就是针脚的唯一名。我们可以通过该名字来找到该针脚。1234567891011121314151617181920212223242526272829303132public class HomeActivity extends Activity &#123; // GPIO Pin Name private static final String GPIO_NAME =&quot;BCM4&quot;; private Gpio mGpio; @Override protected void onCreate(Bundle savedInstanceState) &#123; super.onCreate(savedInstanceState); // Attempt to access the GPIO try &#123; PeripheralManagerService manager = new PeripheralManagerService(); mGpio = manager.openGpio(GPIO_NAME); &#125; catch (IOException e) &#123; Log.w(TAG, &quot;Unable to access GPIO&quot;, e); &#125; &#125; @Override protected void onDestroy() &#123; super.onDestroy(); if (mGpio != null) &#123; try &#123; mGpio.close(); mGpio = null; &#125; catch (IOException e) &#123; Log.w(TAG, &quot;Unable to close GPIO&quot;, e); &#125; &#125; &#125;&#125; &emsp;我们通过PeripheralManagerService 和 确定的针脚名来连接这个针脚。而当通信完成之后，需要释放该资源。如果你没有关闭这个连接，那么就无法创建新的连接到这个针脚。 输入输出&emsp;说完连接之后，紧接着就是针脚状态的输入和输出问题。下面先说说状态输入。 输入&emsp;为了能够读取GPIO针脚的输入，需要做如下配置： 使用 setDirection(Gpio.DIRECTION_IN)方法配置该针脚接收输入； 使用setActiveType()方法配置高电平为true状态还是低电平为true状态； 通过getValue()方法获取当前状态。123456789101112131415public void configureInput(Gpio gpio) throws IOException &#123; // Initialize the pin as an input gpio.setDirection(Gpio.DIRECTION_IN); // High voltage is considered active gpio.setActiveType(Gpio.ACTIVE_HIGH); ... // Read the active high pin state if (gpio.getValue()) &#123; // Pin is HIGH &#125; else &#123; // Pin is LOW &#125;&#125; 监听输入状态的改变&emsp;可以配置当GPIO针脚的输入状态发生变化时，主动通知app。为了注册这种改变事件，需要这么几步：&emsp;一、使用setEdgeTriggerType()声明触发条件,触发条件可以为： EDGE_NONE: 默认值，不会触发事件发生； EDGE_RISING: 当电平从低升到高时触发； EDGE_FALLING: 当电平从高转到低时触发； DEGE_BOTH: 电平发生变化时触发。 &emsp;二、通过registerGpioCallback设置GpioCallback作为触发回调。&emsp;三、在回调中的onGpioEdge()中返回true表示继续接收针脚状态变化事件。123456789101112131415161718192021222324252627282930public void configureInput(Gpio gpio) throws IOException &#123; // Initialize the pin as an input gpio.setDirection(Gpio.DIRECTION_IN); // Low voltage is considered active gpio.setActiveType(Gpio.ACTIVE_LOW); // Register for all state changes gpio.setEdgeTriggerType(Gpio.EDGE_BOTH); gpio.registerGpioCallback(mGpioCallback);&#125;private GpioCallback mGpioCallback = new GpioCallback() &#123; @Override public boolean onGpioEdge(Gpio gpio) &#123; // Read the active low pin state if (gpio.getValue()) &#123; // Pin is LOW &#125; else &#123; // Pin is HIGH &#125; // Continue listening for more interrupts return true; &#125; @Override public void onGpioError(Gpio gpio, int error) &#123; Log.w(TAG, gpio + &quot;: Error event &quot; + error); &#125;&#125;; &emsp;四、取消监听注册。12345678910111213141516171819public class HomeActivity extends Activity &#123; private Gpio mGpio; ... @Override protected void onStart() &#123; super.onStart(); // Begin listening for interrupt events mGpio.registerGpioCallback(mGpioCallback); &#125; @Override protected void onStop() &#123; super.onStop(); // Interrupt events no longer necessary mGpio.unregisterGpioCallback(mGpioCallback); &#125;&#125; 输出&emsp;输出是为了控制GPIO针脚的状态，为了达到这样的目的： 通过setDirection()设置模式为DIRECTION_OUT_INITIALLY_HIGH 或者 DIRECTION_OUT_INITIALLY_LOW进行输出配置。 通过setActivieType()将高电平或者低电平设置值为true。 通过setValue()方法来设置针脚的当前值。1234567891011public void configureOutput(Gpio gpio) throws IOException &#123; // Initialize the pin as a high output gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH); // Low voltage is considered active gpio.setActiveType(Gpio.ACTIVE_LOW); ... // Toggle the value to be LOW gpio.setValue(true);&#125;]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>AndroidThing</tag>
+        <tag>GPIO</tag>
+        <tag>物联网</tag>
       </tags>
   </entry>
   <entry>

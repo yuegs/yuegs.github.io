@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/08/02/AndroidThing-GPIO/</loc>
+    <lastmod>2018-06-03T01:52:41.965Z</lastmod>
+    <data>
+        <display>
+        <title>AndroidThings-GPIO</title>
+        <pubTime>2017-08-02T14:09:01.000Z</pubTime>
+        
+        <tag>AndroidThing</tag>
+         
+        <tag>GPIO</tag>
+         
+        <tag>物联网</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
     <lastmod>2018-06-02T10:13:19.745Z</lastmod>
     <data>
@@ -673,11 +697,11 @@
         <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
         <pubTime>2018-05-26T05:02:00.000Z</pubTime>
         
+        <tag>java</tag>
+         
         <tag>区块链</tag>
          
         <tag>sha256</tag>
-         
-        <tag>java</tag>
          
          
            
@@ -697,13 +721,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
-        <tag>AIDL</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
+         
+        <tag>AIDL</tag>
          
          
            
@@ -771,9 +795,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Process</tag>
+         
+        <tag>IPC</tag>
          
         <tag>Messenger</tag>
          
@@ -797,11 +821,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

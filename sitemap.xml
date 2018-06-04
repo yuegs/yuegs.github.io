@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/06/25/Android-rx-observable/</loc>
+    
+    <lastmod>2018-06-04T15:09:44.752Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
+    
+    <lastmod>2018-06-04T14:01:47.110Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2017/08/02/AndroidThing-GPIO/</loc>
     
     <lastmod>2018-06-03T01:52:41.965Z</lastmod>
@@ -51,13 +65,6 @@
   </url>
   
   <url>
-    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
-    
-    <lastmod>2018-06-02T09:38:02.796Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.yuegs.com/2018/03/04/Android-opengl-2d/</loc>
     
     <lastmod>2018-06-02T09:28:56.694Z</lastmod>
@@ -82,13 +89,6 @@
     <loc>http://blog.yuegs.com/2017/06/18/Android-rx-flowable/</loc>
     
     <lastmod>2018-06-02T08:41:33.709Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/06/25/Android-rx-observable/</loc>
-    
-    <lastmod>2018-06-02T08:40:39.696Z</lastmod>
     
   </url>
   

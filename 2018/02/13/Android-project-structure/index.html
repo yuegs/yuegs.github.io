@@ -136,9 +136,10 @@
 <meta property="og:description" content="&amp;emsp;这些年，参与的项目大大小小应该有六七个。所采用的项目架构，也是从 MVC 到 MVP ，后来使用 ReactNative 进行跨平台开发，再到后来回到原生，使用 MVVM。本节，打算聊一聊我的项目架构的演变之路。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVC%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B8%E5%9E%8B%E5%90%88%E4%BD%9C.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVC-Model.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVP%E6%A8%A1%E5%BC%8F.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVVMPattern.png">
-<meta property="og:updated_time" content="2018-06-05T01:22:26.612Z">
+<meta property="og:updated_time" content="2018-06-05T01:44:47.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="这些年经历的项目架构">
 <meta name="twitter:description" content="&amp;emsp;这些年，参与的项目大大小小应该有六七个。所采用的项目架构，也是从 MVC 到 MVP ，后来使用 ReactNative 进行跨平台开发，再到后来回到原生，使用 MVVM。本节，打算聊一聊我的项目架构的演变之路。">
@@ -443,7 +444,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,833
+                  1,732
                 </span>
               
 
@@ -470,12 +471,12 @@
       
         <p>&emsp;这些年，参与的项目大大小小应该有六七个。所采用的项目架构，也是从 MVC 到 MVP ，后来使用 ReactNative 进行跨平台开发，再到后来回到原生，使用 MVVM。本节，打算聊一聊我的项目架构的演变之路。<br><a id="more"></a></p>
 <h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p>&emsp;M, Model，主要负责进行数据访问，产生数据；C，Controller，主要负责对接 View 和 Model，将 Model 反映到 View 上，或者响应 View 上的动作，修改 Model，处理业务；V，即 View，主要负责 UI 渲染。</p>
-<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVC%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B8%E5%9E%8B%E5%90%88%E4%BD%9C.png" alt="MVC组件之间的典型合作"><br>&emsp;<a href="https://zh.wikipedia.org/wiki/MVC" target="_blank" rel="noopener">上图</a>来自维基百科。我们可以看到一个典型的 MVC 模式下的数据流向。上图中，View 监听 Model 的数据变化，然后进行 UPDATES 工作，这其中也会有业务逻辑处理。事实上，有些时候我们还需要对 Model 层的数据做进一步处理然后再做前端展示，这也是部分业务逻辑。<br>&emsp;<strong>所谓架构只是一种设计理念，目的就是在于保持逻辑的清晰，面向改变易扩展，功能易复用。对于 MVC 模式而言，各司其职（解耦），请求数据的产生数据；负责逻辑的处理逻辑，负责渲染的进行渲染，清晰明了。</strong><br>&emsp;然而，View 层对 Model 有着很强的依赖。为了能够使得 Model 发生的变化及时反映到到 View 上，View 需要注册为一个观察者到 Model 上。鉴于这种关系，View 、 Model 、Controller 需要互相持有对方的引用。</p>
-<p>&emsp;开发初期，可能是对这种设计结构并不十分熟悉，还有就是能力不到位，对结构的控制操作的非常不好。问题在哪里呢？问题就在于有时候可能很难将业务逻辑从 View 层上摘出来统统放到 Controller，它对 Model 的依赖太强了，导致了 View 层有时候也会扮演 Controller 的角色。<br>&emsp;更加“膨胀”的是，作为一个新手，有时甚至会忽略了对 Controller 的分离，而直接由 View 层（Activity）取代，因为 View 层本身就保持有对 Model 的引用，从权限上说它有能力处理业务。这样导致的后果就是，View 层越来越臃肿，越来越大，业务处理根本不可能复用。</p>
-<h3 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h3><p>&emsp;使用 MVC 没多久，同事建议组长采用 MVP 开发模式，于是，就是这么快的就跳转到了 MVP 的阵营。当时，对于一个连 MVC 都没有用好的人来说，还体会不到它太多的优势，最感兴趣的还是这种架构中突出的对<strong>接口</strong>的应用。<br>&emsp;面向接口的编程，实际上是 Java 开发一直所倡导的。优势在于解耦，降低依赖关系。但是也会让开发工作更加复杂。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVC%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B8%E5%9E%8B%E5%90%88%E4%BD%9C.png" alt="MVC组件之间的典型合作"><br>&emsp;<a href="https://zh.wikipedia.org/wiki/MVC" target="_blank" rel="noopener">上图</a>来自维基百科。我们可以看到一个典型的 MVC 模式下的数据流向。上图中，View 监听 Model 的数据变化，然后进行 UPDATES 工作，这其中也会有业务逻辑处理。事实上，有些时候我们还需要对 Model 层的数据做进一步处理然后再做前端展示，这也是部分业务逻辑。<br>&emsp;<strong>所谓架构只是一种设计理念，目的就是在于保持逻辑的清晰，面向改变易扩展，功能易复用。对于 MVC 模式而言，看上去各司其职，请求数据的产生数据；负责逻辑的处理逻辑，负责渲染的进行渲染，清晰明了。</strong><br>&emsp;然而，View 层对 Model 有着很强的依赖。为了能够使得 Model 发生的变化及时反映到到 View 上，View 需要注册成为观察者到 Model 上。鉴于这种关系，View 、 Model 需要互相持有对方的引用。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVC-Model.png" alt=""></p>
+<p>&emsp;首先，这种相互持有引用会导致<strong>层次的独立性、可重用性要降低一些</strong>，而且这种行为也是危险的，<strong>暴露更多的能力给 View</strong>，可能使得部分本应在 Controller 处理的逻辑放在 View，因为这样做确实更加快捷方便。这样做也会带来一个很严重的问题：View 会客串 Controller 的角色，从而越来越臃肿，解耦能力越来越弱。</p>
+<h3 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h3><p>&emsp;使用 MVC 没多久，同事建议组长采用 MVP 开发模式，于是，就是这么快的就跳转到了 MVP 的阵营。当时最感兴趣的还是这种架构中突出的对<strong>接口</strong>的应用，<strong>面向接口的编程思想</strong>。<br>&emsp;面向接口的编程，实际上是 Java 开发一直所倡导的。优势在于解耦，降低依赖关系。但是也会让开发工作更加复杂。</p>
 <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/Android-project-structure/MVP%E6%A8%A1%E5%BC%8F.png" alt="MVP模式"></p>
 <p>&emsp;<a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter" target="_blank" rel="noopener">上图</a>同样来自维基百科。<strong>相较于 MVC 模式，它切断了 View 层和 Model 层的直连。</strong>Model 和 Presenter 之间， Presenter 和 View 之间<strong>相互暴露接口，并通过接口相互访问，接口构成了它们通信的通道</strong>。与 MVC 类似， Modle 负责数据访问和处理；Presenter 像胶水一样，把 Model 和 View 绑在一起，它主要处理业务逻辑，对 View 提供处理好的数据，对 Model 请求数据；View 处理 UI 渲染。<br>&emsp;后来的开发过程中，很少使用 MVC，当然并不是因为觉得它比 MVP 差。更多的，自己是想增强接口使用的意识，以及对新事物的一种探索欲。现在想想，其实它们更多的是理念上的不同，如果控制的足够好，各有千秋吧。下面我们就来比较一下。</p>
-<h3 id="MVC-vs-MVP"><a href="#MVC-vs-MVP" class="headerlink" title="MVC vs MVP"></a>MVC <strong><em>vs</em></strong> MVP</h3><p>&emsp;这两种结构，都体现了良好的<strong>解耦</strong>理念。将一个需求拆分成数据访问模块、UI渲染模块、业务处理模块，相对独立，分工明确，各谋其政。同时，各个模块之间又可以在一定程度上相互组合，尽可能地进行<strong>功能复用</strong>。但是，在具体使用上，我觉得还是有一些偏好。<br>&emsp;我始终觉得保证结构的清晰是一件非常重要的事，对此，大多数情况下宁愿牺牲性能。这一点上我觉得 MVP 要比 MVC 做的好，职责划分的更加清晰。Activity 只负责渲染，很清爽；当然，这就意味着更多的处理逻辑需要搬到 Presenter 中去；Model 只负责向 Presenter 提供数据支持。为了保证逻辑的清晰，整个过程却会显得复杂，有些地方甚至没必要。View 层明明只是需要改一下 Model 的数据，都需要 Presenter 代劳。显然，这种清晰性牺牲了高效。<br> &emsp;结构上的清晰，职责上分工更加明确，更细，也应该就意味着更好的复用性，更加灵活。但是，同样这也未必总是需要的。如果一个需求交互不多，Presenter 可能就会非常小，又何必将一个文件能够搞定的事一定要分成三个文件去完成？</p>
+<h3 id="MVC-vs-MVP"><a href="#MVC-vs-MVP" class="headerlink" title="MVC vs MVP"></a>MVC <strong><em>vs</em></strong> MVP</h3><p>&emsp;这两种结构，都体现了良好的<strong>解耦</strong>理念。将一个需求拆分成数据访问模块、UI渲染模块、业务处理模块，相对独立，分工明确，各谋其政。同时，各个模块之间又可以在一定程度上相互组合，尽可能地进行<strong>功能复用</strong>。但是，在具体使用上，我觉得还是有一些偏好。<br>&emsp;保证结构的清晰是一件非常重要的事，对此，大多数情况下宁愿牺牲性能。这一点上我认为 MVP 要比 MVC 做的好，职责划分的更加清晰。Activity 只负责渲染，很清爽；当然，这就意味着更多的处理逻辑需要搬到 Presenter 中去；Model 只负责向 Presenter 提供数据支持。为了保证逻辑的清晰，整个过程却会显得复杂，有些地方甚至没必要。View 层明明只是需要改一下 Model 的数据，都需要 Presenter 代劳。显然，这种清晰性牺牲了高效。<br> &emsp;结构上的清晰，职责上分工更加明确，更细，也应该就意味着更好的复用性，更加灵活。但是，同样这也未必总是需要的。如果一个需求交互不多，Presenter 可能就会非常小，又何必将一个文件能够搞定的事一定要分成三个文件去完成？</p>
 <h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p>&emsp;MVVM 是由 MVP 演化而来的。我觉得它主要解决了 MVP 没有很好解决的两个问题：</p>
 <ul>
 <li>对于 MVP 的 Presenter 层，由于要处理所有业务逻辑，又要完成 Model 和 View 的沟通，最终可能也会非常臃肿。</li>
@@ -760,7 +761,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">76.7k</span>
+    <span title="Site words total count">76.6k</span>
   
 </div>
 

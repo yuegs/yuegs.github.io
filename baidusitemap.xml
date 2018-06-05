@@ -4,32 +4,8 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2017/06/25/Android-rx-observable/</loc>
-    <lastmod>2018-06-04T15:09:44.752Z</lastmod>
-    <data>
-        <display>
-        <title>RxJava-Observable分析</title>
-        <pubTime>2017-06-25T10:16:01.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>开源框架</tag>
-         
-        <tag>RxJava</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
-    <lastmod>2018-06-04T14:01:47.110Z</lastmod>
+    <lastmod>2018-06-05T01:22:26.612Z</lastmod>
     <data>
         <display>
         <title>这些年经历的项目架构</title>
@@ -42,6 +18,30 @@
         <tag>MVP</tag>
          
         <tag>MVVM</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/25/Android-rx-observable/</loc>
+    <lastmod>2018-06-04T15:09:44.752Z</lastmod>
+    <data>
+        <display>
+        <title>RxJava-Observable分析</title>
+        <pubTime>2017-06-25T10:16:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>开源框架</tag>
+         
+        <tag>RxJava</tag>
          
          
            
@@ -721,13 +721,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
          
+        <tag>Android</tag>
+         
         <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
          
          
            
@@ -795,9 +795,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -821,11 +821,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
+        <tag>Binder</tag>
+         
         <tag>Android</tag>
          
         <tag>IPC</tag>
-         
-        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

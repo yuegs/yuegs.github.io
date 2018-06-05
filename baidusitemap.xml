@@ -3,6 +3,102 @@
 
 
     
+  <url>
+    <loc>http://blog.yuegs.com/2018/01/17/Android-gradle/</loc>
+    <lastmod>2018-06-05T13:27:04.330Z</lastmod>
+    <data>
+        <display>
+        <title>Gradle 之创建 Build Variants</title>
+        <pubTime>2018-01-17T15:46:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>gradle</tag>
+         
+        <tag>BuildVariants</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/11/21/android-ui-adapte/</loc>
+    <lastmod>2018-06-05T08:50:00.705Z</lastmod>
+    <data>
+        <display>
+        <title>Android适配</title>
+        <pubTime>2017-11-21T15:48:06.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>适配</tag>
+         
+        <tag>UI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/02/AndroidThing-GPIO/</loc>
+    <lastmod>2018-06-05T08:41:17.564Z</lastmod>
+    <data>
+        <display>
+        <title>AndroidThings-GPIO</title>
+        <pubTime>2017-08-02T14:09:01.000Z</pubTime>
+        
+        <tag>AndroidThings</tag>
+         
+        <tag>GPIO</tag>
+         
+        <tag>物联网</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/01/14/Android-memeory-leak/</loc>
+    <lastmod>2018-06-05T08:40:55.482Z</lastmod>
+    <data>
+        <display>
+        <title>内存管理之内存泄漏</title>
+        <pubTime>2018-01-14T06:23:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Process</tag>
+         
+        <tag>内存泄漏</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
@@ -43,30 +139,6 @@
         <tag>开源框架</tag>
          
         <tag>RxJava</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/08/02/AndroidThing-GPIO/</loc>
-    <lastmod>2018-06-03T01:52:41.965Z</lastmod>
-    <data>
-        <display>
-        <title>AndroidThings-GPIO</title>
-        <pubTime>2017-08-02T14:09:01.000Z</pubTime>
-        
-        <tag>AndroidThing</tag>
-         
-        <tag>GPIO</tag>
-         
-        <tag>物联网</tag>
          
          
            
@@ -174,30 +246,6 @@
            
              
               <breadCrumb title="MongoDB" url="http://blog.yuegs.com/categories/MongoDB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/11/21/android-ui-adapte/</loc>
-    <lastmod>2018-06-02T09:47:25.738Z</lastmod>
-    <data>
-        <display>
-        <title>Android适配</title>
-        <pubTime>2017-11-21T15:48:06.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>适配</tag>
-         
-        <tag>UI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
           
         </display>
     </data>
@@ -505,52 +553,6 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2018/01/14/Android-memeory-leak/</loc>
-    <lastmod>2018-05-28T13:49:15.457Z</lastmod>
-    <data>
-        <display>
-        <title>内存管理之内存泄漏</title>
-        <pubTime>2018-01-14T06:23:01.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>内存泄漏</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/01/17/Android-gradle/</loc>
-    <lastmod>2018-05-28T09:32:20.893Z</lastmod>
-    <data>
-        <display>
-        <title>Gradle 之创建 Build Variants</title>
-        <pubTime>2018-01-17T15:46:01.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>gradle</tag>
-         
-        <tag>BuildVariants</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://blog.yuegs.com/2018/01/27/Android-proguard/</loc>
     <lastmod>2018-05-28T09:13:19.041Z</lastmod>
     <data>
@@ -722,13 +724,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
-        <tag>AIDL</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
+         
+        <tag>AIDL</tag>
          
          
            
@@ -796,9 +798,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Process</tag>
+         
+        <tag>IPC</tag>
          
         <tag>Messenger</tag>
          
@@ -822,11 +824,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

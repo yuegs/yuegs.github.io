@@ -4,8 +4,34 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
+    <lastmod>2018-06-06T14:49:27.274Z</lastmod>
+    <data>
+        <display>
+        <title>TCP、Socket、Http以及WebSocket</title>
+        <pubTime>2017-10-25T16:55:02.000Z</pubTime>
+        
+        <tag>TCP</tag>
+         
+        <tag>Socker</tag>
+         
+        <tag>WebSocket</tag>
+         
+        <tag>Http</tag>
+         
+         
+           
+             
+              <breadCrumb title="网络通信" url="http://blog.yuegs.com/categories/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/01/17/Android-gradle/</loc>
-    <lastmod>2018-06-05T13:27:04.330Z</lastmod>
+    <lastmod>2018-06-05T14:32:05.384Z</lastmod>
     <data>
         <display>
         <title>Gradle 之创建 Build Variants</title>
@@ -940,32 +966,6 @@
            
              
               <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
-    <lastmod>2018-05-02T14:30:35.014Z</lastmod>
-    <data>
-        <display>
-        <title>TCP、Socket、Http以及WebSocket</title>
-        <pubTime>2017-10-25T16:55:02.000Z</pubTime>
-        
-        <tag>TCP</tag>
-         
-        <tag>Socker</tag>
-         
-        <tag>WebSocket</tag>
-         
-        <tag>Http</tag>
-         
-         
-           
-             
-              <breadCrumb title="网络通信" url="http://blog.yuegs.com/categories/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
           
         </display>
     </data>

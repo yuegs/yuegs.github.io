@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
+    
+    <lastmod>2018-06-06T14:49:27.274Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/01/17/Android-gradle/</loc>
     
-    <lastmod>2018-06-05T13:27:04.330Z</lastmod>
+    <lastmod>2018-06-05T14:32:05.384Z</lastmod>
     
   </url>
   
@@ -285,13 +292,6 @@
     <loc>http://blog.yuegs.com/2018/04/24/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</loc>
     
     <lastmod>2018-05-03T09:44:00.222Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
-    
-    <lastmod>2018-05-02T14:30:35.014Z</lastmod>
     
   </url>
   

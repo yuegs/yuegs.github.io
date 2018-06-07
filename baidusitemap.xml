@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/04/22/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E2%80%94%E2%80%94%E8%AE%A9%20Marker%20%E5%9C%A8%E8%A7%84%E5%88%92%E5%A5%BD%E7%9A%84%E8%B7%AF%E7%BA%BF%E4%B8%8A%E5%B9%B3%E6%BB%91%E7%A7%BB%E5%8A%A8/</loc>
+    <lastmod>2018-06-07T07:56:57.348Z</lastmod>
+    <data>
+        <display>
+        <title>高德地图——让 Marker 在规划好的路线上平滑移动</title>
+        <pubTime>2018-04-22T03:14:53.000Z</pubTime>
+        
+        <tag>高德地图</tag>
+         
+        <tag>Marker</tag>
+         
+        <tag>线路规划</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
     <lastmod>2018-06-06T14:49:27.274Z</lastmod>
     <data>
@@ -492,9 +516,9 @@
         
         <tag>Android</tag>
          
-        <tag>组件库</tag>
-         
         <tag>数据库</tag>
+         
+        <tag>组件库</tag>
          
          
            
@@ -516,9 +540,9 @@
         
         <tag>Android</tag>
          
-        <tag>组件库</tag>
-         
         <tag>数据库</tag>
+         
+        <tag>组件库</tag>
          
          
            
@@ -540,9 +564,9 @@
         
         <tag>Android</tag>
          
-        <tag>组件库</tag>
-         
         <tag>数据库</tag>
+         
+        <tag>组件库</tag>
          
          
            
@@ -564,9 +588,9 @@
         
         <tag>Android</tag>
          
-        <tag>组件库</tag>
-         
         <tag>数据库</tag>
+         
+        <tag>组件库</tag>
          
          
            
@@ -726,11 +750,11 @@
         <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
         <pubTime>2018-05-26T05:02:00.000Z</pubTime>
         
+        <tag>java</tag>
+         
         <tag>区块链</tag>
          
         <tag>sha256</tag>
-         
-        <tag>java</tag>
          
          
            
@@ -750,37 +774,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>AIDL</tag>
          
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/04/22/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E2%80%94%E2%80%94%E8%AE%A9%20Marker%20%E5%9C%A8%E8%A7%84%E5%88%92%E5%A5%BD%E7%9A%84%E8%B7%AF%E7%BA%BF%E4%B8%8A%E5%B9%B3%E6%BB%91%E7%A7%BB%E5%8A%A8/</loc>
-    <lastmod>2018-05-17T15:07:01.932Z</lastmod>
-    <data>
-        <display>
-        <title>高德地图——让 Marker 在规划好的路线上平滑移动</title>
-        <pubTime>2018-04-22T03:14:53.000Z</pubTime>
-        
-        <tag>高德地图</tag>
-         
-        <tag>Marker</tag>
-         
-        <tag>线路规划</tag>
+        <tag>IPC</tag>
          
          
            
@@ -824,9 +824,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -850,11 +850,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
+        <tag>Binder</tag>
+         
         <tag>Android</tag>
          
         <tag>IPC</tag>
-         
-        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

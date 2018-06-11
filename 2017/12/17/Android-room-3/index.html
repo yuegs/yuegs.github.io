@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Android,数据库,组件库," />
+  <meta name="keywords" content="Android,组件库,数据库," />
 
 
 
@@ -128,7 +128,7 @@
 
 
 <meta name="description" content="&amp;emsp;本文翻译自官网 &amp;emsp;我们可以使用 DAO (data access object 数据访问对象) 来访问数据。 一系列的 Dao 对象组成了 Room 的主要部分。每个 DAO 对象包含了访问应用中数据库的方法。&amp;emsp;我们在使用的时候，可以将DAO 定义为一个接口或者抽象类。如果是抽象类，它可以选择带有且仅有一个 RoomDatabase 参数的构造函数。我们无需自己实现">
-<meta name="keywords" content="Android,数据库,组件库">
+<meta name="keywords" content="Android,组件库,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Room 的 DAO 访问数据---Room 系列（2）[译]">
 <meta property="og:url" content="http://blog.yuegs.com/2017/12/17/Android-room-3/index.html">
@@ -406,7 +406,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2017/12/17/Android-room-3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/12/17/Android-room-3/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/17/Android-room-3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -533,9 +534,9 @@
           
             <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
-          
             <a href="/tags/组件库/" rel="tag"># 组件库</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
         </div>
       
@@ -591,9 +592,12 @@
 
   
     <div class="comments" id="comments">
-      
-        <div id="gitment-container"></div>
-      
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
 
   
@@ -885,6 +889,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://yuegs-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.yuegs.com/2017/12/17/Android-room-3/';
+          this.page.identifier = '2017/12/17/Android-room-3/';
+          this.page.title = '使用 Room 的 DAO 访问数据---Room 系列（2）[译]';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yuegs-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -900,49 +924,8 @@
 
 
 
-  
 
 
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
-      <script type="text/javascript">
-      function renderGitment(){
-        var gitment = new Gitmint({
-            id: '使用 Room 的 DAO 访问数据---Room 系列（2）[译]', 
-            owner: 'yuegs',
-            repo: 'yuegs.github.io',
-            
-            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
-            
-            oauth: {
-            
-            
-                client_secret: '0779f5554c26bb7658afd45111bcc1ecd6010d54',
-            
-                client_id: '3497074f49f8bad9e334'
-            }});
-        gitment.render('gitment-container');
-      }
-
-      
-      renderGitment();
-      
-      </script>
-    
 
 
 

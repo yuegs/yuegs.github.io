@@ -415,7 +415,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/05/02/Android-draw-a-custom-view/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/05/02/Android-draw-a-custom-view/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/02/Android-draw-a-custom-view/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -620,9 +621,12 @@
 
   
     <div class="comments" id="comments">
-      
-        <div id="gitment-container"></div>
-      
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
 
   
@@ -914,6 +918,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://yuegs-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.yuegs.com/2018/05/02/Android-draw-a-custom-view/';
+          this.page.identifier = '2018/05/02/Android-draw-a-custom-view/';
+          this.page.title = 'Android:自定义 View 过程 [译]';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yuegs-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -929,49 +953,8 @@
 
 
 
-  
 
 
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
-      <script type="text/javascript">
-      function renderGitment(){
-        var gitment = new Gitmint({
-            id: 'Android:自定义 View 过程 [译]', 
-            owner: 'yuegs',
-            repo: 'yuegs.github.io',
-            
-            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
-            
-            oauth: {
-            
-            
-                client_secret: '0779f5554c26bb7658afd45111bcc1ecd6010d54',
-            
-                client_id: '3497074f49f8bad9e334'
-            }});
-        gitment.render('gitment-container');
-      }
-
-      
-      renderGitment();
-      
-      </script>
-    
 
 
 

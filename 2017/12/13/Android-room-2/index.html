@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Android,数据库,组件库," />
+  <meta name="keywords" content="Android,组件库,数据库," />
 
 
 
@@ -128,7 +128,7 @@
 
 
 <meta name="description" content="&amp;emsp;本文翻译自官网 &amp;emsp;当使用 Room 持久化库 的时候，我们需要定义一系列相关的成员作为 entities 。每个 entity 将被映射为一个 Database 中的 table。&amp;emsp;默认情况下，Room 会为 Entity 中的每个成员创建一个 column。如果你不想对其中的某些成员进行持久化，可以使用 @Ingore 注解。">
-<meta name="keywords" content="Android,数据库,组件库">
+<meta name="keywords" content="Android,组件库,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过 Room entities 定义数据 ---Room 系列(1) [译]">
 <meta property="og:url" content="http://blog.yuegs.com/2017/12/13/Android-room-2/index.html">
@@ -408,7 +408,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2017/12/13/Android-room-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/12/13/Android-room-2/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/13/Android-room-2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -529,9 +530,9 @@
           
             <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
-          
             <a href="/tags/组件库/" rel="tag"># 组件库</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
         </div>
       
@@ -587,9 +588,12 @@
 
   
     <div class="comments" id="comments">
-      
-        <div id="gitment-container"></div>
-      
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
 
   
@@ -881,6 +885,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://yuegs-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.yuegs.com/2017/12/13/Android-room-2/';
+          this.page.identifier = '2017/12/13/Android-room-2/';
+          this.page.title = '通过 Room entities 定义数据 ---Room 系列(1) [译]';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yuegs-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -896,49 +920,8 @@
 
 
 
-  
 
 
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
-      <script type="text/javascript">
-      function renderGitment(){
-        var gitment = new Gitmint({
-            id: '通过 Room entities 定义数据 ---Room 系列(1) [译]', 
-            owner: 'yuegs',
-            repo: 'yuegs.github.io',
-            
-            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
-            
-            oauth: {
-            
-            
-                client_secret: '0779f5554c26bb7658afd45111bcc1ecd6010d54',
-            
-                client_id: '3497074f49f8bad9e334'
-            }});
-        gitment.render('gitment-container');
-      }
-
-      
-      renderGitment();
-      
-      </script>
-    
 
 
 

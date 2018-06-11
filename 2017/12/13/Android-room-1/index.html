@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Android,数据库,组件库," />
+  <meta name="keywords" content="Android,组件库,数据库," />
 
 
 
@@ -128,7 +128,7 @@
 
 
 <meta name="description" content="&amp;emsp;本文翻译自官网 &amp;emsp;Room 提供了一个建立在 SQLite 之上的抽象层，使得我们能够更流畅的进行数据库访问。对于处理大量结构化数据的应用来说，将数据持久化存储到本地处理是一种较好的方式。 通常，我们会缓存相关的数据，当用户没有网络的时候，可以进行离线浏览，当设备在线之后，在同步数据。&amp;emsp;而 Room 实际上就专注于这种方式。我们强烈推荐你使用 Room 替代 SQL">
-<meta name="keywords" content="Android,数据库,组件库">
+<meta name="keywords" content="Android,组件库,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Room进行持久化存储---综述[译]">
 <meta property="og:url" content="http://blog.yuegs.com/2017/12/13/Android-room-1/index.html">
@@ -408,7 +408,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2017/12/13/Android-room-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/12/13/Android-room-1/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/13/Android-room-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -529,9 +530,9 @@
           
             <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
-          
             <a href="/tags/组件库/" rel="tag"># 组件库</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
         </div>
       
@@ -587,9 +588,12 @@
 
   
     <div class="comments" id="comments">
-      
-        <div id="gitment-container"></div>
-      
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
 
   
@@ -856,6 +860,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://yuegs-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.yuegs.com/2017/12/13/Android-room-1/';
+          this.page.identifier = '2017/12/13/Android-room-1/';
+          this.page.title = '使用Room进行持久化存储---综述[译]';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yuegs-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -871,49 +895,8 @@
 
 
 
-  
 
 
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
-      <script type="text/javascript">
-      function renderGitment(){
-        var gitment = new Gitmint({
-            id: '使用Room进行持久化存储---综述[译]', 
-            owner: 'yuegs',
-            repo: 'yuegs.github.io',
-            
-            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
-            
-            oauth: {
-            
-            
-                client_secret: '0779f5554c26bb7658afd45111bcc1ecd6010d54',
-            
-                client_id: '3497074f49f8bad9e334'
-            }});
-        gitment.render('gitment-container');
-      }
-
-      
-      renderGitment();
-      
-      </script>
-    
 
 
 

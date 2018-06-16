@@ -86,7 +86,7 @@
   
     
     
-    <link href="//fonts.lug.ustc.edu.cn/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -135,7 +135,7 @@
 <meta property="og:site_name" content="风雪围城">
 <meta property="og:description" content="&amp;emsp;原地址&amp;emsp;注解允许我们在源码中添加一些元信息。它自JDK5 引入，对于代码中的操作并没有直接的影响。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-11T15:35:44.480Z">
+<meta property="og:updated_time" content="2018-06-12T05:08:34.204Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 中的注解 [译]">
 <meta name="twitter:description" content="&amp;emsp;原地址&amp;emsp;注解允许我们在源码中添加一些元信息。它自JDK5 引入，对于代码中的操作并没有直接的影响。">
@@ -440,7 +440,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,485
+                  1,494
                 </span>
               
 
@@ -467,7 +467,7 @@
       
         <p>&emsp;<a href="http://beginnersbook.com/2014/09/java-annotations/" target="_blank" rel="noopener">原地址</a><br>&emsp;注解允许我们在源码中添加一些元信息。它自JDK5 引入，对于代码中的操作并没有直接的影响。<br><a id="more"></a></p>
 <h3 id="注解用途"><a href="#注解用途" class="headerlink" title="注解用途"></a>注解用途</h3><ol>
-<li>编译器指令：有三个内建注解（@Deprecated, @Override 和 @SuppressWarninigs）。它们被用来作为编译器指令。举例来说，@Override注解用来告诉编译器该方法是一个重写方法。</li>
+<li>编译器指令：有三个内建注解（@Deprecated, @Override 和 @SuppressWarninigs）。它们被用来作为编译器指令，<strong>告诉编译器一些信息</strong>。举例来说，@Override注解用来告诉编译器该方法是一个重写方法。</li>
 <li>编译期指令：注解可以向编译器提供编译时期指令，用于产生代码、XML文件等。</li>
 <li>运行时指令：我们可以定义一些运行时注解，用以通过Java反射访问。</li>
 </ol>
@@ -510,7 +510,7 @@
 <p>&emsp;这里，MyParentClass 使用了标注@inherited 的注解— @MyCustomAnnotation。这意味着在MyChildClass中，将继承 @MyCustomAnnotation。</p>
 <p>@Retention<br>表明注解保留的时间长度。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@interface</span> MyCustomAnnotation &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;在这里，我们使用了 RetentionPolicy.RUNTIME. 其实，这里还有两个选项。下面我们来分别说明：<br>RetentionPolicy.RUNTIME: 该注解在运行时可用，通过Java反射获取。<br>RetentionPolicy.CLASS: 该注解应用于 .class 文件中，但是在运行时不可用。<br>RetentionPolicy.SOURCE: 该注解在程序源码中可用，在 .class 文件中和 运行时均不可用。</p>
-<h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Class&lt;?&gt; c:clzz)&#123;</span><br><span class="line">			<span class="keyword">if</span>(c.isAnnotationPresent(HandlerType.class))&#123;</span><br><span class="line">				HandlerType handlerType=c.getAnnotation(HandlerType.class);</span><br><span class="line">				ChannelType channelType=handlerType.channelType();</span><br><span class="line">				MessageType messageType=handlerType.messageType();</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					Object obj= c.newInstance();</span><br><span class="line">					<span class="keyword">if</span>(obj <span class="keyword">instanceof</span> AbstractHandler)&#123;</span><br><span class="line">						handlers.put(getKey(channelType, messageType), (AbstractHandler)obj);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					<span class="keyword">continue</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Class&lt;?&gt; c:clzz)&#123;</span><br><span class="line">	<span class="keyword">if</span>(c.isAnnotationPresent(HandlerType.class))&#123;</span><br><span class="line">		HandlerType handlerType=c.getAnnotation(HandlerType.class);</span><br><span class="line">		ChannelType channelType=handlerType.channelType();</span><br><span class="line">		MessageType messageType=handlerType.messageType();</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Object obj= c.newInstance();</span><br><span class="line">			<span class="keyword">if</span>(obj <span class="keyword">instanceof</span> AbstractHandler)&#123;</span><br><span class="line">				handlers.put(getKey(channelType, messageType), (AbstractHandler)obj);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">				<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -1392,21 +1392,6 @@
   
 
   
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
 
   
   

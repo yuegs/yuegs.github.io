@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/06/25/java-annotation/</loc>
+    
+    <lastmod>2018-06-12T05:08:34.204Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2017/10/15/Android%20%E4%B9%8B%20setContentView/</loc>
     
     <lastmod>2018-06-11T16:00:46.879Z</lastmod>
@@ -47,13 +54,6 @@
     <loc>http://blog.yuegs.com/2017/07/27/java-pass-by/</loc>
     
     <lastmod>2018-06-11T15:36:02.806Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/06/25/java-annotation/</loc>
-    
-    <lastmod>2018-06-11T15:35:44.480Z</lastmod>
     
   </url>
   

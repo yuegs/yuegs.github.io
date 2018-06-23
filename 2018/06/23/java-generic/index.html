@@ -137,7 +137,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://docs.oracle.com/javase/tutorial/figures/java/generics-subtypeRelationship.gif">
 <meta property="og:image" content="https://docs.oracle.com/javase/tutorial/figures/java/generics-payloadListHierarchy.gif">
-<meta property="og:updated_time" content="2018-06-23T14:27:52.861Z">
+<meta property="og:updated_time" content="2018-06-23T14:40:30.336Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="泛型在 Java 中的应用">
 <meta name="twitter:description" content="&amp;emsp;在很多框架中可以看到泛型的身影，本节就来聊聊它。在定义类、接口、方法时，泛型允许将类型参数化。也就是说，在定义类、接口、方法中可能需要一个不确定的类型，此处暂时命名为 T，T 的具体类型可以使用的时候再指定。比如说：ArrayList&amp;lt;String&amp;gt; nameArray ; 和 ArrayList&amp;lt;Integer&amp;gt; idArray ;此时，你不用分别定义 Str">
@@ -443,7 +443,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,082
+                  1,111
                 </span>
               
 
@@ -481,7 +481,7 @@
 <h3 id="通配符在泛型中的使用"><a href="#通配符在泛型中的使用" class="headerlink" title="通配符在泛型中的使用"></a>通配符在泛型中的使用</h3><p>&emspj;通配符的出现，可以使我们更加灵活的把握泛型的限定范围。以 <code>List</code> 为例，有以下有几种情况：</p>
 <ul>
 <li>List&lt;? extends Number&gt; ：这就意味着使用的泛型，即 <code>T</code> 必须是 <code>Number</code>的子类或 <code>Number</code>类型。</li>
-<li>List&lt;?&gt; list ： 无类型约束，未知类型的通配符。</li>
+<li>List&lt;?&gt; list ： 无类型约束，未知类型的通配符。<code>?</code> 无法替代 <code>T</code>作为一个类型变量，仅仅是说明了我们并不知道 <code>T</code> 的类型。</li>
 <li>List&lt;? super Integer&gt; list ： 这表示，<code>T</code> 应当是 <code>Integer</code> 的父类或 <code>Integer</code> 类型。</li>
 </ul>
 <h3 id="泛型使用的限制"><a href="#泛型使用的限制" class="headerlink" title="泛型使用的限制"></a>泛型使用的限制</h3><p>&emsp;在使用泛型的时候，也有一些注意事项：</p>

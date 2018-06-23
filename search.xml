@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[聊聊泛型]]></title>
+    <url>%2F2018%2F10%2F15%2Fjava-generic%2F</url>
+    <content type="text"><![CDATA[&emsp;在很多框架中可以看到泛型的身影，本节就来聊聊它。在定义类、接口、方法时，泛型允许将类型参数化。也就是说，在定义类、接口、方法中可能需要一个不确定的类型，此处暂时命名为 T，T 的具体类型可以使用的时候再指定。比如说：ArrayList&lt;String&gt; nameArray ; 和 ArrayList&lt;Integer&gt; idArray ;此时，你不用分别定义 StringArrayList 和 IntegerArrayList， 而是以泛型的方式，仅仅使用了一个 ArrayList。我们可以看到，这降低了不必要的代码量。 泛型擦除&emsp;事实上，并没有泛型这种类型。所有的对象都是普通对象，而泛型最终会在编译时被擦除，从而替换为一个限定类型（默认为 Object）。1234567891011121314151617public static &lt;T&gt; void print(T t) &#123; if(t instanceof String)&#123; System.out.println("use a string:"+t); return ; &#125; if(t instanceof Integer)&#123; System.out.println("use a int:"+t); &#125;else&#123; System.out.println("refused"); &#125;&#125;public static void main(String args[])&#123; print(1) ; print("content") ; print(0.1); &#125; &emsp;上述代码仅做演示使用。当调用 print(1) 时，T 在编译期被转化为了 Integer,print(&quot;content&quot;)时，T 被擦除转化为 String。&emsp;上述实例，是对泛型方法的描述，接下来分别讨论下泛型的使用场景。 泛型使用场景&emsp;泛型会应用在不同的使用场景下，比如说类、接口和方法。 在类或接口中使用泛型&emsp;在定义类的时候，指定泛型。1234567891011class Number&lt;T&gt;&#123; private T number ; public T getNumber()&#123; return number ; &#125; public void setNumber(T t)&#123; number = t ; &#125;&#125; &emsp;在使用的时候：123456Number n1 = new Number() ; //没有为泛型设定约束n1.setNumber(123); //合法n1.setNumber("123"); //合法Number&lt;Integer&gt; n2 = new Number(); //为泛型设置约束n2.setNumber(123); //合法n2.setNumber("123"); //不合法 &emsp;接口中使用方式与此类似。 泛型在方法中的使用&emsp;泛型方法其实在介绍泛型擦除的时候，已经给出了示例。它是这么用的：12//其中 &lt;T&gt; 即为类型变量，放在 public static 修饰符的后面，返回类型的前面public static &lt;T&gt; void print(T t)&#123;&#125; 泛型使用的限制]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>泛型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[分治与递归]]></title>
     <url>%2F2018%2F06%2F21%2Frecursion%2F</url>
     <content type="text"><![CDATA[&emsp;分治，分而治之(Divide and Conquer)。将一个复杂的事物，分解成独立的若干部分，分解之后，事务的属性无变化，只是事物的规模发生了变化。分解出来的个体，应是能够很容易能够计算出答案的，之后合并这些答案，得到整体的答案。&emsp;这种技巧在计算机领域很实用，计算机善于分解、合并处理，特别是在大数据的背景下，实用分布式集群来处理巨复杂的问题，分治法是其基本思想。本章，就打算总结一下这种方法，然后讲一下递归这种分治思想的实现，举一些具体应用的实例。 分治法&emsp;分治法有三个步骤： 分解：将原问题分解为若干个规模较小，相对独立，与原问题形式相同的子问题。解决：若子问题规模较小且易于解决时，则直接解。否则，递归或迭代地解决各子问题。合并：将各子问题的解合并为原问题的解。 &emsp;下面看一个排序的实例更好地理解分治：给数组 38、27、43、3、9、82、10 排序（源视频地址）。为了给它们排序，将它们不断二分分组，直到每个分组中数字个数为 1 ，此时也由于分组中只有一个数，自然是排好序的。接着，将结果不断合并，得到最终结果。 递归&emsp;递归调用，是分治方法的一种实现。递归，实际上就是函数中又调用了函数自己，但是为了防止无止境的自我调用，它还必须有递归边界，即问题的规模在不断减小，直到问题可以解决。&emsp;同样，这里以一个斐波那契数列示例更好地解释递归调用： &emsp;以 F(4) 为例，在实际调用过程中如下所示（图片来源：知乎ninechapter）： 小结&emsp;分治与递归，是一种非常常用的思想和方法。所以，这里单独将它们放在这里做描述。当然，如斐波那契数列那张调用过程图所示，对于 F(n) 来说，n 越大，调用栈越深，效率越低。但是，它的逻辑很清楚，而且使用很少的代码量就可以完成。 参考：Method Calls in Java分治法斐波那契数列Merge Sort]]></content>

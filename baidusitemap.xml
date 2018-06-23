@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://blog.yuegs.com/2018/10/15/java-generic/</loc>
-    <lastmod>2018-06-23T03:46:26.263Z</lastmod>
+    <loc>http://blog.yuegs.com/2018/06/23/java-generic/</loc>
+    <lastmod>2018-06-23T14:27:52.861Z</lastmod>
     <data>
         <display>
-        <title>聊聊泛型</title>
-        <pubTime>2018-10-15T08:22:01.000Z</pubTime>
+        <title>泛型在 Java 中的应用</title>
+        <pubTime>2018-06-23T14:27:09.000Z</pubTime>
         
         <tag>Java</tag>
          
@@ -914,9 +914,9 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>AIDL</tag>
          
@@ -990,9 +990,9 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>IPC</tag>
          

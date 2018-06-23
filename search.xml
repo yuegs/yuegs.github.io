@@ -20,7 +20,7 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>Java</tag>
         <tag>注解</tag>
       </tags>
   </entry>
@@ -32,9 +32,9 @@
         <category>区块链</category>
       </categories>
       <tags>
-        <tag>java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -280,7 +280,7 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>Java</tag>
         <tag>λ</tag>
         <tag>stream</tag>
       </tags>
@@ -369,8 +369,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>AIDL</tag>
         <tag>IPC</tag>
       </tags>
@@ -383,8 +383,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>IPC</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
@@ -398,8 +398,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
-        <tag>thread</tag>
+        <tag>Java</tag>
+        <tag>Thread</tag>
       </tags>
   </entry>
   <entry>
@@ -423,7 +423,7 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>Java</tag>
         <tag>并发</tag>
         <tag>同步</tag>
       </tags>
@@ -436,7 +436,7 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>Java</tag>
         <tag>值传递</tag>
         <tag>引用传递</tag>
       </tags>
@@ -449,7 +449,7 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>Java</tag>
         <tag>注解</tag>
       </tags>
   </entry>

@@ -137,7 +137,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://docs.oracle.com/javase/tutorial/figures/java/generics-subtypeRelationship.gif">
 <meta property="og:image" content="https://docs.oracle.com/javase/tutorial/figures/java/generics-payloadListHierarchy.gif">
-<meta property="og:updated_time" content="2018-06-23T14:40:30.336Z">
+<meta property="og:updated_time" content="2018-07-04T03:21:41.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="泛型在 Java 中的应用">
 <meta name="twitter:description" content="&amp;emsp;在很多框架中可以看到泛型的身影，本节就来聊聊它。在定义类、接口、方法时，泛型允许将类型参数化。也就是说，在定义类、接口、方法中可能需要一个不确定的类型，此处暂时命名为 T，T 的具体类型可以使用的时候再指定。比如说：ArrayList&amp;lt;String&amp;gt; nameArray ; 和 ArrayList&amp;lt;Integer&amp;gt; idArray ;此时，你不用分别定义 Str">
@@ -443,7 +443,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,111
+                  1,109
                 </span>
               
 
@@ -470,7 +470,7 @@
       
         <p>&emsp;在很多框架中可以看到泛型的身影，本节就来聊聊它。在定义类、接口、方法时，泛型允许将类型参数化。也就是说，在定义类、接口、方法中可能需要一个不确定的类型，此处暂时命名为 T，T 的具体类型可以使用的时候再指定。比如说：<code>ArrayList&lt;String&gt; nameArray ;</code> 和 <code>ArrayList&lt;Integer&gt; idArray ;</code>此时，你不用分别定义 <code>StringArrayList</code> 和 <code>IntegerArrayList</code>， 而是以泛型的方式，仅仅使用了一个 <code>ArrayList</code>。我们可以看到，这降低了不必要的代码量。<br><a id="more"></a></p>
 <h3 id="泛型擦除"><a href="#泛型擦除" class="headerlink" title="泛型擦除"></a>泛型擦除</h3><p>&emsp;事实上，并没有泛型这种类型。所有的对象都是普通对象，而泛型最终会在编译时被擦除，从而替换为一个限定类型（默认为 Object）。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t <span class="keyword">instanceof</span> String)&#123;</span><br><span class="line">		System.out.println(<span class="string">"use a string:"</span>+t);</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(t <span class="keyword">instanceof</span> Integer)&#123;</span><br><span class="line">		System.out.println(<span class="string">"use a int:"</span>+t);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"refused"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;默认情况下，如果我们不对 <code>T</code> 做出约束，它将会被 <code>Object</code> 替代，如下所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Object t)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t <span class="keyword">instanceof</span> String)&#123;</span><br><span class="line">		System.out.println(<span class="string">"use a string:"</span>+t);</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(t <span class="keyword">instanceof</span> Integer)&#123;</span><br><span class="line">		System.out.println(<span class="string">"use a int:"</span>+t);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"refused"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;默认情况下，如果我们不对 <code>T</code> 做出约束，它将会被 <code>Object</code> 替代，等价于：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Object t)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t <span class="keyword">instanceof</span> String)&#123;</span><br><span class="line">		System.out.println(<span class="string">"use a string:"</span>+t);</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(t <span class="keyword">instanceof</span> Integer)&#123;</span><br><span class="line">		System.out.println(<span class="string">"use a int:"</span>+t);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"refused"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;加入 <code>main</code> 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">	print(<span class="number">1</span>) ;</span><br><span class="line">	print(<span class="string">"content"</span>) ;</span><br><span class="line">	print(<span class="number">0.1</span>);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;上述代码仅做演示使用。当调用 <code>print(1)</code> 时，<code>T</code> 在编译期被转化为了 <code>Integer</code>,<code>print(&quot;content&quot;)</code>时，<code>T</code> 被擦除转化为 <code>String</code>。<br>&emsp;上述实例，是对泛型方法的描述，接下来分别讨论下泛型的使用场景。</p>
 <h3 id="泛型使用场景"><a href="#泛型使用场景" class="headerlink" title="泛型使用场景"></a>泛型使用场景</h3><p>&emsp;泛型会应用在不同的使用场景下，比如说类、接口和方法。</p>
@@ -478,7 +478,7 @@
 <p>&emsp;在使用的时候：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Number n1 = <span class="keyword">new</span> Number() ;            <span class="comment">//没有为泛型设定约束</span></span><br><span class="line">n1.setNumber(<span class="number">123</span>);                    <span class="comment">//合法</span></span><br><span class="line">n1.setNumber(<span class="string">"123"</span>);                  <span class="comment">//合法</span></span><br><span class="line">Number&lt;Integer&gt; n2 = <span class="keyword">new</span> Number();    <span class="comment">//为泛型设置约束</span></span><br><span class="line">n2.setNumber(<span class="number">123</span>);                    <span class="comment">//合法</span></span><br><span class="line">n2.setNumber(<span class="string">"123"</span>);                  <span class="comment">//不合法</span></span><br></pre></td></tr></table></figure></p>
 <p>&emsp;接口中使用方式与此类似。</p>
 <h4 id="泛型在方法中的使用"><a href="#泛型在方法中的使用" class="headerlink" title="泛型在方法中的使用"></a>泛型在方法中的使用</h4><p>&emsp;泛型方法其实在介绍泛型擦除的时候，已经给出了示例。它是这么用的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//其中 &lt;T&gt; 即为类型变量，放在 public static 修饰符的后面，返回类型的前面</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(T t)</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="通配符在泛型中的使用"><a href="#通配符在泛型中的使用" class="headerlink" title="通配符在泛型中的使用"></a>通配符在泛型中的使用</h3><p>&emspj;通配符的出现，可以使我们更加灵活的把握泛型的限定范围。以 <code>List</code> 为例，有以下有几种情况：</p>
+<h3 id="通配符在泛型中的使用"><a href="#通配符在泛型中的使用" class="headerlink" title="通配符在泛型中的使用"></a>通配符在泛型中的使用</h3><p>&emsp;通配符的出现，可以使我们更加灵活的把握泛型的限定范围。以 <code>List</code> 为例，有以下有几种情况：</p>
 <ul>
 <li>List&lt;? extends Number&gt; ：这就意味着使用的泛型，即 <code>T</code> 必须是 <code>Number</code>的子类或 <code>Number</code>类型。</li>
 <li>List&lt;?&gt; list ： 无类型约束，未知类型的通配符。<code>?</code> 无法替代 <code>T</code>作为一个类型变量，仅仅是说明了我们并不知道 <code>T</code> 的类型。</li>
@@ -668,7 +668,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -690,7 +690,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -780,7 +780,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">80.8k</span>
+    <span title="Site words total count">81.6k</span>
   
 </div>
 

@@ -142,11 +142,11 @@
       <category term="区块链" scheme="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
     
+      <category term="Java" scheme="http://blog.yuegs.com/tags/Java/"/>
+    
       <category term="区块链" scheme="http://blog.yuegs.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
       <category term="sha256" scheme="http://blog.yuegs.com/tags/sha256/"/>
-    
-      <category term="Java" scheme="http://blog.yuegs.com/tags/Java/"/>
     
   </entry>
   
@@ -459,9 +459,9 @@
     
       <category term="Android" scheme="http://blog.yuegs.com/tags/Android/"/>
     
-      <category term="Process" scheme="http://blog.yuegs.com/tags/Process/"/>
-    
       <category term="内存泄漏" scheme="http://blog.yuegs.com/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"/>
+    
+      <category term="Process" scheme="http://blog.yuegs.com/tags/Process/"/>
     
   </entry>
   

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/07/04/java-IoC-AOP/</loc>
+    
+    <lastmod>2018-07-09T07:12:41.103Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/06/23/java-generic/</loc>
     
     <lastmod>2018-07-04T03:25:28.459Z</lastmod>

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[IoC 和 AOP]]></title>
+    <url>%2F2018%2F07%2F04%2Fjava-IoC-AOP%2F</url>
+    <content type="text"><![CDATA[&emsp;在 ARouter 组件化框架的介绍视频介绍中，提到借鉴了Spring 中 IoC 和 AOP 的思想，为了更好的理解 ARouter,我决定先搞定 IoC 和 AOP 。这两者都是非常优秀的设计思想，以解决大型项目中尤为需要的低耦合、高内聚。 IoC&emsp;IoC (Inversion of Control,控制反转) 是一种用以降低代码之间的耦合的设计原则。所谓反转，即对象 A 需要对象 B 时， B 的创建依赖于外部注入,而非在 A 中创建 。所谓降耦合，即任何单元尽量保持独立，尽量减小相互依赖。这样的好处在于建立良好的扩展性（当项目复杂庞大之后更能体现这一点的优越性）。此时，A 依赖的应是抽象类 B，在使用时注入的是 B 的具体实现类。&emsp;以给电脑（硬件）装系统为例，通俗地讲，将 System1 和 System2 分别装进各自的移动硬盘里，将电脑设置为 U 盘启动，这时，当需要启动 System1 时，就将装有 System1 的硬盘插到电脑上；当需要启动 System2 时，也只是需要将 System2 相应的硬盘插进来即可。事实上，电脑和系统并没有一种强绑定的关系，电脑硬件本身也不生产系统。电脑上运行什么系统，取决于我们往里面注入了什么系统。123456789101112131415161718192021222324252627interface OperatorSystem &#123; void start(); void shutdown();&#125;class Computer&#123; private OperatorSystem os ; // 通过 setter 方法注入 public void setOperatorSystem(OperatorSystem os)&#123; this.os = os; &#125; // 通过构造函数注入 public Computer(OperatorSystem os)&#123; this.os = os ; &#125; // 开机 public void start()&#123; os.start(); &#125; // 关机 public void shutdown()&#123; os.shutdown(); &#125;&#125; &emsp;这时，当需要装一个 Ubuntu 时，可以这样做：1234567891011121314151617class Ubuntu implements OperatorSystem&#123; @Override public void start() &#123; // TODO Auto-generated method stub &#125; @Override public void shutdown() &#123; // TODO Auto-generated method stub &#125;&#125;public static void main(String args [])&#123; Computer computer = new Computer(new Ubuntu()) ; computer.start();&#125; &emsp;如上面的代码块所示，在宿主中持有的是要注入对象的抽象类以降低耦合。&emsp;事实上，对象的注入有几种方式： 构造函数 set方法 通过注解动态注入 AOP&emsp;Aspect-Oriented Programming (AOP) 意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。 &emsp;以 Spring AOP 为例 &emsp;通过上图，解释几个概念先： 切面：如上如所示，切面包含了切入点（pointcut）和通知（advice）。程序本身是按照时间线运行的，而切面就像是在时间线的某个切入点切断，然后添加一层切面进去。 接入点（JointPoint）：就是上面所看到的类中的方法。 切入点（Pointcut）：选择哪个接入点切入，那个切入点就是切面的切入点。上图中，通过通配符的使用，将所有的接入点作为切入点。 目标对象：被一个或者多个切面通告的主体。在 Spring AOP 中，AOP 是通过运行时的动态代理实现的，因此，这个目标对象实际上是个代理对象。 &emsp;通告类型： Before advice：在进入接入点之前调用 After returning advice：接入点执行完成之后调用 After throwing advice：抛出异常时调用 After (finally) advice：无论是正常退出还是异常退出之后都会调用 Around advice：在方法执行前后和抛出异常时都会执行，相当于以上几种通知。主要用于自定义行为。 &emsp;接下来，添加必要的 xml 文件，并来执行上面的代码：1234567891011121314151617181920&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;beans xmlns = "http://www.springframework.org/schema/beans" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns:aop = "http://www.springframework.org/schema/aop" xsi:schemaLocation = "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd "&gt; &lt;aop:aspectj-autoproxy/&gt; &lt;!-- Definition for student bean --&gt; &lt;bean id = "student" class = "com.example.test.test.Student"&gt; &lt;property name = "name" value = "Zara" /&gt; &lt;property name = "age" value = "11"/&gt; &lt;/bean&gt; &lt;!-- Definition for logging aspect --&gt; &lt;bean id = "logger" class = "com.example.test.test.Logger"/&gt;&lt;/beans&gt; 12345678910public static void main(String[] args) &#123; ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml"); Student student = (Student) context.getBean("student"); student.getName(); student.getAge(); student.printThrowException();&#125; &emsp;结果为： 小结&emsp;在开发中我们经常讲，程序要高内聚低耦合。IoC 就体现了良好的低耦合，依赖倒置、开放封闭原则（开放扩展，关闭修改）、里氏替换原则（在使用的地方可以由子类代替父类接口）。AOP 体现了良好的高内聚性，单一职责原则（进行职责分配，每个类专职专责）。而这两者，都离不开对接口、抽象的应用。 参考：控制反转浅谈控制反转与依赖注入JavaWeb过滤器.监听器.拦截器-原理&amp;区别-个人总结Aspect Oriented Programming with SpringAOP （面向切面编程）《Spring设计思想》AOP设计基本原理]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>IOC</tag>
+        <tag>AOP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[泛型在 Java 中的应用]]></title>
     <url>%2F2018%2F06%2F23%2Fjava-generic%2F</url>
     <content type="text"><![CDATA[&emsp;在很多框架中可以看到泛型的身影，本节就来聊聊它。在定义类、接口、方法时，泛型允许将类型参数化。也就是说，在定义类、接口、方法中可能需要一个不确定的类型，此处暂时命名为 T，T 的具体类型可以使用的时候再指定。比如说：ArrayList&lt;String&gt; nameArray ; 和 ArrayList&lt;Integer&gt; idArray ;此时，你不用分别定义 StringArrayList 和 IntegerArrayList， 而是以泛型的方式，仅仅使用了一个 ArrayList。我们可以看到，这降低了不必要的代码量。 泛型擦除&emsp;事实上，并没有泛型这种类型。所有的对象都是普通对象，而泛型最终会在编译时被擦除，从而替换为一个限定类型（默认为 Object）。1234567891011public static &lt;T&gt; void print(T t) &#123; if(t instanceof String)&#123; System.out.println("use a string:"+t); return ; &#125; if(t instanceof Integer)&#123; System.out.println("use a int:"+t); &#125;else&#123; System.out.println("refused"); &#125;&#125; &emsp;默认情况下，如果我们不对 T 做出约束，它将会被 Object 替代，等价于：1234567891011public static void print(Object t) &#123; if(t instanceof String)&#123; System.out.println("use a string:"+t); return ; &#125; if(t instanceof Integer)&#123; System.out.println("use a int:"+t); &#125;else&#123; System.out.println("refused"); &#125;&#125; &emsp;加入 main 方法：12345public static void main(String args[])&#123; print(1) ; print("content") ; print(0.1); &#125; &emsp;上述代码仅做演示使用。当调用 print(1) 时，T 在编译期被转化为了 Integer,print(&quot;content&quot;)时，T 被擦除转化为 String。&emsp;上述实例，是对泛型方法的描述，接下来分别讨论下泛型的使用场景。 泛型使用场景&emsp;泛型会应用在不同的使用场景下，比如说类、接口和方法。 在类或接口中使用泛型&emsp;在定义类的时候，指定泛型。1234567891011class Number&lt;T&gt;&#123; private T number ; public T getNumber()&#123; return number ; &#125; public void setNumber(T t)&#123; number = t ; &#125;&#125; &emsp;在使用的时候：123456Number n1 = new Number() ; //没有为泛型设定约束n1.setNumber(123); //合法n1.setNumber("123"); //合法Number&lt;Integer&gt; n2 = new Number(); //为泛型设置约束n2.setNumber(123); //合法n2.setNumber("123"); //不合法 &emsp;接口中使用方式与此类似。 泛型在方法中的使用&emsp;泛型方法其实在介绍泛型擦除的时候，已经给出了示例。它是这么用的：12//其中 &lt;T&gt; 即为类型变量，放在 public static 修饰符的后面，返回类型的前面public static &lt;T&gt; void print(T t)&#123;&#125; 通配符在泛型中的使用&emsp;通配符的出现，可以使我们更加灵活的把握泛型的限定范围。以 List 为例，有以下有几种情况： List&lt;? extends Number&gt; ：这就意味着使用的泛型，即 T 必须是 Number的子类或 Number类型。 List&lt;?&gt; list ： 无类型约束，未知类型的通配符。? 无法替代 T作为一个类型变量，仅仅是说明了我们并不知道 T 的类型。 List&lt;? super Integer&gt; list ： 这表示，T 应当是 Integer 的父类或 Integer 类型。 泛型使用的限制&emsp;在使用泛型的时候，也有一些注意事项： 类型参数无法替代为基本类型。正如在上面的示例中那样，可以有Number&lt;Integer&gt;,却没有Number&lt;int&gt; 运行时类型检查只适用于原始类型。也就是说，在下面的代码中： 1if(n1 instanceof Number&lt;Integer&gt;) 只能判断 n1 是否是 Number类型。而事实上： 1n1.getClass() == n2.getClass() //将返回 true 注意，被擦除后，泛型就不存在了。Number&lt;Integer&gt; 最终其实是Number,只不过其内部的 T 被替换为了 Integer。 不能实例化类型变量，也就是说，是无法像下面这样使用 T: 1T a = new T() ; //错误 默认情况下，会创建后一个 Object 对象，你肯定不希望是这样。 显然，你也不应该在一个静态环境中持有泛型引用。比如 1public static T t ; // 错误 泛型的意义，就是在于将类型变量化，而静态引用实际上是想要一个全局的类型不变的引用。 在数组中使用时需要注意： 123 Number&lt;String&gt; [] ns ;ns = new Number [10] ;ns[1] = new Number&lt;Object&gt;() ; //错误 继承关系中的泛型&emsp;如下所示是官网给出的实例，Box&lt;Number&gt; 和 Box&lt;Integer&gt; 之间并不构成继承关系。 &emsp;但是下面的继承关系是成立的:]]></content>
@@ -56,9 +69,9 @@
         <category>区块链</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -214,8 +227,8 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>内存泄漏</tag>
         <tag>Process</tag>
+        <tag>内存泄漏</tag>
       </tags>
   </entry>
   <entry>

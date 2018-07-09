@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
+    
+    <lastmod>2018-07-09T09:25:19.534Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/07/04/java-IoC-AOP/</loc>
     
     <lastmod>2018-07-09T08:51:38.927Z</lastmod>
@@ -159,13 +166,6 @@
     <loc>http://blog.yuegs.com/2018/04/22/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E2%80%94%E2%80%94%E8%AE%A9%20Marker%20%E5%9C%A8%E8%A7%84%E5%88%92%E5%A5%BD%E7%9A%84%E8%B7%AF%E7%BA%BF%E4%B8%8A%E5%B9%B3%E6%BB%91%E7%A7%BB%E5%8A%A8/</loc>
     
     <lastmod>2018-06-11T15:24:31.457Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
-    
-    <lastmod>2018-06-11T15:23:09.341Z</lastmod>
     
   </url>
   

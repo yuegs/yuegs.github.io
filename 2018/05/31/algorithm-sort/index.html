@@ -130,7 +130,7 @@
 <meta name="description" content="&amp;emsp;排序的应用场景是十分普遍的，比如人们总是希望从许多东西中寻找一个最好的；比如，人们总是希望一堆杂乱无章的事务能够按照某种规则有规律的呈现出来，这些，就是它巨大的价值。&amp;emsp;本节就打算聊聊排序算法：选择排序、插入排序、希尔排序、归并排序、快速排序和堆排序。算法能够优化这个过程：使用更小的内存，花费更短的时间。">
 <meta name="keywords" content="算法,排序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="排序算法">
+<meta property="og:title" content="排序算法(一)">
 <meta property="og:url" content="http://blog.yuegs.com/2018/05/31/algorithm-sort/index.html">
 <meta property="og:site_name" content="风雪围城">
 <meta property="og:description" content="&amp;emsp;排序的应用场景是十分普遍的，比如人们总是希望从许多东西中寻找一个最好的；比如，人们总是希望一堆杂乱无章的事务能够按照某种规则有规律的呈现出来，这些，就是它巨大的价值。&amp;emsp;本节就打算聊聊排序算法：选择排序、插入排序、希尔排序、归并排序、快速排序和堆排序。算法能够优化这个过程：使用更小的内存，花费更短的时间。">
@@ -138,9 +138,9 @@
 <meta property="og:image" content="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/sort/selection.gif">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort/insert.gif">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort/shell.gif">
-<meta property="og:updated_time" content="2018-06-24T03:46:20.249Z">
+<meta property="og:updated_time" content="2018-07-09T14:14:24.219Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="排序算法">
+<meta name="twitter:title" content="排序算法(一)">
 <meta name="twitter:description" content="&amp;emsp;排序的应用场景是十分普遍的，比如人们总是希望从许多东西中寻找一个最好的；比如，人们总是希望一堆杂乱无章的事务能够按照某种规则有规律的呈现出来，这些，就是它巨大的价值。&amp;emsp;本节就打算聊聊排序算法：选择排序、插入排序、希尔排序、归并排序、快速排序和堆排序。算法能够优化这个过程：使用更小的内存，花费更短的时间。">
 <meta name="twitter:image" content="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/sort/selection.gif">
 
@@ -178,7 +178,7 @@
 
 
 
-  <title>排序算法 | 风雪围城</title>
+  <title>排序算法(一) | 风雪围城</title>
   
 
 
@@ -356,7 +356,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">排序算法</h1>
+          <h1 class="post-title" itemprop="name headline">排序算法(一)</h1>
         
 
         <div class="post-meta">
@@ -419,7 +419,7 @@
 
           
           
-             <span id="/2018/05/31/algorithm-sort/" class="leancloud_visitors" data-flag-title="排序算法">
+             <span id="/2018/05/31/algorithm-sort/" class="leancloud_visitors" data-flag-title="排序算法(一)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -444,7 +444,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  777
+                  903
                 </span>
               
 
@@ -484,9 +484,12 @@
 <ul>
 <li>与选择排序相比，它比较依赖于输入。如果输入本身就是有序的，或者说是顺序的，那么将大大降低它的交换效率，反之，如果数组本身是逆序，交换所用的时间复杂度为 O(n<sup>2</sup>)</li>
 </ul>
+<h3 id="选择排序和插入排序的比较"><a href="#选择排序和插入排序的比较" class="headerlink" title="选择排序和插入排序的比较"></a>选择排序和插入排序的比较</h3><blockquote>
+<p>选择排序和插入排序的时间复杂度都是二次方级别的，但是，对一个随机序列的数组，插入排序会比选择排序快一个很小的常量倍。上述说法咋很多计算机上验证过，插入排序大约会比选择排序快两倍。</p>
+</blockquote>
 <h3 id="3-希尔排序"><a href="#3-希尔排序" class="headerlink" title="3. 希尔排序"></a>3. 希尔排序</h3><p>&emsp;希尔排序是一种基于插入排序的快速的排序算法。其通过将所有的比较元素进行分区来提升插入排序的性能。这样可以让一个元素一次性地朝最终位置前进一大步。然后算法再取越来越小的步长进行排序，算法的最后一步其实就是普通的插入排序。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort/shell.gif" alt="shell-sort"></p>
 <p>&emsp;对于程序员来说，通过代码可能更加直观些：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Comparable[] a)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> N = a.length;</span><br><span class="line">		<span class="keyword">int</span> step = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span> (step &lt; N / <span class="number">3</span>)</span><br><span class="line">			step = <span class="number">3</span> * step + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span> (step &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = step; i &lt; N; i++) &#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;= step &amp;&amp; less(a[j], a[j - step]); j -= step)</span><br><span class="line">					exch(a, j, j - step);</span><br><span class="line">			&#125;</span><br><span class="line">			step = step / <span class="number">3</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
-<p>步长的选择，是希尔排序重要的部分。</p>
+<p>&emsp;步长的选择，是希尔排序重要的部分。上述算法的最坏时间复杂度接近N<sup>3/2</sup>，对于一个随机序列，会比插入排序快。</p>
 
       
     </div>
@@ -729,7 +732,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-选择排序"><span class="nav-number">1.</span> <span class="nav-text">1. 选择排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-插入排序"><span class="nav-number">2.</span> <span class="nav-text">2. 插入排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-希尔排序"><span class="nav-number">3.</span> <span class="nav-text">3. 希尔排序</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-选择排序"><span class="nav-number">1.</span> <span class="nav-text">1. 选择排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-插入排序"><span class="nav-number">2.</span> <span class="nav-text">2. 插入排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择排序和插入排序的比较"><span class="nav-number">3.</span> <span class="nav-text">选择排序和插入排序的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-希尔排序"><span class="nav-number">4.</span> <span class="nav-text">3. 希尔排序</span></a></li></ol></div>
             
 
           </div>
@@ -763,7 +766,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">83.3k</span>
+    <span title="Site words total count">83.4k</span>
   
 </div>
 
@@ -897,7 +900,7 @@
         var disqus_config = function () {
           this.page.url = 'http://blog.yuegs.com/2018/05/31/algorithm-sort/';
           this.page.identifier = '2018/05/31/algorithm-sort/';
-          this.page.title = '排序算法';
+          this.page.title = '排序算法(一)';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://yuegs-blog.disqus.com/embed.js';

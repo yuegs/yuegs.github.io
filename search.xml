@@ -69,9 +69,9 @@
         <category>区块链</category>
       </categories>
       <tags>
+        <tag>Java</tag>
         <tag>区块链</tag>
         <tag>sha256</tag>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -227,8 +227,8 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Process</tag>
         <tag>内存泄漏</tag>
+        <tag>Process</tag>
       </tags>
   </entry>
   <entry>

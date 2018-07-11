@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/07/11/Kotlin-basicType/</loc>
+    <lastmod>2018-07-11T02:36:58.708Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin基础---基本类型</title>
+        <pubTime>2018-07-11T02:18:01.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://blog.yuegs.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/07/04/java-IoC-AOP/</loc>
     <lastmod>2018-07-10T01:42:28.495Z</lastmod>
     <data>
@@ -129,11 +149,11 @@
         <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
         <pubTime>2018-05-26T05:02:00.000Z</pubTime>
         
-        <tag>Java</tag>
-         
         <tag>区块链</tag>
          
         <tag>sha256</tag>
+         
+        <tag>Java</tag>
          
          
            
@@ -455,9 +475,9 @@
         
         <tag>Android</tag>
          
-        <tag>内存泄漏</tag>
-         
         <tag>Process</tag>
+         
+        <tag>内存泄漏</tag>
          
          
            

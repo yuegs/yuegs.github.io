@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/07/11/Kotlin-basicType/</loc>
+    
+    <lastmod>2018-07-11T02:36:58.708Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/07/04/java-IoC-AOP/</loc>
     
     <lastmod>2018-07-10T01:42:28.495Z</lastmod>

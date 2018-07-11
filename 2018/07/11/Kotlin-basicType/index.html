@@ -127,18 +127,20 @@
 
 
 
-<meta name="description" content="&amp;emsp;在 Kotlin 中，从所有 变量 都可以调用其成员函数和属性的角度看，一切都是对象（包含有属性和方法）。对于一些比较特殊的类型来说，比如数字、字符和布尔值，在运行时实际上可能是作为基础类型来处理的，但是对于使用者而言它就像一个普通的类一样（基础类型会自动装包，自动包装之后依然可以调用其相应方法、访问相应属性）。">
+<meta name="description" content="&amp;emsp;Kotlin，是由俄罗斯圣彼得堡的 JetBrains 团队开发出来的，这个词也来源于俄罗斯圣彼得堡附近的科特林岛。它和 Java 之间的关系如下图所示： &amp;emsp;可以看到，Kotlin 是一种以 Java 平台为运行目标的静态编程语言。因此，你可以替代 Java 使用 Kotlin 进行开发，或者同时使用两种语言。 &amp;emsp;本节，先来看看 Kotlin 中的基本类型。">
 <meta name="keywords" content="Kotlin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kotlin基础---基本类型">
 <meta property="og:url" content="http://blog.yuegs.com/2018/07/11/Kotlin-basicType/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="&amp;emsp;在 Kotlin 中，从所有 变量 都可以调用其成员函数和属性的角度看，一切都是对象（包含有属性和方法）。对于一些比较特殊的类型来说，比如数字、字符和布尔值，在运行时实际上可能是作为基础类型来处理的，但是对于使用者而言它就像一个普通的类一样（基础类型会自动装包，自动包装之后依然可以调用其相应方法、访问相应属性）。">
+<meta property="og:description" content="&amp;emsp;Kotlin，是由俄罗斯圣彼得堡的 JetBrains 团队开发出来的，这个词也来源于俄罗斯圣彼得堡附近的科特林岛。它和 Java 之间的关系如下图所示： &amp;emsp;可以看到，Kotlin 是一种以 Java 平台为运行目标的静态编程语言。因此，你可以替代 Java 使用 Kotlin 进行开发，或者同时使用两种语言。 &amp;emsp;本节，先来看看 Kotlin 中的基本类型。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-11T02:36:58.708Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/kotlin/kotlin-class/kotlin-build.jpg">
+<meta property="og:updated_time" content="2018-07-11T03:40:20.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin基础---基本类型">
-<meta name="twitter:description" content="&amp;emsp;在 Kotlin 中，从所有 变量 都可以调用其成员函数和属性的角度看，一切都是对象（包含有属性和方法）。对于一些比较特殊的类型来说，比如数字、字符和布尔值，在运行时实际上可能是作为基础类型来处理的，但是对于使用者而言它就像一个普通的类一样（基础类型会自动装包，自动包装之后依然可以调用其相应方法、访问相应属性）。">
+<meta name="twitter:description" content="&amp;emsp;Kotlin，是由俄罗斯圣彼得堡的 JetBrains 团队开发出来的，这个词也来源于俄罗斯圣彼得堡附近的科特林岛。它和 Java 之间的关系如下图所示： &amp;emsp;可以看到，Kotlin 是一种以 Java 平台为运行目标的静态编程语言。因此，你可以替代 Java 使用 Kotlin 进行开发，或者同时使用两种语言。 &amp;emsp;本节，先来看看 Kotlin 中的基本类型。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/kotlin/kotlin-class/kotlin-build.jpg">
 
 
 
@@ -440,7 +442,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,132
+                  1,149
                 </span>
               
 
@@ -465,7 +467,9 @@
       
 
       
-        <p>&emsp;在 <code>Kotlin</code> 中，从所有 <code>变量</code> 都可以调用其成员函数和属性的角度看，一切都是对象（包含有属性和方法）。对于一些比较特殊的类型来说，比如数字、字符和布尔值，在运行时实际上可能是作为基础类型来处理的，但是对于使用者而言它就像一个普通的类一样（基础类型会自动装包，自动包装之后依然可以调用其相应方法、访问相应属性）。<br><a id="more"></a></p>
+        <p>&emsp;<code>Kotlin</code>，是由俄罗斯圣彼得堡的 <code>JetBrains</code> 团队开发出来的，这个词也来源于俄罗斯圣彼得堡附近的科特林岛。它和 <code>Java</code> 之间的关系如<a href="https://www.manning.com/books/kotlin-in-action" target="_blank" rel="noopener">下图</a>所示：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/kotlin/kotlin-class/kotlin-build.jpg" alt=""></p>
+<p>&emsp;可以看到，<code>Kotlin</code> 是一种以 <code>Java</code> 平台为运行目标的<strong>静态编程语言</strong>。因此，你可以替代 <code>Java</code> 使用 <code>Kotlin</code> 进行开发，或者同时使用两种语言。</p>
+<p>&emsp;本节，先来看看 <code>Kotlin</code> 中的基本类型。<br><a id="more"></a></p>
 <h3 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h3><p>&emsp;Kotlin 处理数字的方式和 Java 类似，但又不完全一样。类似的是，Kotlin 也提供了内建类型代表数字。</p>
 <table>
 <thead>
@@ -535,7 +539,7 @@
 <p>&emsp;其他使用方式和在 <code>Java</code> 中类似。</p>
 <h3 id="字符串模板"><a href="#字符串模板" class="headerlink" title="字符串模板"></a>字符串模板</h3><p>&emsp;模板表达式以 <code>$</code> 开头，后面跟变量名或者表达式，跟表达式时，以 <code>{}</code> 包裹表达式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val i = <span class="number">10</span></span><br><span class="line">println(<span class="string">"i = $i"</span>) <span class="comment">// prints "i = 10"</span></span><br><span class="line"></span><br><span class="line">val s = <span class="string">"abc"</span></span><br><span class="line">println(<span class="string">"$s.length is $&#123;s.length&#125;"</span>) <span class="comment">// prints "abc.length is 3"</span></span><br></pre></td></tr></table></figure></p>
 <p>&emsp;当然，如果你想打印一个 <code>$</code> 符号，也是可以的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val price = <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">$&#123;'$'&#125;9.99</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;综上，其实我们可以看到，就基础类型而言，<code>Kotlin</code> 和 <code>Java</code> 相差并不大。另外，字符串模板是个很有意思的地方。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;综上，其实我们可以看到，就基础类型而言，<code>Kotlin</code> 和 <code>Java</code> 相差并不大。从所有 <code>变量</code> 都可以调用其成员函数和属性的角度看，一切都是对象（包含有属性和方法）。另外，字符串模板是个很有意思的地方。</p>
 <p>参考：<br><a href="https://kotlinlang.org/docs/reference/basic-types.html" target="_blank" rel="noopener">Kotlin-Basic Types</a></p>
 
       

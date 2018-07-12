@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/07/12/Kotlin-class/</loc>
+    
+    <lastmod>2018-07-12T06:47:45.992Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/07/11/Kotlin-basicType/</loc>
     
     <lastmod>2018-07-11T03:40:20.392Z</lastmod>

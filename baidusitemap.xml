@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/07/12/Kotlin-class/</loc>
+    <lastmod>2018-07-12T06:47:45.992Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin基础---接口和类</title>
+        <pubTime>2018-07-12T06:27:01.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://blog.yuegs.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/07/11/Kotlin-basicType/</loc>
     <lastmod>2018-07-11T03:40:20.392Z</lastmod>
     <data>
@@ -1004,9 +1024,9 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>AIDL</tag>
          
@@ -1080,9 +1100,9 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
         <tag>Binder</tag>
+         
+        <tag>Android</tag>
          
         <tag>IPC</tag>
          

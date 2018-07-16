@@ -127,23 +127,23 @@
 
 
 
-<meta name="description" content="&amp;emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。 一种原地归并算法&amp;emsp;所谓归并，就是将两个已经排好序的序列合并成一个较大的序列。而归并排序算法，就是建立在此基础之上。在具体实现方向上，我找到了两个方式。他们都称为原地归并。  in-place algorithm is an algorithm">
+<meta name="description" content="&amp;emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。">
 <meta name="keywords" content="算法,排序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="排序算法(二)---归并排序">
 <meta property="og:url" content="http://blog.yuegs.com/2018/07/13/algorithm-sort-2/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="&amp;emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。 一种原地归并算法&amp;emsp;所谓归并，就是将两个已经排好序的序列合并成一个较大的序列。而归并排序算法，就是建立在此基础之上。在具体实现方向上，我找到了两个方式。他们都称为原地归并。  in-place algorithm is an algorithm">
+<meta property="og:description" content="&amp;emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/merge.gif">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/recursion-16.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/auxsort-2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/origin-array.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/blocks.png">
-<meta property="og:updated_time" content="2018-07-16T15:34:49.123Z">
+<meta property="og:updated_time" content="2018-07-16T15:44:21.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="排序算法(二)---归并排序">
-<meta name="twitter:description" content="&amp;emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。 一种原地归并算法&amp;emsp;所谓归并，就是将两个已经排好序的序列合并成一个较大的序列。而归并排序算法，就是建立在此基础之上。在具体实现方向上，我找到了两个方式。他们都称为原地归并。  in-place algorithm is an algorithm">
+<meta name="twitter:description" content="&amp;emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/merge.gif">
 
 
@@ -446,7 +446,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,362
+                  1,443
                 </span>
               
 
@@ -471,7 +471,7 @@
       
 
       
-        <p>&emsp;早先，我们在讨论 <a href="https://blog.yuegs.com/2018/06/21/recursion/">分治法</a> 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。</p>
+        <p>&emsp;早先，我们在讨论 <a href="https://blog.yuegs.com/2018/06/21/recursion/">分治法</a> 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。<br><a id="more"></a></p>
 <h3 id="一种原地归并算法"><a href="#一种原地归并算法" class="headerlink" title="一种原地归并算法"></a>一种原地归并算法</h3><p>&emsp;所谓归并，就是将两个已经排好序的序列合并成一个较大的序列。而归并排序算法，就是建立在此基础之上。在具体实现方向上，我找到了两个方式。他们都称为<strong>原地归并</strong>。</p>
 <blockquote>
 <p>in-place algorithm is an algorithm which transforms input using no auxiliary data structure. However a small amount of extra storage space is allowed for auxiliary variables. The input is usually overwritten by the output as the algorithm executes. In-place algorithm updates input sequence only through replacement or swapping of elements.</p>
@@ -495,7 +495,8 @@
 <p>&emsp;你可能认为，我们使用了辅助数组 <code>A</code>，但是实际上，你可以认为 n=9，即 <code>A</code> 也是原数组的一部分，对 <code>X</code> 和 <code>Y</code> 排完序之后，再对 <code>A</code> 进行扫尾即可。但是这种排序是不稳定的，<code>A</code> 的顺序会发生变化。<br>&emsp;总结上面的过程，大概分为三步：<strong>分块—&gt;两两归并—&gt;扫尾</strong>。接下来具体分析下三个过程。<br>&emsp;现在，我们的数组是这样的，数组大小为 <code>N</code>，其中左右两边的 <code>X</code> 和 <code>Y</code> 各自均为有序序列，需要合并它们，形成一个统一的有序序列：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/origin-array.jpg" alt=""></p>
 <p>&emsp;接着，将这大小为 <code>N</code> 的数组，分为 <code>m+2</code> 份：Z<sub>0</sub>、Z<sub>1</sub>、Z<sub>2</sub>、、、Z<sub>m</sub>、Z<sub>m+1</sub>、Z<sub>m+2</sub>，同时确保每一组的大小为 <code>n=sqrt(N)</code>，注意，最后一组的大小将 <code>N[m+2].length &lt;=n</code>。那么，Z<sub>m+1</sub>、Z<sub>m+2</sub>实际上就组成了上面示例中的 <code>A</code>。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/sort-2/blocks.png" alt=""></p>
 <p>&emsp;如上图所示，此时，有一组子数列可能存在于 <code>X</code> 和 <code>Y</code> 相交的地方，将该分组移到 <code>Y</code> 的最后面。这样就保证了一件事：前 <code>m</code> 组数列中每组子数列内部都是有序的。然后，将前 <code>m</code> 组按照 Z<sub>0</sub>[0]、Z<sub>1</sub>[0]、Z<sub>2</sub>[0]…进行排序，若第一个元素相等，则以最后一个元素的大小作为依据。<br>&emsp;紧接着，借助 <code>A</code>,依次对 Z<sub>k</sub>、Z<sub>k+1</sub> 进行两两归并。两两归并之后，前 <code>m</code> 组构成的整体就是有序序列了，前面按照 Z<sub>k</sub>[0] 对各个分组进行排序对这一步起到了非常关键的作用。<br>&emsp;最后一步，就是扫尾了，对后面的数组 <code>A</code> 进行处理。<br>&emsp;综上，我们可以看到，在时间复杂度一样的情况下，但是这种方式的空间复杂度为 <code>o(1)</code>。</p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank" rel="noopener">In-place algorithm</a></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;分治，拆分问题规模，合并问题答案，真的是一种优秀的计算机思想。到目前为止，我们还是需要通过程序告诉计算机如何处理问题，而告诉计算机处理的每一个步骤，必然是简单的，可量化的，可计算的。</p>
+<p><a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank" rel="noopener">In-place algorithm</a></p>
 
       
     </div>

@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://blog.yuegs.com/2018/07/13/algorithm-sort-2/</loc>
-    <lastmod>2018-07-16T15:27:55.337Z</lastmod>
+    <lastmod>2018-07-16T15:34:49.123Z</lastmod>
     <data>
         <display>
         <title>排序算法(二)---归并排序</title>
@@ -1046,13 +1046,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
-        <tag>AIDL</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
+         
+        <tag>AIDL</tag>
          
          
            
@@ -1096,9 +1096,9 @@
         
         <tag>Android</tag>
          
-        <tag>IPC</tag>
-         
         <tag>Process</tag>
+         
+        <tag>IPC</tag>
          
         <tag>Messenger</tag>
          
@@ -1122,11 +1122,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
-        <tag>Binder</tag>
-         
         <tag>Android</tag>
          
         <tag>IPC</tag>
+         
+        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

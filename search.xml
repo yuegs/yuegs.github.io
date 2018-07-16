@@ -274,8 +274,8 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>IPC</tag>
         <tag>Process</tag>
+        <tag>IPC</tag>
         <tag>Messenger</tag>
         <tag>Service</tag>
       </tags>
@@ -441,10 +441,10 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
-        <tag>AIDL</tag>
         <tag>IPC</tag>
+        <tag>Binder</tag>
+        <tag>AIDL</tag>
       </tags>
   </entry>
   <entry>
@@ -455,9 +455,9 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
         <tag>IPC</tag>
+        <tag>Binder</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
       </tags>

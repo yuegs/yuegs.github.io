@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/07/18/Kotlin-property/</loc>
+    <lastmod>2018-07-19T13:48:48.715Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin基础---属性</title>
+        <pubTime>2018-07-18T08:22:01.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://blog.yuegs.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/07/13/algorithm-sort-2/</loc>
     <lastmod>2018-07-16T15:44:21.617Z</lastmod>
     <data>
@@ -1046,13 +1066,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
          
+        <tag>Android</tag>
+         
         <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
          
          
            
@@ -1096,9 +1116,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -1122,11 +1142,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
+        <tag>Binder</tag>
+         
         <tag>Android</tag>
          
         <tag>IPC</tag>
-         
-        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

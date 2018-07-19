@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Kotlin基础---属性]]></title>
+    <url>%2F2018%2F07%2F18%2FKotlin-property%2F</url>
+    <content type="text"><![CDATA[&emsp;在 Kotlin 的类中，有 property （属性）这么一说，而在 Java 中，我们更多的是称它们 field。它们都是为了描述对象的状态，但是相对来说，前者要比后者更加 “高级” 些，属性拥有更丰富的内容，在 Kotlin 中，field 被包含在属性中，同时，属性中还有一些其他操作。 属性声明&emsp;声明一个属性的完整语法是：123var &lt;propertyName&gt;[: &lt;PropertyType&gt;] [= &lt;property_initializer&gt;] [&lt;getter&gt;] [&lt;setter&gt;] &emsp;实例如下：123456var name: String = "Yue" get() = "your name is " + field set(value) &#123; println("you set name "+value) field = value &#125; &emsp;需要注意的是： 在 Kotlin 中，foo.name = value 在执行的时候，最终是调用了 setter 方法进行赋值的。同样的，访问 foo.name 时，实际上是调用了其 getter 方法。 12345fun main(args: Array&lt;String&gt;) &#123; val foo = Foo() foo.name = "YueGs" println(foo.name)&#125; &emsp;输出结果为：12you set name YueGsyour name is YueGs 属性和 Field&emsp;上面已经说了，赋值或者初始化的时候，实际上将调用的是 setter 方法。实际上也就是：123456var name: String = "Yue" get() = "your name is " + field set(value) &#123; println("you set name "+value) field = value &#125; &emsp;这个时候，field 的必要性就出现了。我们无法实现赋值，如果这样做，实际上会导致无限递归：1234set(value) &#123; println("you set name "+value) name = value // 这句实际上被转换成了 set(value),这样就导致了无限递归 &#125; &emsp;所以，我们用 field 来指向这个值。field 只能在属性的访问器中才得以访问。而且，对于属性来说，也可能没有 field。如果属性的访问器至少有一个是使用的默认实现，或者在自定义访问器中有对 field 的引用，也就是需要 field 存在时，才有生成它。123// 以下就没有 field, val 只有 getter 访问器val isEmpty: Boolean get() = this.size == 0 延迟初始化属性&emsp;这里，就牵扯到另外一个关键字 lateinit。通常，属性声明之后如果是非空类型，需要对其进行初始化，然而，有些情况并不适合马上进行初始化。这个时候，就可以使用 lateinit 进行标记。1lateinit var name: String 委托属性&emsp;委托属性的标准语法是：1val/var &lt;property name&gt;: &lt;Type&gt; by &lt;expression&gt; &emsp;by 后面的部分表示委托。123class Example &#123; var p: String by Delegate()&#125; &emsp;以上述代码为例，属性 p 的 get 和 set 方法将委托给 Delegate 处理，对应于它的 getValue 和 setValue，因此，我们需要在 Delegate 中实现这两个方法：123456789class Delegate &#123; operator fun getValue(thisRef: Any?, property: KProperty&lt;*&gt;): String &#123; return "$thisRef, thank you for delegating '$&#123;property.name&#125;' to me!" &#125; operator fun setValue(thisRef: Any?, property: KProperty&lt;*&gt;, value: String) &#123; println("$value has been assigned to '$&#123;property.name&#125;' in $thisRef.") &#125;&#125; &emsp;测试：12val e = Example()println(e.p)//输出：Example@33a17727, thank you for delegating ‘p’ to me! &emsp;Kotlin 为几种有用的委托提供了工厂方法： 延迟属性（lazy properties）: 其值只在首次访问时计算，后面访问时，将只是返回计算结果； 可观察属性（observable properties）: 监听器会收到有关此属性变更的通知； 把多个属性储存在一个映射（map）中，而不是每个存在单独的字段中。 lazy&emsp;我们来看下关于 lazy 的委托：123456789val lazyValue: String by lazy &#123; println("computed!") "Hello"&#125;fun main(args: Array&lt;String&gt;) &#123; println(lazyValue) println(lazyValue)&#125; &emsp;输出：123computed!HelloHello &emsp;注意，其只是在首次访问时计算是指对同一个对象而言。同一个对象多次调用，除了第一次外后面的访问将直接返回结果。 Observable&emsp;observable 方法将返回一个代理，当对属性的值发生变化时，将执行一个回调。该方法需要两个参数，属性的初始值，以及发生变化的回调。1234567891011var observed = falsevar max: Int by Delegates.observable(0) &#123; property, oldValue, newValue -&gt; observed = true &#125;println(max) // 0println("observed is $&#123;observed&#125;") // falsemax = 10println(max) // 10println("observed is $&#123;observed&#125;") // true 将属性存储到 Map 中&emsp;一个通用用法就是将属性的值存储到 map 中。其应用场景比如说解析 JSON ，在这种情况下，你可以使用 map 作为委托。1234class User(val map: Map&lt;String, Any?&gt;) &#123; val name: String by map val age: Int by map&#125; &emsp;这种情况下，在构造器中使用一个 map 作为参数：1234val user = User(mapOf( "name" to "John Doe", "age" to 25)) &emsp;此时：12println(user.name) // Prints "John Doe"println(user.age) // Prints 25 参考：What’s Kotlin Backing Field For?Properties and FieldsDelegated Propertiesobservable]]></content>
+      <categories>
+        <category>Kotlin</category>
+      </categories>
+      <tags>
+        <tag>Kotlin</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[排序算法(二)---归并排序]]></title>
     <url>%2F2018%2F07%2F13%2Falgorithm-sort-2%2F</url>
     <content type="text"><![CDATA[&emsp;早先，我们在讨论 分治法 的时候，实际上就使用了归并算法来举例。也就是说，归并算法体现了分而治之的思想。接下来将讨论两种归并排序算法。 一种原地归并算法&emsp;所谓归并，就是将两个已经排好序的序列合并成一个较大的序列。而归并排序算法，就是建立在此基础之上。在具体实现方向上，我找到了两个方式。他们都称为原地归并。 in-place algorithm is an algorithm which transforms input using no auxiliary data structure. However a small amount of extra storage space is allowed for auxiliary variables. The input is usually overwritten by the output as the algorithm executes. In-place algorithm updates input sequence only through replacement or swapping of elements. &emsp;原地，就是在输入空间的基础上进行操作输出，有时会使用额外的辅助空间。 算法思想&emsp;这种归并排序来自于 Algorithms, 4th Edition ，下面通过图来具体认识下归并过程。 &emsp;由上图可知，其操作流程为： 首先，整个序列的前半部分和后半部分均为顺序的，即已经排好序了。此时我们暂时将它们分别命名为 A 和 B 。 需要申请一块和原序列同样大小的辅助空间，并将所有数据复制到重新申请的空间里。 接下来，我们通过在比较辅助空间中的 A 和 B，找到当前的最小值，然后存入到输入空间里。 图中，i 代表 A 中移动到的当前索引； j 代表 B 中移动到的当前索引， k 代表原数列中已经排好序的当前索引。 算法实现&emsp;算法实现部分，将使用 递归 的方式。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748public class MergeSort1 &#123; static Comparable [] aux ; private static boolean less(Comparable v, Comparable w)&#123; return v.compareTo(w)&lt;0 ; &#125; public static void sort(Comparable[] a) &#123; aux = new Comparable[a.length]; // Allocate space just once. sort(a, 0, a.length - 1); &#125; private static void sort(Comparable[] a, int lo, int hi) &#123; // Sort a[lo..hi]. if (hi &lt;= lo) return; int mid = lo + (hi - lo) / 2; sort(a, lo, mid); // Sort left half. sort(a, mid + 1, hi); // Sort right half. merge(a, lo, mid, hi); // Merge results &#125; public static void merge(Comparable[] array, int low, int mid, int high) &#123; // System.arraycopy(array, 0, aux, 0, N); int i = low, j = mid + 1; for(int k = low ; k &lt;= high ; k++) &#123; aux[k] = array[k] ; &#125; for (int k = low; k &lt;= high; k++) &#123; if (i &gt; mid) &#123; array[k] = aux[j++]; &#125; else if (j &gt; high) &#123; array[k] = aux[i++]; &#125; else if (less(aux[i], aux[j])) &#123; array[k] = aux[i++]; &#125; else array[k] = aux[j++]; &#125; &#125; public static void main(String []args) &#123; Integer [] array = &#123;38,27,43,3,9,82,10&#125;; sort(array); for(int i = 0 ; i&lt; array.length ; i++) &#123; System.out.print(array[i]+","); &#125; &#125;&#125; &emsp;当数组个数为 16 时： 时间和空间复杂度&emsp;首先来看时间复杂度。由上图可以观察到，递归树一共有 lgn 层，而每一层需要赋值的时间复杂度为 o(n)，因此，其时间复杂度为 nlgn，而空间复杂度，我们使用了一个辅助数组，其大小和原数组一样大，因此，时间复杂度为 o(n)。 另外一种原地归并算法&emsp;另外一种方法，是我在另外一篇文章中看到的。空间复杂度到了常量级别，即o(1)。原文已经找不到，只在此处看到了 转载。下面，我也给出基本思路，谈谈我的理解。 &emsp;其基本思想，如下图所示，假设 n=6，且x1 &lt; y1 &lt; x2 &lt; y2&lt; x3 &lt; y3，我们借助辅助的 A 即可完成排序。 &emsp;你可能认为，我们使用了辅助数组 A，但是实际上，你可以认为 n=9，即 A 也是原数组的一部分，对 X 和 Y 排完序之后，再对 A 进行扫尾即可。但是这种排序是不稳定的，A 的顺序会发生变化。&emsp;总结上面的过程，大概分为三步：分块—&gt;两两归并—&gt;扫尾。接下来具体分析下三个过程。&emsp;现在，我们的数组是这样的，数组大小为 N，其中左右两边的 X 和 Y 各自均为有序序列，需要合并它们，形成一个统一的有序序列： &emsp;接着，将这大小为 N 的数组，分为 m+2 份：Z0、Z1、Z2、、、Zm、Zm+1、Zm+2，同时确保每一组的大小为 n=sqrt(N)，注意，最后一组的大小将 N[m+2].length &lt;=n。那么，Zm+1、Zm+2实际上就组成了上面示例中的 A。 &emsp;如上图所示，此时，有一组子数列可能存在于 X 和 Y 相交的地方，将该分组移到 Y 的最后面。这样就保证了一件事：前 m 组数列中每组子数列内部都是有序的。然后，将前 m 组按照 Z0[0]、Z1[0]、Z2[0]…进行排序，若第一个元素相等，则以最后一个元素的大小作为依据。&emsp;紧接着，借助 A,依次对 Zk、Zk+1 进行两两归并。两两归并之后，前 m 组构成的整体就是有序序列了，前面按照 Zk[0] 对各个分组进行排序对这一步起到了非常关键的作用。&emsp;最后一步，就是扫尾了，对后面的数组 A 进行处理。&emsp;综上，我们可以看到，在时间复杂度一样的情况下，但是这种方式的空间复杂度为 o(1)。 小结&emsp;分治，拆分问题规模，合并问题答案，真的是一种优秀的计算机思想。到目前为止，我们还是需要通过程序告诉计算机如何处理问题，而告诉计算机处理的每一个步骤，必然是简单的，可量化的，可计算的。 In-place algorithm]]></content>
@@ -274,8 +285,8 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Process</tag>
         <tag>IPC</tag>
+        <tag>Process</tag>
         <tag>Messenger</tag>
         <tag>Service</tag>
       </tags>
@@ -441,10 +452,10 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
-        <tag>IPC</tag>
         <tag>Binder</tag>
+        <tag>Android</tag>
         <tag>AIDL</tag>
+        <tag>IPC</tag>
       </tags>
   </entry>
   <entry>
@@ -455,9 +466,9 @@
         <category>Android</category>
       </categories>
       <tags>
+        <tag>Binder</tag>
         <tag>Android</tag>
         <tag>IPC</tag>
-        <tag>Binder</tag>
         <tag>序列化</tag>
         <tag>反序列化</tag>
       </tags>

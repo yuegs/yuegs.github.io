@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://blog.yuegs.com/2018/07/26/Android-dagger2-scope-component/</loc>
-    <lastmod>2018-07-26T02:18:12.619Z</lastmod>
+    <lastmod>2018-07-26T02:29:35.431Z</lastmod>
     <data>
         <display>
         <title>Dagger2---Scope & Component</title>
@@ -1088,13 +1088,13 @@
         <title>Android AIDL 详解</title>
         <pubTime>2017-09-24T17:11:29.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>IPC</tag>
-         
         <tag>Binder</tag>
          
+        <tag>Android</tag>
+         
         <tag>AIDL</tag>
+         
+        <tag>IPC</tag>
          
          
            
@@ -1138,9 +1138,9 @@
         
         <tag>Android</tag>
          
-        <tag>Process</tag>
-         
         <tag>IPC</tag>
+         
+        <tag>Process</tag>
          
         <tag>Messenger</tag>
          
@@ -1164,11 +1164,11 @@
         <title>图说 Android Binder 机制</title>
         <pubTime>2017-09-19T15:31:29.000Z</pubTime>
         
+        <tag>Binder</tag>
+         
         <tag>Android</tag>
          
         <tag>IPC</tag>
-         
-        <tag>Binder</tag>
          
         <tag>序列化</tag>
          

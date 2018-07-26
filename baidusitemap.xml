@@ -4,8 +4,30 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/07/24/Android-dagger2-scope-component/</loc>
+    <lastmod>2018-07-26T02:15:19.609Z</lastmod>
+    <data>
+        <display>
+        <title>Dagger2---Scope & Component</title>
+        <pubTime>2018-07-24T14:42:28.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>开源框架</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/07/18/Kotlin-property/</loc>
-    <lastmod>2018-07-19T13:48:48.715Z</lastmod>
+    <lastmod>2018-07-19T13:49:45.001Z</lastmod>
     <data>
         <display>
         <title>Kotlin基础---属性</title>

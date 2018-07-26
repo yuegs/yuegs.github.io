@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/07/24/Android-dagger2-scope-component/</loc>
+    
+    <lastmod>2018-07-26T02:15:19.609Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/07/18/Kotlin-property/</loc>
     
-    <lastmod>2018-07-19T13:48:48.715Z</lastmod>
+    <lastmod>2018-07-19T13:49:45.001Z</lastmod>
     
   </url>
   

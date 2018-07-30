@@ -32,7 +32,6 @@
       </categories>
       <tags>
         <tag>算法</tag>
-        <tag>排序</tag>
       </tags>
   </entry>
   <entry>
@@ -66,8 +65,7 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>IOC</tag>
-        <tag>AOP</tag>
+        <tag>思想</tag>
       </tags>
   </entry>
   <entry>
@@ -79,7 +77,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>泛型</tag>
       </tags>
   </entry>
   <entry>
@@ -91,7 +88,7 @@
       </categories>
       <tags>
         <tag>算法</tag>
-        <tag>分治</tag>
+        <tag>思想</tag>
       </tags>
   </entry>
   <entry>
@@ -103,7 +100,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>注解</tag>
       </tags>
   </entry>
   <entry>
@@ -115,7 +111,6 @@
       </categories>
       <tags>
         <tag>算法</tag>
-        <tag>排序</tag>
       </tags>
   </entry>
   <entry>
@@ -127,7 +122,6 @@
       </categories>
       <tags>
         <tag>区块链</tag>
-        <tag>sha256</tag>
         <tag>Java</tag>
       </tags>
   </entry>
@@ -139,11 +133,8 @@
         <category>Android源码分析</category>
       </categories>
       <tags>
-        <tag>View</tag>
-        <tag>Window</tag>
-        <tag>WindowManagerService</tag>
-        <tag>Surface</tag>
-        <tag>硬件加速</tag>
+        <tag>Android</tag>
+        <tag>源码分析</tag>
       </tags>
   </entry>
   <entry>
@@ -155,7 +146,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>自定义View</tag>
       </tags>
   </entry>
   <entry>
@@ -167,10 +157,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>数字签名</tag>
-        <tag>证书</tag>
-        <tag>非对称加密</tag>
-        <tag>签名</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -181,9 +168,7 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>高德地图</tag>
-        <tag>Marker</tag>
-        <tag>线路规划</tag>
+        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +180,6 @@
       </categories>
       <tags>
         <tag>算法</tag>
-        <tag>并查集</tag>
-        <tag>网络连通性</tag>
       </tags>
   </entry>
   <entry>
@@ -244,9 +227,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>MVC</tag>
-        <tag>MVP</tag>
-        <tag>MVVM</tag>
+        <tag>架构</tag>
       </tags>
   </entry>
   <entry>
@@ -258,8 +239,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>ProGuard</tag>
-        <tag>混淆</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -272,7 +252,6 @@
       <tags>
         <tag>Android</tag>
         <tag>gradle</tag>
-        <tag>BuildVariants</tag>
       </tags>
   </entry>
   <entry>
@@ -284,8 +263,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Process</tag>
-        <tag>内存泄漏</tag>
+        <tag>内存管理</tag>
       </tags>
   </entry>
   <entry>
@@ -298,9 +276,7 @@
       <tags>
         <tag>Android</tag>
         <tag>IPC</tag>
-        <tag>Process</tag>
-        <tag>Messenger</tag>
-        <tag>Service</tag>
+        <tag>内存管理</tag>
       </tags>
   </entry>
   <entry>
@@ -312,7 +288,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>组件库</tag>
         <tag>数据库</tag>
       </tags>
   </entry>
@@ -325,7 +300,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>组件库</tag>
         <tag>数据库</tag>
       </tags>
   </entry>
@@ -338,7 +312,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>组件库</tag>
         <tag>数据库</tag>
       </tags>
   </entry>
@@ -351,7 +324,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>组件库</tag>
         <tag>数据库</tag>
       </tags>
   </entry>
@@ -364,7 +336,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Process</tag>
+        <tag>内存管理</tag>
       </tags>
   </entry>
   <entry>
@@ -376,8 +348,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>λ</tag>
-        <tag>stream</tag>
       </tags>
   </entry>
   <entry>
@@ -389,8 +359,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>适配</tag>
-        <tag>UI</tag>
       </tags>
   </entry>
   <entry>
@@ -401,10 +369,8 @@
         <category>网络通信</category>
       </categories>
       <tags>
-        <tag>TCP</tag>
-        <tag>Socket</tag>
-        <tag>WebSocket</tag>
-        <tag>Http</tag>
+        <tag>安全</tag>
+        <tag>网络</tag>
       </tags>
   </entry>
   <entry>
@@ -415,9 +381,8 @@
         <category>Android源码分析</category>
       </categories>
       <tags>
-        <tag>View</tag>
+        <tag>Android</tag>
         <tag>源码分析</tag>
-        <tag>setContentView</tag>
       </tags>
   </entry>
   <entry>
@@ -429,7 +394,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Activity</tag>
+        <tag>源码分析</tag>
       </tags>
   </entry>
   <entry>
@@ -441,7 +406,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Activity</tag>
+        <tag>源码分析</tag>
       </tags>
   </entry>
   <entry>
@@ -453,7 +418,7 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Activity</tag>
+        <tag>源码分析</tag>
       </tags>
   </entry>
   <entry>
@@ -464,9 +429,7 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
-        <tag>AIDL</tag>
         <tag>IPC</tag>
       </tags>
   </entry>
@@ -478,11 +441,8 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Binder</tag>
         <tag>Android</tag>
         <tag>IPC</tag>
-        <tag>序列化</tag>
-        <tag>反序列化</tag>
       </tags>
   </entry>
   <entry>
@@ -493,8 +453,8 @@
         <category>Java</category>
       </categories>
       <tags>
+        <tag>内存管理</tag>
         <tag>Java</tag>
-        <tag>Thread</tag>
       </tags>
   </entry>
   <entry>
@@ -505,8 +465,6 @@
         <category>Android</category>
       </categories>
       <tags>
-        <tag>AndroidThings</tag>
-        <tag>GPIO</tag>
         <tag>物联网</tag>
       </tags>
   </entry>
@@ -518,9 +476,8 @@
         <category>Java</category>
       </categories>
       <tags>
+        <tag>内存管理</tag>
         <tag>Java</tag>
-        <tag>并发</tag>
-        <tag>同步</tag>
       </tags>
   </entry>
   <entry>
@@ -531,9 +488,8 @@
         <category>Java</category>
       </categories>
       <tags>
+        <tag>内存管理</tag>
         <tag>Java</tag>
-        <tag>值传递</tag>
-        <tag>引用传递</tag>
       </tags>
   </entry>
   <entry>
@@ -545,7 +501,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>注解</tag>
       </tags>
   </entry>
   <entry>
@@ -558,7 +513,6 @@
       <tags>
         <tag>Android</tag>
         <tag>开源框架</tag>
-        <tag>RxJava</tag>
       </tags>
   </entry>
   <entry>
@@ -571,7 +525,6 @@
       <tags>
         <tag>Android</tag>
         <tag>开源框架</tag>
-        <tag>RxJava</tag>
       </tags>
   </entry>
   <entry>
@@ -582,8 +535,7 @@
         <category>网络通信</category>
       </categories>
       <tags>
-        <tag>http</tag>
-        <tag>数字签名</tag>
+        <tag>网络</tag>
       </tags>
   </entry>
   <entry>
@@ -594,7 +546,7 @@
         <category>MongoDB</category>
       </categories>
       <tags>
-        <tag>MongoDB</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -605,7 +557,7 @@
         <category>MongoDB</category>
       </categories>
       <tags>
-        <tag>MongoDB</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -616,7 +568,7 @@
         <category>MongoDB</category>
       </categories>
       <tags>
-        <tag>MongoDB</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -627,7 +579,7 @@
         <category>MongoDB</category>
       </categories>
       <tags>
-        <tag>MongoDB</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -639,7 +591,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>Picasso</tag>
         <tag>开源框架</tag>
       </tags>
   </entry>
@@ -652,8 +603,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-        <tag>组件库</tag>
-        <tag>DataBinding</tag>
       </tags>
   </entry>
 </search>

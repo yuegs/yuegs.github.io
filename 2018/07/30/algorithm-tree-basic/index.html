@@ -114,7 +114,7 @@
 
 
 
-  <meta name="keywords" content="Android,数据库," />
+  <meta name="keywords" content="算法," />
 
 
 
@@ -127,18 +127,24 @@
 
 
 
-<meta name="description" content="&amp;emsp;前面讲述了 Room 库的一些概念，这里记录一下自己的实践部分。">
-<meta name="keywords" content="Android,数据库">
+<meta name="description" content="&amp;emsp;数学归纳法，正如上图中的多米诺骨牌效应一样，在第一块多米诺骨牌倒下的瞬间，就开始了这样一段美妙的旅程。递归算法的本质，我觉得就是数学归纳法。而本节，原本是打算借助二叉树遍历更加深入的了解递归。&amp;emsp;在 归并排序算法 中，实际上我们就看到了一个二叉树。而 sort 部分，更是一个对树的遍历 。树这个概念，应用也十分广泛，特别适用于层级结构。在开发过程中，我们会遇到 View 树，文">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 中使用 Room 实践">
-<meta property="og:url" content="http://blog.yuegs.com/2017/12/26/Android-room-action/index.html">
+<meta property="og:title" content="二叉树---基本概念（一）">
+<meta property="og:url" content="http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/index.html">
 <meta property="og:site_name" content="风雪围城">
-<meta property="og:description" content="&amp;emsp;前面讲述了 Room 库的一些概念，这里记录一下自己的实践部分。">
+<meta property="og:description" content="&amp;emsp;数学归纳法，正如上图中的多米诺骨牌效应一样，在第一块多米诺骨牌倒下的瞬间，就开始了这样一段美妙的旅程。递归算法的本质，我觉得就是数学归纳法。而本节，原本是打算借助二叉树遍历更加深入的了解递归。&amp;emsp;在 归并排序算法 中，实际上我们就看到了一个二叉树。而 sort 部分，更是一个对树的遍历 。树这个概念，应用也十分广泛，特别适用于层级结构。在开发过程中，我们会遇到 View 树，文">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-30T15:56:45.508Z">
+<meta property="og:image" content="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/tree-basic/dominoeffect.png">
+<meta property="og:image" content="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/tree-basic/tree-basic.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/tree-basic/preOrder.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/tree-basic/inOrder.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/tree-basic/postOrder.png">
+<meta property="og:updated_time" content="2018-07-31T08:51:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 中使用 Room 实践">
-<meta name="twitter:description" content="&amp;emsp;前面讲述了 Room 库的一些概念，这里记录一下自己的实践部分。">
+<meta name="twitter:title" content="二叉树---基本概念（一）">
+<meta name="twitter:description" content="&amp;emsp;数学归纳法，正如上图中的多米诺骨牌效应一样，在第一块多米诺骨牌倒下的瞬间，就开始了这样一段美妙的旅程。递归算法的本质，我觉得就是数学归纳法。而本节，原本是打算借助二叉树遍历更加深入的了解递归。&amp;emsp;在 归并排序算法 中，实际上我们就看到了一个二叉树。而 sort 部分，更是一个对树的遍历 。树这个概念，应用也十分广泛，特别适用于层级结构。在开发过程中，我们会遇到 View 树，文">
+<meta name="twitter:image" content="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/tree-basic/dominoeffect.png">
 
 
 
@@ -168,13 +174,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.yuegs.com/2017/12/26/Android-room-action/"/>
+  <link rel="canonical" href="http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/"/>
 
 
 
 
 
-  <title>Android 中使用 Room 实践 | 风雪围城</title>
+  <title>二叉树---基本概念（一） | 风雪围城</title>
   
 
 
@@ -335,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2017/12/26/Android-room-action/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YueGs">
@@ -352,7 +358,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android 中使用 Room 实践</h1>
+          <h1 class="post-title" itemprop="name headline">二叉树---基本概念（一）</h1>
         
 
         <div class="post-meta">
@@ -364,8 +370,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-26T22:27:09+08:00">
-                2017-12-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-30T22:21:01+08:00">
+                2018-07-30
               </time>
             
 
@@ -387,8 +393,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -405,9 +411,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/26/Android-room-action/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/30/algorithm-tree-basic/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/26/Android-room-action/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/30/algorithm-tree-basic/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -415,7 +421,7 @@
 
           
           
-             <span id="/2017/12/26/Android-room-action/" class="leancloud_visitors" data-flag-title="Android 中使用 Room 实践">
+             <span id="/2018/07/30/algorithm-tree-basic/" class="leancloud_visitors" data-flag-title="二叉树---基本概念（一）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -440,7 +446,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,061
+                  1,607
                 </span>
               
 
@@ -465,16 +471,66 @@
       
 
       
-        <p>&emsp;前面讲述了 Room 库的一些概念，这里记录一下自己的实践部分。<br><a id="more"></a></p>
-<h3 id="0-添加依赖"><a href="#0-添加依赖" class="headerlink" title="0. 添加依赖"></a>0. 添加依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">implementation &quot;android.arch.persistence.room:runtime:1.0.0&quot;</span><br><span class="line">annotationProcessor &quot;android.arch.persistence.room:compiler:1.0.0&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="1-设置-Schema-的位置"><a href="#1-设置-Schema-的位置" class="headerlink" title="1. 设置 Schema 的位置"></a>1. 设置 Schema 的位置</h3><p>&emsp;在开始使用的时候，并没有注意 Schema 的问题，所以它就抛出了警告，希望我们指定 Schema 的输出位置，以更好的表明数据库的结构信息。这是，你需要在 build.gradle 中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.yuegs.test&quot;</span><br><span class="line">        minSdkVersion 19</span><br><span class="line">        targetSdkVersion 26</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">        multiDexEnabled true</span><br><span class="line">        //********注意这里**********</span><br><span class="line">        javaCompileOptions &#123;</span><br><span class="line">            annotationProcessorOptions &#123;</span><br><span class="line">                arguments = [&quot;room.schemaLocation&quot;: &quot;$projectDir/schemas&quot;.toString()]</span><br><span class="line">        //*************************</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;然后，编译运行之后，你就可以看到工程目录下的 schemas 问价夹。每个数据库，会对应一个自己的 schema。打开文件夹里面的 json 文件，你就能清楚看到自己定义的由Room 实际完成的数据库 schema 了。</p>
-<h3 id="2-在数据库中存图片"><a href="#2-在数据库中存图片" class="headerlink" title="2. 在数据库中存图片"></a>2. 在数据库中存图片</h3><p>&emsp;遇到的第一个问题，就是如何使用 Room 库在数据库中存储图片。<strong>虽然，在数据库中存储图片实际上一般是不推荐的，但是还要看具体的使用场景和需求。</strong><br>&emsp;比如，我的需求主要来源于：将图片从服务器下载之后，持久化存储到本地；图片主要是一些勋章图片，大小在50k下；在需要的时候，需要快速检索出图片然后显示给用户；存储的时候，还需要记录图片的md5、勋章名称等。查了下资料，SQLite 可以存储的内容，在 TB 量级上，所以不需要担心数据库存不下你的内容，只要磁盘空间足够，就不存在问题。 （我使用模拟器，测试插入了1万张图片，在插入6千多图片后，大约2G，因为模拟器磁盘空间不足而抛出异常）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">class User &#123;</span><br><span class="line">    @PrimaryKey(autoGenerate = true)</span><br><span class="line">    public int id;</span><br><span class="line"></span><br><span class="line">    public String firstName;</span><br><span class="line"></span><br><span class="line">    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)</span><br><span class="line">    private byte[] headImage;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;使用数据库存储图片，和直接在存储卡上存储文件相比，肯定往往不如直接存储文件效率高（文件搜索查询功能非常单纯），然而，数据库中存储了更多的结构性信息。<br><strong>最后，为了以防万一，还是把图片再处理下，使用 OkHttp 下载图片，处理，插入数据库</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">OkHttpUtils.get(url, new Callback() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onFailure(Call call, IOException e) &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onResponse(Call call, Response response) throws IOException &#123;</span><br><span class="line">                byte [] data = response.body().bytes() ;</span><br><span class="line">                //以 50k 作为基准,50k以内不做处理，大于50k时，将压缩到50-100k之间</span><br><span class="line">                float compressTimes = data.length / 1024.0f /50 ;</span><br><span class="line">                ByteArrayOutputStream baos ;</span><br><span class="line">                Bitmap bitmap ;</span><br><span class="line">                if(compressTimes &gt; 1)&#123;</span><br><span class="line">                    baos = new ByteArrayOutputStream();</span><br><span class="line">                    bitmap = BitmapFactory.decodeByteArray(data,0,data.length) ;</span><br><span class="line">                    bitmap.compress(Bitmap.CompressFormat.JPEG, Math.round(100 /compressTimes), baos);</span><br><span class="line">                    data = baos.toByteArray();</span><br><span class="line">                &#125;</span><br><span class="line">                User user1 = new User();</span><br><span class="line">                user1.setFirstName(&quot;compress&quot;);</span><br><span class="line">                user1.setImage(data);</span><br><span class="line">                db.userDao().insertAll(user1);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-将引用类型转换为基础类型存储"><a href="#3-将引用类型转换为基础类型存储" class="headerlink" title="3. 将引用类型转换为基础类型存储"></a>3. 将引用类型转换为基础类型存储</h3><p>&emsp;在 Room 中，是不支持引用类型的存储的（主要考虑到效率问题，往往我们在查询的时候想要查出的内容仅仅是一个属性，而不是一个对象），那么，我想存储时间 Date ，该怎么办呢？<br>&emsp;<strong>需要提供一种转换，将引用类型转换为它可以存储的基础类型。</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class DateConverter &#123;</span><br><span class="line">    @TypeConverter</span><br><span class="line">    public static Date fromTimestamp(Long value) &#123;</span><br><span class="line">        return value == null ? null : new Date(value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @TypeConverter</span><br><span class="line">    public static Long dateToTimestamp(Date date) &#123;</span><br><span class="line">        return date == null ? null : date.getTime();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;上述代码块 ，将 Date 类型数据，转换为 long 类型的数据，可以存储在数据库中。<br>&emsp;<strong>转换方法写完了，下面需要告诉数据库这个转换方法，否则它仍然无法完成转换，会报错告诉你它无法识别这个类型。</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Database(entities = &#123; LogEntity.class&#125;,version = 1)</span><br><span class="line">@TypeConverters(&#123;DateConverter.class&#125;)</span><br><span class="line">public abstract class LogDatabase extends RoomDatabase &#123;</span><br><span class="line">    public abstract LogDao logEntityDao() ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;如上述代码块所示，在数据库上添加 @TypeConverters 注解。</p>
-<h3 id="4-数据库导出与查看"><a href="#4-数据库导出与查看" class="headerlink" title="4. 数据库导出与查看"></a>4. 数据库导出与查看</h3><p>&emsp;我是在模拟器（系统4.4）中做的测试，那么直接使用 Android Studio 将数据库文件导出，使用 SQLite Expert 打开查看。</p>
+        <p><img src="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/tree-basic/dominoeffect.png" alt="dominoeffect"><br>&emsp;数学归纳法，正如上图中的多米诺骨牌效应一样，在第一块多米诺骨牌倒下的瞬间，就开始了这样一段美妙的旅程。递归算法的本质，我觉得就是数学归纳法。而本节，原本是打算借助二叉树遍历更加深入的了解递归。<br>&emsp;在 <a href="https://blog.yuegs.com/2018/07/13/algorithm-sort-2/">归并排序算法</a> 中，实际上我们就看到了一个二叉树。而 <code>sort</code> 部分，更是一个对树的遍历 。树这个概念，应用也十分广泛，特别适用于层级结构。在开发过程中，我们会遇到 View 树，文件树，组织结构树等等。<br><a id="more"></a></p>
+<h3 id="二叉树的基本概念"><a href="#二叉树的基本概念" class="headerlink" title="二叉树的基本概念"></a>二叉树的基本概念</h3><p>&emsp;二叉树还是一颗树。所以，我们先从 树 开始。</p>
+<h4 id="树的基本概念"><a href="#树的基本概念" class="headerlink" title="树的基本概念"></a>树的基本概念</h4><p>&emsp;树，是由顶点（节点）和边构成的数据结构。没有节点的称之为空树。对于一个非空的树，包含了根节点和一个节点的层次结构。<br><img src="https://github.com/yuegs/yuegs.github.io/raw/master/images/algorithm/tree-basic/tree-basic.png" alt=""><br>&emsp;如上图所示，先介绍几个基本概念：</p>
+<ul>
+<li>根节点：树的最顶端的节点</li>
+<li>孩子节点和父节点：两个相连的节点，原理根节点的称为孩子结点，反之称为父节点</li>
+<li>边：两个节点之间的连线</li>
+<li>兄弟节点：同一个父节点下的所有直连子节点</li>
+<li>叶子节点：没有子节点的节点</li>
+<li>路径：连接一个节点和它后代节点之间的节点和线</li>
+<li>祖先节点：从根到该节点所经分支上的所有节点</li>
+<li>结点的深度：对于任意节点n,n的深度为从根到n的唯一路径长，根的深度为0</li>
+<li>结点的高度：对于任意节点n,n的高度为从n到一片树叶的最长路径长，所有树叶的高度为0</li>
+<li>树的高度：根节点的高度</li>
+<li>节点的度：对于一个给定的节点，它子节点的个数就是它的度。显然，叶子结点的度为0</li>
+</ul>
+<p>&emsp;需要注意的是，有的书中，将根节点算作是第一层。</p>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>&emsp;二叉树，是一种特殊的树，它的子节点个数不超过两个。其中，左边的子树为左子树，右边的子树为右子树，不能颠倒顺序。<br>&emsp;如果一个二叉树，每个父节点都有两个子节点，且所有叶子节点都在同一层，那么，我们称这棵树为满二叉树。<br>&emsp;对于一个有 h 层的满二叉树，节点的个数为 [2<sup>1</sup>+2<sup>2</sup>+…+2<sup>h</sup>] = 2<sup>h+1</sup> - 1。（<strong>注意，此处 h 可以为0，为 0 时表示根节点</strong>）<br>&emsp;假设二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边，这就是完全二叉树。<br>&emsp;完全二叉树中节点的个数为 2<sup>h</sup> 到 2<sup>h+1</sup> - 1 之间。<br>&emsp;在任意一棵二叉树中，若叶子结点的个数为n0，度为2的结点数为n2，则n0=n2+1。<br>&emsp;用 Java 代码可实现为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinaryTreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> BinaryTreeNode left ;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> BinaryTreeNode right ;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T key ;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BinaryTreeNode</span><span class="params">(BinaryTreeNode left, BinaryTreeNode right, T key)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">		<span class="keyword">this</span>.left = left;</span><br><span class="line">		<span class="keyword">this</span>.right = right;</span><br><span class="line">		<span class="keyword">this</span>.key = key;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BinaryTreeNode <span class="title">getLeft</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> left;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLeft</span><span class="params">(BinaryTreeNode left)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.left = left;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BinaryTreeNode <span class="title">getRight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> right;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRight</span><span class="params">(BinaryTreeNode right)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.right = right;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">getKey</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> key;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setKey</span><span class="params">(T key)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.key = key;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>&emsp;为了能够对树结构进行处理，遍历是一种非常基础的机制。二叉树的遍历，最简单的方式就是使用递归。当然，也可以借助其他工作，使用非递归的方式进行。</p>
+<h4 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h4><p>&emsp;前序遍历定义如下：</p>
+<ul>
+<li>访问根节点</li>
+<li>按前序遍历的方式遍历左子树</li>
+<li>按前序遍历的方式遍历右子树</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainTest</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; G = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="string">'G'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; H = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="string">'H'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; I = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="string">'I'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; F = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="string">'F'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; D = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(G, H, <span class="string">'D'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; E = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(I, <span class="keyword">null</span>, <span class="string">'E'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; B = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(D, E, <span class="string">'B'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; C = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(F, <span class="keyword">null</span>, <span class="string">'C'</span>) ;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt;Character&gt; A = <span class="keyword">new</span> BinaryTreeNode&lt;Character&gt;(B, C, <span class="string">'A'</span>) ;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		preOrder(A) ;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(BinaryTreeNode&lt;Character&gt; root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">			System.out.println(root.getKey());</span><br><span class="line">			preOrder(root.getLeft()) ;</span><br><span class="line">			preOrder(root.getRight());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/tree-basic/preOrder.png" alt="PreOrder"></p>
+<h4 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h4><p>&emsp;中序遍历定义如下：</p>
+<ul>
+<li>按中序遍历方式遍历左子树</li>
+<li>访问根节点</li>
+<li>按中序遍历方式遍历右子树</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(BinaryTreeNode&lt;Character&gt; root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">			preOrder(root.getLeft()) ;</span><br><span class="line">            System.out.println(root.getKey());</span><br><span class="line">			preOrder(root.getRight());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/tree-basic/inOrder.png" alt="InOrder"></p>
+<h4 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h4><p>&emsp;后序遍历定义如下：</p>
+<ul>
+<li>按后序遍历方式遍历左子树</li>
+<li>按后序遍历方式遍历右子树</li>
+<li>访问根节点</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(BinaryTreeNode&lt;Character&gt; root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">			preOrder(root.getLeft()) ;</span><br><span class="line">			preOrder(root.getRight());</span><br><span class="line">            System.out.println(root.getKey());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/tree-basic/postOrder.png" alt="PostOrder"></p>
+<h4 id="层次遍历"><a href="#层次遍历" class="headerlink" title="层次遍历"></a>层次遍历</h4><p>&emsp;层次遍历定义如下：</p>
+<ul>
+<li>访问根节点</li>
+<li>按照从左到右的顺序依次访问 h 层节点，并将 h+1 层节点依次入队列</li>
+<li>重复上述操作</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">levelOrder</span><span class="params">(BinaryTreeNode&lt;Character&gt; root)</span> </span>&#123;</span><br><span class="line">		Queue&lt;BinaryTreeNode&gt; mQueue =<span class="keyword">new</span>  LinkedList&lt;BinaryTreeNode&gt;();</span><br><span class="line">		System.out.println(root.getKey());</span><br><span class="line">		<span class="keyword">if</span>(root.getLeft() != <span class="keyword">null</span>)</span><br><span class="line">			mQueue.add(root.getLeft()) ;</span><br><span class="line">		<span class="keyword">if</span>(root.getRight() != <span class="keyword">null</span>)</span><br><span class="line">			mQueue.add(root.getRight()) ;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">while</span>(!mQueue.isEmpty()) &#123;</span><br><span class="line">			BinaryTreeNode node = mQueue.poll() ;</span><br><span class="line">			<span class="keyword">if</span>(node.getLeft() != <span class="keyword">null</span>)</span><br><span class="line">				mQueue.add(node.getLeft()) ;</span><br><span class="line">			<span class="keyword">if</span>(node.getRight() != <span class="keyword">null</span>)</span><br><span class="line">				mQueue.add(node.getRight()) ;</span><br><span class="line">			System.out.println(node.getKey());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h4><p>&emsp;深度优先遍历定义为：</p>
+<ul>
+<li>访问根节点</li>
+<li>如果有左子树，优先访问左子树，然后访问右子树</li>
+<li>重复上述步骤</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">depthFirst</span><span class="params">(BinaryTreeNode&lt;Character&gt; root)</span> </span>&#123;</span><br><span class="line">		Stack&lt;BinaryTreeNode&lt;Character&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;() ;</span><br><span class="line">		<span class="keyword">if</span>(root != <span class="keyword">null</span>)</span><br><span class="line">			stack.push(root);</span><br><span class="line">		<span class="keyword">while</span>(!stack.isEmpty()) &#123;</span><br><span class="line">			BinaryTreeNode&lt;Character&gt; node = stack.pop() ;</span><br><span class="line">			System.out.println(node.getKey());</span><br><span class="line">			<span class="keyword">if</span>(node.getRight() != <span class="keyword">null</span>)</span><br><span class="line">				stack.push(node.getRight()) ;</span><br><span class="line">			<span class="keyword">if</span>(node.getLeft() != <span class="keyword">null</span>)</span><br><span class="line">				stack.push(node.getLeft());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;我们已经看到，层次遍历借助队列完成；深度优先遍历借助栈完成。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;这一节，其实涉及到了分治递归、栈、队列、树，是算法基础的一种集中体现。良好的算法基础，将非常有助于我们处理计算机问题。</p>
+<p>参考：<br><a href="https://en.wikipedia.org/wiki/Tree_%28data_structure%29" target="_blank" rel="noopener">树（数据结构）</a><br><a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95" target="_blank" rel="noopener">数学归纳法</a></p>
 
       
     </div>
@@ -521,9 +577,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
         </div>
       
@@ -536,8 +590,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/17/Android-room-3/" rel="next" title="使用 Room 的 DAO 访问数据---Room 系列（2）[译]">
-                <i class="fa fa-chevron-left"></i> 使用 Room 的 DAO 访问数据---Room 系列（2）[译]
+              <a href="/2018/07/26/Android-dagger2-scope-component/" rel="next" title="Dagger2---Scope & Component">
+                <i class="fa fa-chevron-left"></i> Dagger2---Scope & Component
               </a>
             
           </div>
@@ -545,10 +599,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/06/Android-Multi-Process/" rel="prev" title="Android 多进程实践">
-                Android 多进程实践 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -717,7 +767,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-添加依赖"><span class="nav-number">1.</span> <span class="nav-text">0. 添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-设置-Schema-的位置"><span class="nav-number">2.</span> <span class="nav-text">1. 设置 Schema 的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在数据库中存图片"><span class="nav-number">3.</span> <span class="nav-text">2. 在数据库中存图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-将引用类型转换为基础类型存储"><span class="nav-number">4.</span> <span class="nav-text">3. 将引用类型转换为基础类型存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据库导出与查看"><span class="nav-number">5.</span> <span class="nav-text">4. 数据库导出与查看</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树的基本概念"><span class="nav-number">1.</span> <span class="nav-text">二叉树的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#树的基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">树的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.2.</span> <span class="nav-text">二叉树</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历"><span class="nav-number">2.</span> <span class="nav-text">遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前序遍历"><span class="nav-number">2.1.</span> <span class="nav-text">前序遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中序遍历"><span class="nav-number">2.2.</span> <span class="nav-text">中序遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后序遍历"><span class="nav-number">2.3.</span> <span class="nav-text">后序遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#层次遍历"><span class="nav-number">2.4.</span> <span class="nav-text">层次遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#深度优先遍历"><span class="nav-number">2.5.</span> <span class="nav-text">深度优先遍历</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
@@ -883,9 +933,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://blog.yuegs.com/2017/12/26/Android-room-action/';
-          this.page.identifier = '2017/12/26/Android-room-action/';
-          this.page.title = 'Android 中使用 Room 实践';
+          this.page.url = 'http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/';
+          this.page.identifier = '2018/07/30/algorithm-tree-basic/';
+          this.page.title = '二叉树---基本概念（一）';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://yuegs-blog.disqus.com/embed.js';

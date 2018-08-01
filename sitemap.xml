@@ -2,13 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.yuegs.com/2018/10/15/algorithm-BST/</loc>
-    
-    <lastmod>2018-08-01T13:12:53.438Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/</loc>
     
     <lastmod>2018-08-01T13:11:49.602Z</lastmod>

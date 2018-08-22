@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/08/22/render-process/</loc>
+    
+    <lastmod>2018-08-22T14:12:48.023Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
+    
+    <lastmod>2018-08-22T02:29:57.369Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/08/10/algorithm-RBT/</loc>
     
     <lastmod>2018-08-10T07:56:22.153Z</lastmod>
@@ -383,13 +397,6 @@
     <loc>http://blog.yuegs.com/2018/03/06/Android-opengl-matrix/</loc>
     
     <lastmod>2018-06-02T09:23:40.722Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
-    
-    <lastmod>2018-06-02T09:13:28.603Z</lastmod>
     
   </url>
   

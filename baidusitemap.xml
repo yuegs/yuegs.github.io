@@ -4,6 +4,50 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/08/22/render-process/</loc>
+    <lastmod>2018-08-22T14:12:48.023Z</lastmod>
+    <data>
+        <display>
+        <title>聊聊渲染:Android , Flutter & Chrome</title>
+        <pubTime>2018-08-22T14:12:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Flutter</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
+    <lastmod>2018-08-22T02:29:57.369Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---纹理</title>
+        <pubTime>2018-03-19T06:47:36.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/08/10/algorithm-RBT/</loc>
     <lastmod>2018-08-10T07:56:22.153Z</lastmod>
     <data>
@@ -1133,28 +1177,6 @@
         <display>
         <title>OpenGL ES---矩阵变换</title>
         <pubTime>2018-03-06T08:28:01.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>OpenGL</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
-    <lastmod>2018-06-02T09:13:28.603Z</lastmod>
-    <data>
-        <display>
-        <title>OpenGL ES---纹理</title>
-        <pubTime>2018-03-19T06:47:36.000Z</pubTime>
         
         <tag>Android</tag>
          

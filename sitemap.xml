@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/08/24/flutter-widget-layout/</loc>
+    
+    <lastmod>2018-08-24T07:57:23.748Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/08/22/render-process/</loc>
     
     <lastmod>2018-08-22T14:29:42.030Z</lastmod>

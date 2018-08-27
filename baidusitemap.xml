@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/08/27/flutter-mvp/</loc>
+    <lastmod>2018-08-27T15:52:10.318Z</lastmod>
+    <data>
+        <display>
+        <title>Flutter ： MVP 架构 [译]</title>
+        <pubTime>2018-08-27T15:50:01.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/08/24/flutter-widget-layout/</loc>
     <lastmod>2018-08-25T15:43:23.713Z</lastmod>
     <data>

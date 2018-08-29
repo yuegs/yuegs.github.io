@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
+    <lastmod>2018-08-29T02:51:48.033Z</lastmod>
+    <data>
+        <display>
+        <title>这些年经历的项目架构</title>
+        <pubTime>2018-02-12T16:55:27.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/</loc>
     <lastmod>2018-08-28T14:33:47.736Z</lastmod>
     <data>
@@ -772,28 +794,6 @@
         <pubTime>2018-04-22T03:14:53.000Z</pubTime>
         
         <tag>Android</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
-    <lastmod>2018-07-30T16:00:21.150Z</lastmod>
-    <data>
-        <display>
-        <title>这些年经历的项目架构</title>
-        <pubTime>2018-02-12T16:55:27.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>架构</tag>
          
          
            

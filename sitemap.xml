@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
+    
+    <lastmod>2018-08-29T02:51:48.033Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/</loc>
     
     <lastmod>2018-08-28T14:33:47.736Z</lastmod>
@@ -257,13 +264,6 @@
     <loc>http://blog.yuegs.com/2018/04/22/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E2%80%94%E2%80%94%E8%AE%A9%20Marker%20%E5%9C%A8%E8%A7%84%E5%88%92%E5%A5%BD%E7%9A%84%E8%B7%AF%E7%BA%BF%E4%B8%8A%E5%B9%B3%E6%BB%91%E7%A7%BB%E5%8A%A8/</loc>
     
     <lastmod>2018-07-30T16:01:27.387Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
-    
-    <lastmod>2018-07-30T16:00:21.150Z</lastmod>
     
   </url>
   

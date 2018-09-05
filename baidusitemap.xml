@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/09/05/dart-create-stream/</loc>
+    <lastmod>2018-09-05T13:59:34.496Z</lastmod>
+    <data>
+        <display>
+        <title>在 Dart 中创建 Stream [译]</title>
+        <pubTime>2018-09-05T13:59:29.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+        <tag>Dart</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/</loc>
     <lastmod>2018-09-04T05:32:15.046Z</lastmod>
     <data>

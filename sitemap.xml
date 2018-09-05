@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/09/05/dart-create-stream/</loc>
+    
+    <lastmod>2018-09-05T13:59:34.496Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/</loc>
     
     <lastmod>2018-09-04T05:32:15.046Z</lastmod>

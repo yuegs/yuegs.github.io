@@ -1,0 +1,1324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/10/17/java-src-hashmap/</loc>
+    <lastmod>2018-10-22T16:19:30.704Z</lastmod>
+    <data>
+        <display>
+        <title>HashMap</title>
+        <pubTime>2018-10-17T01:22:21.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/30/algorithm-tree-basic/</loc>
+    <lastmod>2018-09-17T22:33:19.889Z</lastmod>
+    <data>
+        <display>
+        <title>二叉树---基本概念</title>
+        <pubTime>2018-07-30T14:21:01.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/08/24/flutter-widget-layout/</loc>
+    <lastmod>2018-09-06T13:39:39.512Z</lastmod>
+    <data>
+        <display>
+        <title>Flutter 中创建布局 [译]</title>
+        <pubTime>2018-08-24T07:57:23.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/09/05/dart-create-stream/</loc>
+    <lastmod>2018-09-05T13:59:34.496Z</lastmod>
+    <data>
+        <display>
+        <title>在 Dart 中创建 Stream [译]</title>
+        <pubTime>2018-09-05T13:59:29.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+        <tag>Dart</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/06/21/recursion/</loc>
+    <lastmod>2018-09-04T02:03:51.922Z</lastmod>
+    <data>
+        <display>
+        <title>分治与递归</title>
+        <pubTime>2018-06-21T14:27:20.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+        <tag>思想</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/09/03/dart-future/</loc>
+    <lastmod>2018-09-03T09:34:28.046Z</lastmod>
+    <data>
+        <display>
+        <title>异步编程：Futures [译]</title>
+        <pubTime>2018-09-03T09:22:21.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+        <tag>Dart</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/08/30/dart-event-loop/</loc>
+    <lastmod>2018-09-03T08:56:04.744Z</lastmod>
+    <data>
+        <display>
+        <title>Dart 中的事件循环 [译]</title>
+        <pubTime>2018-08-30T15:22:01.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+        <tag>Dart</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/02/13/Android-project-structure/</loc>
+    <lastmod>2018-08-29T02:54:57.155Z</lastmod>
+    <data>
+        <display>
+        <title>这些年经历的项目架构</title>
+        <pubTime>2018-02-12T16:55:27.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/08/27/flutter-mvp/</loc>
+    <lastmod>2018-08-27T16:05:06.534Z</lastmod>
+    <data>
+        <display>
+        <title>Flutter ： MVP 架构 [译]</title>
+        <pubTime>2018-08-27T15:50:01.000Z</pubTime>
+        
+        <tag>Flutter</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/08/22/render-process/</loc>
+    <lastmod>2018-08-22T14:29:42.030Z</lastmod>
+    <data>
+        <display>
+        <title>聊聊渲染:Android , Flutter & Chrome</title>
+        <pubTime>2018-08-22T14:12:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Flutter</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flutter" url="http://blog.yuegs.com/categories/Flutter/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/19/Android-opengl-texture/</loc>
+    <lastmod>2018-08-22T02:29:57.369Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---纹理</title>
+        <pubTime>2018-03-19T06:47:36.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/08/10/algorithm-RBT/</loc>
+    <lastmod>2018-08-10T07:56:22.153Z</lastmod>
+    <data>
+        <display>
+        <title>RBTree</title>
+        <pubTime>2018-08-09T16:49:28.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/08/08/algorithm-BST-AVL/</loc>
+    <lastmod>2018-08-08T01:48:16.394Z</lastmod>
+    <data>
+        <display>
+        <title>BST & AVL</title>
+        <pubTime>2018-08-07T16:49:28.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/02/AndroidThing-GPIO/</loc>
+    <lastmod>2018-07-30T16:23:51.794Z</lastmod>
+    <data>
+        <display>
+        <title>AndroidThings-GPIO</title>
+        <pubTime>2017-08-02T14:09:01.000Z</pubTime>
+        
+        <tag>物联网</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/13/algorithm-sort-2/</loc>
+    <lastmod>2018-07-30T16:22:47.809Z</lastmod>
+    <data>
+        <display>
+        <title>排序算法(二)---归并排序</title>
+        <pubTime>2018-07-13T14:21:01.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/05/31/algorithm-sort/</loc>
+    <lastmod>2018-07-30T16:22:34.626Z</lastmod>
+    <data>
+        <display>
+        <title>排序算法(一)</title>
+        <pubTime>2018-05-31T14:21:01.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/10/26/TCP%E3%80%81Socket%E3%80%81Http%E4%BB%A5%E5%8F%8AWebSocket/</loc>
+    <lastmod>2018-07-30T16:21:14.245Z</lastmod>
+    <data>
+        <display>
+        <title>TCP、Socket、Http以及WebSocket</title>
+        <pubTime>2017-10-25T16:55:02.000Z</pubTime>
+        
+        <tag>安全</tag>
+         
+        <tag>网络</tag>
+         
+         
+           
+             
+              <breadCrumb title="网络通信" url="http://blog.yuegs.com/categories/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/01/06/Android-Multi-Process/</loc>
+    <lastmod>2018-07-30T16:20:28.995Z</lastmod>
+    <data>
+        <display>
+        <title>Android 多进程实践</title>
+        <pubTime>2018-01-06T10:05:29.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>IPC</tag>
+         
+        <tag>内存管理</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/12/Android-process-intro/</loc>
+    <lastmod>2018-07-30T16:20:14.470Z</lastmod>
+    <data>
+        <display>
+        <title>Android 进程介绍</title>
+        <pubTime>2017-12-11T16:54:32.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>内存管理</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/01/java-concurrency/</loc>
+    <lastmod>2018-07-30T16:19:42.254Z</lastmod>
+    <data>
+        <display>
+        <title>Java 中的并发与同步</title>
+        <pubTime>2017-08-01T15:32:44.000Z</pubTime>
+        
+        <tag>内存管理</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/08/13/how-to-stop-thread/</loc>
+    <lastmod>2018-07-30T16:19:27.123Z</lastmod>
+    <data>
+        <display>
+        <title>如何正确停止线程</title>
+        <pubTime>2017-08-13T10:20:01.000Z</pubTime>
+        
+        <tag>内存管理</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/07/27/java-pass-by/</loc>
+    <lastmod>2018-07-30T16:19:12.811Z</lastmod>
+    <data>
+        <display>
+        <title>值传递、引用传递、共享传递</title>
+        <pubTime>2017-07-26T17:28:01.000Z</pubTime>
+        
+        <tag>内存管理</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/01/14/Android-memeory-leak/</loc>
+    <lastmod>2018-07-30T16:18:45.334Z</lastmod>
+    <data>
+        <display>
+        <title>内存管理之内存泄漏</title>
+        <pubTime>2018-01-14T06:23:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>内存管理</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/06/23/java-generic/</loc>
+    <lastmod>2018-07-30T16:12:55.384Z</lastmod>
+    <data>
+        <display>
+        <title>泛型在 Java 中的应用</title>
+        <pubTime>2018-06-23T14:27:09.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/04/java-IoC-AOP/</loc>
+    <lastmod>2018-07-30T16:11:42.644Z</lastmod>
+    <data>
+        <display>
+        <title>IoC 和 AOP</title>
+        <pubTime>2018-07-04T08:22:01.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>思想</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/04/05/%E5%B9%B6%E6%9F%A5%E9%9B%86%EF%BC%88Union-Find%EF%BC%89%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2018-07-30T16:07:51.516Z</lastmod>
+    <data>
+        <display>
+        <title>并查集(Union-Find)算法</title>
+        <pubTime>2018-04-05T02:22:44.000Z</pubTime>
+        
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
+    <lastmod>2018-07-30T16:07:37.414Z</lastmod>
+    <data>
+        <display>
+        <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
+        <pubTime>2018-05-26T05:02:00.000Z</pubTime>
+        
+        <tag>区块链</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="区块链" url="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/08/java8-new-feature/</loc>
+    <lastmod>2018-07-30T16:06:30.383Z</lastmod>
+    <data>
+        <display>
+        <title>Java8 中的新特性 [译]</title>
+        <pubTime>2017-12-08T08:22:09.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/25/java-annotation/</loc>
+    <lastmod>2018-07-30T16:06:17.556Z</lastmod>
+    <data>
+        <display>
+        <title>Java 中的注解 [译]</title>
+        <pubTime>2017-06-25T14:44:01.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/06/13/java-annotation-processor/</loc>
+    <lastmod>2018-07-30T16:06:05.515Z</lastmod>
+    <data>
+        <display>
+        <title>Java 注解处理器</title>
+        <pubTime>2018-06-13T01:07:01.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.yuegs.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/10/15/Android%20%E4%B9%8B%20setContentView/</loc>
+    <lastmod>2018-07-30T16:05:53.835Z</lastmod>
+    <data>
+        <display>
+        <title>Android 之 setContentView</title>
+        <pubTime>2017-10-15T08:22:44.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/10/11/Android-activity-launch-process-2/</loc>
+    <lastmod>2018-07-30T16:04:50.043Z</lastmod>
+    <data>
+        <display>
+        <title>Android Activity启动三部曲(二)</title>
+        <pubTime>2017-10-11T11:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/10/11/Android-activity-launch-process-1/</loc>
+    <lastmod>2018-07-30T16:04:35.517Z</lastmod>
+    <data>
+        <display>
+        <title>Android Activity启动三部曲（一）</title>
+        <pubTime>2017-10-11T08:29:51.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/10/13/Android-activity-launch-process-3/</loc>
+    <lastmod>2018-07-30T16:04:22.419Z</lastmod>
+    <data>
+        <display>
+        <title>Android Activity启动三部曲(三)</title>
+        <pubTime>2017-10-13T06:06:15.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/05/02/Android-draw-a-custom-view/</loc>
+    <lastmod>2018-07-30T16:04:01.647Z</lastmod>
+    <data>
+        <display>
+        <title>Android:自定义 View 过程 [译]</title>
+        <pubTime>2018-05-02T15:57:29.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/05/11/from-view-to-window/</loc>
+    <lastmod>2018-07-30T16:03:47.800Z</lastmod>
+    <data>
+        <display>
+        <title>从 Window 到 View</title>
+        <pubTime>2018-05-11T06:17:29.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://blog.yuegs.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/07/MongoDB-crud/</loc>
+    <lastmod>2018-07-30T16:03:21.103Z</lastmod>
+    <data>
+        <display>
+        <title>MongoDB CRUD操作[译]</title>
+        <pubTime>2017-06-07T14:42:01.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="MongoDB" url="http://blog.yuegs.com/categories/MongoDB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/14/Net-https/</loc>
+    <lastmod>2018-07-30T16:03:08.552Z</lastmod>
+    <data>
+        <display>
+        <title>Https之安全Socket</title>
+        <pubTime>2017-06-14T15:50:01.000Z</pubTime>
+        
+        <tag>网络</tag>
+         
+         
+           
+             
+              <breadCrumb title="网络通信" url="http://blog.yuegs.com/categories/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/25/Android-rx-observable/</loc>
+    <lastmod>2018-07-30T16:02:44.052Z</lastmod>
+    <data>
+        <display>
+        <title>RxJava-Observable分析</title>
+        <pubTime>2017-06-25T10:16:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>开源框架</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/11/21/android-ui-adapte/</loc>
+    <lastmod>2018-07-30T16:01:56.634Z</lastmod>
+    <data>
+        <display>
+        <title>Android适配</title>
+        <pubTime>2017-11-21T15:48:06.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/01/17/Android-gradle/</loc>
+    <lastmod>2018-07-30T16:01:42.136Z</lastmod>
+    <data>
+        <display>
+        <title>Gradle 之创建 Build Variants</title>
+        <pubTime>2018-01-17T15:46:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>gradle</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/04/22/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E2%80%94%E2%80%94%E8%AE%A9%20Marker%20%E5%9C%A8%E8%A7%84%E5%88%92%E5%A5%BD%E7%9A%84%E8%B7%AF%E7%BA%BF%E4%B8%8A%E5%B9%B3%E6%BB%91%E7%A7%BB%E5%8A%A8/</loc>
+    <lastmod>2018-07-30T16:01:27.387Z</lastmod>
+    <data>
+        <display>
+        <title>高德地图——让 Marker 在规划好的路线上平滑移动</title>
+        <pubTime>2018-04-22T03:14:53.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/12/MongoDB-update/</loc>
+    <lastmod>2018-07-30T15:59:32.035Z</lastmod>
+    <data>
+        <display>
+        <title>MongoDB之update[译]</title>
+        <pubTime>2017-06-12T13:22:01.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="MongoDB" url="http://blog.yuegs.com/categories/MongoDB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/06/MongoDB-selector/</loc>
+    <lastmod>2018-07-30T15:59:19.465Z</lastmod>
+    <data>
+        <display>
+        <title>MongoDB之Selector[译]</title>
+        <pubTime>2017-06-06T15:19:01.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="MongoDB" url="http://blog.yuegs.com/categories/MongoDB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/06/MongoDB-basic/</loc>
+    <lastmod>2018-07-30T15:59:07.570Z</lastmod>
+    <data>
+        <display>
+        <title>MongoDB基础[译]</title>
+        <pubTime>2017-06-05T16:30:01.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="MongoDB" url="http://blog.yuegs.com/categories/MongoDB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/18/Android-rx-flowable/</loc>
+    <lastmod>2018-07-30T15:58:40.339Z</lastmod>
+    <data>
+        <display>
+        <title>RxJava流控机制之Flowable</title>
+        <pubTime>2017-06-18T07:57:11.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>开源框架</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/06/04/Android-Picasso/</loc>
+    <lastmod>2018-07-30T15:58:28.307Z</lastmod>
+    <data>
+        <display>
+        <title>Picasso构建过程</title>
+        <pubTime>2017-06-04T04:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>开源框架</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/04/25/Android-databinding/</loc>
+    <lastmod>2018-07-30T15:58:15.050Z</lastmod>
+    <data>
+        <display>
+        <title>Data Binding[译]</title>
+        <pubTime>2017-04-25T06:53:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/13/Android-room-1/</loc>
+    <lastmod>2018-07-30T15:57:25.522Z</lastmod>
+    <data>
+        <display>
+        <title>使用Room进行持久化存储---综述[译]</title>
+        <pubTime>2017-12-12T16:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/13/Android-room-2/</loc>
+    <lastmod>2018-07-30T15:57:09.529Z</lastmod>
+    <data>
+        <display>
+        <title>通过 Room entities 定义数据 ---Room 系列(1) [译]</title>
+        <pubTime>2017-12-12T16:36:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/17/Android-room-3/</loc>
+    <lastmod>2018-07-30T15:56:57.283Z</lastmod>
+    <data>
+        <display>
+        <title>使用 Room 的 DAO 访问数据---Room 系列（2）[译]</title>
+        <pubTime>2017-12-17T13:19:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/12/26/Android-room-action/</loc>
+    <lastmod>2018-07-30T15:56:45.508Z</lastmod>
+    <data>
+        <display>
+        <title>Android 中使用 Room 实践</title>
+        <pubTime>2017-12-26T14:27:09.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/01/27/Android-proguard/</loc>
+    <lastmod>2018-07-30T15:56:23.926Z</lastmod>
+    <data>
+        <display>
+        <title>使用 ProGuard 进行代码混淆</title>
+        <pubTime>2018-01-27T07:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>安全</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/09/25/Android-AIDL/</loc>
+    <lastmod>2018-07-30T15:56:04.355Z</lastmod>
+    <data>
+        <display>
+        <title>Android AIDL 详解</title>
+        <pubTime>2017-09-24T17:11:29.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>IPC</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2017/09/19/android-binder-mechanism/</loc>
+    <lastmod>2018-07-30T15:55:00.682Z</lastmod>
+    <data>
+        <display>
+        <title>图说 Android Binder 机制</title>
+        <pubTime>2017-09-19T15:31:29.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>IPC</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/04/24/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</loc>
+    <lastmod>2018-07-30T15:54:25.202Z</lastmod>
+    <data>
+        <display>
+        <title>数字签名及其应用</title>
+        <pubTime>2018-04-24T13:40:05.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>安全</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/26/Android-dagger2-scope-component/</loc>
+    <lastmod>2018-07-26T02:29:35.431Z</lastmod>
+    <data>
+        <display>
+        <title>Dagger2---Scope & Component</title>
+        <pubTime>2018-07-26T02:18:28.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>开源框架</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/18/Kotlin-property/</loc>
+    <lastmod>2018-07-19T13:49:45.001Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin基础---属性</title>
+        <pubTime>2018-07-18T08:22:01.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://blog.yuegs.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/12/Kotlin-class/</loc>
+    <lastmod>2018-07-12T06:52:12.654Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin基础---接口和类</title>
+        <pubTime>2018-07-12T06:27:01.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://blog.yuegs.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/07/11/Kotlin-basicType/</loc>
+    <lastmod>2018-07-11T03:40:20.392Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin基础---基本类型</title>
+        <pubTime>2018-07-11T02:18:01.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://blog.yuegs.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/04/Android-opengl-2d/</loc>
+    <lastmod>2018-06-02T09:28:56.694Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---绘制二维图形</title>
+        <pubTime>2018-03-04T02:22:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.yuegs.com/2018/03/06/Android-opengl-matrix/</loc>
+    <lastmod>2018-06-02T09:23:40.722Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES---矩阵变换</title>
+        <pubTime>2018-03-06T08:28:01.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>OpenGL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+</urlset>

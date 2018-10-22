@@ -1,0 +1,316 @@
+<!DOCTYPE html><html class="theme-next mist use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="baidu-site-verification" content="q7HLrvvPSn"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="算法,"><link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml"><meta name="description" content="&amp;emsp;走过了 BST， AVL ，现在终于来到了 RedBlackTree，红黑树，是一种比较常用树结构。在 Java 8 中的 HashMap 里，就是用了红黑树以提升效率。"><meta name="keywords" content="算法"><meta property="og:type" content="article"><meta property="og:title" content="RBTree"><meta property="og:url" content="http://blog.yuegs.com/2018/08/10/algorithm-RBT/index.html"><meta property="og:site_name" content="风雪围城"><meta property="og:description" content="&amp;emsp;走过了 BST， AVL ，现在终于来到了 RedBlackTree，红黑树，是一种比较常用树结构。在 Java 8 中的 HashMap 里，就是用了红黑树以提升效率。"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/6/66/Red-black_tree_example.svg"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/insert-process.png"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/reblance-rbt.png"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/delete-exhaustion-set.png"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/right-red-child.png"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/left-red-child.png"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/no-red-child.png"><meta property="og:image" content="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/red-bro.png"><meta property="og:updated_time" content="2018-08-10T07:56:22.153Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="RBTree"><meta name="twitter:description" content="&amp;emsp;走过了 BST， AVL ，现在终于来到了 RedBlackTree，红黑树，是一种比较常用树结构。在 Java 8 中的 HashMap 里，就是用了红黑树以提升效率。"><meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/6/66/Red-black_tree_example.svg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Mist",version:"5.1.4",sidebar:{position:"left",display:"hide",offset:12,b2t:!1,scrollpercent:!0,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="http://blog.yuegs.com/2018/08/10/algorithm-RBT/"><title>RBTree | 风雪围城</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">风雪围城</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle"></p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="http://blog.yuegs.com/2018/08/10/algorithm-RBT/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="YueGs"><meta itemprop="description" content=""><meta itemprop="image" content="/images/head.gif"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="风雪围城"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">RBTree</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-10T00:49:28+08:00">2018-08-10</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/2018/08/10/algorithm-RBT/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/10/algorithm-RBT/" itemprop="commentCount"></span></a></span> <span id="/2018/08/10/algorithm-RBT/" class="leancloud_visitors" data-flag-title="RBTree"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-eye"></i></span> <span class="post-meta-item-text">阅读次数&#58;</span><span class="leancloud-visitors-count"></span></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">1,913</span></div></div></header><div class="post-body" itemprop="articleBody"><p><img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Red-black_tree_example.svg" alt=""><br>&emsp;走过了 BST， AVL ，现在终于来到了 RedBlackTree，红黑树，是一种比较常用树结构。在 Java 8 中的 HashMap 里，就是用了红黑树以提升效率。<br><a id="more"></a></p><h3 id="红黑树定义"><a href="#红黑树定义" class="headerlink" title="红黑树定义"></a>红黑树定义</h3><p>&emsp;红黑树是一种自平衡的二叉搜索树，满足一下性质：</p><ol><li>根结点是黑色</li><li>所有叶子(<code>NIL</code>)都是黑色的</li><li>每个结点必须是红色或者黑色</li><li>如果结点是红色的，那么它的子结点必须是黑色的，反之，如果结点是黑色的，其子结点（如果存在）则不一定是红色的</li><li>从结点，到任意 <code>NIL</code> 结点的路径上，所包含的黑色结点的个数是一样的</li></ol><h3 id="AVL-Vs-RBTree"><a href="#AVL-Vs-RBTree" class="headerlink" title="AVL Vs RBTree"></a>AVL Vs RBTree</h3><p>&emsp; AVL 和 RBT 相比，前者更加平衡，但是，在插入的时候，也可能会造成更多的旋转。因此，如果应用中，频繁的执行插入和删除操作，Red Black Tree 会更加合适。反之，AVL 也因为更加平衡，会比 RBT 更适合搜索。</p><h3 id="红黑树操作"><a href="#红黑树操作" class="headerlink" title="红黑树操作"></a>红黑树操作</h3><p>&emsp;首先，红黑树是一颗搜索二叉树，所以有些操作是可以复用的，比如说查找，只不过它是一颗特殊的BST，具有平衡的属性，因此有些操作又需要做特殊处理，比如说插入和删除结点的操作。</p><h4 id="插入结点"><a href="#插入结点" class="headerlink" title="插入结点"></a>插入结点</h4><p>&emsp;当插入一颗新的结点后，就可能会破坏原有的平衡。此时，就需要进行 <code>reblance</code> 操作，进行 <strong>修正</strong>，使其仍然为一颗红黑树。</p><p>&emsp;首先，将插入的结点涂成红色（涂成红色，看起来能尽量降低对平衡的<a href="https://stackoverflow.com/questions/35965640/why-are-newly-inserted-nodes-are-always-colored-red-in-red-black-tree-insert-ope" target="_blank" rel="noopener">破坏</a>）。然后按照下述流程：</p><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/insert-process.png" alt=""><br>&emsp;需要注意的是：</p><ol><li>只要父结点和叔叔结点为红色，就将父结点和叔叔结点涂成黑色，将祖父结点涂成红色，然后用祖父结点更新当前的插入结点，继续判断祖父的父结点和叔叔结点。这是一个循环的过程，这就是<code>CASE 1</code>，知道叔叔结点为空，或者黑色，进入步骤 2</li><li>当遇到叔叔结点为空，或者叔叔结点为黑色的情况下，如果当前插入结点是父结点的右孩子，则需要左旋，这就是 <code>CASE 2</code> 。进而进入步骤 3</li><li>而如果当前插入结点是父结点的左孩子，则需要右旋，这就是 <code>CASE 3</code> ，此时，平衡修正就基本上完成了。</li></ol><p>&emsp;如下所示：</p><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/reblance-rbt.png" alt=""></p><p>&emsp;代码如下:</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addNode</span><span class="params">(RBNode  node)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">		root = node;</span><br><span class="line">		root.setRed(<span class="keyword">false</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	addNode(root, node);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addNode</span><span class="params">(RBNode  parent, RBNode  child)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (parent.getKey() &gt; child.getKey()) &#123;</span><br><span class="line">		RBNode node = parent.getLeft();</span><br><span class="line">		<span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">			child.setParent(parent);</span><br><span class="line">			parent.setLeft(child);</span><br><span class="line">			rebalance(child);   <span class="comment">// 平衡修正</span></span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			addNode(node, child);</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (parent.getKey() &lt; child.getKey()) &#123;</span><br><span class="line">		RBNode  node = parent.getRight();</span><br><span class="line">		<span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">			child.setParent(parent);</span><br><span class="line">			parent.setRight(child);</span><br><span class="line">			rebalance(child);   <span class="comment">// 平衡修正</span></span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			addNode(node, child);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rebalance</span><span class="params">(RBNode node)</span> </span>&#123;</span><br><span class="line">	RBNode parent, grandpa;</span><br><span class="line">	<span class="comment">//父结点存在，且父结点为红色</span></span><br><span class="line">	<span class="keyword">while</span>(((parent = getParent(node)) != <span class="keyword">null</span>) &amp;&amp; isRed(parent)) &#123;</span><br><span class="line">		grandpa = getParent(parent);<span class="comment">//获得祖父节点</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">//若父结点是祖父结点的左子结点</span></span><br><span class="line">		<span class="keyword">if</span>(parent == grandpa.left) &#123;</span><br><span class="line">			RBNode uncle = grandpa.right; <span class="comment">//获得叔叔节点</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// case1: 叔叔结点也是红色</span></span><br><span class="line">			<span class="keyword">if</span>(uncle != <span class="keyword">null</span> &amp;&amp; isRed(uncle)) &#123;</span><br><span class="line">				setBlack(parent); <span class="comment">// 把父结点涂成黑色</span></span><br><span class="line">				setBlack(uncle);  <span class="comment">// 把叔叔结点涂成黑色</span></span><br><span class="line">				setRed(grandpa);  <span class="comment">// 把祖父结点涂成红色</span></span><br><span class="line">				node = grandpa;   <span class="comment">//将位置放到祖父节点处</span></span><br><span class="line">				<span class="keyword">continue</span>;         <span class="comment">//继续while，重新判断</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// case2: 叔叔节点是黑色或不存在，且当前结点是右子结点</span></span><br><span class="line">			<span class="keyword">if</span>(node == parent.right) &#123;</span><br><span class="line">				rotateLeft(parent); <span class="comment">// 父结点处左旋</span></span><br><span class="line">				parent = node ; <span class="comment">// 旋转之后，node结点变成 parent</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// case3: 叔叔节点是黑色或不存在，且当前结点是左子结点</span></span><br><span class="line">			setBlack(parent);</span><br><span class="line">			setRed(grandpa);</span><br><span class="line">			RBNode newParent = rotateRight(grandpa);</span><br><span class="line">            <span class="comment">//是否需要更新根节点</span></span><br><span class="line">			<span class="keyword">if</span>(newParent.parent == <span class="keyword">null</span>)</span><br><span class="line">				root = newParent ;</span><br><span class="line">			<span class="keyword">break</span> ;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123; <span class="comment">//若父结点是祖父结点的右子结点,与上面的情况完全相反，本质一样的</span></span><br><span class="line">			RBNode  uncle = grandpa.left;</span><br><span class="line"></span><br><span class="line">			<span class="comment">//case1: 叔叔结点也是红色</span></span><br><span class="line">			<span class="keyword">if</span>(uncle != <span class="keyword">null</span> &amp;&amp; isRed(uncle)) &#123;</span><br><span class="line">				setBlack(parent);</span><br><span class="line">				setBlack(uncle);</span><br><span class="line">				setRed(grandpa);</span><br><span class="line">				node = grandpa;</span><br><span class="line">				<span class="keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">//case2: 叔叔结点是黑色或者不存在，且当前结点是左子结点</span></span><br><span class="line">			<span class="keyword">if</span>(node == parent.left) &#123;</span><br><span class="line">				rotateRight(parent);</span><br><span class="line">				parent = node;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">//case3: 叔叔结点是黑色或者不存在，且当前结点是右子结点</span></span><br><span class="line">			setBlack(parent);</span><br><span class="line">			setRed(grandpa);</span><br><span class="line">			RBNode newParent = rotateLeft(grandpa);</span><br><span class="line">			<span class="comment">//是否需要更新根节点</span></span><br><span class="line">			<span class="keyword">if</span>(newParent.parent == <span class="keyword">null</span>)</span><br><span class="line">				root = newParent ;</span><br><span class="line">			<span class="keyword">break</span> ;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将根节点设置为黑色</span></span><br><span class="line">	setBlack(<span class="keyword">this</span>.root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="删除结点"><a href="#删除结点" class="headerlink" title="删除结点"></a>删除结点</h4><p>&emsp;删除结点之后的平衡修正有点麻烦，情况比较复杂。对于一个将要被删除的结点 Node，它的位置分布有以下几种情况：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/delete-exhaustion-set.png" alt=""></p><p>&emsp;由此，我们需要着重处理的是，被删除的结点为叶子结点，同时为黑色的情况。删除这种结点，势必会破坏 RBT 的平衡。<br>&emsp;需要注意的是，<strong>上图中，我们并没有加入 <code>NIL</code>（只有颜色，没有值的结点） 结点</strong>。现在，为了好做进一步处理，我们给它加上。这就是说，我们所谓的叶子结点，有了新的叶子 <code>NIL</code>。此时，问题得到了进一步的转化，即，删除一个只有一个孩子的结点。<br>&emsp;同样，既然要被删除的结点是黑色，根据属性5，它必然有兄弟结点。接着，我们希望结合兄弟结点做出修正，存在以下四种情况。假设被删除的结点的父结点是 father，兄弟结点是 brother，兄弟结点的孩子是 son。</p><h5 id="情况一：Brother-是黑色，且-Brother-有红色右孩子"><a href="#情况一：Brother-是黑色，且-Brother-有红色右孩子" class="headerlink" title="情况一：Brother 是黑色，且 Brother 有红色右孩子"></a>情况一：Brother 是黑色，且 Brother 有红色右孩子</h5><p>&emsp;左旋 father 结点，抽调替换被删除的结点上，同时该涂黑色。son 结点由红色改为黑色。这样，father 的左子树删除了一个黑色结点，又补充了一个黑色结点；右子树少了一个黑色结点 brother，同时修改了一个红色结点 son 为黑色作为补充。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/right-red-child.png" alt=""></p><h5 id="情况二：Brother是黑色，且-Brother-仅有左孩子是红色"><a href="#情况二：Brother是黑色，且-Brother-仅有左孩子是红色" class="headerlink" title="情况二：Brother是黑色，且 Brother 仅有左孩子是红色"></a>情况二：Brother是黑色，且 Brother 仅有左孩子是红色</h5><p>&emsp;右旋 brother 结点，变成了情况一。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/left-red-child.png" alt=""></p><h5 id="情况三：Brother-是黑色，且-Brother-无红色孩子"><a href="#情况三：Brother-是黑色，且-Brother-无红色孩子" class="headerlink" title="情况三：Brother 是黑色，且 Brother 无红色孩子"></a>情况三：Brother 是黑色，且 Brother 无红色孩子</h5><p>&emsp;若 father 结点为红色，此时只需要将其改为黑色即可保证平衡。若 father 为黑色，将额外的黑色移到 father 身上，将 father 结点作为新的判断结点向上走。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/no-red-child.png" alt=""></p><h5 id="情况四：Brother-是红色，那么父结点和孩子结点必然是黑色"><a href="#情况四：Brother-是红色，那么父结点和孩子结点必然是黑色" class="headerlink" title="情况四：Brother 是红色，那么父结点和孩子结点必然是黑色"></a>情况四：Brother 是红色，那么父结点和孩子结点必然是黑色</h5><p>&emsp;这种情况下，根据 RBT 属性，其父结点和孩子结点，必然均为黑色。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/algorithm/RBTree/red-bro.png" alt=""><br>&emsp;至此，删除操作就完成了。删除部分的代码，这里暂时不想写了，缓缓[捂脸]。上面的图片来在于 <a href="https://segmentfault.com/a/1190000012115424#articleHeader4" target="_blank" rel="noopener">红黑树的删除</a></p><h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&emsp;从二叉搜索树，到 AVL ，再到 RBT ，其实都是在对搜索、插入、删除数据过程的优化。这种优化，带来了软件性能的提升，也带来了用户体验的提升。同时，这种优化也越来越复杂，RBT 显得更加明显，要考虑在平衡，涉及的情况会非常多。但是，其实如果能做好情况的<strong>分解</strong>，做好<strong>完备集</strong>，会更容易理解。</p><hr><p>参考<br><a href="https://attractivechaos.wordpress.com/2008/10/02/comparison-of-binary-search-trees/" target="_blank" rel="noopener">Comparison of Binary Search Trees (BSTs)</a><br><a href="http://www.stolerman.net/studies/cs521/red_black_trees.pdf" target="_blank" rel="noopener">Red-Black Trees – Insertion, Deletion</a><br><a href="https://subetter.com/articles/2018/06/rb-tree.html" target="_blank" rel="noopener">红黑树</a><br><a href="https://zh.wikipedia.org/wiki/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="noopener">红黑树—维基百科</a>：关于删除那段挺不错的<br><a href="https://segmentfault.com/a/1190000012115424#articleHeader4" target="_blank" rel="noopener">红黑树的删除</a><br><a href="https://tech.meituan.com/java_hashmap.html" target="_blank" rel="noopener">Java 8系列之重新认识HashMap</a>:源于美团技术团队博客</p></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>Donate comment here</div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>打赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/wechatpay.jpg" alt="YueGs 微信支付"><p>微信支付</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/alipay.jpg" alt="YueGs 支付宝"><p>支付宝</p></div></div></div></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/算法/" rel="tag"># 算法</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/08/08/algorithm-BST-AVL/" rel="next" title="BST & AVL"><i class="fa fa-chevron-left"></i> BST & AVL</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/08/22/render-process/" rel="prev" title="聊聊渲染:Android , Flutter & Chrome">聊聊渲染:Android , Flutter & Chrome<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="disqus_thread"><noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/head.gif" alt="YueGs"><p class="site-author-name" itemprop="name">YueGs</p><p class="site-description motion-element" itemprop="description">“大圣，此去欲何?” “踏南天，碎凌霄。” “若一去不回……” “便一去不回”</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">62</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">9</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">19</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/yuegs" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:2690694582@qq.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#红黑树定义"><span class="nav-number">1.</span> <span class="nav-text">红黑树定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AVL-Vs-RBTree"><span class="nav-number">2.</span> <span class="nav-text">AVL Vs RBTree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#红黑树操作"><span class="nav-number">3.</span> <span class="nav-text">红黑树操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入结点"><span class="nav-number">3.1.</span> <span class="nav-text">插入结点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除结点"><span class="nav-number">3.2.</span> <span class="nav-text">删除结点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#情况一：Brother-是黑色，且-Brother-有红色右孩子"><span class="nav-number">3.2.1.</span> <span class="nav-text">情况一：Brother 是黑色，且 Brother 有红色右孩子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#情况二：Brother是黑色，且-Brother-仅有左孩子是红色"><span class="nav-number">3.2.2.</span> <span class="nav-text">情况二：Brother是黑色，且 Brother 仅有左孩子是红色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#情况三：Brother-是黑色，且-Brother-无红色孩子"><span class="nav-number">3.2.3.</span> <span class="nav-text">情况三：Brother 是黑色，且 Brother 无红色孩子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#情况四：Brother-是红色，那么父结点和孩子结点必然是黑色"><span class="nav-number">3.2.4.</span> <span class="nav-text">情况四：Brother 是红色，那么父结点和孩子结点必然是黑色</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">YueGs</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">115.2k</span></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><script id="dsq-count-scr" src="https://yuegs-blog.disqus.com/count.js" async></script><script type="text/javascript">var disqus_config=function(){this.page.url="http://blog.yuegs.com/2018/08/10/algorithm-RBT/",this.page.identifier="2018/08/10/algorithm-RBT/",this.page.title="RBTree"},d=document,s=d.createElement("script");s.src="https://yuegs-blog.disqus.com/embed.js",s.setAttribute("data-timestamp",""+ +new Date),(d.head||d.body).appendChild(s)</script><script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script><script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script><script>AV.initialize("OqJ3dMbcdWf32fNOpaJs3OGq-gzGzoHsz","CK52NIJEVvzwXss28W9Vgtnm")</script><script>function showTime(e){var t=new AV.Query(e),c=[],u=$(".leancloud_visitors");u.each(function(){c.push($(this).attr("id").trim())}),t.containedIn("url",c),t.find().done(function(e){var t=".leancloud-visitors-count";if(0!==e.length){for(var n=0;n<e.length;n++){var o=e[n],i=o.get("url"),s=o.get("time"),r=document.getElementById(i);$(r).find(t).text(s)}for(n=0;n<c.length;n++){i=c[n],r=document.getElementById(i);var l=$(r).find(t);""==l.text()&&l.text(0)}}else u.find(t).text(0)}).fail(function(e,t){console.log("Error: "+t.code+" "+t.message)})}function addCount(i){var e=$(".leancloud_visitors"),s=e.attr("id").trim(),r=e.attr("data-flag-title").trim(),t=new AV.Query(i);t.equalTo("url",s),t.find({success:function(e){if(0<e.length){var t=e[0];t.fetchWhenSave(!0),t.increment("time"),t.save(null,{success:function(e){$(document.getElementById(s)).find(".leancloud-visitors-count").text(e.get("time"))},error:function(e,t){console.log("Failed to save Visitor num, with error message: "+t.message)}})}else{var n=new i,o=new AV.ACL;o.setPublicReadAccess(!0),o.setPublicWriteAccess(!0),n.setACL(o),n.set("title",r),n.set("url",s),n.set("time",1),n.save(null,{success:function(e){$(document.getElementById(s)).find(".leancloud-visitors-count").text(e.get("time"))},error:function(e,t){console.log("Failed to create")}})}},error:function(e){console.log("Error:"+e.code+" "+e.message)}})}$(function(){var e=AV.Object.extend("Counter");1==$(".leancloud_visitors").length?addCount(e):1<$(".post-title-link").length&&showTime(e)})</script><script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script></body></html>

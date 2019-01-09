@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2019/01/09/queue/</loc>
+    <lastmod>2019-01-09T15:12:56.734Z</lastmod>
+    <data>
+        <display>
+        <title>事件驱动中的基础：队列</title>
+        <pubTime>2019-01-09T15:29:57.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Dart</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.yuegs.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2018/09/05/dart-create-stream/</loc>
     <lastmod>2018-10-24T15:42:18.110Z</lastmod>
     <data>

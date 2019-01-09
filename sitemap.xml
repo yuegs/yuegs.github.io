@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2019/01/09/queue/</loc>
+    
+    <lastmod>2019-01-09T15:12:56.734Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2018/09/05/dart-create-stream/</loc>
     
     <lastmod>2018-10-24T15:42:18.110Z</lastmod>

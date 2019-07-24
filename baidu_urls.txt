@@ -1,3 +1,3 @@
+http://blog.yuegs.com/2019/07/23/create-simple-blockchain-java-tutorial-2/
 http://blog.yuegs.com/2019/07/05/Android-livedata/
 http://blog.yuegs.com/2019/01/09/queue/
-http://blog.yuegs.com/2018/10/17/java-src-hashmap/

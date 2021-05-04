@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
+    
+    <lastmod>2019-07-24T16:12:30.416Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2019/07/23/create-simple-blockchain-java-tutorial-2/</loc>
     
     <lastmod>2019-07-24T15:15:30.906Z</lastmod>
@@ -208,13 +215,6 @@
     <loc>http://blog.yuegs.com/2018/04/05/%E5%B9%B6%E6%9F%A5%E9%9B%86%EF%BC%88Union-Find%EF%BC%89%E7%AE%97%E6%B3%95/</loc>
     
     <lastmod>2018-07-30T16:07:51.516Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
-    
-    <lastmod>2018-07-30T16:07:37.414Z</lastmod>
     
   </url>
   

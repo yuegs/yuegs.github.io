@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
+    <lastmod>2019-07-24T16:12:30.416Z</lastmod>
+    <data>
+        <display>
+        <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
+        <pubTime>2018-05-26T05:02:00.000Z</pubTime>
+        
+        <tag>区块链</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="区块链" url="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2019/07/23/create-simple-blockchain-java-tutorial-2/</loc>
     <lastmod>2019-07-24T15:15:30.906Z</lastmod>
     <data>
@@ -629,28 +651,6 @@
            
              
               <breadCrumb title="算法" url="http://blog.yuegs.com/categories/%E7%AE%97%E6%B3%95/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/</loc>
-    <lastmod>2018-07-30T16:07:37.414Z</lastmod>
-    <data>
-        <display>
-        <title>Part1 ：使用 Java 创建你的第一个区块链[译]</title>
-        <pubTime>2018-05-26T05:02:00.000Z</pubTime>
-        
-        <tag>区块链</tag>
-         
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="区块链" url="http://blog.yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
           
         </display>
     </data>

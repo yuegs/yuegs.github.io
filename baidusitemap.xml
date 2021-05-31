@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2021/05/31/SpringBoot-Container-ioc-annotation/</loc>
+    <lastmod>2021-05-31T13:53:35.500Z</lastmod>
+    <data>
+        <display>
+        <title>IoC 容器、Bean 和常用注解</title>
+        <pubTime>2021-05-31T15:01:28.000Z</pubTime>
+        
+        <tag>Spring Boot</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spring Boot" url="http://blog.yuegs.com/categories/Spring-Boot/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2021/05/28/springboot-redis/</loc>
     <lastmod>2021-05-28T06:01:17.627Z</lastmod>
     <data>
@@ -11,9 +31,9 @@
         <title>在 Spring Boot 中使用 Redis 进行缓存</title>
         <pubTime>2021-05-28T15:01:28.000Z</pubTime>
         
-        <tag>Cache</tag>
-         
         <tag>Spring Boot</tag>
+         
+        <tag>Cache</tag>
          
          
            

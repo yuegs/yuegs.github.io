@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://blog.yuegs.com/2021/06/01/springboot-bean-conditional-scope/</loc>
+    <lastmod>2021-06-01T05:56:52.797Z</lastmod>
+    <data>
+        <display>
+        <title>Bean 装载条件及作用域</title>
+        <pubTime>2021-06-01T15:01:28.000Z</pubTime>
+        
+        <tag>Spring Boot</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spring Boot" url="http://blog.yuegs.com/categories/Spring-Boot/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.yuegs.com/2021/05/31/SpringBoot-Container-ioc-annotation/</loc>
     <lastmod>2021-05-31T14:10:49.556Z</lastmod>
     <data>

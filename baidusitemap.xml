@@ -5,14 +5,19 @@
     
   <url>
     <loc>http://blog.yuegs.com/2021/06/10/springboot-jdbc-mybatis/</loc>
-    <lastmod>2021-06-10T12:51:25.231Z</lastmod>
+    <lastmod>2021-06-10T13:02:59.262Z</lastmod>
     <data>
         <display>
-        <title></title>
-        <pubTime>2021-06-10T12:52:01.648Z</pubTime>
+        <title>JDBC 和 MyBatis</title>
+        <pubTime>2021-06-10T15:01:28.000Z</pubTime>
         
+        <tag>Spring Boot</tag>
+         
          
            
+             
+              <breadCrumb title="Spring Boot" url="http://blog.yuegs.com/categories/Spring-Boot/"/>
+          
         </display>
     </data>
     </url>

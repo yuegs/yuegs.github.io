@@ -1,3 +1,3 @@
+http://blog.yuegs.com/2021/06/18/db-isolation/
 http://blog.yuegs.com/2021/06/10/springboot-jdbc-mybatis/
 http://blog.yuegs.com/2021/06/01/springboot-bean-conditional-scope/
-http://blog.yuegs.com/2021/05/31/SpringBoot-Container-ioc-annotation/

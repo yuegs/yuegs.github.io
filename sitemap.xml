@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.yuegs.com/2021/07/07/db-mysql-lock/</loc>
+    
+    <lastmod>2021-07-07T13:21:30.933Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.yuegs.com/2021/07/04/db-mysql-index/</loc>
     
     <lastmod>2021-07-05T04:32:49.196Z</lastmod>

@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在 Docker 中使用桥接网络 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文是一篇译文，原文地址。在 Docker 中使用的桥接网络是通过软件桥接的方式，允许连接在同一个桥接网络下的容器可以相互访问，同时，隔离没有连接在该桥接网络下的容器。Docker 桥接驱动器自动在宿主设备上安装了协议，因此，不同桥接网络下的容器，无法直接进行相互访问。
+桥接网络，适用于通过同一个 Docker 伴随进程宿主的容器之间。不同伴随进程宿主之间，可以通过 OS 层的路由或者通过 overlay network 完成。
+当启动 Docker 时，默认桥接网络将会被自动创建。新加进来的容器自动连接到该网络中，除非你指定了不同。当然，你也可以创建用户自定义网络。">
+  
+
+  
+  
+  <meta name="keywords" content="Docker">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="在 Docker 中使用桥接网络"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>在 Docker 中使用桥接网络</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/05/27/use-bridge-networks/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-05-27T15:01:28.000Z">
+          2021-05-27
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇译文，<a target="_blank" rel="noopener" href="https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge">原文地址</a>。<br>在 Docker 中使用的桥接网络是通过软件桥接的方式，允许连接在同一个桥接网络下的容器可以相互访问，同时，隔离没有连接在该桥接网络下的容器。Docker 桥接驱动器自动在宿主设备上安装了协议，因此，不同桥接网络下的容器，无法直接进行相互访问。</p>
+<p>桥接网络，适用于通过同一个 Docker 伴随进程宿主的容器之间。不同伴随进程宿主之间，可以通过 OS 层的路由或者通过 <a target="_blank" rel="noopener" href="https://docs.docker.com/network/overlay/">overlay network</a> 完成。</p>
+<p>当启动 Docker 时，默认桥接网络将会被自动创建。新加进来的容器自动连接到该网络中，除非你指定了不同。当然，你也可以创建用户自定义网络。</p>
+<span id="more"></span>
+
+<h3 id="用户自定义桥接网络和默认桥接网络的不同"><a href="#用户自定义桥接网络和默认桥接网络的不同" class="headerlink" title="用户自定义桥接网络和默认桥接网络的不同"></a>用户自定义桥接网络和默认桥接网络的不同</h3><ul>
+<li><strong><strong>用户自定义桥接网络提供自动 DNS 解析</strong></strong><br>在默认桥接网络中的容器，可以通过 IP 地址相互访问，除非你使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/network/links/">–link</a> 选项，但是该选项已经被考虑废弃了。在用户自定义的桥接网络中，容器之间可以通过名字或者别称相互访问。</li>
+</ul>
+<p>考虑一种场景，一个应用具有 web 前端和数据库后端，分别位于 web 和 db 容器中。web 需要连接到 db。<br>如果它们被放置在同一个应用中，且使用了默认的桥接网络，则需要在两者之间创建链接（使用 - - flag 标志）。这个连接标志需要在两边都创建，才能实现相互访问。这看起来就比较复杂。<br>或者，也可以通过操作 &#x2F;etc&#x2F;hosts 文件内，但是这很难 debug.</p>
+<ul>
+<li><strong><strong>用户桥接网络提供了更好的隔离措施</strong></strong><br>所有的容器，如果不使用 <code>--network</code> 指定，默认的都连接在默认桥接网络下。这种使用方式是有风险的，一些不相关的服务、容器、应用都可以相互访问。</li>
+</ul>
+<p>使用用户定义的桥接网络，将实现很好的访问隔离。只有连接在该网络中的容器可以相互访问。</p>
+<ul>
+<li><p><strong><strong>用户定义网络中，容器连接在网络中或从网络中退出都是实时操作的</strong></strong><br>在容器的生命周期中，连接到或者退出连接，在用户自定义网络中可以是实时的，不需要关闭容器。而在默认桥接网络中，需要停止容器，然后使用不同网络配置重建它。</p>
+</li>
+<li><p><strong><strong>每个用户自定义网络都创建了一个可配置的桥接</strong></strong><br>如果容器使用了默认桥接网络，你可以配置它，但是，所有的容器，都将使用同一个配置，比如 MTU 和 iptables 。额外的，配置默认桥接网络需要在 docker 外部完成，然后重启 docker。<br>而用户定义的桥接网络，及其配置，都是通过指令 <code>docker network create</code> 完成的。不同的应用组可以使用不同的网络需求。</p>
+</li>
+<li><p><strong><strong>在默认桥接网络上连接的容器共享环境变量</strong></strong><br>起初，两个容器之间共享环境变量的唯一方式，是使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/network/links/"><code>--link</code></a> 标识，而在用户定义的网络下，则无法通过这种方式共享变量。然而，其实还有一些其它较好的方式来完成环境变量共享：</p>
+</li>
+<li><p>多个容器使用 Docker volumn 挂载同一个共享文件或者文件夹。</p>
+</li>
+<li><p>使用 <code>docker-compose</code> 设置共享变量；</p>
+</li>
+<li><p>使用 swarm serivce 代替单体的容器。</p>
+</li>
+</ul>
+<h3 id="管理用户定义桥接网络"><a href="#管理用户定义桥接网络" class="headerlink" title="管理用户定义桥接网络"></a>管理用户定义桥接网络</h3><p>使用 <code>docker network create</code> 指令可以创建一个用户定义的桥接网络。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network create my-net</span><br></pre></td></tr></table></figure>
+<p>还可以指定子网、IP 段、网关等。可以通过 [docker network create]<br>(<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/commandline/network_create/#specify-advanced-options">https://docs.docker.com/engine/reference/commandline/network_create/#specify-advanced-options</a>) 或者 <code>docker network create --help</code> 获取详情。<br>删除时，使用:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network rm my-net</span><br></pre></td></tr></table></figure>
+
+<h3 id="用户定义桥接网络的使用"><a href="#用户定义桥接网络的使用" class="headerlink" title="用户定义桥接网络的使用"></a>用户定义桥接网络的使用</h3><p>创建一个容器时，可以指定一个或者多个 <code>--network</code> 标志。下面的例子，是将一个 Nginx 容器连接到 <code>my-net</code> 网络下，内部访问端口 80，外部访问端口 8080。任何连接到 <code>my-net</code> 网络的容器，都能访问到 <code>my-nginx</code> 容器，反之亦然了。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker create --name my-nginx \</span><br><span class="line">  --network my-net \</span><br><span class="line">  --publish 8080:80 \</span><br><span class="line">  nginx:latest</span><br></pre></td></tr></table></figure>
+<p>如果一个<strong><strong>正在运行的</strong></strong>容器要连接到一个已经存在的用户定义桥接网络闪给，可以使用如下指令：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network connect my-net my-nginx</span><br></pre></td></tr></table></figure>
+<p>删除时:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network disconnect my-net my-nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用默认的桥接网卡"><a href="#使用默认的桥接网卡" class="headerlink" title="使用默认的桥接网卡"></a>使用默认的桥接网卡</h3><p>默认桥接网络，是 Docker 的历史遗留问题，是不被推荐使用的。配置起来，很不方便，并且存在一些技术缺陷。</p>
+<h4 id="将容器连接到默认桥接网络中"><a href="#将容器连接到默认桥接网络中" class="headerlink" title="将容器连接到默认桥接网络中"></a>将容器连接到默认桥接网络中</h4><p>如果不使用 <code>--network</code> flag，但是指定了网络驱动，你的容器就是连接在默认桥接网络上。在此网络内，容器只能通过 IP 相互访问，除非你使用 <code>--link</code> flag。</p>
+<h4 id="配置默认桥接网络"><a href="#配置默认桥接网络" class="headerlink" title="配置默认桥接网络"></a>配置默认桥接网络</h4><p>可以通过 <code>deamon.json</code> 配置默认桥接网络。以下是示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;bip&quot;</span><span class="punctuation">:</span> <span class="string">&quot;192.168.1.5/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;fixed-cidr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;192.168.1.5/25&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;fixed-cidr-v6&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2001:db8::/64&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mtu&quot;</span><span class="punctuation">:</span> <span class="number">1500</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;default-gateway&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10.20.1.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;default-gateway-v6&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2001:db8:abcd::89&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dns&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;10.20.1.2&quot;</span><span class="punctuation">,</span><span class="string">&quot;10.20.1.3&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>重启 Docker 后生效。</p>
+<p>####——–####</p>
+<p>译者附</p>
+<ol>
+<li><p>docker compose 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#指定 docker-compose.yml 文件的写法格式</span><br><span class="line">version: &quot;3.9&quot;  # optional since v1.27.0</span><br><span class="line">#多个容器的集合</span><br><span class="line">services:</span><br><span class="line">  redist:</span><br><span class="line">    build:</span><br><span class="line">      context: ./</span><br><span class="line">      dockerfile: Dockerfile</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;4631:9096&quot;</span><br><span class="line">    links:   # 指定容器连接到当前连接，避免容器重启引发ip动态改变，无法连接</span><br><span class="line">      - &quot;db_redis&quot;</span><br><span class="line"></span><br><span class="line">  db_redis:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: db_redis</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6679:6379&quot;</span><br><span class="line">    hostname: db_redis</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 hostname 后，实际上：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/docker/use-bridge-network/Use-bridge-networks-hosts.png"></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/yuegs/docker-sprintboot-redis">项目练习地址</a></p>
+</li>
+</ol>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Docker/">Docker</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Docker/">Docker</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

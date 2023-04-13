@@ -1,0 +1,239 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>EVM-存储模型概述 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="图片来源
+以太坊上状态的变化，实际上由运行在虚拟机上的智能合约在交易的触发情况下改变的。这个改变的底层逻辑，将涉及到 EVM 的存储模型。">
+  
+
+  
+  
+  <meta name="keywords" content="Storage,Memory,EVM,Slot,模型">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="EVM-存储模型概述"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>EVM-存储模型概述</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/05/11/evm-storage/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-05-10T16:38:28.000Z">
+          2022-05-11
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/library.jpg?raw=true"><br><a target="_blank" rel="noopener" href="https://pixabay.com/images/id-1281581/">图片来源</a></p>
+<p>以太坊上状态的变化，实际上由运行在虚拟机上的智能合约在交易的触发情况下改变的。<br>这个改变的底层逻辑，将涉及到 EVM 的存储模型。</p>
+<span id="more"></span>
+
+<br/>
+
+<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p>在此之前，先对 EVM 做一整体了解。如下图所示：<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/evm.png?raw=true"><br><a target="_blank" rel="noopener" href="https://ethereum.org/en/developers/docs/evm/">图片来源</a></p>
+<p>我们可以看到，<strong><strong>PC &#x2F; Stack &#x2F; Memory 这些组件构成了基本的基于栈结构的计算引擎运行环境。</strong></strong> 而 <code>GAS Available</code> 是是否可以继续计算和存储的基本条件，也解决了无限循环问题（gas 一旦耗尽，将终止运行）。<code>EVM Code</code> 为编译后的合约代码；<code>Storage</code> 持久化存储状态数据。以上，就组成了 一个完整的基于以太坊区块链的 “准” （gas耗尽终止执行）图灵完备的虚拟机 — <code>EVM</code>.</p>
+<p>以下，是一张更加详细的模型图：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/evm-architecture.png?raw=true"><br><a target="_blank" rel="noopener" href="https://cypherpunks-core.github.io/ethereumbook/13evm.html">图片来源</a></p>
+<p>由此可见，<code>EVM</code> 内部，更像是一个 “<strong><strong>单线程</strong></strong>“ 的受（内&#x2F;外部）调用触发的状态机。而调用，是经过签名&#x2F;授权后，任何人（或者合约）都可以调用的。<strong><strong>状态数据的有效性和完整性，是靠底层区块链技术支持的。</strong></strong></p>
+<br/>
+
+<h3 id="2-Calldata"><a href="#2-Calldata" class="headerlink" title="2. Calldata"></a>2. Calldata</h3><p>对应着交易中的 <code>data</code> 数据。是交易中合约调用的负载。<br>一个 <code>Transaction</code> 中，<code>data</code> 字段不为空，代表存在合约调用；<code>value</code> 字段不为空，代表存在 eth 转移。而 <code>data</code> 的内容，就是 <code>ABI</code> 编码后的方法调用。</p>
+<ul>
+<li><code>calldatasize()</code>: 该操作符代表了 <code>Transaction</code> 中 <code>data</code> 的长度；</li>
+<li><code>calldataload(p)</code>: 从 p 位置开始，获取 32 个字节并入栈；</li>
+<li><code>calldatacopy(t, f, s)</code>: 该操作符将 <code>data</code> 拷贝进 <code>memory</code> 中。从 <code>f</code> 开始，从 <code>calldata</code> 中拷贝 <code>s</code> 个字节到 <code>memory</code> 的 <code>t</code> 位置。</li>
+</ul>
+<p>这些操作符，在应用层面主要应用于内联汇编方法中，具体操作将在下文做进一步分析。</p>
+<br/>
+
+<h3 id="3-Stack"><a href="#3-Stack" class="headerlink" title="3. Stack"></a>3. Stack</h3><p>引擎运行环境，是栈。入栈，出栈，运算，就构成 EVM 的计算引擎。<br>栈深 1024，超出将会导致栈溢出，交易失败。这实际上限制了函数的调用深度。<br>虽然栈深 1024，但是允许访问的却只有顶端的 16 个。<br>只能 <strong><strong>访问(access)</strong></strong> 顶端 16 个元素的限制，可能会导致 “Stack Too Deep” 的异常。</p>
+<blockquote>
+<p>It has a maximum size of 1024 elements and contains words of 256 bits. Access to the stack is limited to the top end in the following way: It is possible to copy one of the topmost 16 elements to the top of the stack or swap the topmost element with one of the 16 elements below it.</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/introduction-to-smart-contracts.html#storage-memory-and-the-stack">来源</a></p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/stack.png?raw=true"></p>
+<p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/yul.html#evm-dialect">更多 EVM 操作符</a></p>
+<br/>
+
+<h3 id="4-Memory"><a href="#4-Memory" class="headerlink" title="4. Memory"></a>4. Memory</h3><p>memory 中的数据，存续于函数执行期间。<br>每个合约调用，都拥有它自己的 memory 空间，且这个空间在初始时是 clean 的。在合约调用完成之后，memory 空间又被整体释放。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/memory.png?raw=true"></p>
+<p>如上图示：</p>
+<blockquote>
+<p>Memory is linear and can be addressed at byte level, but reads are limited to a width of 256 bits, while writes can be either 8 bits or 256 bits wide. </p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/introduction-to-smart-contracts.html#storage-memory-and-the-stack">来源</a></p>
+<p>在 Solidity 中保留了 4 个 32-byte 的槽位，这些槽位具有特定的 byte 范围：</p>
+<ul>
+<li><code>0x00</code> - <code>0x3f</code>(64 bytes): 保存方法 hash 的临时空间。</li>
+<li><code>0x40</code> - <code>0x5f</code>(32 bytes): 当前已经分配的 memory 的大小（或者说，是还未分配的可以使用的 memory 的指针）。</li>
+<li><code>0x60</code> - <code>0x7f</code>(32 bytes): 0值槽位。</li>
+</ul>
+<p>因此，memory 中的数据，实际上是从 <code>0x80</code> 开始的。数据的内容，可能来自 calldata，也可以是在函数内定义的变量。<br>每当申请新的 memory 空间时，新申请的空间总是在原空间上线性递增的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">contract <span class="title class_">Memsize</span> &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">uint _its</span>) pure public returns (uint) &#123;</span><br><span class="line">        uint ms;</span><br><span class="line">        uint[] memory a;</span><br><span class="line">        <span class="keyword">for</span> (uint i = <span class="number">0</span>; i &lt; _its; ++i) &#123;</span><br><span class="line">            a = <span class="keyword">new</span> uint[](<span class="number">100</span>);</span><br><span class="line">            <span class="keyword">delete</span> a;</span><br><span class="line">        &#125;</span><br><span class="line">        assembly&#123;</span><br><span class="line">            ms := <span class="title function_">msize</span>()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>(ms);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/32096/does-the-evm-always-allocate-new-memory-or-can-it-reuse-already-allocated-but-u">代码来源</a></p>
+<p>测试结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">foo</span>(<span class="number">1</span>) <span class="number">3392</span></span><br><span class="line"><span class="title function_">foo</span>(<span class="number">2</span>) <span class="number">6656</span></span><br><span class="line"><span class="title function_">foo</span>(<span class="number">3</span>) <span class="number">9920</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们使用内联汇编做另外一种应用分析。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>(<span class="params"></span>) payable public &#123;</span><br><span class="line">    address _impl = <span class="title function_">implementation</span>();</span><br><span class="line">    <span class="built_in">require</span>(_impl != <span class="title function_">address</span>(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    assembly &#123;</span><br><span class="line">        <span class="comment">// 获取当前 0x40 所指向的空余 memory 所在的地址</span></span><br><span class="line">        <span class="keyword">let</span> ptr := <span class="title function_">mload</span>(<span class="number">0x40</span>)</span><br><span class="line">        <span class="comment">// 将 0 到 calldatasize 的 calldata 数据，拷贝到 ptr 所指向的 memory 空余空间</span></span><br><span class="line">        <span class="title function_">calldatacopy</span>(ptr, <span class="number">0</span>, calldatasize)</span><br><span class="line">        <span class="comment">// result 即执行是否成功</span></span><br><span class="line">        <span class="comment">// delegatecall(g, a, in, insize, out, outsize)</span></span><br><span class="line">        <span class="comment">// https://docs.soliditylang.org/en/latest/yul.html#yul-call-return-area</span></span><br><span class="line">        <span class="keyword">let</span> result := <span class="title function_">delegatecall</span>(gas, _impl, ptr, calldatasize, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">        <span class="comment">// 获取返回值的大小</span></span><br><span class="line">        <span class="keyword">let</span> size := returndatasize</span><br><span class="line">        <span class="comment">// 将 0 到 size 的 returndata 返回到 ptr 所指向的 memory 空余空间。注意，这里会覆盖 calldata，但是 calldata 已经没有用了。</span></span><br><span class="line">        <span class="title function_">returndatacopy</span>(ptr, <span class="number">0</span>, size)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> result</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span> &#123;<span class="title function_">revert</span>(ptr, size)&#125;</span><br><span class="line">        <span class="keyword">default</span> &#123;<span class="keyword">return</span> (ptr, size)&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再来看一个示例，以下这种方式，是主动使用 ABI 接口，进行汇编调用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getValue</span>(<span class="params"></span>) public returns (uint256) &#123;</span><br><span class="line">    bytes memory data = abi.<span class="title function_">encodeWithSignature</span>(<span class="string">&quot;modValue(uint256,uint256)&quot;</span>, <span class="number">52</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    assembly &#123;</span><br><span class="line">        <span class="keyword">let</span> pointer := <span class="title function_">mload</span>(<span class="number">0x40</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="title function_">iszero</span>(<span class="params">delegatecall(not(<span class="number">0</span>), sload(_delegate.slot), add(data,<span class="number">32</span>), mload(data), pointer, <span class="number">0x20</span>)</span>) &#123;</span><br><span class="line">            <span class="title function_">revert</span>(<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> size := <span class="title function_">returndatasize</span>()</span><br><span class="line">        <span class="title function_">returndatacopy</span>(pointer, <span class="number">0</span>, size)</span><br><span class="line">        <span class="keyword">return</span>(pointer,size)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong><strong>需要注意的是，<code>add(data,32)</code>，地址前移了 <code>32</code> 个字节，原因在于 <code>data</code> 的前 32 个字节，实际上是 <code>data</code> 数组的长度。</strong></strong></p>
+<blockquote>
+<p>Solidity always places new objects at the free memory pointer and memory is never freed (this might change in the future).</p>
+</blockquote>
+<br/>
+
+<h3 id="5-Storage"><a href="#5-Storage" class="headerlink" title="5. Storage"></a>5. Storage</h3><p>Storage 主要用于持久化存储，数据内容不会随着合约调用的结束而遗失。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/storage.png?raw=true"></p>
+<p>我们可以看到，Storage 中的数据是以 key&#x2F;value 的形式存储的。其中，每个 slot 为 32 字节。对于 key 来说，不同的数据类型的定义又是不一样的。<br>对于整型&#x2F;整型结构体&#x2F;定长数据的存储，key 是该变量在合约中首次操作的位置。</p>
+<p>对于 map 类型，key 是 <code>sha3(map 的key + position)</code>，然后递增。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">contract <span class="title class_">MyContract</span> &#123;</span><br><span class="line">    uint256 a;</span><br><span class="line">    uint256 b;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">mapping</span>(<span class="function"><span class="params">uint256</span> =&gt;</span> uint256) c;</span><br><span class="line">    uint256 d;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">func1</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        a = <span class="number">1</span>;</span><br><span class="line">        b = <span class="number">2</span>;</span><br><span class="line">        c[<span class="number">3</span>] = <span class="number">0xAABB</span>;</span><br><span class="line">        c[<span class="number">9</span>] = <span class="number">0xCCDD</span>;</span><br><span class="line">        d = <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/map_slot.png?raw=true"></p>
+<p>对于数组，key 是 <code>sha3(position)</code>，然后递增。</p>
+<p>比如 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">uint256 foo;</span><br><span class="line">uint256 bar;</span><br><span class="line">uint256[] items;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">allocate</span>(<span class="params"></span>) public &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="number">0</span> == items.<span class="property">length</span>);</span><br><span class="line"></span><br><span class="line">    items.<span class="property">length</span> = <span class="number">2</span>;</span><br><span class="line">    items[<span class="number">0</span>] = <span class="number">12</span>;</span><br><span class="line">    items[<span class="number">1</span>] = <span class="number">42</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/list_slot.svg?raw=true"></p>
+<p><strong><strong>为什么要采用这种通过 slot index 来定义存储位置的方式呢？我个人的看法是：一个是因为 2^256 空间足够大，大到已经忽略了碰撞；另外，也会考虑保持 EVM 设计的简单性，它并不具有一个 GC 回收器。</strong></strong></p>
+<p>这种机制下，同样也影响着代理模式的使用。</p>
+<br/>
+
+<h4 id="存储碰撞"><a href="#存储碰撞" class="headerlink" title="存储碰撞"></a>存储碰撞</h4><p>存储碰撞发生在逻辑合约和代理合约中。在调用 <code>delegatecall</code> 时。<br>比如，代理模式中，Proxy 合约的 Fallback 函数中，通常是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">assembly &#123;</span><br><span class="line">  <span class="keyword">let</span> ptr := <span class="title function_">mload</span>(<span class="number">0x40</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// (1) copy incoming call data</span></span><br><span class="line">  <span class="title function_">calldatacopy</span>(ptr, <span class="number">0</span>, calldatasize)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// (2) forward call to logic contract</span></span><br><span class="line">  <span class="keyword">let</span> result := <span class="title function_">delegatecall</span>(gas, _impl, ptr, calldatasize, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">  <span class="keyword">let</span> size := returndatasize</span><br><span class="line"></span><br><span class="line">  <span class="comment">// (3) retrieve return data</span></span><br><span class="line">  <span class="title function_">returndatacopy</span>(ptr, <span class="number">0</span>, size)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// (4) forward return data back to caller</span></span><br><span class="line">  <span class="keyword">switch</span> result</span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span> &#123; <span class="title function_">revert</span>(ptr, size) &#125;</span><br><span class="line">  <span class="keyword">default</span> &#123; <span class="keyword">return</span>(ptr, size) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是，一旦 Proxy 合约和 Implementation 合约中槽位不一致，就可能会发生碰撞的情况。如下所示：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/evm-model/storage-collisions.png?raw=true"></p>
+<p>此时，Proxy 中的 <code>_implementation</code> 就和 Implementation 中的 <code>_owner</code> 就发生了碰撞。其结果，就是在 Proxy 通过 <code>delegatecall</code> 访问 Implementation 中的方法时，如果方法中包含了 _owner，那么，其实这个值是 Proxy 中的 <code>_implementation</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">contract <span class="title class_">Implementation</span> &#123;</span><br><span class="line">    address _owner ;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">proxy</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        <span class="comment">// 此时 _owner 实际上是 _implementation</span></span><br><span class="line">        <span class="keyword">if</span>(_owner == msg.<span class="property">sender</span>)&#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-小结"><a href="#6-小结" class="headerlink" title="6. 小结"></a>6. 小结</h3><p><strong><strong>EVM 的出现，让每一个 以太坊 节点，变成了一个可以运行智能合约的且被以太坊区块链承认其运算结果的 “计算机”。</strong></strong> </p>
+<br/>
+<br/>
+
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies#storage-collisions-between-implementation-versions">存储碰撞</a><br><a target="_blank" rel="noopener" href="https://www.adrianhetman.com/unboxing-evm-storage/">Unboxing EVM storage</a><br><a target="_blank" rel="noopener" href="https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf">Ethereum EVM illustrated</a><br><a target="_blank" rel="noopener" href="https://medium.com/shyft-network-media/solidity-and-inline-assembly-37871dc582a6">Solidity 汇编</a><br><a target="_blank" rel="noopener" href="https://blog.openzeppelin.com/ethereum-in-depth-part-2-6339cf6bddb9/"></a><br><a target="_blank" rel="noopener" href="https://medium.com/coinmonks/10-evm-design-mistakes-7c9a75a77ee9">10 EVM Design Mistakes</a><br><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/108052/why-does-solidity-never-free-memory">Solidity 中的 memory 为什么从来不用释放?</a><br><a target="_blank" rel="noopener" href="https://medium.com/@Knownsec_Blockchain_Lab/knowsec-blockchain-lab-depth-understanding-of-evm-storage-mechanism-and-security-issues-50509acea373">Knowsec Blockchain Lab | Depth understanding of EVM storage mechanism and security issues</a><br><a target="_blank" rel="noopener" href="https://mixbytes.io/blog/collisions-solidity-storage-layouts">Collisions of Solidity Storage Layouts</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Ethereum/">Ethereum</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Storage/">Storage</a><a href="/tags/Memory/">Memory</a><a href="/tags/EVM/">EVM</a><a href="/tags/Slot/">Slot</a><a href="/tags/模型/">模型</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

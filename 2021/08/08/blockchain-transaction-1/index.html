@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>交易（一） | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="图片来源
+本篇是一篇译文，原文地址。交易，是比特币系统中最重要的组成部分。比特币系统的设计，围绕着确保交易的创建&amp;#x2F;传播&amp;#x2F;合法性验证，最后将其添加全局大账本而展开。交易，是参与者之间传输的数据结构。每笔交易，是比特币上区块链（全球复式记账账本）的公共实体。">
+  
+
+  
+  
+  <meta name="keywords" content="区块链">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="交易（一）"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>交易（一）</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/08/08/blockchain-transaction-1/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-08-08T15:01:28.000Z">
+          2021-08-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/transaction-1/bitcoin_trans.jpg?raw=true"><br><a target="_blank" rel="noopener" href="https://images.unsplash.com/photo-1615992174118-9b8e9be025e7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80">图片来源</a></p>
+<p>本篇是一篇译文，<a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch05.html">原文地址</a>。<br>交易，是比特币系统中最重要的组成部分。比特币系统的设计，围绕着确保交易的创建&#x2F;传播&#x2F;合法性验证，最后将其添加全局大账本而展开。<br>交易，是参与者之间传输的数据结构。每笔交易，是比特币上区块链（全球复式记账账本）的公共实体。</p>
+<span id="more"></span>
+
+<h3 id="交易的生命周期"><a href="#交易的生命周期" class="headerlink" title="交易的生命周期"></a>交易的生命周期</h3><p>交易的生命周期，从交易的创建开始；接着，被一个或多个签名授权资金花费；随后，该交易被广播在比特币网络中，每个网络节点（参与者）将验证交易的有效性，并传播该交易，直到其达到（或者说几乎到达）所有的区块链节点。</p>
+<p>一旦被足够的区块记录并确认，交易将被永久的记录在比特币账本中，并所有的区块所接受。新的资金拥有者，可以将其在新的交易中花费它们，这就是一个新的交易生命周期的开始了。</p>
+<h3 id="创建交易"><a href="#创建交易" class="headerlink" title="创建交易"></a>创建交易</h3><p>与支票支付类似，交易表达了一个意图：转移价值，它是不可见的，直到其在金融系统中被提交并执行。如支票一样，交易最终的创建者，不需要签名交易。然而，支票引用的是特定账户作为资金来源，而比特币交易引用的是特定的先前的交易作为其来源，而不是账户。</p>
+<p>交易可以被在线创建，也可以被离线创建，甚至用户可以创建一个还没有被签名者授权的交易。举例而言，应付文件可能会处理被 CEO 签名的支付支票。类似的，应付文员也可以创建一个比特币交易，然后再让 CEO 签名使其合法。</p>
+<p>一旦交易被创建，其被相关资金拥有者进行了签名。如果其被正确的创建并签名，且签名是合法的，其将完成相关价值的转移。最终，合法的交易将发送到比特币网络中，直到矿工将他们打包成区块包含进公共账本（区块链）中。</p>
+<h3 id="将交易广播到比特币网路"><a href="#将交易广播到比特币网路" class="headerlink" title="将交易广播到比特币网路"></a>将交易广播到比特币网路</h3><p>交易需要被发布到比特币网络中，以便其能传播并被记录在区块链上。本质上讲，一个交易数据大概在 300 到 400 字节，将到达成千上万个网络节点上。发送者不需要信任他们广播的节点，节点也不需要信任发送者，不需要查证发送者的身份。因为，交易是被签名的，不包含任何机密信息，比如私钥或者证书，它可以被公开地通过任何底层的网络传输。不像是信用卡交易，举例而言，在信用卡交易中会包含敏感数据，需要传输在加密网络中，一个比特币交易可以被传输在任何网络中。只要交易能够达到节点中，并被传播下去，第一个是谁都没关系。</p>
+<p>比特币交易可以通过不可安全的网络完成传递，比如 WIFI&#x2F; 蓝牙&#x2F; NFC &#x2F; 调频信号&#x2F; 条形码&#x2F; 粘贴复制到web表单中。极端情况下，甚至可以通过封包无线电，卫星数据转发，短波，光谱，跳频 来完成。比特币交易，还可以通过表情包编码并发布的公共论坛。因此，任何人，都可以创建并执行比特币交易。</p>
+<h3 id="在比特币网络中传递交易"><a href="#在比特币网络中传递交易" class="headerlink" title="在比特币网络中传递交易"></a>在比特币网络中传递交易</h3><p>一旦交易被发送网络中任意节点上，它的合法性将被验证。如果是合法的，节点将其传播给它连接的其他节点，同时，成功的消息将被反馈给交易创建者。<br>如果交易是不合法的，节点将拒绝它，并返回创建者错误信息。</p>
+<p>比特币网路，是一个点对点网络，这就意味着，每个比特币节点都会连接到一些其他节点上，在节点启动的时候，会根据点对点协议去发现附近节点。<br>这个网络就是一个松散的相互连接的 mesh，没有固定的拓扑结构使得所有节点都互连。<br>包括交易和区块，都是从一个节点，往其相连的节点上传播。<br>一个合法的交易，被任意节点接收后，将被发送给其相连的三到四个附近节点，以此类推，几秒钟内，以指数传播的速度，将比将被传播到整个网路中。</p>
+<p>比特币网路被设计为这种高效且有弹性的方式快速传播交易和区块到整个网络中。为了防止垃圾信息&#x2F; 服务攻击&#x2F; 以及其他有害攻击，每个节点都将在传播数据之前验证数据的合法性。如果交易有问题，将不会被传播。更详细的解释，可以看 <a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch08.html#tx_verification">交易的独立验证</a>。</p>
+<h3 id="交易的数据结构"><a href="#交易的数据结构" class="headerlink" title="交易的数据结构"></a>交易的数据结构</h3><p>交易，是一种数据结构。这种结构对价值转移做了编码：价值的来源，称为 input；价值的目的地，称为 output。交易的输入和输出不会关联到账号或者身份信息。反而，所有价值其实是绑定在一个特殊的密钥上。知道该密钥的任何人，都可以解锁并获取其关联的比特币。</p>
+<p>交易结构的数据包括：</p>
+<table>
+<thead>
+<tr>
+<th>大小</th>
+<th>域</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4 bytes</td>
+<td>Version</td>
+<td>指定交易应该遵守的规则版本</td>
+</tr>
+<tr>
+<td>1-9 bytes（VarInt）</td>
+<td>Input Counter</td>
+<td>包含有多少输入</td>
+</tr>
+<tr>
+<td>Variable</td>
+<td>Inputs</td>
+<td>一个或者多个交易输入</td>
+</tr>
+<tr>
+<td>1-9 bytes（VarInt）</td>
+<td>Output Counter</td>
+<td>包含有多少输出</td>
+</tr>
+<tr>
+<td>Variable</td>
+<td>Onputs</td>
+<td>一个或者多个交易输出</td>
+</tr>
+<tr>
+<td>4 bytes</td>
+<td>Locktime</td>
+<td>时间戳或者区块号</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><strong>交易的 Locktime</strong></strong><br>Locktime 定义了交易可以被添加到区块链中的最早时间。通常其被设置为 0，即立即执行。如果 Locktime 是非 0 的，但低于 500 百万，它将被解释为区块高度。如果该值超过 500 百万，将被解释为 Unix 时间戳。</p>
+</blockquote>
+<h3 id="交易的输出和输入"><a href="#交易的输出和输入" class="headerlink" title="交易的输出和输入"></a>交易的输出和输入</h3><p>交易的基础，是 <strong><strong>未花费交易输出（UTXO）</strong></strong>。UTXO 是整个网络中，将比特币货币锁定给一个指定的拥有者，并将其记录在区块链中的不可分割的货币单元。<br>比特币网络中可用的 UNXO 目前已经有数百万个。当用户接收到比特币时，其数量以 UTXO 的形式记录在区块链上。因此，用户的比特币实际上就是分散在各个区块中的数百个交易中的 UTXO 中。事实上，在区块链中并没有存储一个地址或者账户的余额，只有这些分散的 UTXO，锁定到了指定的拥有者。用户比特币余额的概念，是钱包应用中的一个概念。钱包将扫描整个区块链，聚合属于指定用户的所有 UTXO，从而计算出余额。</p>
+<blockquote>
+<p>TIP<br>在比特币中，没有账户或者余额，只有分散在区块链上的未花费交易输出。</p>
+</blockquote>
+<p>一个 UTXO 的面额，可以是一聪的任意倍。就像美元，可以向下分割到小数点后两位，作为美分。比特币可以分割到小数点后8位，作为一聪。<br>虽然，UTXO 可以是任意值，一旦被创建，它将不可再分割，就像一个硬币不能再被砍成两半。如果一个 UTXO 比交易中期望的额度高，它也将完全被消耗，多出来的部分，将被重新创建。换而言之，如果你有 20 个比特币的 UTXO，但是你想支付 1 比特币，你的交易必须消耗整个 20 个比特币的 UTXO，输出部分将有两项：一个用于支付想发给指定接收者的 1 比特币，另外 19 个比特币返回到钱包。因此，很多比特币交易将产生零钱。</p>
+<p>想象一次，去商店买了 1.5$ 的饮料，你会去钱包中找到足够 1.5$ 的硬币或者纸钞。如果有的话，你可能会找到恰好 1.5$ 的钱（一美元纸币，两个25美分硬币，或者 6 个 25 美分硬币），也有可能，你找到了 5 美元纸币。如果你给 5 美元给商店，她应该找你 3.5 美元零钱，并将这 3.5 美元放回钱包，用以后续可能的交易。</p>
+<p>相似的，比特币交易必须从用户可用的 UTXO 中开始，用户无法切割 UTXO，就像他们无法将1美元纸币切割成两半来使用。用户的钱包应用程序会选择能够满足用户交易的 UTXO ，这个额度，应当大于或等于用户期望交易出去的额度。</p>
+<p>实际上，比特币应用可以使用一些策略，满足支付额度：组合若干个较小额度；找到满足支付需求的额度；或者使用一个较大额度的但是要找零。这些复杂的花费 UTXO 的装配方式，是在用户钱包中自动完成的，对用户不可见。除非你是开发者，否则这些都给你没有关系。</p>
+<p><strong><strong>UTXO 的消耗，在交易中被成为交易输入；创建 UTXO 的过程被称为交易输出。</strong></strong>这样一来，比特币价值随着交易链不断输入和输出而前向移动。通过签名的方式，解锁消耗 UTXO，通过校验签名即新拥有者比特币地址的方式，锁定 UTXO。</p>
+<p>在这条输入输出链上，一个例外的交易是 铸币交易（coinbase transaction）。这种交易，将是每个区块中的第一个交易，是为了奖励给获胜的矿工。</p>
+<blockquote>
+<p>TIP<br>输入和输出谁是第一个？先有鸡还是现有蛋？严格的说，现有铸币交易，铸币交易产生新的比特币，这种交易，没有输入。</p>
+</blockquote>
+<h3 id="交易输出"><a href="#交易输出" class="headerlink" title="交易输出"></a>交易输出</h3><p>每个交易中产生的 输出，被记录在比特币账本中。除了一种特例（查看<a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch05.html#op_return">数据输出（OPT_RETURN）</a>），几乎所有的输出，都创建了可花费的 UTXO，拥有者可以使用这些 UTXO 进行后续的交易。<strong><strong>向某人发送比特币，就是向指定的地址注册 UTXO.</strong></strong></p>
+<p>每个全节点比特币客户端，都将跟踪 UTXO ，并将它们存储在内存中，称为 UTXO 集合或者 UTXO 池。新的交易消耗将从该池中消耗 UTXO.</p>
+<p>交易输出包含两个部分：</p>
+<ul>
+<li>比特币总额，单位为 聪，比特币最小单位。</li>
+<li>锁定脚本，通过指定的条件，将总额锁定到满足条件的输出上。</li>
+</ul>
+<p>交易脚本语言，使用在锁定脚本中，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>大小</th>
+<th>域</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8 bytes</td>
+<td>Amount</td>
+<td>比特币额度，以 聪 为单位（10^<sup>-8</sup> 比特币）</td>
+</tr>
+<tr>
+<td>1-9 bytes（VarInt）</td>
+<td>Locking-Script Size</td>
+<td>锁定脚本的长度</td>
+</tr>
+<tr>
+<td>Variable</td>
+<td>Lock-Script</td>
+<td>定义要花费的输出的指定条件</td>
+</tr>
+</tbody></table>
+<p>如下所示，我们使用 blockchain.info 中的 API ，查找指定地址的 UTXO.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># get unspent outputs from blockchain API</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># example address</span></span><br><span class="line">address = <span class="string">&#x27;1Dorian4RoXcnBv9hnQ4Y2C1an6NJ4UrjX&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The API URL is https://blockchain.info/unspent?active=&lt;address&gt;</span></span><br><span class="line"><span class="comment"># It returns a JSON object with a list &quot;unspent_outputs&quot;, containing UTXO, like this:</span></span><br><span class="line"><span class="comment">#&#123;      &quot;unspent_outputs&quot;:[</span></span><br><span class="line"><span class="comment">#   &#123;</span></span><br><span class="line"><span class="comment">#     &quot;tx_hash&quot;:&quot;ebadfaa92f1fd29e2fe296eda702c48bd11ffd52313e986e99ddad9084062167&quot;,</span></span><br><span class="line"><span class="comment">#     &quot;tx_index&quot;:51919767,</span></span><br><span class="line"><span class="comment">#     &quot;tx_output_n&quot;: 1,</span></span><br><span class="line"><span class="comment">#     &quot;script&quot;:&quot;76a9148c7e252f8d64b0b6e313985915110fcfefcf4a2d88ac&quot;,</span></span><br><span class="line"><span class="comment">#     &quot;value&quot;: 8000000,</span></span><br><span class="line"><span class="comment">#     &quot;value_hex&quot;: &quot;7a1200&quot;,</span></span><br><span class="line"><span class="comment">#     &quot;confirmations&quot;:28691</span></span><br><span class="line"><span class="comment">#   &#125;,</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="comment">#]&#125;</span></span><br><span class="line"></span><br><span class="line">resp = requests.get(<span class="string">&#x27;https://blockchain.info/unspent?active=%s&#x27;</span> % address)</span><br><span class="line">utxo_set = json.loads(resp.text)[<span class="string">&quot;unspent_outputs&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> utxo <span class="keyword">in</span> utxo_set:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;%s:%d - %ld Satoshis&quot;</span> % (utxo[<span class="string">&#x27;tx_hash&#x27;</span>], utxo[<span class="string">&#x27;tx_output_n&#x27;</span>], utxo[<span class="string">&#x27;value&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>运行该脚本，我们将看到交易 ID,冒号，指定 UTXO 的索引，以及 UTXO 值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python get-utxo.py</span><br><span class="line">ebadfaa92f1fd29e2fe296eda702c48bd11ffd52313e986e99ddad9084062167:<span class="number">1</span> - <span class="number">8000000</span> Satoshis</span><br><span class="line">6596fd070679de96e405d52b51b8e1d644029108ec4cbfe451454486796a1ecf:<span class="number">0</span> - <span class="number">16050000</span> Satoshis</span><br><span class="line">74d788804e2aae10891d72753d1520da1206e6f4f20481cc1555b7f2cb44aca0:<span class="number">0</span> - <span class="number">5000000</span> Satoshis</span><br><span class="line">b2affea89ff82557c60d635a2a3137b8f88f12ecec85082f7d0a1f82ee203ac4:<span class="number">0</span> - <span class="number">10000000</span> Satoshis</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="花费条件"><a href="#花费条件" class="headerlink" title="花费条件"></a>花费条件</h4><p>交易输出，将特定的额度（以聪为单位）于产权负担相关联。在大多数情况下，锁定脚本将锁定输出到指定的比特币地址，因此，相当于转换该总额的所有权。当 Alice 向 Bob的咖啡 店支付一杯咖啡费用，她的交易就是创建一个 0.015 比特币的输出并将其锁定到咖啡店的比特币地址。0.015 比特币的输出，将被记录在区块链上，称为 UNXO 池的一部分，并将显示在 Bob 钱包余额中可见。当 Bob 选择要花费这部分 UTXO 时，他的交易将释放这部分产权负担，解锁这部分输出，并使用 Bob 的私钥签名。</p>
+<h3 id="交易输入"><a href="#交易输入" class="headerlink" title="交易输入"></a>交易输入</h3><p>简单地说，交易输入就是指向 UTXO 的指针。它们通过交易哈希和序列号指向特定的 UTXO。为了花费 UTXO，交易的输入应当包含解锁脚本，以满足花费条件。解锁脚本通常是一个证明比特币拥有权限的签名。</p>
+<p>当用户支付时，它们的钱包将选择可以使用的 UTXO 构建一个交易，举个例子，为了支付 0.015 比特币，钱包应用选择了 0.01 UTXO 和 0.005 UTXO，选择这二者，进行期望的交易输入。</p>
+<p>在下面的代码块中，我们使用了 “greedy” 算法选择可用的 UTXO 以完成特定的支付。在这个示例中，可用的 UTXO 被放在一个常量数组中，但是实际上，可用的 UTXO 可能通过 RPC 调用 BitCoin Core，或者第三方 API 来完成。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Selects outputs from a UTXO list using a greedy algorithm.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> argv</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OutputInfo</span>:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, tx_hash, tx_index, value</span>):</span><br><span class="line">        self.tx_hash = tx_hash</span><br><span class="line">        self.tx_index = tx_index</span><br><span class="line">        self.value = value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&lt;%s:%s with %s Satoshis&gt;&quot;</span> % (self.tx_hash, self.tx_index,</span><br><span class="line">                                             self.value)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Select optimal outputs for a send from unspent outputs list.</span></span><br><span class="line"><span class="comment"># Returns output list and remaining change to be sent to</span></span><br><span class="line"><span class="comment"># a change address.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">select_outputs_greedy</span>(<span class="params">unspent, min_value</span>):</span><br><span class="line">    <span class="comment"># Fail if empty.</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> unspent:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># Partition into 2 lists.</span></span><br><span class="line">    lessers = [utxo <span class="keyword">for</span> utxo <span class="keyword">in</span> unspent <span class="keyword">if</span> utxo.value &lt; min_value]</span><br><span class="line">    greaters = [utxo <span class="keyword">for</span> utxo <span class="keyword">in</span> unspent <span class="keyword">if</span> utxo.value &gt;= min_value]</span><br><span class="line">    key_func = <span class="keyword">lambda</span> utxo: utxo.value</span><br><span class="line">    <span class="keyword">if</span> greaters:</span><br><span class="line">        <span class="comment"># Not-empty. Find the smallest greater.</span></span><br><span class="line">        min_greater = <span class="built_in">min</span>(greaters)</span><br><span class="line">        change = min_greater.value - min_value</span><br><span class="line">        <span class="keyword">return</span> [min_greater], change</span><br><span class="line">    <span class="comment"># Not found in greaters. Try several lessers instead.</span></span><br><span class="line">    <span class="comment"># Rearrange them from biggest to smallest. We want to use the least</span></span><br><span class="line">    <span class="comment"># amount of inputs as possible.</span></span><br><span class="line">    lessers.sort(key=key_func, reverse=<span class="literal">True</span>)</span><br><span class="line">    result = []</span><br><span class="line">    accum = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> utxo <span class="keyword">in</span> lessers:</span><br><span class="line">        result.append(utxo)</span><br><span class="line">        accum += utxo.value</span><br><span class="line">        <span class="keyword">if</span> accum &gt;= min_value:</span><br><span class="line">            change = accum - min_value</span><br><span class="line">            <span class="keyword">return</span> result, <span class="string">&quot;Change: %d Satoshis&quot;</span> % change</span><br><span class="line">    <span class="comment"># No results found.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span>, <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    unspent = [</span><br><span class="line">        OutputInfo(<span class="string">&quot;ebadfaa92f1fd29e2fe296eda702c48bd11ffd52313e986e99ddad9084062167&quot;</span>, <span class="number">1</span>,  <span class="number">8000000</span>),</span><br><span class="line">        OutputInfo(<span class="string">&quot;6596fd070679de96e405d52b51b8e1d644029108ec4cbfe451454486796a1ecf&quot;</span>, <span class="number">0</span>,  <span class="number">16050000</span>),</span><br><span class="line">        OutputInfo(<span class="string">&quot;b2affea89ff82557c60d635a2a3137b8f88f12ecec85082f7d0a1f82ee203ac4&quot;</span>, <span class="number">0</span>,  <span class="number">10000000</span>),</span><br><span class="line">        OutputInfo(<span class="string">&quot;7dbc497969c7475e45d952c4a872e213fb15d45e5cd3473c386a71a1b0c136a1&quot;</span>, <span class="number">0</span>,  <span class="number">25000000</span>),</span><br><span class="line">        OutputInfo(<span class="string">&quot;55ea01bd7e9afd3d3ab9790199e777d62a0709cf0725e80a7350fdb22d7b8ec6&quot;</span>, <span class="number">17</span>,  <span class="number">5470541</span>),</span><br><span class="line">        OutputInfo(<span class="string">&quot;12b6a7934c1df821945ee9ee3b3326d07ca7a65fd6416ea44ce8c3db0c078c64&quot;</span>, <span class="number">0</span>,  <span class="number">10000000</span>),</span><br><span class="line">        OutputInfo(<span class="string">&quot;7f42eda67921ee92eae5f79bd37c68c9cb859b899ce70dba68c48338857b7818&quot;</span>, <span class="number">0</span>,  <span class="number">16100000</span>),</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(argv) &gt; <span class="number">1</span>:</span><br><span class="line">        target = long(argv[<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        target = <span class="number">55000000</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;For transaction amount %d Satoshis (%f bitcoin) use: &quot;</span> % (target, target/<span class="number">10.0</span>**<span class="number">8</span>)</span><br><span class="line">    <span class="built_in">print</span> select_outputs_greedy(unspent, target)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>当我们运行 select-utxo.py 脚本，它将创建一个 UTXO 集合，用于支付 55，000，000 聪（0.55比特币）的比特币。如果你使用了目标支付额度作为参数，脚本将选择 UTXO 以满足该额度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python select-utxo.py <span class="number">50000000</span></span><br><span class="line">For transaction amount <span class="number">50000000</span> Satoshis (<span class="number">0.500000</span> bitcoin) use:</span><br><span class="line">([&lt;7dbc497969c7475e45d952c4a872e213fb15d45e5cd3473c386a71a1b0c136a1:<span class="number">0</span> <span class="keyword">with</span> <span class="number">25000000</span> Satoshis&gt;, &lt;7f42eda67921ee92eae5f79bd37c68c9cb859b899ce70dba68c48338857b7818:<span class="number">0</span> <span class="keyword">with</span> <span class="number">16100000</span> Satoshis&gt;, &lt;6596fd070679de96e405d52b51b8e1d644029108ec4cbfe451454486796a1ecf:<span class="number">0</span> <span class="keyword">with</span> <span class="number">16050000</span> Satoshis&gt;], <span class="string">&#x27;Change: 7150000 Satoshis&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>一旦，UTXO 被选定，钱包将为每个 UNXO 生成包含签名的解锁脚本，即，使它们是可花费的，且能够满足锁定脚本的条件。下表中，将描述每个交易输入的数据结构。</p>
+<table>
+<thead>
+<tr>
+<th>大小</th>
+<th>域</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>32 bytes</td>
+<td>交易哈希</td>
+<td>指向一个包含了可花费 UTXO 的交易</td>
+</tr>
+<tr>
+<td>4 bytes</td>
+<td>Output Index</td>
+<td>将被花费的 UTXO 的索引数量</td>
+</tr>
+<tr>
+<td>1-9 bytes</td>
+<td>解锁脚本的长度</td>
+<td>解锁脚本的长度</td>
+</tr>
+<tr>
+<td>Variable</td>
+<td>Unlocking-Script</td>
+<td>脚本脚本</td>
+</tr>
+<tr>
+<td>4 bytes</td>
+<td>Sequence Number</td>
+<td>目前该值不可用，设置为 0xFFFFFFFF</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/区块链/">区块链</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/区块链/">区块链</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

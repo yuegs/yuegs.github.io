@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>InnoDB 锁 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="InnoDB 同时支持行锁和表锁。从是否独占锁的角度上讲，这些锁又可以分为共享锁和排它锁。锁机制，进一步完善了并发下数据一致性的策略。">
+  
+
+  
+  
+  <meta name="keywords" content="数据库">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="InnoDB 锁"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>InnoDB 锁</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/07/07/db-mysql-lock/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-07-07T15:01:28.000Z">
+          2021-07-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/locks.jpg?raw=true"><br>InnoDB 同时支持行锁和表锁。从是否独占锁的角度上讲，这些锁又可以分为共享锁和排它锁。锁机制，进一步完善了并发下数据一致性的策略。</p>
+<span id="more"></span>
+<h3 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h3><p>MySQL 版本：8.0.25<br>隔离模式：默认隔离模式 RR（Repeatable read）<br>存储引擎：InnoDB</p>
+<h3 id="共享锁和排它锁"><a href="#共享锁和排它锁" class="headerlink" title="共享锁和排它锁"></a>共享锁和排它锁</h3><p>共享锁和排它锁都是行锁（row-level locking）。</p>
+<ul>
+<li>共享锁（S），允许持有该锁的事务读取该行；</li>
+<li>排它锁（X），允许持有该锁的事务更新或和删除该行。</li>
+</ul>
+<p>如果事务 T1 持有某行 r 的共享锁（S），接着，另外一个事务 T2 请求 r 行锁的处理如下所示：</p>
+<ul>
+<li>T2 对锁的请求立即被允许，此时，T1 和 T2 都持有锁 r。</li>
+<li>如果 T2 请求的是排它锁（X），这个请求无法被立即满足。</li>
+</ul>
+<p>如果 T1 持有的是 r 上的互斥锁，其它事务 T2 请求 r 锁时则无法被立即允许。T2 需要等待 T1 释放 r 上的锁。<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html">官网的说法</a>。</p>
+<p>根据在 MySQL 中的实际测试结果，与上述描述基本一致，但是，当 r 行锁为互斥锁时，此时，是可以请求到该行的共享锁的，这种即使可能是源于 MySQL 中的 <a target="_blank" rel="noopener" href="https://draveness.me/database-concurrency-control/">MVCC 多版本控制机制</a>。</p>
+<blockquote>
+<p>多版本并发控制（Multiversion Concurrency Control），每一个写操作都会创建一个新版本的数据，读操作会从有限多个版本的数据中挑选一个最合适的结果直接返回；在这时，读写操作之间的冲突就不再需要被关注，而管理和快速挑选数据的版本就成了 MVCC 需要解决的主要问题。<a target="_blank" rel="noopener" href="https://draveness.me/database-concurrency-control/">来源</a></p>
+</blockquote>
+<p>如下图示，我们有两个客户端 A 和 B，在 A 客户端上，开启一个事务，并通过 <code>select for update</code> 获取该行的排它锁。此时，在 B 中，我们仍然可以读取该数据的，甚至可以获取该行的共享锁：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/xs_lock.png?raw=true"></p>
+<p>如下图示，如果 A 先获取了该行的共享锁，此时，在 B 中仍然可以获取到该行的共享锁，但是无法获取到该行的排它锁。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/sx_lock.png?raw=true"></p>
+<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>在 InnoDB 中，默认是采用了行级锁的。</p>
+<ul>
+<li>自动加锁：对于 UPDATE&#x2F;DELETE&#x2F;INSERT等语句，InnoDB 会自动给相应行加排它锁。</li>
+<li>显式加锁：对于普通 SELETCT 语句，本是没有锁的。但是，可以通过<code>select *** lock in share more</code> 的方式加上共享锁，或通过<code>select *** for update</code> 给相应行加上排它锁。</li>
+</ul>
+<h4 id="行锁的实现算法"><a href="#行锁的实现算法" class="headerlink" title="行锁的实现算法"></a>行锁的实现算法</h4><p>行级锁的算法实现方式，主要有以下三种，无论是哪种实现方式，其实都是<strong><strong>对索引记录进行加锁</strong></strong>：</p>
+<table>
+<thead>
+<tr>
+<th>行锁算法</th>
+<th>锁定内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Record Lock</td>
+<td>A record lock is a lock on an index record.</td>
+</tr>
+<tr>
+<td>Gap Lock</td>
+<td>A gap lock is a lock on a gap between index records, or a lock on the gap before the first or after the last index record.</td>
+</tr>
+<tr>
+<td>Next-Key Lock</td>
+<td>A next-key lock is a combination of a record lock on the index record and a gap lock on the gap before the index record.</td>
+</tr>
+</tbody></table>
+<h5 id="记录锁（Record-Lock）"><a href="#记录锁（Record-Lock）" class="headerlink" title="记录锁（Record Lock）"></a>记录锁（Record Lock）</h5><p>记录锁实现了对单个索引的锁定。比如说，我们使用了</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> id<span class="operator">=</span><span class="number">30</span> <span class="keyword">for</span> <span class="keyword">update</span> ;</span><br></pre></td></tr></table></figure>
+<p>上面的语句，将锁定 id 为 30 的行，以防止其它事务对其 <strong><strong>编辑</strong></strong>。如果表中没有索引，根据<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html#innodb-record-locks">官网</a>的说法，InnoDB 会创建一个隐式的聚集索引，在使用锁的时候可能会锁定这个隐式索引。实际测试，并发生这种情况，而是使用了表级锁。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/r_lock.png?raw=true"></p>
+<p>从上图上我们可以看到，<code>update</code> 语句执行，获取了该行的排他锁，此时，A 事务中，如果通过不需要获取锁的方式，可以看到基于 A 事务开始时间的值，但是，如果 A 事务想要通过排他锁的方式查看该值，会发生超时，因为 B 事务一直没有释放该锁。<br>之所以在 A 事务中，仍然能够看到值，这是由于 MySQL 中的 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/HwLe07YDajIDPmkcZwhAlg">MVCC</a> 机制。</p>
+<h5 id="间隙锁（Gap-Lock）"><a href="#间隙锁（Gap-Lock）" class="headerlink" title="间隙锁（Gap Lock）"></a>间隙锁（Gap Lock）</h5><p>间隙锁会锁定一定范围内的索引记录，但不包括记录本身。比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> id <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span> <span class="keyword">for</span> <span class="keyword">update</span> ;</span><br></pre></td></tr></table></figure>
+<p>间隙锁的存在，可以有效解决 <a target="_blank" rel="noopener" href="https://blog.yuegs.com/2021/06/18/db-isolation/">幻读</a> 的问题。在一定范围内锁定，防止中途有其它行插入或删除，导致在此范围内查询出来的结果不一样。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/g_lock.png?raw=true"></p>
+<h5 id="Next-Key-Lock"><a href="#Next-Key-Lock" class="headerlink" title="Next-Key Lock"></a>Next-Key Lock</h5><p>记录锁，防止别的事务对加锁的记录修改、编辑；间隙锁防止别的事务进行插入操作；两者结合形成的 Next-Key Lock，共同解决了 RR 级别的幻读问题。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/n_lock.png?raw=true"></p>
+<h4 id="行级锁的优势的弊端"><a href="#行级锁的优势的弊端" class="headerlink" title="行级锁的优势的弊端"></a>行级锁的优势的弊端</h4><p>锁的粒度小，因此并发能力强，发生锁冲突的概率低。<br>但是，其开销比较大，加锁速度慢，且会出现死锁。</p>
+<h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><p>表锁，提供了一种锁定整张表的途径，客户端通过这种方式，在某个事务中拥有了对某张表的唯一访问权。相对于行锁而言，它的锁粒度较大，容易发生碰撞，但是加锁速度块，不会出现死锁。<br>因此，表锁和行锁在某型情况下其实是形成互补的。<br>比如，如果事务中需要更新大量的数据，而表又比较大，如果使用行锁，反而会降低效率，且增加了死锁的风险；亦或者在事务中涉及较为复杂的多表关联查询，也可能会引发死锁。这些都是表锁的使用场景。</p>
+<h4 id="表锁的加锁-x2F-解锁方式"><a href="#表锁的加锁-x2F-解锁方式" class="headerlink" title="表锁的加锁&#x2F;解锁方式"></a>表锁的加锁&#x2F;解锁方式</h4><p>表级锁的加锁，是通过 <code>LOCK TABLE tbl_name</code> 来完成的。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LOCK <span class="keyword">TABLE</span> keyt READ;   <span class="operator">/</span><span class="operator">/</span> 加读锁</span><br><span class="line">LOCK <span class="keyword">TABLE</span> keyt WRITE ; <span class="operator">/</span><span class="operator">/</span> 加写锁</span><br><span class="line">UNLOCK TABLES;          <span class="operator">/</span><span class="operator">/</span> 释放所有锁</span><br></pre></td></tr></table></figure>
+<p>读锁，持有该锁的会话，可以读表，但是不能写表；多个会话可以同时获取读锁，但是就是没有获取到读锁，也不影响对该表的读，但是，<strong><strong>它们都不能写</strong></strong>。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/t_r_lock.png?raw=true"></p>
+<p>写锁，持有该锁的会话，可以读、写表，这种锁是独占式的，排他的，在锁被释放前，其它会话不能访问该表（阻塞）。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/t_w_lock.png?raw=true"></p>
+<h4 id="行锁自动升级为表锁"><a href="#行锁自动升级为表锁" class="headerlink" title="行锁自动升级为表锁"></a>行锁自动升级为表锁</h4><p>在 InnoDB 中默认使用行锁，但是在某些情况下，会自动由行锁升级为表锁。<br>首先，SQL 语句中没有使用索引，但是又需要锁时，这时将自动使用表锁。<br>如果 SQL 中，使用了普通索引，如果这个普通索引没有那么高效（重复性很高），那么它可能会被优化掉，从而导致升级到表锁。</p>
+<blockquote>
+<p>行锁，实际锁的对象不是行，而是按索引锁定，也就是说锁不会定位到某条记录，而是通过限制索引来间接作用到记录。 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/343295865">来源</a></p>
+</blockquote>
+<p>测试如下所示：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/rt_lock.png?raw=true"></p>
+<p>使用另外一张表，做个测试，在未给 userName 增加唯一主键前，和上述发生同样的阻塞事件，但是，为 userName 增加唯一主键后，使用了行级锁。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/lock/x2.png?raw=true"></p>
+<h4 id="表锁的优势和弊端"><a href="#表锁的优势和弊端" class="headerlink" title="表锁的优势和弊端"></a>表锁的优势和弊端</h4><p>加锁速度块，开销小，不会造成死锁；但是由于锁的粒度较大，容易发生碰撞，在极大多数情况下，没有行锁的并发性高。</p>
+<h4 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h4><p>InnoDB 中，是允许行锁和表锁共存的。而在表锁和行锁之间，其实也存在某些互斥关系，会话不可同时拥有。<br>意向锁，就是这样一种存在，让行锁和表锁之间的互斥关系的比较变得简单。<br><strong><strong>意向锁是一种由存储引擎自己维护的用户无法操作的表锁，它不与行级锁冲突，但是会与一般表锁相互斥</strong></strong>。在对数据行加共享锁或者排它锁时，引擎会首先请求该表的意向锁，此时，如果你再请求表锁时，表锁会去跟该表的意向锁相比较。</p>
+<p>意向锁分为两种：</p>
+<ul>
+<li><p>意向共享锁：当会话请求行的共享锁，就会先去请求其表的意向共享锁，比如:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> keyt <span class="keyword">where</span> age <span class="operator">=</span> <span class="number">100</span> lock <span class="keyword">in</span> share mode;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>意向排它锁：当会话请求行的排它锁时，就会先去请求其表的意向排它锁，比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> keyt <span class="keyword">where</span> age <span class="operator">=</span><span class="number">100</span> <span class="keyword">for</span> <span class="keyword">update</span> ;</span><br></pre></td></tr></table></figure>
+<p>||	意向共享锁（IS）|	意向排他锁（IX）|<br>|—|—|<br>|表级共享锁（S）	|兼容|	互斥|<br>|表级排他锁（X）|	互斥|	互斥|</p>
+</li>
+</ul>
+<hr>
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html">InnoDB Locking</a><br><a target="_blank" rel="noopener" href="https://draveness.me/database-concurrency-control/">浅谈数据库并发控制 - 锁和 MVCC</a><br><a target="_blank" rel="noopener" href="https://tech.meituan.com/2014/08/20/innodb-lock.html">Innodb中的事务隔离级别和锁的关系</a><br><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html">LOCK TABLES and UNLOCK TABLES Statements</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000012773157">MySQL 表锁和行锁机制</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903666332368909">详解 MySql InnoDB 中意向锁的作用</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/数据库/">数据库</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/数据库/">数据库</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

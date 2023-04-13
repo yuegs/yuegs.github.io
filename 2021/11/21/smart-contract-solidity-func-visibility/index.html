@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Solidity-合约成员可见性 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="在 Solidity 中有两种函数调用：不需要 EVM 调用（或者说“消息调用”）的内部函数调用和需要 EVM 调用的外部调用。由此，对于函数和状态变量存在 4 种可见性。对于函数来说，需要被指定为 external &amp;#x2F; public &amp;#x2F; internal 或者 private。相比于此，状态变量是没有 external 的。">
+  
+
+  
+  
+  <meta name="keywords" content="智能合约">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Solidity-合约成员可见性"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Solidity-合约成员可见性</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/11/21/smart-contract-solidity-func-visibility/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-11-21T09:46:01.000Z">
+          2021-11-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/smart-contract-solidity-func-visibility/telescope.jpg"></p>
+<p>在 Solidity 中有两种函数调用：不需要 EVM 调用（或者说“消息调用”）的内部函数调用和需要 EVM 调用的外部调用。由此，对于函数和状态变量存在 4 种可见性。<br>对于函数来说，需要被指定为 external &#x2F; public &#x2F; internal 或者 private。相比于此，状态变量是没有 external 的。</p>
+<span id="more"></span>
+
+<h3 id="external"><a href="#external" class="headerlink" title="external"></a><code>external</code></h3><p>外部函数是合约接口的一部分。这就意味着，它们可以通过交易（transaction）被其它合约调用。一个外部函数 <code>f</code> 是无法被内部调用的（因此，f() 是不起作用的，需要使用 this.f()）.</p>
+<h3 id="public"><a href="#public" class="headerlink" title="public"></a><code>public</code></h3><p>公共函数也是合约接口的一部分，但是它同时也可以被合约内部所调用。对于一个公共 状态变量 而言，getter 函数将会自动生成。</p>
+<h3 id="internal"><a href="#internal" class="headerlink" title="internal"></a><code>internal</code></h3><p>内部的函数和状态，只能在内部被调用和访问（即，只能在当前合约内部，或者其派生合约中），不能使用 <code>this</code> 访问。状态变量默认具有该层级的可见性。</p>
+<h3 id="private"><a href="#private" class="headerlink" title="private"></a><code>private</code></h3><p>私有函数和变量，只在被定义的合约内部访问，无法在派生合约中可见。</p>
+<blockquote>
+<p>注意<br>事实上，合约中的所有内容（Everything inside） 对于区块链外的所有观察者来说都是可见的。使用类似 <code>private</code> 这类的可见性等级，旨在防止 <strong><strong>其它合约</strong></strong> 读取或者修改信息。</p>
+</blockquote>
+<p>对于状态变量而言，可见性指示符在类型之后，对于函数而言，实在参数列表和返回参数列表之间。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.16</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">uint a</span>) private pure returns (uint b) &#123; <span class="keyword">return</span> a + <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setData</span>(<span class="params">uint a</span>) internal &#123; data = a; &#125;</span><br><span class="line">    uint public data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在下述例子中，<code>D</code> 可以调用 <code>c.getData()</code> 以获取 <code>data</code> 值。但是，它无法调用 <code>f</code> 函数。合约 <code>E</code> 继承自 <code>C</code>，因此，可以调用 <code>compute</code> 函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.16</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">    uint private data;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">uint a</span>) private pure <span class="title function_">returns</span>(<span class="params">uint b</span>) &#123; <span class="keyword">return</span> a + <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setData</span>(<span class="params">uint a</span>) public &#123; data = a; &#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">getData</span>(<span class="params"></span>) public view <span class="title function_">returns</span>(<span class="params">uint</span>) &#123; <span class="keyword">return</span> data; &#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">compute</span>(<span class="params">uint a, uint b</span>) internal pure returns (uint) &#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This will not compile</span></span><br><span class="line">contract D &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">readData</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        C c = <span class="keyword">new</span> <span class="title function_">C</span>();</span><br><span class="line">        uint local = c.<span class="title function_">f</span>(<span class="number">7</span>); <span class="comment">// error: member `f` is not visible</span></span><br><span class="line">        c.<span class="title function_">setData</span>(<span class="number">3</span>);</span><br><span class="line">        local = c.<span class="title function_">getData</span>();</span><br><span class="line">        local = c.<span class="title function_">compute</span>(<span class="number">3</span>, <span class="number">5</span>); <span class="comment">// error: member `compute` is not visible</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract E is C &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">g</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        C c = <span class="keyword">new</span> <span class="title function_">C</span>();</span><br><span class="line">        uint val = <span class="title function_">compute</span>(<span class="number">3</span>, <span class="number">5</span>); <span class="comment">// access to internal member (from derived to parent contract)</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.8.9/contracts.html">Contracts-Visibility and Getters</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

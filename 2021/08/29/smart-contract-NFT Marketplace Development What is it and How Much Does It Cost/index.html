@@ -1,0 +1,300 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>NFT 交易市场开发：它是什么，将花费多少钱？ | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本篇是一篇翻译，原文来自：NFT Marketplace Development: What is it and How Much Does It Cost?， NFT 交易市场做一初步认识。">
+  
+
+  
+  
+  <meta name="keywords" content="智能合约">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="NFT 交易市场开发：它是什么，将花费多少钱？"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>NFT 交易市场开发：它是什么，将花费多少钱？</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/08/29/smart-contract-NFT Marketplace Development What is it and How Much Does It Cost/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-08-29T15:01:28.000Z">
+          2021-08-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://www.codica.com/static/7f3548f137653102f81527c9920d1eb2/838a3/1526b07bc4634aa694c5d5d6ece897f0.jpg"></p>
+<p>本篇是一篇翻译，原文来自：<a target="_blank" rel="noopener" href="https://www.codica.com/blog/how-to-create-nft-marketplace/">NFT Marketplace Development: What is it and How Much Does It Cost?</a>， NFT 交易市场做一初步认识。</p>
+<span id="more"></span>
+
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>NFT 市场致力于 非同质化token 的存储和交易。token 有固定的价格，或者也可以从拍卖过程中买入。<br>需要注意的是，购买者需要有加密货币钱包以完成交易。</p>
+<h4 id="NFT-交易平台类型"><a href="#NFT-交易平台类型" class="headerlink" title="NFT 交易平台类型"></a>NFT 交易平台类型</h4><ul>
+<li><strong><strong>通用 非同质化 token 网站</strong></strong>：销售任何类型的加密物品，这些物品可以是数字艺术品，甚至是一个域名。这类我们熟知的网站包括：Rarible&#x2F;OpenSea 以及 Mintable。</li>
+<li><strong><strong>Niche peer-to-peer marketplaces （利基点对点市场)</strong></strong>: 关注于提供某个特殊领域的数字资产化。你可能听说过 <a target="_blank" rel="noopener" href="https://v.cent.co/">Valuables</a>，在这个网站中，你可以购买或售卖推文。另外一个例子是 Glass Factory，在这里数字全息照片被售卖。</li>
+</ul>
+<p>比较有名的 NFT 市场有 Rairble&#x2F;OpenSea 以及 AtomicMarket 等。</p>
+<h4 id="NFT-平台是如何工作的"><a href="#NFT-平台是如何工作的" class="headerlink" title="NFT 平台是如何工作的"></a>NFT 平台是如何工作的</h4><h5 id="智能合约的定义"><a href="#智能合约的定义" class="headerlink" title="智能合约的定义"></a>智能合约的定义</h5><p>智能合约，是一个自执行的交易协议，简单来说，就是一段代码。<strong><strong>该代码用于在区块链上输入交易各方达成的协议的所有条款。</strong></strong><br>为什么交易协议如此重要？它控制了在 NFT 交易市场上卖家和买家之间的关系。</p>
+<h4 id="智能合约是如何工作的"><a href="#智能合约是如何工作的" class="headerlink" title="智能合约是如何工作的"></a>智能合约是如何工作的</h4><p><strong><strong>各方的义务以 if&#x2F;then 的形式在智能合约中表示。</strong></strong><br>比如说，****<code>if</code><strong><strong>一个购买者对一个电子商品发起了支付，</strong></strong><code>then</code><strong><strong>卖方则授予 NFT 加密资产权力。</strong></strong>一旦所设置的条件被满足，智能合约将独立执行该交易。****</p>
+<p>总体来讲，下表展示了传统合约和智能合约之间的主要差异。<br><img src="https://codica-images-production.s3.eu-central-1.amazonaws.com/4885dc31df164a27b6f8164c6061ea20.webp"></p>
+<p>让我们再回到 NFT 交易市场。NFT(非同质化 Token)通过智能合约实现。每个 item 都有一个独一无二的 元素据（metadata）。元素据中包含了写在智能合约中的供给&#x2F;出处&#x2F;真实性相关的特定信息。区块链技术保证了这些数据的安全。</p>
+<p>对于一个交易市场的开发者，我们需要创建一个 token 协议，通常，这些协议是在以太坊网络中创建的，这是一组特定的智能合约。它们能够实现某些交易市场的功能。后续，token 协议将被集成在 NFT 市场开发过程中。</p>
+<h4 id="用户在-NFT-市场上的操作过程"><a href="#用户在-NFT-市场上的操作过程" class="headerlink" title="用户在 NFT 市场上的操作过程"></a>用户在 NFT 市场上的操作过程</h4><p>现在，我们来讨论 NFT 交易市场是如何服务于用户的。可以说，这些操作流程在各大 NFC 拍卖网站上都是类似的：</p>
+<ul>
+<li><strong><strong>Step 1:</strong></strong> 用户在 NFT 平台上注册账号；</li>
+<li><strong><strong>Step 2:</strong></strong> 设置一个加密钱包；</li>
+<li><strong><strong>Step 3:</strong></strong> 进行 NFT 创作。为了达到这个目的，用户会上传数字商品，以展示他们的工作；</li>
+<li><strong><strong>Step 4:</strong></strong> 用户列出他们要销售的商品。这里，他们有两个选择：选择进行拍卖或者设置一个固定的价格；</li>
+<li><strong><strong>Step 5:</strong></strong> 商品通过审核；</li>
+<li><strong><strong>Step 6:</strong></strong> 一旦新的 NFT 被审核通过，潜在的买家就可以在销售列表中看到它；</li>
+<li><strong><strong>Step 7:</strong></strong> token 的拥有者可以开始接收出价（译注：如果选择拍卖）；</li>
+<li><strong><strong>Step 8:</strong></strong> 当拍卖结束， 卖方将被通知最高出价；</li>
+<li><strong><strong>Step 9:</strong></strong> NFT 平台控制着数字资产和资金之间的转换。</li>
+</ul>
+<p>如下图是示，用户在 NFT 平台上的操作流可以被展现为：</p>
+<p><img src="https://codica-images-production.s3.eu-central-1.amazonaws.com/c6291d203ded4b849ccef71286903294.webp"></p>
+<h3 id="如何创建-NFT-交易市场"><a href="#如何创建-NFT-交易市场" class="headerlink" title="如何创建 NFT 交易市场"></a>如何创建 NFT 交易市场</h3><p>我们已经描述了 非同质化Token 平台的关键特征，它们的类型以及它们的功能。现在，是时候来讨论 NFT 交易市场的开发过程了。<br>当涉及到业务部分，它就和其他任何软件产品一样，你需要去找到整体的客户群体以及你要解决的挑战。<br>接着，你需要确定必要的 NFT 交易市场功能，并找到最合适的开发方法。</p>
+<h4 id="NFT-网站的基础功能"><a href="#NFT-网站的基础功能" class="headerlink" title="NFT 网站的基础功能"></a>NFT 网站的基础功能</h4><p>对于加密市场，你首先需要实现的功能是什么？你首要的任务，是允许用户创建和销售收藏品。接着，其他产品特征才被加进来，以提升用户体验。<br>我们建议实现下述产品特征：</p>
+<ul>
+<li>店面：就像其他任务交易市场一样，你的 NFT 市场平台应该有个店面。</li>
+<li>便利的搜索：确保用户可以方便地找到他们感兴趣地收藏品。把所有藏品进行分类是个不错的主意。比如，艺术品&#x2F;摄影照片&#x2F;音乐等。</li>
+</ul>
+<p>下面，你可以看到 <a target="_blank" rel="noopener" href="https://rarible.com/">Rarible</a> 的产品目录：</p>
+<p><img src="https://codica-images-production.s3.eu-central-1.amazonaws.com/5f14846e371f49d5a8c1c9578d9a0f1f.webp"></p>
+<ul>
+<li>过滤：系统的过滤功能，帮助用户查找其需要的商品。通过这个产品功能，NFT 精品和购买之间的时间将有效缩减。通常，可以通过价格&#x2F;最新商品&#x2F;最多访问这些方面进行排序过滤。</li>
+<li>详细说明创作过程：创建一个藏品的处理过程应当是简明且快速的。在创作界面上，用户应当可以上传一个文件，并输入必须的 token 信息，如名字&#x2F;描述&#x2F;tag 等。</li>
+<li>验证状态：这个产品特征将有利于卖家掌握藏品的验证过程。通过它的帮助，卖家可以检查这些商品目前处于何种验证状态。</li>
+<li>购买和拍卖：创建一个便捷的拍卖系统是 NFT 交易平台开发的关键。不要忘记在在表单上设置过期时间。通过这种方式，可以的授权用户在出价上的控制权。除此之外，可以通过拍卖观察列表，用户可以追踪当前的出价状态。</li>
+<li>评级：这个产品特性可以帮助那些不知道选择什么 NFT 的新用户做选择。除此之外，你也可以使用评级，奖励那些优质的卖家，或者证明他们的可靠性。</li>
+<li>钱包：通过这个基础功能，发送&#x2F;存储&#x2F;接收加密货币和 NFT。</li>
+</ul>
+<p>举个例子，OpenSea 提供给用户使用各类钱包进行连接的选择：<br><img src="https://codica-images-production.s3.eu-central-1.amazonaws.com/d87d0f1aeabd4169b927fa7d50487a17.webp"></p>
+<p>NFT 交易市场的功能不限于上面所讨论的内容。你也可以尝试添加一些独有的功能来增加用户体验。比如，你可以创建一个论坛，加强用户在平台上的沟通交流。</p>
+<h4 id="准备好解决方案，定制市场发展"><a href="#准备好解决方案，定制市场发展" class="headerlink" title="准备好解决方案，定制市场发展"></a>准备好解决方案，定制市场发展</h4><p>我们已经定义好了 NFT 交易市场所需要的基本功能，是时候讨论技术实现了。因此，如何来创建 NFT 交易市场？</p>
+<p>在开始创建 NFT 平台时，你有两个选择。首先，你可以使用现成的 NFT 交易市场开发工具集。这个选择会相对便宜些，同时，可以缩短构建时间。<br>比如，你可以使用 OpenSea 提供的 <a target="_blank" rel="noopener" href="https://docs.opensea.io/docs/opensea-sdk">SDK</a>，通过这个工具集，你可以获取一个在基于 OpenSea 的由你独立设计的 NFT 交易市场。</p>
+<p>可选择的，你也可以使用一些 <a target="_blank" rel="noopener" href="https://www.codica.com/services/custom-software-development/">定制软件开发</a>公司提供的服务。他们的专家直到如何创建一个 NFT 市场，以满足你定制化的需求。</p>
+<p>通过这种方式，任何新的功能都将对应到每个需求中，你也并不用担心获得更多用户会导致的平台扩展性和健壮性。</p>
+<p>定制软件开发另一个好处，在于对用户敏感信息的保护。对于 NFT 交易市场，这一点非常重要，如果不遵守安全法，可能会给公司或交易市场带来一些负面影响。<br><img src="https://codica-images-production.s3.eu-central-1.amazonaws.com/ad77594d66e8460c99f51a0fd57912fc.png"></p>
+<h3 id="创建一个-NFT-市场需要多少钱"><a href="#创建一个-NFT-市场需要多少钱" class="headerlink" title="创建一个 NFT 市场需要多少钱"></a>创建一个 NFT 市场需要多少钱</h3><p>接下来，我们来到了有趣其棘手的话题，构建一个 NFT 市场需要花费多少钱？概括地说，所有事情都取决于工作量的需要。如果，你决定使用一个可以随时安装的现有方案，成本可能会很低。</p>
+<p>于此同时，NFT 市场开发服务（译注：外包）更贵些。理由是他们的专家需要构建用户操作流，开发功能，并从你的手稿设计解决方案。</p>
+<p>平台功能也是如此，平台越复杂，那么在市场开发上投入的资金就越多。</p>
+<p>我们创建了一个功能价格表：</p>
+<p>NFT marketplace development cost</p>
+<table>
+<thead>
+<tr>
+<th>Features</th>
+<th>Time, hours</th>
+<th>Cost, $45&#x2F;hour</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UX&#x2F;UI Development</td>
+<td>42 hours</td>
+<td>$1,890</td>
+</tr>
+<tr>
+<td>Authorization and Security</td>
+<td>72 hours</td>
+<td>$3,240</td>
+</tr>
+<tr>
+<td>User Profiles</td>
+<td>42 hours</td>
+<td>$1,890</td>
+</tr>
+<tr>
+<td>Home page</td>
+<td>84 hours</td>
+<td>$3,780</td>
+</tr>
+<tr>
+<td>Search and filters</td>
+<td>96 hours</td>
+<td>$4,320</td>
+</tr>
+<tr>
+<td>Product page</td>
+<td>42 hours</td>
+<td>$1,890</td>
+</tr>
+<tr>
+<td>Reviews &amp; Ratings</td>
+<td>48 hours</td>
+<td>$2,160</td>
+</tr>
+<tr>
+<td>Shopping cart</td>
+<td>48 hours</td>
+<td>$2,160</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>42 hours</td>
+<td>$1,890</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>32 hours</td>
+<td>$1,440</td>
+</tr>
+<tr>
+<td>Etherium integration</td>
+<td>96 hours</td>
+<td>$4,320</td>
+</tr>
+<tr>
+<td>NFT management</td>
+<td>96 hours</td>
+<td>$4,320</td>
+</tr>
+<tr>
+<td>Inventory management</td>
+<td>42 hours</td>
+<td>$1,890</td>
+</tr>
+<tr>
+<td>Buyer panel</td>
+<td>64 hours</td>
+<td>$2,880</td>
+</tr>
+<tr>
+<td>Author panel</td>
+<td>132 hours</td>
+<td>$5,940</td>
+</tr>
+<tr>
+<td>Admin panel</td>
+<td>85 hours</td>
+<td>$3,825</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>1063 hours</td>
+<td>$47,835</td>
+</tr>
+</tbody></table>
+<p>因此，如果你对 NFT 交易市场平台开发的价格感兴趣，价格是 $47,7835 起步。注意，如果你想使用西欧或者美国的开发者提供的服务，价格会更高些。<br>除此之外，你需要注意总价和你的业务需求也有关系。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

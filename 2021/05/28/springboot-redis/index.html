@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在 Spring Boot 中使用 Redis 进行缓存 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文是一篇译文，原文地址。
+系统运行变慢，是一种很普遍的问题。即使代码非常优秀，但是在高负载下，可能也会不堪一击。缓存，是一种快速的、廉价的提升性能以及响应事件的重要方式。
+简而言之，缓存是一种性能策略。调用结果被放置在内存中，因此再下次使用时，将不必再重新执行。我们可以看到，如果请求的数据再缓存中（称之为缓存命中），我们将节省很多时间和资源。红色的数据快，代表了一种糟糕的情况，即缓存缺失，这种情况下，就需要加载并重新计算，这也将增加响应时间。">
+  
+
+  
+  
+  <meta name="keywords" content="Spring Boot,Cache">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="在 Spring Boot 中使用 Redis 进行缓存"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>在 Spring Boot 中使用 Redis 进行缓存</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/05/28/springboot-redis/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-05-28T15:01:28.000Z">
+          2021-05-28
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇译文，<a target="_blank" rel="noopener" href="https://medium.com/@MatthewFTech/spring-boot-cache-with-redis-56026f7da83a">原文地址</a>。</p>
+<p>系统运行变慢，是一种很普遍的问题。即使代码非常优秀，但是在高负载下，可能也会不堪一击。缓存，是一种快速的、廉价的提升性能以及响应事件的重要方式。</p>
+<p>简而言之，缓存是一种性能策略。调用结果被放置在内存中，因此再下次使用时，将不必再重新执行。我们可以看到，如果请求的数据再缓存中（称之为缓存命中），我们将节省很多时间和资源。红色的数据快，代表了一种糟糕的情况，即缓存缺失，这种情况下，就需要加载并重新计算，这也将增加响应时间。</p>
+<span id="more"></span>
+
+<p>更简单的说，当数据到达后，先会被放置再空桶中，当缓存满了，清理过程将按照相关算法执行。如果某些数据的使用频率很高，或者满足选择算法，这些数据是安全的（不会被清理）。反之，另外一些数据将会被清理。在理想情况下，缓存被清理只是因为数据需要更新。使用 Spring 和 Redis ，我们将尝试创建一个简单的应用，并思考不同的影响因子如何对我们的缓存层产生影响。</p>
+<h3 id="从代码开始"><a href="#从代码开始" class="headerlink" title="从代码开始"></a>从代码开始</h3><p>我们设想一下，如果你在做一个社交网站，用户可以在网站上创作内容，阅读次数最多的文章，最好就能够放置在缓存中。<code>Post</code>的结构，大概就像下面的代码块一样，非常简单，但是够用了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Post</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String title;</span><br><span class="line">    <span class="keyword">private</span> String description;</span><br><span class="line">    <span class="keyword">private</span> String image;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> shares;</span><br><span class="line">    <span class="keyword">private</span> Author author;</span><br><span class="line">    <span class="comment">//getters setters and constructors</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="配置和依赖"><a href="#配置和依赖" class="headerlink" title="配置和依赖"></a>配置和依赖</h3><p>Spring 需要通过 <code>spring-boot-started-data-redis</code> 解决缓存依赖。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spring.cache.type=redis</span><br><span class="line">spring.redis.host=192.168.99.100</span><br><span class="line">spring.redis.port=6379</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="缓存抽象"><a href="#缓存抽象" class="headerlink" title="缓存抽象"></a>缓存抽象</h3><p>Spring 框架提供了抽象层，以提供通过注解的方式做缓存支持。它可以和其它的<strong><strong>存实现</strong></strong>如Redis、EhCache、Hazelcast、Infinispan 等一起工作。这种解耦是非常受欢迎的。</p>
+<p>****@Cacheable–****在方法执行完后，进行缓存，下次使用相同的参数进行调用时，其结果将从缓存中加载。</p>
+<p>注解还提供了缓存条件。在某些情况下，不是所有的数据都需要被缓存，比如，仅仅是希望最受欢迎的文章被缓存。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Cacheable(value = &quot;post-single&quot;, key = &quot;#id&quot;, unless = &quot;#result.shares &lt; 500&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Post <span class="title function_">getPostByID</span><span class="params">(<span class="meta">@PathVariable</span> String id)</span> <span class="keyword">throws</span> PostNotFoundException &#123;</span><br><span class="line">    log.info(<span class="string">&quot;get post with id &#123;&#125;&quot;</span>, id);</span><br><span class="line">    <span class="keyword">return</span> postService.getPostByID(id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Cacheable(value = &quot;post-top&quot;)</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/top&quot;)</span></span><br><span class="line"><span class="keyword">public</span> List&lt;Post&gt; <span class="title function_">getTopPosts</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> postService.getTopPosts();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>****@CachePut–****该注解允许更新缓存中的实体，也支持一些 Cacheable 注解中的配置选项。下面的代码中，可以更新 post，并从缓存中获取到新值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@CachePut(value = &quot;post-single&quot;, key = &quot;#post.id&quot;)</span></span><br><span class="line"><span class="meta">@PutMapping(&quot;/update&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Post <span class="title function_">updatePostByID</span><span class="params">(<span class="meta">@RequestBody</span> Post post)</span> <span class="keyword">throws</span> PostNotFoundException &#123;</span><br><span class="line">    log.info(<span class="string">&quot;update post with id &#123;&#125;&quot;</span>, post.getId());</span><br><span class="line">    postService.updatePost(post);</span><br><span class="line">    <span class="keyword">return</span> post;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>****@CacheEvict–****从缓存中移除该实体。支持从缓存中条件删除和全部删除。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@CacheEvict(value = &quot;post-single&quot;, key = &quot;#id&quot;)</span></span><br><span class="line"><span class="meta">@DeleteMapping(&quot;/delete/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deletePostByID</span><span class="params">(<span class="meta">@PathVariable</span> String id)</span> <span class="keyword">throws</span> PostNotFoundException &#123;</span><br><span class="line">    log.info(<span class="string">&quot;delete post with id &#123;&#125;&quot;</span>, id);</span><br><span class="line">    postService.deletePost(id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@CacheEvict(value = &quot;post-top&quot;)</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/top/evict&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">evictTopPosts</span><span class="params">()</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;Evict post-top&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>****@EnableCaching–****该注解将确保文章处理器将检查所有的 bean，并试图找到目标方法，并创建代理，以拦截所有调用。</p>
+<p>****@Caching–****允许同时使用多个通类型注解。比如，你可能需要使用不同的条件进行缓存。</p>
+<p>****@CacheConfig–****Class级别的注解，允许未注解指定全局值，比如 cache name 或者 key 生成器。</p>
+<h3 id="Redis-缓存"><a href="#Redis-缓存" class="headerlink" title="Redis 缓存"></a>Redis 缓存</h3><p>Redis 是一款非常流行的内存数据存储框架，可以作为数据库、消息代理或者缓存。这里，只说缓存。</p>
+<p>可以在 docker hub 中使用 <code>docker pull redis</code>，新的镜像将被下载到本地仓库（可以使用 <code>docker images</code> 来检查以下）。当然，你也可以单独安装它。将 Redis 作为缓存，我们还需要考虑一些重要的事情，比如最大内存、回收算法和持久性。</p>
+<p>****最大内存–****默认的，对于 64 位系统，没有内存限制，对于 32 位系统，限制是 3GB .大内存可以存储更多数据，以增强命中率。内存大小对于命中率是个非常重要的指标，但是，也不是说内存越大命中率越高，达到一定限度后，命中率变化不大。</p>
+<p>****驱逐算法–****当缓存到达了内存限制，旧的数据需要被驱逐。当考虑回收算法时，访问策略是关键。每种缓存策略都有适用的情况：</p>
+<ul>
+<li><p>****Last Recently Used(LRU)****追踪键值上次被使用的时间。如果数据只是被使用了一次，且空置了很长时间，那么下次回收算法运行时，将被清理。</p>
+</li>
+<li><p>****Least Frequently Used(LFU)[Redis 4.0可用]–****将记录键值被使用的次数。使用次数最多的键值，活得越久。但是如果有些数据很久以前被经常使用，且一些新的键值最近被经常使用，这样就会带来一些问题（Redis 团队处理这类问题是将长期存活的键值在一段时间不用后，减少它的 counter）。</p>
+</li>
+</ul>
+<p>****持久性–****出于一些特殊的原因，你可能希望能够持久化缓存。在系统启动时，通常缓存是空的。但是，系统异常中断后，使用快照数据在系统启动时进行数据恢复是非常有用的。Redis 支持三种类型的持久化：</p>
+<ul>
+<li><p><strong><strong>RDB</strong></strong> 支持周期性快照，或者当数据写入到一定量时自动备份。少量的数据快照不会影响性能，但是，我们还是需要在快照周期和避免系统异常中断后的数据恢复之间，寻找一个平衡。</p>
+</li>
+<li><p><strong><strong>AOF</strong></strong>每次进行写操作时，都会保留持久化日志。如果你需要这种持久化策略，可以配置  <code>appendfsync</code> 。</p>
+</li>
+<li><p>RDB 和 AOF 一起使用</p>
+</li>
+</ul>
+<p>每次 fork 或者执行类似 <code>fsync</code> 的操作，都将消耗资源。因此，如果不需要该功能，关闭所有持久化配置选项。</p>
+<h3 id="Redis-配置"><a href="#Redis-配置" class="headerlink" title="Redis 配置"></a>Redis 配置</h3><p>上面提到的所有方面，都是可以在 <a target="_blank" rel="noopener" href="http://download.redis.io/redis-stable/redis.conf">redis.conf</a> 完成的配置。分配多少内存或者使用什么回收算法，取决于你自己。回收算法可以是即时切换的（译者注：使用<a target="_blank" rel="noopener" href="https://redis.io/commands/config-set">CONFIG SET</a>指令）。但是，Reids 需要一些时间来为所有 key 设置合适的算法。</p>
+<h3 id="量化价值"><a href="#量化价值" class="headerlink" title="量化价值"></a>量化价值</h3><p><strong><strong>命中率</strong></strong>，描述了缓存的效果。低命中率，是对存储数据自然本性的一个反应，很容易让人掉入到<code>过早优化</code>的陷阱中（译者注：项目的早期阶段，先考虑架构的优化）。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">λ: redis-cli info stats</span><br><span class="line">...</span><br><span class="line">keyspace_hits:142   #Successful lookups</span><br><span class="line">keyspace_misses:26  #Failed lookups</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>Redis 传递了查找的大量信息，命中率可以通过下面的公式被计算出来：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hit_ratio  = (keyspace_hits)/(keyspace_hits + keyspace_misses)</span><br><span class="line">miss_ratio = (keyspace_misses)/(keyspace_hits + keyspace_misses)</span><br></pre></td></tr></table></figure>
+<p><strong><strong>延时</strong></strong>，在请求和响应之间，最长的延时时间。当缓存过程出问题时，将会看到明显的延时时间。导致这类问题的因素有很多，比如， VM 过载等。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">λ: redis-cli --latency -h 127.0.0.1 -p 6379</span><br><span class="line">min: 0, max: 16, avg: 0.15 (324531 samples)...</span><br></pre></td></tr></table></figure>
+<p><strong><strong>碎片率</strong></strong>，Redis 通常会使用的内存空间大于在 <code>maxmemory </code> 声明的最大空间。</p>
+<ul>
+<li>radio &lt; 1.0 —内存不够用了，内存分配器实际需要的内存大于你指定的内存空间。旧的数据将会被 swap 到磁盘上（译注：使用虚拟内存）。</li>
+<li>radio &gt;~1.5 —分配的内存空间超过实际使用的内存空间。<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">λ: redis-cli info memory</span><br><span class="line">...</span><br><span class="line">used_memory_human:41.22M</span><br><span class="line">...</span><br><span class="line">used_memory_rss_human:50.01M</span><br><span class="line">...</span><br><span class="line">mem_fragmentation_ratio:1.21 #used_memory_rss/used_memory</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong><strong>驱逐 key</strong></strong>，当缓存大小超过 <code>maxmemory</code>，Reids 将通过选择的驱逐策略清理数据。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">λ: redis-cli info stats</span><br><span class="line">...</span><br><span class="line">evicted_keys:14 #14 keys removed since operation time</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p><strong><strong>旧数据</strong></strong>，高动态的数据很快就会变得过期。如果没有更新或过期机制，在这种情境下，缓存就会失效。<br><strong><strong>内存越大，不代表命中率越高</strong></strong>，当内存达到一定数量，命中率就不再增加了。在这种情况下，数据回收算法和数据本身就很重要了。<br><strong><strong>不要进行过早得优化</strong></strong>，测试一下在没有缓存时的服务性能，也许，你的恐惧是多余的（译者注：不是任何情况下都需要使用 redis，如无必要，则不用？）。“过早的优化是噩梦的根源”。<br><strong><strong>隐藏较差的性能</strong></strong>，对于一些运行较慢的服务来说，缓存通常不是解决问题的答案。在使用缓存之前，需要做好服务优化，因为当使用缓存后，一些可能的架构上的错误就被隐藏了。<br><strong><strong>不要对外部分享你的 redis 缓存</strong></strong>，Redis 工作在单线程中，有时，出于一些扩展的目的，可能会向第三方分享你的 redis 缓存。一些比较重的指令，如 sort 等，可能会增加运行时间，阻塞缓存运行。这类性能问题的检查，可以使用 <a target="_blank" rel="noopener" href="https://redis.io/commands/slowlog">SLOWLOG</a>指令。<br>****配置参数[最大使用内存空间]****如果考虑在缓存中，使用快照备份，那么，你可以使用的最大内存空间，应小于最大内存空间的一半。<br><strong><strong>监控</strong></strong>，应该监控你的缓存，相比于<a target="_blank" rel="noopener" href="https://redis.io/commands/info">INFO</a>,<a target="_blank" rel="noopener" href="https://redis.io/commands/monitor">MONITOR</a> 可以显著的减少吞吐量。</p>
+<hr>
+<p>译者添加过期删除策略，引用自<a target="_blank" rel="noopener" href="https://www.hoohack.me/2019/06/24/redis-expire-strategy">理解Redis的内存回收机制</a>：</p>
+<h3 id="过期删除策略"><a href="#过期删除策略" class="headerlink" title="过期删除策略"></a>过期删除策略</h3><p>删除达到过期时间的key。</p>
+<p>1、定时删除<br>对于每一个设置了过期时间的key都会创建一个定时器，一旦到达过期时间就立即删除。该策略可以立即清除过期的数据，对内存较友好，但是缺点是占用了大量的CPU资源去处理过期的数据，会影响Redis的吞吐量和响应时间。</p>
+<p>2、惰性删除<br>当访问一个key时，才判断该key是否过期，过期则删除。该策略能最大限度地节省CPU资源，但是对内存却十分不友好。有一种极端的情况是可能出现大量的过期key没有被再次访问，因此不会被清除，导致占用了大量的内存。</p>
+<p>在计算机科学中，懒惰删除（英文：lazy deletion）指的是从一个散列表（也称哈希表）中删除元素的一种方法。在这个方法中，删除仅仅是指标记一个元素被删除，而不是整个清除它。被删除的位点在插入时被当作空元素，在搜索之时被当作已占据。</p>
+<p>3、定期删除<br>每隔一段时间，扫描Redis中过期key字典，并清除部分过期的key。该策略是前两者的一个折中方案，还可以通过调整定时扫描的时间间隔和每次扫描的限定耗时，在不同情况下使得CPU和内存资源达到最优的平衡效果。</p>
+<p>在Redis中，同时使用了定期删除和惰性删除。过期删除策略<br>删除达到过期时间的key。</p>
+<p>1、定时删除<br>对于每一个设置了过期时间的key都会创建一个定时器，一旦到达过期时间就立即删除。该策略可以立即清除过期的数据，对内存较友好，但是缺点是占用了大量的CPU资源去处理过期的数据，会影响Redis的吞吐量和响应时间。</p>
+<p>2、惰性删除<br>当访问一个key时，才判断该key是否过期，过期则删除。该策略能最大限度地节省CPU资源，但是对内存却十分不友好。有一种极端的情况是可能出现大量的过期key没有被再次访问，因此不会被清除，导致占用了大量的内存。</p>
+<p>在计算机科学中，懒惰删除（英文：lazy deletion）指的是从一个散列表（也称哈希表）中删除元素的一种方法。在这个方法中，删除仅仅是指标记一个元素被删除，而不是整个清除它。被删除的位点在插入时被当作空元素，在搜索之时被当作已占据。</p>
+<p>3、定期删除<br>每隔一段时间，扫描Redis中过期key字典，并清除部分过期的key。该策略是前两者的一个折中方案，还可以通过调整定时扫描的时间间隔和每次扫描的限定耗时，在不同情况下使得CPU和内存资源达到最优的平衡效果。</p>
+<p>在Redis中，同时使用了定期删除和惰性删除。</p>
+<p>以下是译者注：<br>可参考链接：<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904083459932167">Spring-5-精品翻译：缓存抽象（Cache-Abstraction）</a><br><a target="_blank" rel="noopener" href="https://www.hoohack.me/2019/06/24/redis-expire-strateg">理解Redis的内存回收机制</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Spring-Boot/">Spring Boot</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Spring-Boot/">Spring Boot</a><a href="/tags/Cache/">Cache</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

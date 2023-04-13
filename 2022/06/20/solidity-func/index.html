@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>智能合约-函数调用那些事 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="图片来源本文对智能合约函数中常见的问题做一总结。内容涉及调用编码、调用过程、回退函数和内联汇编。">
+  
+
+  
+  
+  <meta name="keywords" content="call,delegatecall,ABI,fallback">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="智能合约-函数调用那些事"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>智能合约-函数调用那些事</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/06/20/solidity-func/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-06-20T12:07:28.000Z">
+          2022-06-20
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/smart-contract-func/magic.jpg"><br><a target="_blank" rel="noopener" href="https://unsplash.com/photos/4Ennrbj1svk?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink">图片来源</a><br>本文对智能合约函数中常见的问题做一总结。内容涉及调用编码、调用过程、回退函数和内联汇编。</p>
+<span id="more"></span>
+
+<h3 id="1-函数调用的编码过程"><a href="#1-函数调用的编码过程" class="headerlink" title="1. 函数调用的编码过程"></a>1. 函数调用的编码过程</h3><p>在通过 ABI  接口进行合约调用时，需要对调用的数据进行<strong><strong>编码和封装</strong></strong>，赋值到 msg 的 data 字段中（data 不为空，代表存在合约调用）。<br>编码的内容，将涉及到函数签名和调用参数。<br>所谓函数签名，将对函数名和参数列表进行摘要（SHA3）计算，计算的结果为 4 个字节的数据，这部分数据又可以成为 “函数选择器”。<br>比如 transferFrom(address,address,uint256) 的函数选择器为 bytes4(keccak256(‘transferForm(address,address,uint256)’)) ，即 ‘0x23b872dd’。<br>也因此，编码后的参数排列在函数选择器的后面，从第 5 个字节开始。</p>
+<p>参数的编码，其实就是参数的序列化过程。下面，我们以  GnosisSafeProxyFactory 中的 <a target="_blank" rel="noopener" href="https://github.com/safe-global/safe-contracts/blob/main/contracts/proxies/GnosisSafeProxyFactory.sol#L61">createProxyWithNonce</a> 调用为例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>: <span class="title function_">createProxyWithNonce</span>(address _singleton, bytes initializer, uint256 saltNonce)</span><br><span class="line"></span><br><span class="line"><span class="title class_">MethodID</span>: <span class="number">0x1688f0b9</span></span><br><span class="line"><span class="comment">/// d9db270c1b5e3bd161e8c8503c55ceabee709552 是 GnosisSafe 合约</span></span><br><span class="line">[<span class="number">0</span>]:  000000000000000000000000d9db270c1b5e3bd161e8c8503c55ceabee709552</span><br><span class="line"><span class="comment">/// initializer 是从第 96 个字节开始(动态数据的位置偏移量)</span></span><br><span class="line">[<span class="number">1</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000060</span></span><br><span class="line"><span class="comment">/// saltNonce 的值是 &#x27;0x1813d227a48&#x27;（静态部分，直接表示）</span></span><br><span class="line">[<span class="number">2</span>]:  000000000000000000000000000000000000000000000000000001813d227a48</span><br><span class="line"><span class="comment">/// 第 96 个字节开始的地方。由于这是一个 bytes，动态数组，因此，0x1c4 代表数组大小 452。</span></span><br><span class="line">[<span class="number">3</span>]:  00000000000000000000000000000000000000000000000000000000000001c4</span><br><span class="line"><span class="comment">/// b63e800d 代表另外一个要调用的函数的选择器：</span></span><br><span class="line"><span class="comment">/// keccak256(&quot;setup(address[],uint256,address,bytes,address,address,uint256,address)&quot;)</span></span><br><span class="line">[<span class="number">4</span>]:  b63e800d</span><br><span class="line"><span class="comment">/// 第一个参数 address[] 是从第 256 个字节开始的</span></span><br><span class="line">      <span class="number">0000000000000000000000000000000000000000000000000000000000000100</span></span><br><span class="line"><span class="comment">/// 至少需要 三个人 参与(阈值) </span></span><br><span class="line">[<span class="number">5</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000003</span></span><br><span class="line"><span class="comment">/// delegatecall 调用地址</span></span><br><span class="line">[<span class="number">6</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 第四个参数 bytes 是从第 0x1a0，即 416 个字节开始的</span></span><br><span class="line">[<span class="number">7</span>]:  00000000000000000000000000000000000000000000000000000000000001a0</span><br><span class="line"><span class="comment">/// fallbackHandler Handler for fallback calls to this contract</span></span><br><span class="line">[<span class="number">8</span>]:  000000000000000000000000f48f2b2d2a534e402487b3ee7c18c33aec0fe5e4</span><br><span class="line"><span class="comment">/// paymentToken Token that should be used for the payment (0 is ETH)</span></span><br><span class="line">[<span class="number">9</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// payment Value that should be paid</span></span><br><span class="line">[<span class="number">10</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// paymentReceiver Address that should receive the payment (or 0 if tx.origin)</span></span><br><span class="line">[<span class="number">11</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 第一个参数 address[] 真正开 始的地方。这里就是第 256 的位置。数组长度为 4.</span></span><br><span class="line">[<span class="number">12</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000004</span></span><br><span class="line"><span class="comment">/// address[0]</span></span><br><span class="line">[<span class="number">13</span>]: 000000000000000000000000792b18b5453b1e265bfe71ea33131155745200a3</span><br><span class="line"><span class="comment">/// address[1]</span></span><br><span class="line">[<span class="number">14</span>]: 0000000000000000000000005796e1051c18ed58d980ff935ce188a63d086e7a</span><br><span class="line"><span class="comment">/// address[2]</span></span><br><span class="line">[<span class="number">15</span>]: 000000000000000000000000a9227990e08aeb90e3538fbf6e629e8e545705e0</span><br><span class="line"><span class="comment">/// address[3]</span></span><br><span class="line">[<span class="number">16</span>]: 000000000000000000000000357ad87d4e546bb2406f020675db2f1e343fdda2</span><br><span class="line"><span class="comment">/// 第四个参数 bytes 真正开始的地方，即第 416 个字节开始的地方，后面一共 32+32-4 = 60 个字节。</span></span><br><span class="line"><span class="comment">/// Data payload for optional delegate call.</span></span><br><span class="line">[<span class="number">17</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line">[<span class="number">18</span>]: <span class="number">00000000000000000000000000000000000000000000000000000000</span></span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="2-call-和-delegatecall"><a href="#2-call-和-delegatecall" class="headerlink" title="2. call 和 delegatecall"></a>2. call 和 delegatecall</h3><p>call 和 delegatecall 均可以用于函数调用。但是，它们在函数调用过程中，<code>msg.sender</code> 和 <code>address(this)</code> 存在巨大差异。<br>我们定义三个合约，如下：<br>Greeter:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.8</span><span class="number">.0</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;hardhat/console.sol&quot;</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">Greeter</span> &#123;</span><br><span class="line"></span><br><span class="line">    string private greeting;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">string memory _greeting</span>) &#123;</span><br><span class="line">        greeting = _greeting;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Deploying a Greeter at:&quot;</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">greet</span>(<span class="params"></span>) public view returns (string memory) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;caller1:&quot;</span>, msg.<span class="property">sender</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;adthis1:&quot;</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">        <span class="keyword">return</span> greeting;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Greeter2:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.8</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;./Greeter.sol&quot;</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">Greeter2</span> &#123;</span><br><span class="line">    <span class="title class_">Greeter</span> private greeter ;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">address addr</span>)&#123;</span><br><span class="line">        greeter = <span class="title class_">Greeter</span>(addr) ;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Deploying a Greeter2 at:&quot;</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">greet</span>(<span class="params"></span>) public   &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;caller2:&quot;</span>, msg.<span class="property">sender</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;adthis2:&quot;</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">        (<span class="title function_">address</span>(greeter)).<span class="title function_">delegatecall</span>(abi.<span class="title function_">encodeWithSignature</span>(<span class="string">&quot;greet()&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Greeter3:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.8</span><span class="number">.0</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;./Greeter2.sol&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;./Greeter.sol&quot;</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">Greeter3</span> &#123;</span><br><span class="line">    <span class="title class_">Greeter</span> private greeter1 ;</span><br><span class="line">    <span class="title class_">Greeter2</span> private greeter2 ;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">address addr1,address addr2</span>)&#123;</span><br><span class="line">        greeter1 = <span class="title class_">Greeter</span>(addr1) ;</span><br><span class="line">        greeter2 = <span class="title class_">Greeter2</span>(addr2) ;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Deploying a Greeter3 at:&quot;</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">greet</span>(<span class="params"></span>) public   &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;caller3:&quot;</span>, msg.<span class="property">sender</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;adthis3:&quot;</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">        (<span class="title function_">address</span>(greeter2)).<span class="title function_">delegatecall</span>(abi.<span class="title function_">encodeWithSignature</span>(<span class="string">&quot;greet()&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;Greeter&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;Should return the new greeting once it&#x27;s changed&quot;</span>, <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">Greeter</span> = <span class="keyword">await</span> ethers.<span class="title function_">getContractFactory</span>(<span class="string">&quot;Greeter&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> greeter = <span class="keyword">await</span> <span class="title class_">Greeter</span>.<span class="title function_">deploy</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">    <span class="keyword">await</span> greeter.<span class="title function_">deployed</span>();</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;************************************&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;-----------greater2-----------------&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">Greeter2</span> = <span class="keyword">await</span> ethers.<span class="title function_">getContractFactory</span>(<span class="string">&quot;Greeter2&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> greeter2 = <span class="keyword">await</span> <span class="title class_">Greeter2</span>.<span class="title function_">deploy</span>(greeter.<span class="property">address</span>);</span><br><span class="line">    <span class="keyword">await</span> greeter2.<span class="title function_">deployed</span>();</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;************************************&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;-----------greater3-----------------&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">Greeter3</span> = <span class="keyword">await</span> ethers.<span class="title function_">getContractFactory</span>(<span class="string">&quot;Greeter3&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> greeter3 = <span class="keyword">await</span> <span class="title class_">Greeter3</span>.<span class="title function_">deploy</span>(greeter.<span class="property">address</span>,greeter2.<span class="property">address</span>);</span><br><span class="line">    <span class="keyword">await</span> greeter3.<span class="title function_">deployed</span>();</span><br><span class="line">    <span class="keyword">await</span> greeter3.<span class="title function_">greet</span>() ;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>获得结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Deploying</span> a <span class="title class_">Greeter</span> <span class="attr">at</span>: <span class="number">0x5fbdb2315678afecb367f032d93f642f64180aa3</span></span><br><span class="line">************************************</span><br><span class="line">-----------greater2-----------------</span><br><span class="line"><span class="title class_">Deploying</span> a <span class="title class_">Greeter2</span> <span class="attr">at</span>: <span class="number">0xe7f1725e7734ce288f8367e1bb143e90bb3f0512</span></span><br><span class="line">************************************</span><br><span class="line">-----------greater3-----------------</span><br><span class="line"><span class="title class_">Deploying</span> a <span class="title class_">Greeter3</span> <span class="attr">at</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">caller3</span>: <span class="number">0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266</span></span><br><span class="line"><span class="attr">adthis3</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">caller2</span>: <span class="number">0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266</span></span><br><span class="line"><span class="attr">adthis2</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">caller1</span>: <span class="number">0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266</span></span><br><span class="line"><span class="attr">adthis1</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br></pre></td></tr></table></figure>
+<p>如上所示，可知：<strong><strong>delegatecall 是可以 “传递” 的。它可以一直改变调用过程的 address(this) 和 msg.sender</strong></strong>。</p>
+<p>对于 <code>this</code> 而言，表示调用执行所在的合约，因此，<code>address(this)</code> 则表示当前调用运行所在的合约地址。</p>
+<p>鉴于 <code>delegatecall</code> 时，<code>this</code> 的传递性，因此，在进行这种调用时，可能会引发的 <a href="https://yuegs.com/2022/05/11/evm-storage/"><code>Storage Collision</code></a>，前面的文章已经介绍，这里不在赘述。</p>
+<p>如果在 <code>Greeter2</code> 中的 <code>greet()</code> 函数内部，实际使用了 <code>call</code> 调用，其结果如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Deploying</span> a <span class="title class_">Greeter</span> <span class="attr">at</span>: <span class="number">0x5fbdb2315678afecb367f032d93f642f64180aa3</span></span><br><span class="line">************************************</span><br><span class="line">-----------greater2-----------------</span><br><span class="line"><span class="title class_">Deploying</span> a <span class="title class_">Greeter2</span> <span class="attr">at</span>: <span class="number">0xe7f1725e7734ce288f8367e1bb143e90bb3f0512</span></span><br><span class="line">************************************</span><br><span class="line">-----------greater3-----------------</span><br><span class="line"><span class="title class_">Deploying</span> a <span class="title class_">Greeter3</span> <span class="attr">at</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">caller3</span>: <span class="number">0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266</span></span><br><span class="line"><span class="attr">adthis3</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">caller2</span>: <span class="number">0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266</span></span><br><span class="line"><span class="attr">adthis2</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">caller1</span>: <span class="number">0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0</span></span><br><span class="line"><span class="attr">adthis1</span>: <span class="number">0x5fbdb2315678afecb367f032d93f642f64180aa3</span></span><br></pre></td></tr></table></figure>
+<p>如上可知，<code>delegatecall</code> 链条一旦中断，变成 <code>call</code> 调用，则，在进行调用时，被调用者中的 <code>msg.sender</code> 就变成了调用者调用时的 <code>address(this)</code>，被调用者中的 <code>address(this)</code> 就是被调用者合约自身。</p>
+<br/> 
+
+<h3 id="4-回退函数"><a href="#4-回退函数" class="headerlink" title="4. 回退函数"></a>4. 回退函数</h3><p>回退函数无函数名&#x2F;无参数&#x2F;无返回值。当合约中没有相应的方法匹配给调用者的时候，会调用到该函数中。</p>
+<blockquote>
+<p>The fallback function is executed on a call to the contract if none of the other functions match the given function signature, or if no data was supplied at all and there is no receive Ether function. The fallback function always receives data, but in order to also receive Ether it must be marked <br>payable.<br><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.8.12/contracts.html#fallback-function">官网</a></p>
+</blockquote>
+<p>正因为存在此类回退函数，使得我们可以实现代理调用。<br>代理人在函数中使用 call 或者 delegatecall 来<strong><strong>中继调用</strong></strong>，将接收到的所有函数调用转发给真正的实现者。因此，这时，实现者是可以更换的，我们只是把代理暴露给了相关调用者，因此，这也就实现了所谓的 合约的 “可升级性”。</p>
+<p>同时，借助回退函数和 <code>delegatecall</code>，还可以实现合约逻辑（代理实现者）和合约状态数据（代理）的分离，可以有效降低合约所需消耗。<br>由状态数据组成的合约，作为代理，在其 回退函数 中，<code>delegatecall</code> 真正的合约实现者。这样，每次部署时，只需要部署代理即可，所有的代理都可以指向同一个代理实现者。</p>
+<br/>
+
+<h3 id="4-内联汇编"><a href="#4-内联汇编" class="headerlink" title="4. 内联汇编"></a>4. 内联汇编</h3><p>接着回退函数，我们来看看内联汇编的使用。不同于 Solidity，这是一种可以直接通过操作符和 EVM 交互的方式。</p>
+<p>如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>(<span class="params"></span>) payable public &#123;</span><br><span class="line">    address _impl = <span class="title function_">implementation</span>();</span><br><span class="line">    <span class="built_in">require</span>(_impl != <span class="title function_">address</span>(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    assembly &#123;</span><br><span class="line">        <span class="comment">// 获取当前 0x40 所指向的空余 memory 所在的地址</span></span><br><span class="line">        <span class="keyword">let</span> ptr := <span class="title function_">mload</span>(<span class="number">0x40</span>)</span><br><span class="line">        <span class="comment">// 将 0 到 calldatasize 的 calldata 数据，拷贝到 ptr 所指向的 memory 空余空间</span></span><br><span class="line">        <span class="title function_">calldatacopy</span>(ptr, <span class="number">0</span>, calldatasize)</span><br><span class="line">        <span class="comment">// result 即执行是否成功</span></span><br><span class="line">        <span class="comment">// delegatecall(g, a, in, insize, out, outsize)</span></span><br><span class="line">        <span class="comment">// https://docs.soliditylang.org/en/latest/yul.html#yul-call-return-area</span></span><br><span class="line">        <span class="keyword">let</span> result := <span class="title function_">delegatecall</span>(gas, _impl, ptr, calldatasize, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">        <span class="comment">// 获取返回值的大小</span></span><br><span class="line">        <span class="keyword">let</span> size := returndatasize</span><br><span class="line">        <span class="comment">// 将 0 到 size 的 returndata 返回到 ptr 所指向的 memory 空余空间。注意，这里会覆盖 calldata，但是 calldata 已经没有用了。</span></span><br><span class="line">        <span class="title function_">returndatacopy</span>(ptr, <span class="number">0</span>, size)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> result</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span> &#123;<span class="title function_">revert</span>(ptr, size)&#125;</span><br><span class="line">        <span class="keyword">default</span> &#123;<span class="keyword">return</span> (ptr, size)&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上所示，内敛块使用 <code>assembly &#123;...&#125;</code> 包裹，使用 <a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/yul.html#yul">Yul</a> 语言描述，一种更细粒度的编码方式，更加灵活，却也更加危险，是一种 <code>low level</code> 层面的调用。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/assembly.html">Inline Assembly</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/call/">call</a><a href="/tags/delegatecall/">delegatecall</a><a href="/tags/ABI/">ABI</a><a href="/tags/fallback/">fallback</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

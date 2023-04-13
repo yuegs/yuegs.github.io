@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySQL 事务处理 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="Transactions are not a law of nature; they were created with a purpose, namely to simplify the programming model for applications accessing a database. By using transactions, the application is free to ignore certain potential error scenarios and concurrency issues, because the database takes care of them instead (we call these safety guarantees).">
+  
+
+  
+  
+  <meta name="keywords" content="数据库">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="MySQL 事务处理"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>MySQL 事务处理</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/06/27/db-mysql-transaction/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-06-27T15:01:28.000Z">
+          2021-06-27
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/transaction/transaction.jpeg?raw=true"></p>
+<blockquote>
+<p>Transactions are not a law of nature; they were created with a purpose, namely to simplify the programming model for applications accessing a database. By using transactions, the application is free to ignore certain potential error scenarios and concurrency issues, because the database takes care of them instead (we call these safety guarantees).</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="事务是什么"><a href="#事务是什么" class="headerlink" title="事务是什么"></a>事务是什么</h3><p>事务，是一组 SQL 语句，是一个满足 ACID （原子性、一致性、隔离性、持久性）特性的独立的执行单位。</p>
+<ul>
+<li><strong><strong>原子性（atomicity）</strong></strong>：事务内的 SQL 语句<code>“共进退”</code>，构成一个不可分割的可执行单位。事务提交(commit)后，只有事务中所有操作都执行成功，整个事务才算成功。如果事务中任一 SQL 语句执行失败，都需要通过回滚（rollback）讲数据库恢复到原状态。</li>
+<li><strong><strong>一致性（consistency）（或者说正确性）</strong></strong>:数据库能够从一个正确的状态，迁移到另一个正确的状态（当前的状态满足预定的约束），事务执行前后，数据库的完整性约束没有被破坏。</li>
+<li><strong><strong>隔离性（Isolation）</strong></strong>:事务之间，不应相互影响。即，一个事务的影响在该事务提交前对其它事务不可见。</li>
+<li><strong><strong>持久性（Durability）</strong></strong>:事务一旦提交，其结果是永久性的。</li>
+</ul>
+<p>在 MySQL 中，不是所有的存储引擎，都只是事务使用。事务的执行，对于 CPU&#x2F;内存&#x2F;磁盘都有一定的消耗，因此，是否选用具有事务功能的存储引擎，是根据具体使用场景决定的。<br>如 InnoDB，是支持事务的，MyISAM 和 MEMEROY 这列存储引擎就不行。</p>
+<h3 id="事务中的控制语句"><a href="#事务中的控制语句" class="headerlink" title="事务中的控制语句"></a>事务中的控制语句</h3><p>默认情况下，MySQL 的运行模式是自动提交的。即，每条语句所做的更改会自动提交到数据库据，并永久保存下来。事实上，这相当于每条语句都是被隐性地当作一个事务来执行。<br>如果想要显示地执行事务，那么，需要禁用自动提交模式，并主动告知 MySQL 何时提交更改或何时回滚更改。<br>更具体地，其控制语句包括：</p>
+<ul>
+<li><strong><strong>SET autocommit &#x3D; 0&#x2F;1</strong></strong>:将 autocommit 设置为 1，将开启自动提交模式；将 autocommit 设置为 0 ，将关闭自动提交模式，后面的所有语句，都将是事务的一部分，语句范围，一直到 COMMIT 或者 ROLLBACK. COMMIT&#x2F;ROLLBACK 之后，又开启一个新的事务。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">0</span> ;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.01</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> users <span class="keyword">SET</span> userName <span class="operator">=</span> <span class="string">&#x27;Zhangsan&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">ROLLBACK</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.03</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> userName <span class="operator">|</span> passWord <span class="operator">|</span> user_sex <span class="operator">|</span> nick_name <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="operator">|</span> <span class="number">28</span> <span class="operator">|</span> aa1      <span class="operator">|</span> a123456  <span class="operator">|</span> MAN      <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">29</span> <span class="operator">|</span> bb1      <span class="operator">|</span> b123456  <span class="operator">|</span> WOMAN    <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">30</span> <span class="operator">|</span> cc1      <span class="operator">|</span> b123456  <span class="operator">|</span> WOMAN    <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="number">3</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><strong>START TRANSACTION | BEGIN</strong></strong>: 这两个语句具有同等效力，旨在挂起自动提交模式，再执行事务中的 SQL 语句。直到 COMMIT 或者 ROLLBACK 之后，该模式又恢复到执行 COMMIT&#x2F;ROLLBACK 之前的状态。</li>
+<li><strong><strong>COMMIT</strong></strong>: 提交事务，并将对数据库造成永久性修改。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">0</span> ;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">BEGIN</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">INSERT</span> users <span class="keyword">SET</span> userName <span class="operator">=</span> <span class="string">&#x27;Zhangsan&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.01</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">COMMIT</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.02</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> userName <span class="operator">|</span> passWord <span class="operator">|</span> user_sex <span class="operator">|</span> nick_name <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="operator">|</span> <span class="number">28</span> <span class="operator">|</span> aa1      <span class="operator">|</span> a123456  <span class="operator">|</span> MAN      <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">29</span> <span class="operator">|</span> bb1      <span class="operator">|</span> b123456  <span class="operator">|</span> WOMAN    <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">30</span> <span class="operator">|</span> cc1      <span class="operator">|</span> b123456  <span class="operator">|</span> WOMAN    <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">34</span> <span class="operator">|</span> Zhangsan <span class="operator">|</span> <span class="keyword">NULL</span>     <span class="operator">|</span> <span class="keyword">NULL</span>     <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><strong>ROLLBACK</strong></strong>: 回滚事务，并撤销正在进行的未提交的修改。</li>
+<li><strong><strong>SAVEPOINT identifier</strong></strong>: MySQL 可以让你对事务进行部分回滚，SAVEPOINT 即是在标记这个起始位置。</li>
+<li><strong><strong>RELEASE SAVEPOINT identifier</strong></strong>: 删除一个事务的保存点。</li>
+<li><strong><strong>ROLLBACK TO SAVEPOINT identifier</strong></strong>: 回滚到指定的标记点（由 SAVEPOINT 指定的）。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">START</span> TRANSACTION;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> users <span class="keyword">SET</span> userName <span class="operator">=</span> <span class="string">&#x27;Wanger&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SAVEPOINT</span> wanger;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> users <span class="keyword">SET</span> userName <span class="operator">=</span> <span class="string">&#x27;Lisi&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">ROLLBACK</span> <span class="keyword">TO</span> <span class="keyword">SAVEPOINT</span> wanger;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">COMMIT</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.02</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> userName <span class="operator">|</span> passWord <span class="operator">|</span> user_sex <span class="operator">|</span> nick_name <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="operator">|</span> <span class="number">28</span> <span class="operator">|</span> aa1      <span class="operator">|</span> a123456  <span class="operator">|</span> MAN      <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">29</span> <span class="operator">|</span> bb1      <span class="operator">|</span> b123456  <span class="operator">|</span> WOMAN    <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">30</span> <span class="operator">|</span> cc1      <span class="operator">|</span> b123456  <span class="operator">|</span> WOMAN    <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">34</span> <span class="operator">|</span> Zhangsan <span class="operator">|</span> <span class="keyword">NULL</span>     <span class="operator">|</span> <span class="keyword">NULL</span>     <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="number">35</span> <span class="operator">|</span> Wanger   <span class="operator">|</span> <span class="keyword">NULL</span>     <span class="operator">|</span> <span class="keyword">NULL</span>     <span class="operator">|</span> <span class="keyword">NULL</span>      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+----------+----------+----------+-----------+</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><strong>SET TRANSACTION</strong></strong>: 设置事务的隔离级别。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">隔离级别</th>
+<th align="center">脏读</th>
+<th align="center">不可重复读</th>
+<th align="center">幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">READ UNCOMMITTED</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">READ COMMITTED</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">REPEATABLE READ</td>
+<td align="center">否</td>
+<td align="center">否</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">SERIALIZABLE</td>
+<td align="center">否</td>
+<td align="center">否</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<h4 id="事务隔离"><a href="#事务隔离" class="headerlink" title="事务隔离"></a>事务隔离</h4><p>InnoDB 存储引擎提供了四种事务隔离级别。</p>
+<ul>
+<li><strong><strong>READ UNCOMMITTED</strong></strong>: 它允许某个事务看到其它事务尚未提交的修改。</li>
+<li><strong><strong>READ COMMITTED</strong></strong>: 它只允许某个事务看到其它事务已经提交的修改。</li>
+<li><strong><strong>REPEATABLE READ</strong></strong>: 如果某个事务两次执行同一条 SELECT 语句，其结果是可重复的。即，即使有其它事务同时插入或修改行，这个事务所看到的结果也是一样的。该隔离级别也是 InnoDB 默认的隔离级别。</li>
+<li><strong><strong>SERIALIZABLE</strong></strong>: 与 REPEATABLE READ 类似，但是其隔离更加彻底。对于某个事务正在查看的行，只有等该事务完成才能被其它事务所修改。</li>
+</ul>
+<p>修改默认隔离级别，有两种方式，在服务启动时，使用 –transaction-isolation 选项，或者在服务运行中，使用 SET TRANSACTION 语句。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span> 拥有超级管理权力权限的客户端，可以使用它来改变全局隔离级别。之后它会作用域后续的所有客户端连接。</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> TRANSACTION ISOLATION LEVEL level;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span> 对当前会话的所有后续事务起作用。</span><br><span class="line"><span class="keyword">SET</span> SESSION TRANSACTION ISOLATION LEVEL level;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span> 对当前事务起作用。</span><br><span class="line"><span class="keyword">SET</span> TRANSACTION ISOLATION LEVEL level;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SET</span> TRANSACTION ISOLATION LEVEL SERIALIZABLE;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="隐式提交的-SQL-语句"><a href="#隐式提交的-SQL-语句" class="headerlink" title="隐式提交的 SQL 语句"></a>隐式提交的 SQL 语句</h3><p>有些 SQL 语句，会产生一个隐式的提交操作。即，执行完该语句后，会有一个隐式的 COMMIT 操作。<br>这些语句包括：</p>
+<ul>
+<li><strong><strong>数据定义语言（Data Definition Language,DDL）</strong></strong>:通常，那些用来创建、更改或删除数据库或其中对象的数据定义语言，由于不能成为事务的一部分，而只会对事务产生隐式影响。具体包括：ALERT TABLE&#x2F; DRAP DATABASE&#x2F; RENAME TABLE&#x2F; SET autocommit&#x2F; LOCK TABLES 等。</li>
+<li><strong><strong>用来隐式地修改 MySQL 架构的操作</strong></strong>：CREATE USER&#x2F; DROP USER&#x2F; RENAME USER&#x2F; SET PASSWORD 等。</li>
+<li><strong><strong>管理语句</strong></strong>：CHECK TABLE&#x2F; OPTIMIZE TABLE&#x2F; REPAIR TABLE 等。</li>
+</ul>
+<hr>
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://www.educative.io/edpresso/what-are-acid-properties-in-a-database">What are ACID properties in a database?</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43493165">深入理解数据库事务</a><br><a target="_blank" rel="noopener" href="https://seanhu93.medium.com/revisit-database-isolation-863b3ca06f5f">Revisit Database Isolation</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/31346392/answer/362597203">如何理解数据库事务中的一致性的概念？</a><br>《MySQL 技术内幕（第五版）》<br>《MySQL 技术内幕 InnoDB 存储引擎》</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/数据库/">数据库</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/数据库/">数据库</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

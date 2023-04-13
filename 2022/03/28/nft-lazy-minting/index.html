@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Lazy minting | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文是一篇译文，原文在此。在区块链主网络上铸造 NFT 通常需要消耗一些资金，在链上写入数据，你需要为算力和存储消耗支付费用。这对于 NFT 创建者而言，实际上是一个阻力，特别是对那些不想投入太多资金的创作者，他们甚至不知道这些 NFT 是否可以被销售出去。">
+  
+
+  
+  
+  <meta name="keywords" content="Lazy minting,NFT,EIP712">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Lazy minting"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Lazy minting</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/03/28/nft-lazy-minting/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-03-28T15:33:20.000Z">
+          2022-03-28
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇译文，<a target="_blank" rel="noopener" href="https://nftschool.dev/tutorial/lazy-minting/#how-it-works">原文在此</a>。<br>在区块链主网络上铸造 NFT 通常需要消耗一些资金，在链上写入数据，你需要为算力和存储消耗支付费用。这对于 NFT 创建者而言，实际上是一个阻力，特别是对那些不想投入太多资金的创作者，他们甚至不知道这些 NFT 是否可以被销售出去。</p>
+<span id="more"></span>
+<p>在技术层面，实际上可以实现推迟 NFT 的铸造花销，直到第一次交易完成。铸造和 NFT 转移操作在同一个交易中完成，因此，NFT。取而代之的，创建 NFT 的初始记录（铸币），算在买家的 gas 费用里。</p>
+<p>在购买时铸造的方式，就是 <strong><strong>lazy minting</strong></strong>。这种方式被类似 <a target="_blank" rel="noopener" href="https://opensea.io/blog/announcements/introducing-the-collection-manager/">OpenSea</a> 这样的交易所采用。</p>
+<p>本指引将向你展示在一些 <a target="_blank" rel="noopener" href="https://openzeppelin.com/contracts/">OpenZeppelin</a> 库的帮助下，在以太坊上进行 lazy minting 的过程。</p>
+<p>通过该指引，我们将创建一个示例项目，<a target="_blank" rel="noopener" href="https://github.com/ipfs-shipyard/nft-school-examples">仓库在此</a>。如果你想深入了解，可以 clone 仓库按照你的想法编辑。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ipfs-shipyard/nft-school-examples</span><br><span class="line"><span class="built_in">cd</span> nft-school-examples/lazy-minting</span><br><span class="line">code . <span class="comment"># or whichever editor you prefer</span></span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="1-工作原理"><a href="#1-工作原理" class="headerlink" title="1. 工作原理"></a>1. 工作原理</h3><p>lazy minting 的基本前提，就是取代直接通过调用合约函数去创建 NFT 的方式，NFT 铸造者通过账户私钥对数据进行签名。</p>
+<p>签名的数据，扮演着凭证或者票据的角色，据此可以兑换 NFT。凭证中，包含了可以铸造 NFT 的所有信息，当然，它也可以包含一些不记录在区块链上的可选数据，比如我们稍后将谈论的价格。签名证明了 NFT 创建者授权创建凭证中指定的 NFT。</p>
+<p>当买家希望购买 NFT 时，他们可以调用 <code>redeem</code> 函数，以兑换一个经过签名的凭证。如果签名是合法的，并且属于 NFT 铸造的授权账户，新的 token 将会被基于凭证创建，并且转移给买家。</p>
+<p>在以下的示例中，我们使用 Solidity struct 代表一个凭证：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct <span class="title class_">NFTVoucher</span> &#123;</span><br><span class="line">  uint256 tokenId;</span><br><span class="line">  uint256 minPrice;</span><br><span class="line">  string uri;</span><br><span class="line">  bytes signature;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>凭证包含的两个信息将会被记录在区块链上：<code>tokenId</code> 以及 <code>uri</code>。<code>minPrice</code> 将不会被记录，但是它会被用于 <code>redeem</code> 函数中，以允许创建者设置购买价格。如果 <code>minPrice</code> 大于零，买家在调用 <code>redeem</code> 函数时，至少应支付这么多的 Ether 给卖家。</p>
+<p><code>signature</code> 即 NFT 创建者的签名信息，我们将在下一部分描述。</p>
+<blockquote>
+<p><strong><strong>提示</strong></strong><br>在凭证中设置价格通常不是必须的，但是通常你可能也需要设置一些条件，不然，任何人都可以通过凭证获取你的 NFT，而只需要支付 gas 费用。<br>举例来说，如果你正在空投一些 NFT 到指定的已知账户，你的凭证中就需要包含 <code>address recipient</code> 而不是 <code>minPrice</code>，并且，在 <code>redeem</code> 函数中检查确保 <code>msg.sender == voucher.recipient</code>。</p>
+</blockquote>
+<br/>
+
+<h3 id="2-创建一个签名的凭证"><a href="#2-创建一个签名的凭证" class="headerlink" title="2. 创建一个签名的凭证"></a>2. 创建一个签名的凭证</h3><p>使用签名进行授权的方式保证交易的唯一性实际上是困难的，因为一些狡猾的第三方可能会将某个上下文中的签名用于别处。比如，他们可能会将一个在 Ropsten 测试网络中的 NFT 签名用于主网络中。除非，签名信息中包含饿了这些环境信息，这种 “重放攻击” 在平台上是非常常见且很难防范的。</p>
+<p>为了解决这类问题，并提供更好的信息签名体验，以太坊社区开发了<a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-712">EIP-712</a> 协议，这是一种签名标准。在 EIP-712 协议中，签名被限制在一个指定的合约运行网络中。它们也包含类型信息，因此，在类似于 <a target="_blank" rel="noopener" href="https://metamask.io/">MetaMask</a> 这样的工具中，可以向用户展现关于被签名数据的更多信息，而不仅仅是一串十六进制字符。</p>
+<p>在我们的示例中，将使用 JavaScript 类 <code>LazyMinter</code> 构造符合 EIP-712 的凭证。由于签名被限定在一个指定的合约实例中，你还需要提供被部署的合约的地址，并使用 ethers.js 中的 <code>Singer</code> 获取 NFT 创作者的私钥：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lazyminter = <span class="keyword">new</span> <span class="title class_">LazyMinter</span>(&#123; myDeployedContract.<span class="property">address</span>, signerForMinterAccount &#125;)</span><br></pre></td></tr></table></figure>
+<p>完整的 <a target="_blank" rel="noopener" href="https://github.com/ipfs-shipyard/nft-school-examples/blob/f96f04c78b391e9901c7f37d1becbcc41446db53/lazy-minting/lib/LazyMinter.js#L20">LazyMinter 在此</a>。</p>
+<p>下面，<code>createVoucher</code> 方法将创建一个签名的 NFT 凭证：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="title function_">createVoucher</span>(<span class="params">tokenId, uri, minPrice = <span class="number">0</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> voucher = &#123; tokenId, uri, minPrice &#125;</span><br><span class="line">  <span class="keyword">const</span> domain = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">_signingDomain</span>()</span><br><span class="line">  <span class="keyword">const</span> types = &#123;</span><br><span class="line">    <span class="title class_">NFTVoucher</span>: [</span><br><span class="line">      &#123;<span class="attr">name</span>: <span class="string">&quot;tokenId&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;uint256&quot;</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">name</span>: <span class="string">&quot;minPrice&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;uint256&quot;</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">name</span>: <span class="string">&quot;uri&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;string&quot;</span>&#125;,  </span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> signature = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">signer</span>.<span class="title function_">_signTypedData</span>(domain, types, voucher)</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    ...voucher,</span><br><span class="line">    signature,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，我们准备了一个未签名的 <code>voucher</code> 对象，以及一个等待签名的域名信息。<code>types</code> 对象包含了 <code>NFTVoucher</code> 中每个字段的类型信息。<br>为了创建签名，我们调用了 <code>Signer</code> 对象的 <code>_signTypedData</code> 方法，并传递了域名，定义的类型以及未签名的凭证数据。<br>最后，我们返回整个完整的凭证对象。</p>
+<blockquote>
+<p><strong><strong>注意</strong></strong><br><code>_signTypedData</code> 方法在 ethers.js 的新版本中可能被重命名为了 <code>sighTypedData</code>。可以在 <a target="_blank" rel="noopener" href="https://docs.ethers.io/v5/api/signer/#Signer-signTypedData">ethers doc</a> 中获取更多信息。</p>
+</blockquote>
+<br/>
+
+<h3 id="3-链上凭证兑换"><a href="#3-链上凭证兑换" class="headerlink" title="3. 链上凭证兑换"></a>3. 链上凭证兑换</h3><p>为了使 lazy minting 工作，我们需要在同一个交易中同时实现 NFT 的铸造和转移。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">redeem</span>(<span class="params">address redeemer, NFTVoucher calldata voucher</span>) public payable returns (uint256) &#123;</span><br><span class="line">  <span class="comment">// make sure signature is valid and get the address of the signer</span></span><br><span class="line">  address signer = <span class="title function_">_verify</span>(voucher);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// make sure that the signer is authorized to mint NFTs</span></span><br><span class="line">  <span class="built_in">require</span>(<span class="title function_">hasRole</span>(<span class="variable constant_">MINTER_ROLE</span>, signer), <span class="string">&quot;Signature invalid or unauthorized&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// make sure that the redeemer is paying enough to cover the buyer&#x27;s cost</span></span><br><span class="line">  <span class="built_in">require</span>(msg.<span class="property">value</span> &gt;= voucher.<span class="property">minPrice</span>, <span class="string">&quot;Insufficient funds to redeem&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// first assign the token to the signer, to establish provenance on-chain</span></span><br><span class="line">  <span class="title function_">_mint</span>(signer, voucher.<span class="property">tokenId</span>);</span><br><span class="line">  <span class="title function_">_setTokenURI</span>(voucher.<span class="property">tokenId</span>, voucher.<span class="property">uri</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// transfer the token to the redeemer</span></span><br><span class="line">  <span class="title function_">_transfer</span>(signer, redeemer, voucher.<span class="property">tokenId</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// record payment to signer&#x27;s withdrawal balance</span></span><br><span class="line">  pendingWithdrawals[signer] += msg.<span class="property">value</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> voucher.<span class="property">tokenId</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先，调用 <code>_verify</code> 函数，该函数将通过返回签名的账户信息，当然，如果签名不合法，则交易失败。</p>
+<p>一旦拥有了签名者的地址，就可以通过 <a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/4.x/access-control">AccessControl</a> 中的 <code>hasRole</code> 函数检测他们是否被授权创建 NFT。</p>
+<p>接下来，还需要确保买家所支付的金额应可以覆盖 <code>minPrice</code>。如果满足要求，则基于凭证创建一个新的 token，并将其转移给 <code>redmeemer</code> 账户。</p>
+<p>最后，在 <code>pendingWithdrawls</code> 中记录要支付给 NFT 创建者的 ether。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/4.x/api/utils#EIP712">EIP-712</a> 和 <a target="_blank" rel="noopener" href="https://github.com/ipfs-shipyard/nft-school-examples/blob/main/lazy-minting/contracts/LazyNFT.sol">合约源码</a> 中，可以获取更多关于签名验证过程的信息。</p>
+<br/>
+
+<h3 id="4-结论"><a href="#4-结论" class="headerlink" title="4. 结论"></a>4. 结论</h3><p>Lazy minting 是一种强力的技术，可以避免在发布 NFT 被收取“前置”费用。</p>
+<p>就实现而言，虽然我们在这里展现了其核心技术，实际上在产品环境下，还需要更多细节。比如，你可能需要 NFT 铸造者自己发布一个签名的凭证，也可能你需要后端系统持续对所有未铸造的 NFT 进行跟踪，直到它被兑换。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Lazy-minting/">Lazy minting</a><a href="/tags/NFT/">NFT</a><a href="/tags/EIP712/">EIP712</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

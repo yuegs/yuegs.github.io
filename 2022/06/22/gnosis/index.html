@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Gnosis 多签机制 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="Gnosis 提供一种多签名决策&amp;#x2F;执行机制。简单来说，就是多个人可以共同通过签名决定一个提案是否需要被执行。这也体现了 DAO 的思想。本文，将从源码的角度分析通过 Gnosis 建立组织、发起提案、决策&amp;#x2F;执行的过程。">
+  
+
+  
+  
+  <meta name="keywords" content="gnosis,multisig,dao">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Gnosis 多签机制"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Gnosis 多签机制</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/06/22/gnosis/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-06-22T15:07:12.000Z">
+          2022-06-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/gnosis-analysis/gnosis-multisign.png"><br>Gnosis 提供一种多签名决策&#x2F;执行机制。简单来说，就是多个人可以共同通过签名决定一个提案是否需要被执行。这也体现了 DAO 的思想。<br>本文，将从<a target="_blank" rel="noopener" href="https://github.com/safe-global/safe-contracts/tree/v1.3.0/contracts">源码</a>的角度分析通过 Gnosis 建立组织、发起提案、决策&#x2F;执行的过程。</p>
+<span id="more"></span>
+
+<h3 id="1-创建代理"><a href="#1-创建代理" class="headerlink" title="1. 创建代理"></a>1. 创建代理</h3><p>在这里，创建代理，并不是为了实现合约的可升级性，而是为了减少部署合约的代码量（所有代理合约可以共用一个执行业务逻辑的合约 GnosisSafe），从而为使用者降低部署时的 gas 费用。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/gnosis-analysis/gnosis-createproxy.png"></p>
+<p>使用 <code>create2</code> 操作码进行代理合约部署的代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">deployProxyWithNonce</span>(<span class="params"></span></span><br><span class="line"><span class="params">    address _singleton,</span></span><br><span class="line"><span class="params">    bytes memory initializer,</span></span><br><span class="line"><span class="params">    uint256 saltNonce</span></span><br><span class="line"><span class="params"></span>) internal returns (<span class="title class_">GnosisSafeProxy</span> proxy) &#123;</span><br><span class="line">    <span class="comment">// If the initializer changes the proxy address should change too. Hashing the initializer data is cheaper than just concatinating it</span></span><br><span class="line">    bytes32 salt = <span class="title function_">keccak256</span>(abi.<span class="title function_">encodePacked</span>(<span class="title function_">keccak256</span>(initializer), saltNonce));</span><br><span class="line">    bytes memory deploymentData = abi.<span class="title function_">encodePacked</span>(<span class="title function_">type</span>(<span class="title class_">GnosisSafeProxy</span>).<span class="property">creationCode</span>, <span class="title function_">uint256</span>(<span class="title function_">uint160</span>(_singleton)));</span><br><span class="line">    <span class="comment">// solhint-disable-next-line no-inline-assembly</span></span><br><span class="line">    assembly &#123;</span><br><span class="line">        <span class="comment">// 第一个参数：发给创建出来的合约的 eth。</span></span><br><span class="line">        <span class="comment">// 第二个参数：由于数组的前 32 位表示数组长度，因此，这里在计算 size 时，需要使用 deploymentData 的长度加上 0x20</span></span><br><span class="line">        <span class="comment">// 第三个参数：读取 deploymentData 数组的长度。实际上合约的 bytecode 存储在 add(0x20, deploymentData) 到 add(0x20, deploymentData) + mload(deploymentData) 的区域。</span></span><br><span class="line">        <span class="comment">// 第四个参数：盐值（随机数）。</span></span><br><span class="line">        <span class="comment">// 返回部署的合约地址。</span></span><br><span class="line">        proxy := <span class="title function_">create2</span>(<span class="number">0x0</span>, <span class="title function_">add</span>(<span class="number">0x20</span>, deploymentData), <span class="title function_">mload</span>(deploymentData), salt)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">require</span>(<span class="title function_">address</span>(proxy) != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;Create2 call failed&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在合约内部创建新合约，可以使用：<code>create</code>、<code>new</code> 或者 <code>create2</code> 关键字。<br>前两者计算新合约的地址的方式是相同的，即，通过 sender 的地址以及一个 nonce。其中，nonce 是和用户账户关联的，每次交易后都会增加。这意味着其实 <code>create</code> 创建的新合约的地址仍然是可预测的，前提是 sender 需要保证 nonce 的稳定性，即在此之前不发生交易。<br>对于 <code>create2</code> 来说，合约地址的生成通过如下公式：<br>new_address &#x3D; hash(0xFF, sender, salt, bytecode)，因此，地址是可预测的。</p>
+</blockquote>
+<h3 id="2-多签初始化"><a href="#2-多签初始化" class="headerlink" title="2. 多签初始化"></a>2. 多签初始化</h3><p>多签设置，主要是对组织管理规则的初始化，涉及到总人数、决策参与人数、回退函数处理等细则。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/gnosis-analysis/setup.png"></p>
+<p>记录所有 owners：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">address currentOwner = <span class="variable constant_">SENTINEL_OWNERS</span>;</span><br><span class="line"><span class="keyword">for</span> (uint256 i = <span class="number">0</span>; i &lt; _owners.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="comment">// Owner address cannot be null.</span></span><br><span class="line">    address owner = _owners[i];</span><br><span class="line">    <span class="built_in">require</span>(owner != <span class="title function_">address</span>(<span class="number">0</span>) &amp;&amp; owner != <span class="variable constant_">SENTINEL_OWNERS</span> &amp;&amp; owner != <span class="title function_">address</span>(<span class="variable language_">this</span>) &amp;&amp; currentOwner != owner, <span class="string">&quot;GS203&quot;</span>);</span><br><span class="line">    <span class="comment">// No duplicate owners allowed.</span></span><br><span class="line">    <span class="built_in">require</span>(owners[owner] == <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;GS204&quot;</span>);</span><br><span class="line">    owners[currentOwner] = owner;</span><br><span class="line">    currentOwner = owner;</span><br><span class="line">&#125;</span><br><span class="line">owners[currentOwner] = <span class="variable constant_">SENTINEL_OWNERS</span>;</span><br><span class="line">ownerCount = _owners.<span class="property">length</span>;</span><br><span class="line">threshold = _threshold;</span><br></pre></td></tr></table></figure>
+
+<p>设置 fallbackHandler:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// keccak256(&quot;fallback_manager.handler.address&quot;)</span></span><br><span class="line">bytes32 internal constant <span class="variable constant_">FALLBACK_HANDLER_STORAGE_SLOT</span> = <span class="number">0x6c9a6c4a39284e37ed1cf53d337577d14212a4870fb976a4366c693b939918d5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">internalSetFallbackHandler</span>(<span class="params">address handler</span>) internal &#123;</span><br><span class="line">    bytes32 slot = <span class="variable constant_">FALLBACK_HANDLER_STORAGE_SLOT</span>;</span><br><span class="line">    <span class="comment">// solhint-disable-next-line no-inline-assembly</span></span><br><span class="line">    assembly &#123;</span><br><span class="line">        <span class="title function_">sstore</span>(slot, handler)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>初始化 modules:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">setupModules</span>(<span class="params">address to, bytes memory data</span>) internal &#123;</span><br><span class="line">    <span class="built_in">require</span>(modules[<span class="variable constant_">SENTINEL_MODULES</span>] == <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;GS100&quot;</span>);</span><br><span class="line">    <span class="comment">// 初始化 modules，通过 map 实现了一个循环链表</span></span><br><span class="line">    modules[<span class="variable constant_">SENTINEL_MODULES</span>] = <span class="variable constant_">SENTINEL_MODULES</span>;</span><br><span class="line">    <span class="keyword">if</span> (to != <span class="title function_">address</span>(<span class="number">0</span>))</span><br><span class="line">        <span class="comment">// Setup has to complete successfully or transaction fails.</span></span><br><span class="line">        <span class="built_in">require</span>(<span class="title function_">execute</span>(to, <span class="number">0</span>, data, <span class="title class_">Enum</span>.<span class="property">Operation</span>.<span class="property">DelegateCall</span>, <span class="title function_">gasleft</span>()), <span class="string">&quot;GS000&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>: <span class="title function_">createProxyWithNonce</span>(address _singleton, bytes initializer, uint256 saltNonce)</span><br><span class="line"></span><br><span class="line"><span class="title class_">MethodID</span>: <span class="number">0x1688f0b9</span></span><br><span class="line"><span class="comment">/// d9db270c1b5e3bd161e8c8503c55ceabee709552 是 GnosisSafe 合约</span></span><br><span class="line">[<span class="number">0</span>]:  000000000000000000000000d9db270c1b5e3bd161e8c8503c55ceabee709552</span><br><span class="line"><span class="comment">/// initializer 是从第 96 个字节开始(动态数据的位置偏移量)</span></span><br><span class="line">[<span class="number">1</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000060</span></span><br><span class="line"><span class="comment">/// saltNonce 的值是 &#x27;0x1813d227a48&#x27;（静态部分，直接表示）</span></span><br><span class="line">[<span class="number">2</span>]:  000000000000000000000000000000000000000000000000000001813d227a48</span><br><span class="line"><span class="comment">/// 第 96 个字节开始的地方。由于这是一个 bytes，动态数组，因此，0x1c4 代表数组大小 452。</span></span><br><span class="line">[<span class="number">3</span>]:  00000000000000000000000000000000000000000000000000000000000001c4</span><br><span class="line"><span class="comment">/// b63e800d 代表另外一个要调用的函数的选择器：</span></span><br><span class="line"><span class="comment">/// keccak256(&quot;setup(address[],uint256,address,bytes,address,address,uint256,address)&quot;)</span></span><br><span class="line">[<span class="number">4</span>]:  b63e800d</span><br><span class="line"><span class="comment">/// 第一个参数 address[] 是从第 256 个字节开始的</span></span><br><span class="line">      <span class="number">0000000000000000000000000000000000000000000000000000000000000100</span></span><br><span class="line"><span class="comment">/// 至少需要 三个人 参与(阈值) </span></span><br><span class="line">[<span class="number">5</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000003</span></span><br><span class="line"><span class="comment">/// delegatecall 调用地址</span></span><br><span class="line">[<span class="number">6</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 第四个参数 bytes 是从第 0x1a0，即 416 个字节开始的</span></span><br><span class="line">[<span class="number">7</span>]:  00000000000000000000000000000000000000000000000000000000000001a0</span><br><span class="line"><span class="comment">/// fallbackHandler Handler for fallback calls to this contract</span></span><br><span class="line">[<span class="number">8</span>]:  000000000000000000000000f48f2b2d2a534e402487b3ee7c18c33aec0fe5e4</span><br><span class="line"><span class="comment">/// paymentToken Token that should be used for the payment (0 is ETH)</span></span><br><span class="line">[<span class="number">9</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// payment Value that should be paid</span></span><br><span class="line">[<span class="number">10</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// paymentReceiver Address that should receive the payment (or 0 if tx.origin)</span></span><br><span class="line">[<span class="number">11</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 第一个参数 address[] 真正开 始的地方。这里就是第 256 的位置。数组长度为 4.</span></span><br><span class="line">[<span class="number">12</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000004</span></span><br><span class="line"><span class="comment">/// address[0]</span></span><br><span class="line">[<span class="number">13</span>]: 000000000000000000000000792b18b5453b1e265bfe71ea33131155745200a3</span><br><span class="line"><span class="comment">/// address[1]</span></span><br><span class="line">[<span class="number">14</span>]: 0000000000000000000000005796e1051c18ed58d980ff935ce188a63d086e7a</span><br><span class="line"><span class="comment">/// address[2]</span></span><br><span class="line">[<span class="number">15</span>]: 000000000000000000000000a9227990e08aeb90e3538fbf6e629e8e545705e0</span><br><span class="line"><span class="comment">/// address[3]</span></span><br><span class="line">[<span class="number">16</span>]: 000000000000000000000000357ad87d4e546bb2406f020675db2f1e343fdda2</span><br><span class="line"><span class="comment">/// 第四个参数 bytes 真正开始的地方，即第 416 个字节开始的地方，后面一共 32+32-4 = 60 个字节。</span></span><br><span class="line"><span class="comment">/// Data payload for optional delegate call.</span></span><br><span class="line">[<span class="number">17</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line">[<span class="number">18</span>]: <span class="number">00000000000000000000000000000000000000000000000000000000</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-提案与执行"><a href="#3-提案与执行" class="headerlink" title="3. 提案与执行"></a>3. 提案与执行</h3><p>该过程，涉及用户发起提案、投票、执行结果的过程。<br><strong><strong>需要注意的是，用户发起提案并进行签名的过程，是在线下执行的。</strong></strong> 当第一个能够触发执行的赞同票签名后，连带前面用户的同意签名一起将进行上链，经过合约校验通过后，会触发提案执行。</p>
+<p>整体过程如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/gnosis-analysis/exe.png"></p>
+<p>可见，其实核心原理并不复杂，就是检查每个 “同意” 签名的有效性，全部通过之后，为了保险起见，如果设置了 “守卫合约”，在具体交易在执行之前后，会对交易再做检查。</p>
+<p>只是，验证签名验证的过程，支持三种类型：</p>
+<ul>
+<li>对于 EOA 用户而言，涉及到消息签名验证和基于 EIP712 的签名验证；<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (v &gt; <span class="number">30</span>) &#123;</span><br><span class="line">    currentOwner = <span class="title function_">ecrecover</span>(<span class="title function_">keccak256</span>(abi.<span class="title function_">encodePacked</span>(<span class="string">&quot;\x19Ethereum Signed Message:\n32&quot;</span>, dataHash)), v - <span class="number">4</span>, r, s);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    currentOwner = <span class="title function_">ecrecover</span>(dataHash, v, r, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>对于合约账户，涉及到基于 EIP1271 的签名验证；<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="title class_">ISignatureValidator</span>(currentOwner).<span class="title function_">isValidSignature</span>(data, contractSignature) == <span class="title class_">EIP1271</span>_MAGIC_VALUE, <span class="string">&quot;GS024&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li>还有一种验证方式，是一种基于 approvedHashes （数据类型为 map） 的签名验证。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 添加待授权的 hash</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">approveHash</span>(<span class="params">bytes32 hashToApprove</span>) external &#123;</span><br><span class="line">    <span class="built_in">require</span>(owners[msg.<span class="property">sender</span>] != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;GS030&quot;</span>);</span><br><span class="line">    approvedHashes[msg.<span class="property">sender</span>][hashToApprove] = <span class="number">1</span>;</span><br><span class="line">    emit <span class="title class_">ApproveHash</span>(hashToApprove, msg.<span class="property">sender</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断过程</span></span><br><span class="line"><span class="built_in">require</span>(msg.<span class="property">sender</span> == currentOwner || approvedHashes[currentOwner][dataHash] != <span class="number">0</span>, <span class="string">&quot;GS025&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>函数调用编码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>: <span class="title function_">execTransaction</span>(address to, uint256 value, bytes data,</span><br><span class="line"> uint8 operation, uint256 safeTxGas, uint256 dataGas, uint256 gasPrice,</span><br><span class="line">  address gasToken, address refundReceiver, bytes signatures)</span><br><span class="line"></span><br><span class="line"><span class="title class_">MethodID</span>: <span class="number">0x6a761202</span></span><br><span class="line"><span class="comment">/// 01be23585060835e02b77ef475b0cc51aa1e0709 合约将执行具体交易</span></span><br><span class="line">[<span class="number">0</span>]:  00000000000000000000000001be23585060835e02b77ef475b0cc51aa1e0709</span><br><span class="line"><span class="comment">/// 交易需要支付的 ethers</span></span><br><span class="line">[<span class="number">1</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 交易的数据负载部分。由于是数组，实际上这里是数组所在位置的偏移量。即 从第 320 字节开始</span></span><br><span class="line">[<span class="number">2</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000140</span></span><br><span class="line"><span class="comment">/// operation. 0 代表着 call；1代表着 delegatecall.</span></span><br><span class="line">[<span class="number">3</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// safeTxGas Gas that should be used for the Safe transaction.</span></span><br><span class="line">[<span class="number">4</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// dataGas baseGas Gas costs that are independent of the transaction </span></span><br><span class="line"><span class="comment">/// execution(e.g. base transaction fee, signature check, payment of the refund)</span></span><br><span class="line">[<span class="number">5</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// gasPrice Gas price that should be used for the payment calculation.</span></span><br><span class="line">[<span class="number">6</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// gasToken Token address (or 0 if ETH) that is used for the payment.</span></span><br><span class="line">[<span class="number">7</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// refundReceiver Address of receiver of gas payment (or 0 if tx.origin).</span></span><br><span class="line">[<span class="number">8</span>]:  <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 签名数据的偏移量是 0x1c0,即 448。</span></span><br><span class="line">[<span class="number">9</span>]:  00000000000000000000000000000000000000000000000000000000000001c0</span><br><span class="line"><span class="comment">/// 交易负载(data)，在 0x01be23585060835e02b77ef475b0cc51aa1e0709 执行，数组长度 0x33,即 68</span></span><br><span class="line">[<span class="number">10</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000044</span></span><br><span class="line"><span class="comment">/// 函数器</span></span><br><span class="line">[<span class="number">11</span>]: a9059cbb</span><br><span class="line">      000000000000000000000000792b18b5453b1e265bfe71ea33131155745200a3</span><br><span class="line">[<span class="number">12</span>]: 0000000000000000000000000000000000000000000000000de0b6b3a7640000</span><br><span class="line">[<span class="number">13</span>]: <span class="number">0000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="comment">/// 签名数据的长度是 0xc3,即 195。每个签名的长度是 65，这里，有 3 个人的签名</span></span><br><span class="line">[<span class="number">14</span>]: 000000000000000000000000000000000000000000000000000000c3</span><br><span class="line">[<span class="number">15</span>]: 023901ebcf84a9c42ad9282a24333489f87ce7d8c63ad27da98b0c0649825c2b</span><br><span class="line">[<span class="number">16</span>]: 40ff5061703fb9537a5284f304d341bdadabfa239d51ad0480721f4974cc499e</span><br><span class="line">[<span class="number">17</span>]: 1b20fa15902cbe5d4f131eeb275a57a40ac456bc63f89180dac9e06e5f9b82f7</span><br><span class="line">[<span class="number">18</span>]: 8a51b5ea8017b90766015f26c4a8664396d4c8a9fc2d6b8a2a49b3df0048b953</span><br><span class="line">[<span class="number">19</span>]: 8b1c000000000000000000000000a9227990e08aeb90e3538fbf6e629e8e5457</span><br><span class="line">[<span class="number">20</span>]: 05e0000000000000000000000000000000000000000000000000000000000000</span><br><span class="line">[<span class="number">21</span>]: <span class="number">0000010000000000000000000000000000000000000000000000000000000000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/438892410">Genosis Safe</a><br><a target="_blank" rel="noopener" href="https://help.gnosis-safe.io/en/articles/4934378-what-is-a-module">What is a module in Gnosis?</a><br><a target="_blank" rel="noopener" href="https://rinkeby.etherscan.io/address/0xd9Db270c1B5E3Bd161E8c8503c55cEABeE709552#code">GnosisSafe</a><br><a target="_blank" rel="noopener" href="https://hackernoon.com/using-ethereums-create2-nw2137q7">Using Ethereum’s CREATE2</a><br><a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/cli/2.8/deploying-with-create2">Deploying Smart Contracts Using CREATE2</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/gnosis/">gnosis</a><a href="/tags/multisig/">multisig</a><a href="/tags/dao/">dao</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

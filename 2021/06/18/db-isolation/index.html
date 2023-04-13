@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>再谈数据库隔离 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本篇是译文，原文地址
+当两个或跟更多的工作单位（它可以是进程、线程、程序或任何可执行体）同时工作，特别是访问或者修改同一个数据，这时，并发问题就发生了。
+举个现实中的例子，如果在同一个十字路口两辆车同时行进（非同向），没有停止信号或者交通灯，它们彼此看不到对方，最终它们驶向同一个车道，它们相撞了。
+相似的，两个程序更新数据库中的同一行数据，其中一个程序可能就会覆写了另外一个程序的数据（考虑不使用数据库锁这种机制）。
+即使两个程序都在单线程环境中可以正确执行，并发问题也会影响结果的正确性。">
+  
+
+  
+  
+  <meta name="keywords" content="数据库">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="再谈数据库隔离"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>再谈数据库隔离</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/06/18/db-isolation/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-06-18T15:01:28.000Z">
+          2021-06-18
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本篇是译文，<a target="_blank" rel="noopener" href="https://seanhu93.medium.com/revisit-database-isolation-863b3ca06f5f">原文地址</a></p>
+<p>当两个或跟更多的工作单位（它可以是进程、线程、程序或任何可执行体）同时工作，特别是访问或者修改同一个数据，这时，并发问题就发生了。</p>
+<p>举个现实中的例子，如果在同一个十字路口两辆车同时行进（非同向），没有停止信号或者交通灯，它们彼此看不到对方，最终它们驶向同一个车道，它们相撞了。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/car_conflict.png?raw=true"></p>
+<p>相似的，两个程序更新数据库中的同一行数据，其中一个程序可能就会覆写了另外一个程序的数据（考虑不使用数据库锁这种机制）。</p>
+<p>即使两个程序都在单线程环境中可以正确执行，并发问题也会影响结果的正确性。</p>
+<span id="more"></span>
+
+<h3 id="数据库事务以及它所带来的帮助"><a href="#数据库事务以及它所带来的帮助" class="headerlink" title="数据库事务以及它所带来的帮助"></a>数据库事务以及它所带来的帮助</h3><p>自然地，开发人员很擅长写单线程的程序。<br>数据库事务是一个非常好的想法。它给开发提供了单线程的环境错觉。它降低了并发性问题的复杂性。程序员只需要保障单线程环境下程序的正确性。</p>
+<p>但是，数据库事务是如何提供这种幻觉的？如果你学习了数据库，你可能还记得 ACID 的概念。它代表了数据库事务的四大属性—原子性、一致性、隔离性和持久化。后续我们会说到它们，本文，我们关注隔离属性。</p>
+<p>隔离，确保了事务非并发的执行。换而言之，事务执行是串行的。</p>
+<p>然而，任何事的到来都是要付出代价的。我们在上面提到的，是非常严格的隔离保障，它的性能消耗，比如延时（事务执行所花费的时间）和吞吐量（每秒内数据库系统能处理完成多少事务）。实际上，出于性能考虑，现有的数据库实现默认不会提供这么严格或者默认关闭了这么严格的隔离。</p>
+<p>正如其它计算机科学中的系统，这是一个平衡。为了获得更好的性能，人们通常会弱化隔离保障。因此，隔离等级的概念应时而出。不同的隔离等级，定义了不同程度的隔离严格程度。</p>
+<p>为了回顾和理解不同的隔离等级，我们先从并发系统中的异常开始了解。</p>
+<h3 id="并发系统中的异常"><a href="#并发系统中的异常" class="headerlink" title="并发系统中的异常"></a>并发系统中的异常</h3><p>异常，或者说并发bug，是在并发系统中常见的问题。注意，这些异常仅仅是出现在数据库系统中事务被并发执行的时候（时间上有重合），隔离，并不能完全确保异常被消除。一旦这些事务被串行执行，异常将不再存在。</p>
+<h4 id="更新丢失"><a href="#更新丢失" class="headerlink" title="更新丢失"></a>更新丢失</h4><p>这是一个写-写冲突问题—连各个事务并发更新同一行数据，其中一个的更新将丢失。<br>举例而言，数据库行 X 的初始值是 0，我们有两个事务 T1 和 T2，T1 读取 X(&#x3D;0)，并将该值加一。同时，T2 读取 X(&#x3D;0)，将值加二。<br>如我们所见，最终 X &#x3D; 2， T1 的更新丢失了。如果串行执行两个事务，最终的结果是 X &#x3D; 3.<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/lost_update.png?raw=true"></p>
+<h4 id="脏写"><a href="#脏写" class="headerlink" title="脏写"></a>脏写</h4><p>当两个事务同时更新某一行时，将可能会发生脏写。第一个事务更新了行中的某些数据，但是接着又回滚了。另外一边，第二个事务读取了未提交的写入，并更新了该行数据。<br>举例来说，在数据库中，一行中 X &#x3D; 0 是默认的。接着，</p>
+<ul>
+<li>(1) T1 读取了 X(&#x3D;0)</li>
+<li>(2) T1 将 X 加一（X&#x3D;1）</li>
+<li>(3) T1 放弃并回滚<br>如果，T2 在上述(2)(3)之间开始执行，此时，T2 读取到 X(&#x3D;1)，并将 X 加一(X&#x3D;2)后提交。<br>我们可有看到，这里是有问题的，因为 T2 写入数据 X，是基于 T1 中未提交i的数据。如果两个事务串行的执行，X应该等于 1.<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/write_dirty.png?raw=true"></li>
+</ul>
+<h4 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h4><p>和脏写类似，不同之处在于，第二个事务在它读取了未提交的数据之后，并不需要写入。<br>举例来说，如果 X 的初始值是 0，</p>
+<ul>
+<li>(1) T1 读取 X(&#x3D;0)</li>
+<li>(2) T1 将 X 加一(X&#x3D;1)</li>
+<li>(3) T1 放弃并回滚<br>此时，T2 在(2)(3)之间开始执行，T2 读取了 X(&#x3D;1)，并将该数据返回给客户端，因此在客户端可以看到 X &#x3D; 1.<br>如我们所见，用户就看到 X &#x3D; 1 也是有问题的，因为这个数据并未提交，并且最终回滚了。如果这两个事务串行执行，用户将看到 X &#x3D; 0.<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/dirty_read.png?raw=true"></li>
+</ul>
+<h4 id="不可重复的读"><a href="#不可重复的读" class="headerlink" title="不可重复的读"></a>不可重复的读</h4><p>这是由于读写冲突造成的。当一个事务读取同样一行数据两次，但是，两次读取之间，另外一个事务提交了该数据的写入。<br>举例来说，T1 读取到 X &#x3D; 0，T2 将 X 更新到 1 并提交了该数据。T1 再次读取 X，这时，它发现 X &#x3D; 1。<br>T1 发现了由 T2 引发的数据变化。如果两个事务是串行执行的，我们的期望值是 T1 两次获取到的 X 是 0 或者 1（具体取决于两个事务的执行顺序）。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/no_repeatable_read.png?raw=true"></p>
+<h4 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h4><p>在同一个事务中，执行相同的两次查询，得出的查询结果不同。这中间，可能出现另外一个事务做了一些更新影响到了第二次的查询结果。<br>举例而言，初始时，A表中有两个记录。 T1（原文中是 T1，但是此处应该是 T2） 查询 A表 并找到了这两个记录。 T2（应该是 T1） 在 A表 中插入了一个新行。接着，	T1（应该是 T2）次查询时，发现结果中有三条数据。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/phantom_read.png?raw=true"></p>
+<h4 id="写偏差"><a href="#写偏差" class="headerlink" title="写偏差"></a>写偏差</h4><p>当两个事务并发读取了 X 和 Y 两个行，两个事务又进行了并发的不相关联的更新（T1 更新了 X， T2 更新了 Y），最后，并发提交。两者对对方的更新互不可见。<br>问题在于，如果 X 和 Y 之间存在约束，比如 X + Y &gt;0. 注意，约束检查在每次更新 X 或者 Y 时，是每次都执行的，但是，并发更新时，约束可能会失效。<br>如果串行执行两个事务，T1 或者 T2 都将由于约束而放弃执行。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/write_skew.png?raw=true"></p>
+<h3 id="隔离等级"><a href="#隔离等级" class="headerlink" title="隔离等级"></a>隔离等级</h3><p>如果定义比完美隔离弱化的隔离等级？（译者注：不采用严格的完美的串行化隔离策略，大概是性能消耗太大吧）<br>如果数据库系统要确保完美的隔离，它就要保障不会有并发异常发生。顺着这个思路，我们可以通过释放一些约束的方式定义弱化的隔离等级。<br>ISO SQL 标准定义了一些弱化的隔离等级，在这里，某些等级下异常是被允许的。<br>举例来说，最弱化的隔离等级—Read Uncommitted—允许三个异常—脏读，不可重复读以及幻读。而最严格的隔离等级—Serializable—不允许这三个异常发生。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/sql_isolation_level.png?raw=true"></p>
+<p>你可能会好奇，上文中我们提到了三种异常，但是在 ISO SQL 标准中只提到了三种，剩下的三种怎么办？接着阅读。</p>
+<p>ISO SQL 标准怎样定义隔离标准的很多问题，<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-95-51.pdf">在这里已经提到了</a>。你提出的问题，在其中也有描述。不幸的是，多次校正之后，ISO SQL 标准仍然没有修复它们。</p>
+<p>让我们来回顾以下 ISO SQL 标准中已经定义的隔离等级的问题。</p>
+<h3 id="现有的隔离等级存在的问题"><a href="#现有的隔离等级存在的问题" class="headerlink" title="现有的隔离等级存在的问题"></a>现有的隔离等级存在的问题</h3><p>首先，目前的 ISO SQL 标准定义隔离标准时所考虑的异常并不够全面。它只提到了三种类型的异常，其它的异常比如更新丢失、脏写和写偏差都没有提到。因此，不同的数据库据系统实现厂家可能会自己根据不同异常类型定义不同的隔离等级，这将导致隔离等级的不一致性。如果这种差异没有被厂商以文档的形式很好的提供出来，这对于开发来说会更加糟糕。</p>
+<p>其次，目前的 ISO SQL 标准没有提供对快照隔离等级的定义，这在实际过程中，实际上是很受欢迎的。因此，不同的数据库系统实现，实现方式也有差异。<br>快照隔离，确保在一个事务中所有的读操作所看到的是同一个数据库快照。数据库采用了快照一致性，每个快照都都是提交完成的数据。（在实际过程中，快照隔离典型地采用了 MVCC 多版本并发控制机制）</p>
+<p>当一个事务开始，它将持有上个数据库快照的引用。事务内所有读操作的数据，来自同一个快照。重复读一个数据获得的结果是一样的。因此，非重复读异常将不会发生。另一方面，写入讲导致一个新的数据库快照产生。如果两个事务并发写入同一个数据，这时其中一个事务会放弃该操作。因此，更新丢失异常将不会发生。然而，如果两个并发事务写入的数据是没有任何关联的，那么写冲突将不会被检测到。因此，快照隔离容易发生<strong><strong>写偏差</strong></strong>。一些数据库系统实现也容易引发幻读异常。</p>
+<p>最后，现有的隔离等级对串行化的定义比较模糊。一方面，SQL 标准所定义的串行化是正确的—事务之间串行执行，不会有重叠的部分；另外一方面，上述的隔离等级表似乎暗示着只要隔离等级不容易触发被上面提到的 3 种类型的异常，它就是串行化的。</p>
+<h3 id="作为一个应用开发者，我们可以从中学习到什么？"><a href="#作为一个应用开发者，我们可以从中学习到什么？" class="headerlink" title="作为一个应用开发者，我们可以从中学习到什么？"></a>作为一个应用开发者，我们可以从中学习到什么？</h3><p>在本篇文章中，我们回顾了并发问题，以及数据库事务以及 ACID 属性对并发问题的处理。<br>我们深入了解了数据库事务属性—隔离。<br>我们知道，越加严格的隔离限制，意味着越大的性能问题。根据不同的用例，开发者需要自己做这个平衡，选择合适的隔离等级。<br>我们知道了六种并发异常。不幸地是，目前 ISO SQL 标准并没有清晰完整地定义好隔离标准，只定义了六种异常中的三种。这会导致很多冲突（译注：没有统一的标准）。<br>现今，不同的数据库厂商对不同的隔离等级提供了含糊不清的定义，使用者需要深入了解数据库系统的实现细节以更好的处理这些问题。</p>
+<h3 id="作为一个开发者，我们可以做什么"><a href="#作为一个开发者，我们可以做什么" class="headerlink" title="作为一个开发者，我们可以做什么"></a>作为一个开发者，我们可以做什么</h3><p>当我以前在 google 在分布式系统上数据一致性问题的时候，找到了 <a target="_blank" rel="noopener" href="http://dbmsmusings.blogspot.com/2019/05/introduction-to-transaction-isolation.html">Daniel Abadi 教授的博客</a>。在博客里发现了大量优质的内容。但是，不幸的是，离开学校后又忘记了。</p>
+<p>然而，在重读了一遍又一遍之后（为了写这篇文章），我觉得很悲伤，作为一个应用开发者，我找不到一个更好的解决方式—如何能把分布式微服务写的更好。</p>
+<p>在 Java 中，我们有接口和实体类，**** 接口提供了 API 协议，而实体类提供 API 的具体实现。**** 接口的使用者希望能够被清晰的定义，同时应保持一致性。从而，使用者可以很好的利用接口提供的功能，而不需要去理解背后的实现细节。这就是抽象。<br>抽象在计算机科学中随处可见，在我看来，这是现代计算机系统成功的基础。</p>
+<p>数据库系统为它们的使用者提供了相同的抽象。ISO SQL 标准，在我看来，扮演着在应用和数据库系统之间接口的角色。然而，它的隔离等级定义的非常不好，以至于用户需要自己查看数据库系统的具体实现细节，以便做出更好的判断。这是不可接受的。</p>
+<p>作为一个数据库领域的门外汉（我对数据库系统很感兴趣，并计划学习更多。现今，我依然认为我知道的很少），我的建议是：<br>首先，查找并搜索数据库系统实现的不同点。查找文档，如果文档不能提供一个关于不同隔离等级清晰的解释以及配置说明，那这个数据库可能不适合你。</p>
+<p>第二，尽可能地选择更加严格的隔离等级。如上面提到的，你需要确认不同的缺陷以及它们会对应用造成的影响，以确定选择哪个等级。</p>
+<p>虽然性能是非常值得考虑且重要的，但实际上这里仍然有变通的地方，比如：查找其它数据库系统的实现，看哪个在同等隔离等级下提供更好的性能；基于一些最佳实践，优化应用代码和数据库设计。</p>
+<h3 id="接下来怎么做"><a href="#接下来怎么做" class="headerlink" title="接下来怎么做"></a>接下来怎么做</h3><p>这篇文章仅仅是在讨论传统数据库。现今，我们看到对分布式数据库系统的需求越来越强烈。在分布式数据库系统中，为了高可用性和扩展性，数据被复制在多个数据库实例中。我们将在下篇文章中，讨论分布式数据库系统中的隔离问题。</p>
+<h3 id="参考引用"><a href="#参考引用" class="headerlink" title="参考引用"></a>参考引用</h3><p>我非常推荐 Daniel Abadi 的博客。文中一些图片和思想来源于该博客中，但是原文的内容比此更多。<br><a target="_blank" rel="noopener" href="http://dbmsmusings.blogspot.com/2019/05/introduction-to-transaction-isolation.html">Introduction to Transaction Isolation Levels</a><br><a target="_blank" rel="noopener" href="http://dbmsmusings.blogspot.com/2019/06/correctness-anomalies-under.html">Correctness Anomalies Under Serializable Isolation</a></p>
+<hr>
+<p>译者添加的其它参考链接<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/38217080">并发异常那些事</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/数据库/">数据库</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/数据库/">数据库</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

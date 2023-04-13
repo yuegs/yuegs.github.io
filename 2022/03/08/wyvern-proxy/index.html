@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Wyvern 代理注册协议 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="OpenSea 使用了 Wyvern 协议。协议内容，主要包括了代理注册部分和交换部分。本文主要展开分析 OpenSea 所使用的 代理注册部分。">
+  
+
+  
+  
+  <meta name="keywords" content="智能合约,Wyvern,ProxyRegistry,注册">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Wyvern 代理注册协议"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Wyvern 代理注册协议</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/03/08/wyvern-proxy/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-03-08T14:45:28.000Z">
+          2022-03-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-registry/wyvern-registry.png?raw=true"><br>OpenSea 使用了 <a target="_blank" rel="noopener" href="https://wyvernprotocol.com/">Wyvern</a> 协议。协议内容，主要包括了代理注册部分和交换部分。本文主要展开分析 OpenSea 所使用的 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0xa5409ec958c83c3f309868babaca7c86dcb077c1#code">代理注册部分</a>。</p>
+<span id="more"></span>
+
+<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p>从技术层面讲，整个代理注册过程，关键在于通过 <strong><strong>代理模式</strong></strong> 实现 <code>可更新的授权实现者</code> 。<br>所谓 <code>授权实现者</code>，即，在 NFT 合约中，用户授权其可以转移自己的 NFT。<code>授权实现者</code> 被用户 <code>approve</code> 后，通过 <code>delegatecall</code> 或者 <code>call</code> 调用可以代替用户处理 NFT。<br>所谓 <code>可更新性</code>，即，通过重新部署新合约的形式，借助代理模式，将 <code>授权实现者</code> 指向最新的合约。这种方式，将大大增强合约的灵活性。</p>
+<p>接下来，就具体合约内容做分析。<br>继承关系如下所示：<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-registry/wyvern-registry-contracts.png?raw=true"></p>
+<h3 id="2-Proxy"><a href="#2-Proxy" class="headerlink" title="2. Proxy"></a>2. Proxy</h3><p>代理过程，通过 <code>fallback</code> 函数实现，<code>fallback</code> 中，通过内联汇编，实现可以接收返回值的 <code>delegatecall</code>。<br>汇编代码中，最终调用 <code>implementation</code> 做实现。而该变量，在 <code>Proxy</code> 构造时，被构造参数赋值为 <code>AuthenticatedProxy</code>。<br>当然，<code>implementation</code> 是可以被“升级”的。即，允许重新上链一个合约作为 <code>implementation</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> (<span class="params"></span>) payable public &#123;</span><br><span class="line">    address _impl = <span class="title function_">implementation</span>();</span><br><span class="line">    <span class="built_in">require</span>(_impl != <span class="title function_">address</span>(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    assembly &#123;</span><br><span class="line">        <span class="keyword">let</span> ptr := <span class="title function_">mload</span>(<span class="number">0x40</span>)</span><br><span class="line">        <span class="comment">// 将参数存储到从 ptr 开始的数据槽，需要的槽位:calldatasize</span></span><br><span class="line">        <span class="title function_">calldatacopy</span>(ptr, <span class="number">0</span>, calldatasize)</span><br><span class="line">        <span class="comment">// 注意，这里的 delegatecall 并非 Solidity 中的 delegatecall</span></span><br><span class="line">        <span class="comment">// 此处是 EVM 中的操作符</span></span><br><span class="line">        <span class="keyword">let</span> result := <span class="title function_">delegatecall</span>(gas, _impl, ptr, calldatasize, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> size := returndatasize</span><br><span class="line">        <span class="comment">// 将返回值存储到从 ptr 开始的数据槽，需要的槽位:size</span></span><br><span class="line">        <span class="title function_">returndatacopy</span>(ptr, <span class="number">0</span>, size)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 检查调用是否成功</span></span><br><span class="line">        <span class="keyword">switch</span> result</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span> &#123; <span class="title function_">revert</span>(ptr, size) &#125;</span><br><span class="line">        <span class="comment">// 如果成功，则返回数据</span></span><br><span class="line">        <span class="keyword">default</span> &#123; <span class="keyword">return</span>(ptr, size) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-AuthenticatedProxy"><a href="#3-AuthenticatedProxy" class="headerlink" title="3. AuthenticatedProxy"></a>3. <a target="_blank" rel="noopener" href="https://etherscan.io/address/0xf9e266af4bca5890e2781812cc6a6e89495a79f2#code">AuthenticatedProxy</a></h3><p><code>AuthenticatedProxy</code> 是事实上的授权实现者。虽然，用户将交易权授权给了 <code>OwnableDelegateProxy</code>，但是，其 通过 <code>delegatecall</code> 最终调用了 <code>AuthenticatedProxy</code> 中的 <code>proxy</code> 方法。<code>delegatecall</code> 调用机制，<strong><strong>从某种程度上就像</strong></strong> <code>OwnableDelegateProxy</code> <strong><strong>继承</strong></strong>了 <code>AuthenticatedProxy</code>。 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">proxy</span>(<span class="params">address dest, HowToCall howToCall, bytes calldata</span>) public returns (bool result)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// user, 发起 `registerProxy` 注册的用户。</span></span><br><span class="line">    <span class="comment">// registry, 即 `ProxyRegistry`</span></span><br><span class="line">    <span class="comment">// 因此，调用该函数，需要调用者是注册的发起者，或者，是调用者授权的第三方</span></span><br><span class="line">    <span class="built_in">require</span>(msg.<span class="property">sender</span> == user || (!revoked &amp;&amp; registry.<span class="title function_">contracts</span>(msg.<span class="property">sender</span>)));</span><br><span class="line">    <span class="keyword">if</span> (howToCall == <span class="title class_">HowToCall</span>.<span class="property">Call</span>) &#123;</span><br><span class="line">        result = dest.<span class="title function_">call</span>(calldata);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (howToCall == <span class="title class_">HowToCall</span>.<span class="property">DelegateCall</span>) &#123;</span><br><span class="line">        result = dest.<span class="title function_">delegatecall</span>(calldata);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，在注册中心 <code>registry</code>，已经对交易协议 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#code">Wyvern Exchange v2</a> 进行了授权。因此，当调用者为 <code>Wyvern Exchange v2</code> 时，<code>registry.contracts(msg.sender))</code> 将返回 <code>true</code>。<code>Wyvern Exchange v2</code> 合约地址为 <code>0x7f268357a8c2552623316e2562d90e642bb538e5</code>，可以使用该地址，在 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x16be9005894e09671c6efb50cd1d221f0d6320f2#code">OwnableDelegateProxy</a> 中检查授权。</p>
+<h3 id="4-ProxyRegistry"><a href="#4-ProxyRegistry" class="headerlink" title="4. ProxyRegistry"></a>4. ProxyRegistry</h3><p>主要包括两个功能：</p>
+<ul>
+<li>管理 <code>proxy</code> 方法的调用授权。</li>
+<li>为调用者创建代理对象。</li>
+</ul>
+<h4 id="4-1-授权管理"><a href="#4-1-授权管理" class="headerlink" title="4.1 授权管理"></a>4.1 授权管理</h4><p>需要注意的是，在授权第三方可以请求代理方法执行时，授权过程需要两周才会生效。而取消一个授权，是可以直接取消的。<br>另外，授权管理方法，只能由 <code>ProxyRegistry</code> 的创建者调用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">startGrantAuthentication</span> (address addr) public onlyOwner&#123;</span><br><span class="line">    <span class="built_in">require</span>(!contracts[addr] &amp;&amp; pending[addr] == <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 两周后，再调用 endGrantAuthentication 可以完成授权  </span></span><br><span class="line">    pending[addr] = now;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取消授权</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">revokeAuthentication</span> (address addr) public onlyOwner</span><br><span class="line">&#123;</span><br><span class="line">    contracts[addr] = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在授权时，只有一种不需要 <code>两周时延</code> 的方法，但是只能调用一次。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">grantInitialAuthentication</span> (address authAddress) onlyOwner public</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">require</span>(!initialAddressSet);</span><br><span class="line">    initialAddressSet = <span class="literal">true</span>;</span><br><span class="line">    contracts[authAddress] = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>授权的本质，是 <code>registry.contracts(msg.sender)</code> 布尔值的赋值。根据该值，将决定是否被允许可以进行 <code>AuthenticatedProxy</code> 中 <code>proxy</code> 调用。<code>proxy</code> 函数中，将对被代理对象执行 <code>delegatecall</code>，通过该方法，完成 NFT 所属权转移。</p>
+<h4 id="4-2-创建代理"><a href="#4-2-创建代理" class="headerlink" title="4.2 创建代理"></a>4.2 创建代理</h4><p><code>ProxyRegistry</code> 会为用户创建 <code>OwnableDelegateProxy</code> 合约。<code>OwnableDelegateProxy</code> 合约是用户授权的对象，它有权限转移用户的 NFT。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">registerProxy</span>(<span class="params"></span>) public returns (<span class="title class_">OwnableDelegateProxy</span> proxy)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">require</span>(proxies[msg.<span class="property">sender</span>] == <span class="title function_">address</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="comment">// 为 `msg.sender` 创建一个代理合约</span></span><br><span class="line">    <span class="comment">// `initialize` 实际上，是 `AuthenticatedProxy` 中的方法</span></span><br><span class="line">    proxy = <span class="keyword">new</span> <span class="title class_">OwnableDelegateProxy</span>(msg.<span class="property">sender</span>, delegateProxyImplementation, abi.<span class="title function_">encodeWithSignature</span>(<span class="string">&quot;initialize(address,address)&quot;</span>, msg.<span class="property">sender</span>, <span class="title function_">address</span>(<span class="variable language_">this</span>)));</span><br><span class="line">    proxies[msg.<span class="property">sender</span>] = proxy;</span><br><span class="line">    <span class="keyword">return</span> proxy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-代理对象-OwnableDelegateProxy"><a href="#5-代理对象-OwnableDelegateProxy" class="headerlink" title="5. 代理对象 OwnableDelegateProxy"></a>5. <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x16be9005894e09671c6efb50cd1d221f0d6320f2#code">代理对象 OwnableDelegateProxy</a></h3><p>最终，<strong><strong>为用户注册的合约为 <code>OwnableDelegateProxy</code>.</strong></strong><br>其构造方法为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">constructor</span>(<span class="params">address owner, address initialImplementation, bytes calldata</span>)</span><br><span class="line">public</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 被代理者，可以更换 代理实现，即 AuthenticatedProxy</span></span><br><span class="line">    <span class="title function_">setUpgradeabilityOwner</span>(owner);</span><br><span class="line">    <span class="title function_">_upgradeTo</span>(initialImplementation);</span><br><span class="line">    <span class="comment">// 注意，这里通过 `delegatecall` 调用了 AuthenticatedProxy 中的 `initialize` 方法</span></span><br><span class="line">    <span class="built_in">require</span>(initialImplementation.<span class="title function_">delegatecall</span>(calldata));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用了 AuthenticatedProxy 中的 `initialize`</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">initialize</span> (address addrUser, <span class="title class_">ProxyRegistry</span> addrRegistry) public</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">require</span>(!initialized);</span><br><span class="line">    <span class="comment">// 以下状态变量，都将在 OwnableDelegateProxy 空间中。</span></span><br><span class="line">    initialized = <span class="literal">true</span>;</span><br><span class="line">    user = addrUser;</span><br><span class="line">    registry = addrRegistry;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-WyvernProxyRegistry"><a href="#6-WyvernProxyRegistry" class="headerlink" title="6. WyvernProxyRegistry"></a>6. <a target="_blank" rel="noopener" href="https://etherscan.io/address/0xa5409ec958c83c3f309868babaca7c86dcb077c1#code">WyvernProxyRegistry</a></h3><p><strong><strong>注意，其继承自</strong></strong> <code>ProxyRegistry</code>，在单独的 <code>WyvernProxyRegistry</code> 层面，完成了两件事：</p>
+<ul>
+<li><p>在构造函数中，创建 <code>AuthenticatedProxy</code>，该对象将传递给各个由 <code>WyvernProxyRegistry</code> 创建的 <code>OwnableDelegateProxy</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">constructor</span> () public</span><br><span class="line">&#123;</span><br><span class="line">    delegateProxyImplementation = <span class="keyword">new</span> <span class="title class_">AuthenticatedProxy</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以进行一次没有延时的合约授权</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">grantInitialAuthentication</span> (address authAddress) onlyOwner public</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">require</span>(!initialAddressSet);</span><br><span class="line">    initialAddressSet = <span class="literal">true</span>;</span><br><span class="line">    contracts[authAddress] = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-OwnedUpgradeabilityProxy"><a href="#7-OwnedUpgradeabilityProxy" class="headerlink" title="7. OwnedUpgradeabilityProxy"></a>7. OwnedUpgradeabilityProxy</h3><p>最后，说明下管理代理更新的合约。<br>主要包含两个功能：谁有权限可以更新实现；当前的实现是谁。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">transferProxyOwnership</span>(<span class="params">address newOwner</span>) public onlyProxyOwner &#123;</span><br><span class="line">    <span class="built_in">require</span>(newOwner != <span class="title function_">address</span>(<span class="number">0</span>));</span><br><span class="line">    emit <span class="title class_">ProxyOwnershipTransferred</span>(<span class="title function_">proxyOwner</span>(), newOwner);</span><br><span class="line">    <span class="title function_">setUpgradeabilityOwner</span>(newOwner);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">_upgradeTo</span>(<span class="params">address implementation</span>) internal &#123;</span><br><span class="line">    <span class="built_in">require</span>(_implementation != implementation);</span><br><span class="line">    _implementation = implementation;</span><br><span class="line">    emit <span class="title class_">Upgraded</span>(implementation);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a><a href="/tags/Wyvern/">Wyvern</a><a href="/tags/ProxyRegistry/">ProxyRegistry</a><a href="/tags/注册/">注册</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

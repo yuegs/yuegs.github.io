@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ERC 721 协议解析 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="ERC 721 是非同质化通证（token） NFT 的实现标准。非同质化，意味着它是唯一的，不可替代的，比如区块链应用里的一块土地&amp;#x2F;一首歌&amp;#x2F;一张图&amp;#x2F;一段话，甚至你也可以将现实世界里的物理资产 token 化，它还可以代表一辆车&amp;#x2F;一间房。
+相较于 ERC 20 这种同质化通证的标准，ERC 721 协议必然更加复杂，通常会由若干个合约组成。分开来看，每个合约都定义一定的职责或者功能，组合起来，共同完成 NFT 的实现和管理。
+接下来，我们来讨论其在 OpenZeppelin 中的实现。@openzeppelin 版本 4.5.0">
+  
+
+  
+  
+  <meta name="keywords" content="NFT,ERC721,ERC721Metadata">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="ERC 721 协议解析"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>ERC 721 协议解析</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/16/smart-contract-erc721/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-16T14:43:00.000Z">
+          2022-02-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/erc721-func/nft-min.png?raw=true"></p>
+<p>ERC 721 是非同质化通证（token） NFT 的实现标准。<br>非同质化，意味着它是唯一的，不可替代的，比如区块链应用里的一块土地&#x2F;一首歌&#x2F;一张图&#x2F;一段话，甚至你也可以将现实世界里的物理资产 token 化，它还可以代表一辆车&#x2F;一间房。</p>
+<p>相较于 ERC 20 这种同质化通证的标准，ERC 721 协议必然更加复杂，通常会由若干个合约组成。分开来看，每个合约都定义一定的职责或者功能，组合起来，共同完成 NFT 的实现和管理。</p>
+<p>接下来，我们来讨论其在 <strong><strong>OpenZeppelin 中的实现</strong></strong>。<br>@openzeppelin 版本 <a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/tree/v4.5.0">4.5.0</a></p>
+<span id="more"></span>
+<br/>
+核心实现接口包括：
+
+<ul>
+<li><strong><strong>IERC721</strong></strong>: 定义了 Token 层面的通用属性，包括持有查询&#x2F;余额查询&#x2F;转账&#x2F;转账授权等。</li>
+<li><strong><strong>IERC165</strong></strong>: 判断合约是否实现了某个接口。</li>
+<li><strong><strong>ERC721Metadata</strong></strong>: Metadata 层面的通用属性，包括token名称&#x2F;存储地址(metadata URI)等。</li>
+<li><strong><strong>ERC721</strong></strong>: 实现上述三个接口，实现 ERC721 协议。</li>
+<li><strong><strong>ERC721URIStorage</strong></strong>: 实现上述所有接口，同时，是 tokenId 到 tokenURI 映射关系的实际持有者。</li>
+</ul>
+<br/>
+
+<p>这些实现中，更多的，是通过 <code>tokenId</code> 将各类关系关联起来。</p>
+<ul>
+<li>tokenId 和 OwnerAddress 组成的 map，解决是谁的问题。可以查询指定 tokenId 的 NFT 是否属于某个账户。</li>
+<li>tokenId 和 tokenURI 组成的 map 中，主要解决 NFT 在哪的问题。可以通过 tokenId 获取 NFT 的信息（创建者&#x2F;metadata地址等）；</li>
+<li>tokenId 和 ApprovedAdress 组成的 map 中，解决谁可以被授权转账的问题。可以查询指定 tokenId 的 NFT 是否授权给某个账户进行操作；</li>
+</ul>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/erc721-func/token-relationship.png?raw=true"></p>
+<p>下面，我们来看具体的接口定义和实现。</p>
+<br/>
+
+<h3 id="1-IERC721"><a href="#1-IERC721" class="headerlink" title="1 IERC721"></a>1 IERC721</h3><p>符合 ERC 721 标准的合约必须实现的接口。</p>
+<h4 id="1-1-balanceOf-address-owner-→-uint256-balance"><a href="#1-1-balanceOf-address-owner-→-uint256-balance" class="headerlink" title="1.1 balanceOf(address owner) → uint256 balance"></a>1.1 balanceOf(address owner) → uint256 balance</h4><p>获取 <code>owner</code> 账户所拥有的 NFT 的数量。</p>
+<h4 id="1-2-ownerOf-uint256-tokenId-→-address-owner"><a href="#1-2-ownerOf-uint256-tokenId-→-address-owner" class="headerlink" title="1.2 ownerOf(uint256 tokenId) → address owner"></a>1.2 ownerOf(uint256 tokenId) → address owner</h4><p>通过 tokenId 查询持有特定 NFT 的账户。  </p>
+<h4 id="1-3-transferFrom-address-from-address-to-uint256-tokenId"><a href="#1-3-transferFrom-address-from-address-to-uint256-tokenId" class="headerlink" title="1.3 transferFrom(address from, address to, uint256 tokenId)"></a>1.3 transferFrom(address from, address to, uint256 tokenId)</h4><p>将 <code>from</code> 账户上指定 <code>tokenId</code> 的 NFT 转给 <code>to</code> 账户。注意，这里 <code>from</code> 和 <code>to</code> 都不能是零地址，<code>tokenId</code> 必须属于 <code>from</code>，如果该方法的调用者不是 <code>from</code> 账户，它必须是通过 <code>approve</code> 或者 <code>setApprovalForAll</code> 被授权过允许转移 NFT 的账户。</p>
+<h4 id="1-4-safeTransferFrom-address-from-address-to-uint256-tokenId"><a href="#1-4-safeTransferFrom-address-from-address-to-uint256-tokenId" class="headerlink" title="1.4 safeTransferFrom(address from, address to, uint256 tokenId)"></a>1.4 safeTransferFrom(address from, address to, uint256 tokenId)</h4><p>与 <code>transferFrom</code> 相同，但是需要注意的是，<br>在本函数中，如果 <code>to</code> 是合约，则其必须实现 <a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/2.x/api/token/erc721#IERC721Receiver-onERC721Received-address-address-uint256-bytes-"><code>IERC721Receiver.onERC721Received</code></a> ，在这种情况下，<code>onERC721Received</code> 将被执行，且需要返回 <code>IERC721Receiver.onERC721Received.selector</code>（即<code>bytes4(keccak256(&quot;onERC721Received(address,address,uint256,bytes)&quot;))</code>）,交易才能执行成功。</p>
+<h4 id="1-5-safeTransferFrom-from-to-tokenId-data"><a href="#1-5-safeTransferFrom-from-to-tokenId-data" class="headerlink" title="1.5 safeTransferFrom(from, to, tokenId, data)"></a>1.5 safeTransferFrom(from, to, tokenId, data)</h4><p>上面的函数实际上将调用本函数执行，只不过其 <code>data</code> 字段为空字符串。如果 <code>to</code> 是合约，数据负载 <code>data</code> 将通过 <code>to</code> 合约的 <code>onERC721Received</code> 方法由 <code>from</code> 发送到 <code>to</code> 合约。转账完成之后，<code>to</code> 合约的<code>onERC721Received</code> 被调用，这就是 <code>safe</code> 前缀的含义。<br>具体代码可以 <a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol#L203">查看这里</a>。</p>
+<h4 id="1-6-approve-to-tokenId"><a href="#1-6-approve-to-tokenId" class="headerlink" title="1.6 approve(to, tokenId)"></a>1.6 approve(to, tokenId)</h4><p>由 NFT 的实际持有者授权 <code>to</code> 账户可以调用 <code>transferFrom</code> 或者 <code>safeTransferFrom</code>，代替持有者完成 <code>tokenId</code> 的 NFT 的交易。</p>
+<h4 id="1-7-getApproved-tokenId"><a href="#1-7-getApproved-tokenId" class="headerlink" title="1.7 getApproved(tokenId)"></a>1.7 getApproved(tokenId)</h4><p>通过 <code>tokenId</code> 查询授权操作账户。所有授权操作账户和 <code>tokenId</code> 的关系，在 OpenZeppelin 的实现中，记录在 <code>_tokenApprovals</code> map 中。</p>
+<h4 id="1-8-setApprovalForAll-operator-approved"><a href="#1-8-setApprovalForAll-operator-approved" class="headerlink" title="1.8 setApprovalForAll(operator, _approved)"></a>1.8 setApprovalForAll(operator, _approved)</h4><p>由 NFT 的实际持有者授权 <code>operator</code> 账户<strong><strong>是否</strong></strong>可以通过调用 <code>transferFrom</code> 或者 <code>safeTransferFrom</code>，代替持有者完成其账户下所有 NFT 的转账。授权关系记录在 <code>_operatorApprovals</code> map 中。</p>
+<h4 id="1-9-isApprovedForAll-owner-operator"><a href="#1-9-isApprovedForAll-owner-operator" class="headerlink" title="1.9 isApprovedForAll(owner, operator)"></a>1.9 isApprovedForAll(owner, operator)</h4><p>以 <code>owner</code> 和 <code>operator</code> 为 key，查询 <code>_operatorApprovals</code> map 中存储的数据是否为 <code>true</code>，即持有者是否授权 <code>operator</code> 可以操作自己所有的 NFT。是否授权所有 token 的交易权，是存储在 <code>_operatorApprovals</code> 这个 map 中，该 map 的具体形式为 <code>mapping(address =&gt; mapping(address =&gt; bool))</code>,第一个地址是 <code>owner</code>,第二个地址是 <code>operator</code>，变量 <code>bool</code>是是否全部授权。</p>
+<br/>
+
+<h3 id="2-IERC165"><a href="#2-IERC165" class="headerlink" title="2 IERC165"></a>2 IERC165</h3><p>该协议标准中，判断合约是否实现了某个接口。<a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/introspection/IERC165.sol">具体实现</a></p>
+<h4 id="2-1-supportsInterface-interfaceId"><a href="#2-1-supportsInterface-interfaceId" class="headerlink" title="2.1 supportsInterface(interfaceId)"></a>2.1 supportsInterface(interfaceId)</h4><p>外部可以通过调用该方法，确认该合约是否支持某些标准(或者说实现了某些接口)，比如 <code>ERC 721</code>.<br>注意，该方法是 <a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/4.x/api/utils#ERC165"><code>ERC 165</code></a> 标准中的方法。</p>
+<blockquote>
+<p>A bytes4 value containing the EIP-165 interface identifier of the given interface I. This identifier is defined as the XOR of all function selectors defined within the interface itself - excluding all inherited functions.</p>
+</blockquote>
+<p>引用来源：<a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.7.1/units-and-global-variables.html">type(I).interfaceId</a></p>
+<br/>
+
+<h3 id="3-IERC721Metadata"><a href="#3-IERC721Metadata" class="headerlink" title="3 IERC721Metadata"></a>3 IERC721Metadata</h3><p>该接口主要定义 NFT 的属性信息。</p>
+<h4 id="3-1-name-→-string"><a href="#3-1-name-→-string" class="headerlink" title="3.1 name() → string"></a>3.1 name() → string</h4><p>合约 token 的名字。</p>
+<h4 id="3-2-symbol-→-string"><a href="#3-2-symbol-→-string" class="headerlink" title="3.2 symbol() → string"></a>3.2 symbol() → string</h4><p>合约 token 名字的简写。</p>
+<h4 id="3-3-tokenURI-uint256-tokenId-→-string"><a href="#3-3-tokenURI-uint256-tokenId-→-string" class="headerlink" title="3.3 tokenURI(uint256 tokenId) → string"></a>3.3 tokenURI(uint256 tokenId) → string</h4><p>通过指定的 <code>tokenId</code> 返回其 <code>URI</code>。如果 <code>baseURI</code> 不为空，则 <code>tokenURI</code> 应该为 <code>abi.encodePacked(baseURI, tokenId.toString())</code>，否则该方法将返回空字符串。注意，通常在其实现类中，会 <code>override</code> 该方法，当 <code>baseURI</code> 为空时，直接返回 <code>tokenURI</code>。这里，URI 通常指向了符合 ERC721 Metadata 的 Json 格式文件，如下所示：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Asset Metadata&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Identifies the asset to which this NFT represents&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Describes the asset to which this NFT represents&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;image&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A URI pointing to a resource with mime type image/* representing the asset to which this NFT represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive.&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="4-ERC721"><a href="#4-ERC721" class="headerlink" title="4 ERC721"></a>4 ERC721</h3><p>ERC721 同时实现了 IERC721&#x2F;IERC165&#x2F;IERC721Metadata 接口，也有一些内部方法的实现。</p>
+<h4 id="4-1-exists-uint256-tokenId-→-bool"><a href="#4-1-exists-uint256-tokenId-→-bool" class="headerlink" title="4.1 _exists(uint256 tokenId) → bool"></a>4.1 _exists(uint256 tokenId) → bool</h4><p>通过 <code>tokenId</code> 查询 NFT 是否存在。tokenId 到 账户地址的映射关系存储在 <code>_owners</code> map 中。</p>
+<h4 id="4-2-isApprovedOrOwner-address-spender-uint256-tokenId-→-bool"><a href="#4-2-isApprovedOrOwner-address-spender-uint256-tokenId-→-bool" class="headerlink" title="4.2 _isApprovedOrOwner(address spender, uint256 tokenId) → bool"></a>4.2 _isApprovedOrOwner(address spender, uint256 tokenId) → bool</h4><p>查询指定的 <code>spender</code> 账户是否被允许交易指定 <code>tokenId</code> 的 NFT. tokeId 到授权账户的映射关系存储在 <code>_tokenApprovals</code> map 中。</p>
+<h4 id="4-3-mint-address-to-uint256-tokenId"><a href="#4-3-mint-address-to-uint256-tokenId" class="headerlink" title="4.3 _mint(address to, uint256 tokenId)"></a>4.3 _mint(address to, uint256 tokenId)</h4><p>本质上来讲，就是将 <code>tokenId</code> 和账户 <code>to</code> 通过 <code>_owners</code>(一个map) 关联起来，<code>tokenId</code> 为 key，<code>to</code> 为 value。在关联之前，此 <code>tokenId</code> 应为 <code>_owners</code> 中未曾有过的。确保 <code>tokenId</code> 的唯一性。同时，将账户 <code>to</code> 的持有量自增。</p>
+<h4 id="4-4-safeMint-address-to-uint256-tokenId-bytes-data"><a href="#4-4-safeMint-address-to-uint256-tokenId-bytes-data" class="headerlink" title="4.4 _safeMint(address to, uint256 tokenId, bytes _data)"></a>4.4 _safeMint(address to, uint256 tokenId, bytes _data)</h4><p>该方法将调用上述 <code>_mint</code> 方法，但同时，所谓 <code>safe</code>，也将调用 <code>_checkOnERC721Received</code> 方法。在 <code>_checkOnERC721Received</code> 中，如果 <code>to</code> 是合约账户，则 <code>to</code> 必须实现了 <code>IERC721Receiver</code> 接口，其 <code>onERC721Received</code> 将被调用，<code>data</code> 作为参数通过 <code>onERC721Received</code> 传递给 <code>to</code> 合约。 </p>
+<h4 id="4-5-safeMint-address-to-uint256-tokenId"><a href="#4-5-safeMint-address-to-uint256-tokenId" class="headerlink" title="4.5 _safeMint(address to, uint256 tokenId)"></a>4.5 _safeMint(address to, uint256 tokenId)</h4><p>将调用 <code>2.2.4</code> 的方法，只不过 <code>_data</code> 是个缺省值，用空字符串表示。</p>
+<h4 id="4-6-burn-uint256-tokenId"><a href="#4-6-burn-uint256-tokenId" class="headerlink" title="4.6 _burn(uint256 tokenId)"></a>4.6 _burn(uint256 tokenId)</h4><p>销毁指定 <code>tokenId</code> 的 NFT。所谓销毁，将移除 <code>tokenId</code> 的授权操作关系，且在 <code>_owners</code> 账户关系中将 <code>tokenId</code> 指向零地址。’owner’ 持有量自减。</p>
+<h4 id="4-7-burn-address-owner-uint256-tokenId"><a href="#4-7-burn-address-owner-uint256-tokenId" class="headerlink" title="4.7 _burn(address owner, uint256 tokenId)"></a>4.7 _burn(address owner, uint256 tokenId)</h4><p>销毁指定 <code>tokenId</code> 的 NFT。该方法已经被弃用，推荐 <code>2.2.6</code> 中的方法。</p>
+<h4 id="4-8-baseURI"><a href="#4-8-baseURI" class="headerlink" title="4.8 _baseURI()"></a>4.8 _baseURI()</h4><p>baseURI 主要用于参与 tokenURI 的计算。默认情况下，它是空字符串。默认情况下，tokenId 到 tokenURI 之间的映射关系存储在 <code>_tokenURIs</code> 中。如果 baseURI 为空，则方法 tokenURI() 将直接从 <code>_tokenURIs</code> 中取值；否则， tokenURI() 方法中，将通过 <code>abi.encodePacked</code> 方法拼接 <code>baseURI</code> 和 <code>tokenURI</code> 并返回。</p>
+<br/>
+
+<h3 id="5-ERC721URIStorage"><a href="#5-ERC721URIStorage" class="headerlink" title="5 ERC721URIStorage"></a>5 ERC721URIStorage</h3><p>实现了上述所有接口。同时，是 <code>tokenId</code> 和 <code>tokenURI</code> 映射关系的实际持有者。</p>
+<h4 id="5-1-tokenURI-uint256-tokenId"><a href="#5-1-tokenURI-uint256-tokenId" class="headerlink" title="5.1 tokenURI(uint256 tokenId)"></a>5.1 tokenURI(uint256 tokenId)</h4><p>在 <code>4.8</code> 中已经做了介绍。</p>
+<h4 id="5-2-setTokenURI-uint256-tokenId-string-tokenURI"><a href="#5-2-setTokenURI-uint256-tokenId-string-tokenURI" class="headerlink" title="5.2 _setTokenURI(uint256 tokenId, string _tokenURI)"></a>5.2 _setTokenURI(uint256 tokenId, string _tokenURI)</h4><p>通过 <code>_tokenURIs</code> 这个 map 来关联 tokenId 和 tokenURI.</p>
+<h4 id="5-3-burn-uint256-tokenId"><a href="#5-3-burn-uint256-tokenId" class="headerlink" title="5.3 _burn(uint256 tokenId)"></a>5.3 _burn(uint256 tokenId)</h4><p>如上 <code>_burn()</code> 方法，该类中，同时删除了 <code>_tokenURIs</code> 中所存储的对应的内容。</p>
+<br/>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/2.x/api/token/erc721">ERC 721</a><br><a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/3.x/erc721">ERC721</a><br><a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-721">EIP-721: Non-Fungible Token Standard</a><br><a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol">openzeppelin-ERC721.sol</a><br><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.7.1/units-and-global-variables.html">type(I).interfaceId</a><br><a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/contracts/2.x/api/token/erc721#ERC721Metadata">ERC721Metadata</a><br><a target="_blank" rel="noopener" href="https://forum.openzeppelin.com/t/why-doesnt-openzeppelin-erc721-contain-settokenuri/6373">Why doesn’t OpenZeppelin ERC721 contain setTokenURI?</a><br><a target="_blank" rel="noopener" href="https://forum.openzeppelin.com/t/why-doesnt-openzeppelin-erc721-contain-settokenuri/6373/40">Why doesn’t OpenZeppelin ERC721 contain setTokenURI?-Answer</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/NFT/">NFT</a><a href="/tags/ERC721/">ERC721</a><a href="/tags/ERC721Metadata/">ERC721Metadata</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

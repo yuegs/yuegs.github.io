@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>IoC 容器、Bean 和常用注解 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="IoC(Inversion of Control) 也被称为 DI (Dependency Injection)。对象通过构造参数、工厂参数、set方法等，确定了依赖关系，而 IoC 容器在创建这个对象的时候，将自动为这个对象注入其所需要的依赖。这个过程，就是非常基础的控制反转（IoC）。
+beans，就是上面所述由 IoC 容器创建并管理的对象。">
+  
+
+  
+  
+  <meta name="keywords" content="Spring Boot">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="IoC 容器、Bean 和常用注解"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>IoC 容器、Bean 和常用注解</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/05/31/SpringBoot-Container-ioc-annotation/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-05-31T15:01:28.000Z">
+          2021-05-31
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><code>IoC</code>(Inversion of Control) 也被称为 <code>DI</code> (Dependency Injection)。<br>对象通过构造参数、工厂参数、set方法等，确定了依赖关系，而 IoC 容器在创建这个对象的时候，将自动为这个对象注入其所需要的依赖。这个过程，就是非常基础的控制反转（IoC）。</p>
+<p>beans，就是上面所述由 IoC 容器创建并管理的对象。</p>
+<span id="more"></span>
+<h3 id="IoC-容器"><a href="#IoC-容器" class="headerlink" title="IoC 容器"></a>IoC 容器</h3><p><code>org.springframework.context.ApplicationContxt</code>接口代表了 Spring 的 IoC 容器，并负责实例化、配置、装配各类 beans。这个过程，依赖于配置元数据（configuration metadata），而配置元数据，就是 XML 文件、Java 注解或者 Java 代码。<br><img src="https://docs.spring.io/spring-framework/docs/current/reference/html/images/container-magic.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CustomAutoConfigApplication</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		<span class="type">ConfigurableApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> SpringApplication.run(CustomAutoConfigApplication.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Bean-生命周期管理"><a href="#Bean-生命周期管理" class="headerlink" title="Bean 生命周期管理"></a>Bean 生命周期管理</h3><p>Bean 的生命周期，大致分为 Bean 定义、Bean初始化、Bean的生存期、Bean的销毁。</p>
+<h4 id="Bean-定义"><a href="#Bean-定义" class="headerlink" title="Bean 定义"></a>Bean 定义</h4><ul>
+<li>Spring 通过在如 <code>scanBasePackages</code> 设置的扫描路径，找到带有 @Component 类。即，进行资源定位。</li>
+<li>解析文件，将定义信息保存起来。</li>
+<li>将定义信息发布到 IoC 容器中。注意，这里仍然时 Bean 定义，并没有实例化。</li>
+</ul>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>初始话过程如下所示：<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/springboot/contianer-bean/spring-boot-container-bean-init.png?raw=true"><br>图片来源 《深入浅出Spring Boot 2.x》</p>
+<h4 id="整个生命周期"><a href="#整个生命周期" class="headerlink" title="整个生命周期"></a>整个生命周期</h4><p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/springboot/contianer-bean/spring-boot-container-bean-lifecyclle.png?raw=true"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Apple</span> <span class="keyword">implements</span> <span class="title class_">Fruit</span>, BeanNameAware, BeanFactoryAware,</span><br><span class="line">        ApplicationContextAware, InitializingBean, DisposableBean ,BeanPostProcessor &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span> <span class="variable">TGA</span> <span class="operator">=</span> Apple.class.getSimpleName() + <span class="string">&quot; &quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getFruitName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Apple&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setBeanFactory</span><span class="params">(BeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;set bean factory......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setBeanName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;set bean name:&quot;</span>+ name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;destroy......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setApplicationContext</span><span class="params">(ApplicationContext applicationContext)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;set Application context...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;after property set......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;postProcessAfterInitialization,beanName:&quot;</span>+ beanName);</span><br><span class="line">        <span class="keyword">return</span> BeanPostProcessor.<span class="built_in">super</span>.postProcessAfterInitialization(bean, beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        System.out.println(TGA+<span class="string">&quot;postProcessBeforeInitialization, beanName:&quot;</span>+ beanName);</span><br><span class="line">        <span class="keyword">return</span> BeanPostProcessor.<span class="built_in">super</span>.postProcessBeforeInitialization(bean, beanName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/springboot/contianer-bean/spring-boot-container-bean-demo.png?raw=true"></p>
+<h3 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h3><h4 id="注解-Component"><a href="#注解-Component" class="headerlink" title="注解 @Component"></a>注解 @Component</h4><p>表明这个类将被 Spring IoC容器扫描装配，从而建构出一个 Bean。如下所示，“apple”将作为这个 Bean 的名称。默认情况下，IoC 容器会把类名的第一个字母小写，其它不变，作为 Bean 的名称放入到 IoC 容器中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;apple&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Apple</span>  &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="注解-ComponentScan"><a href="#注解-ComponentScan" class="headerlink" title="注解 @ComponentScan"></a>注解 @ComponentScan</h4><p>这里加入了 @ComponentScan ，表明它会进行扫描，但是它只会扫描 UserConfig 所在当前包和子包。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserConfig</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ApplicationContext</span> <span class="variable">context1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigApplicationContext</span>(UserConfig.class) ;</span><br><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> context1.getBean(User.class) ;</span><br><span class="line">user.setName(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">System.out.println(user.getName());</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="注解-Configuration"><a href="#注解-Configuration" class="headerlink" title="注解 @Configuration"></a>注解 @Configuration</h4><p>@Configuration 代表这是一个 Java 配置文件（相当于一个xml配置文件），Spring 容器将会根据它来装配 Bean（xml 中的 <bean>)。即，bei’ta被它标记的类中，通常，其返回值通常会被 IoC 容器管理，被标记为 @Bean。</p>
+<h4 id="注解-Bean"><a href="#注解-Bean" class="headerlink" title="注解 @Bean"></a>注解 @Bean</h4><p>表明方法返回的对象将被 IoC 容器管理。</p>
+<h4 id="注解-Autowired"><a href="#注解-Autowired" class="headerlink" title="注解 @Autowired"></a>注解 @Autowired</h4><p>@Autowired 提供这样的规则：首先，它会根据类型找到对应的 Bean，如果对应类型的 Bean 不是唯一的，那么，它会根据期属性名称和 Bean 的名称进行匹配，如果匹配的上，就使用该 Bean，否则，抛出异常（如果 @Autowired 属性 required 为 false，则该值为 null）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Fruit</span> &#123;</span><br><span class="line">    String <span class="title function_">getFruitName</span><span class="params">()</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Apple</span> <span class="keyword">implements</span> <span class="title class_">Fruit</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getFruitName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Apple&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> Fruit fruit ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">eatFruit</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(fruit != <span class="literal">null</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;person eat&quot;</span> + fruit.getFruitName());</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Autowired 可以除了用在属性上，还可以用于方法上，构造参数中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Fruit fruit ;</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(<span class="meta">@Autowired</span> <span class="meta">@Qualifier(&quot;apple&quot;)</span> Fruit fruit)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.fruit = fruit ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="注解-Primary"><a href="#注解-Primary" class="headerlink" title="注解 @Primary"></a>注解 @Primary</h4><p>注解 @Primary 是一个修改优先注解。根据 @Autowired 的注入规则，我们知道，在进行注入时，容易产生歧义：即，IoC 容器由于找到多个同类型的可注入对象，而不知道要注入哪个。<br>@Primary 将告诉  IoC 容器，当发现有多个同样类型的 Bean 时，将优先注入使用了 @Primary 注解的 Bean。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;apple&quot;)</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Apple</span> <span class="keyword">implements</span> <span class="title class_">Fruit</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="注解-Quelifier"><a href="#注解-Quelifier" class="headerlink" title="注解 @Quelifier"></a>注解 @Quelifier</h4><p>对于 @Primary 来说，同样可能会导致歧义，可能有多个同类 Bean 被添加了 @Primary 注解。<br>在 BeanFactory 中，实际上有一个通过名称和类型找到对象的方法。而使用 @Quelifier 就可以指定 Bean 名称。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier(&quot;apple&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Fruit fruit ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">eatFruit</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(fruit != <span class="literal">null</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;person eat&quot;</span> + fruit.getFruitName());</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="注解-Service"><a href="#注解-Service" class="headerlink" title="注解 @Service"></a>注解 @Service</h4><p>@Service 所标记的类，标识该类提供业务功能。本质上，其实就是 @Component：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Service &#123;</span><br><span class="line">	<span class="meta">@AliasFor(annotation = Component.class)</span></span><br><span class="line">	String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="注解-Controller"><a href="#注解-Controller" class="headerlink" title="注解 @Controller"></a>注解 @Controller</h4><p>@Controller 标明其标注的类是处理器，这里更多的其实是标识意义。通常，它会和 @RequestMapping 注解一起使用。@RequestMapping 负责将网络请求的处理映射到 @Controller 标记的对象中的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Controller &#123;</span><br><span class="line">	<span class="meta">@AliasFor(annotation = Component.class)</span></span><br><span class="line">	String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="注解-Repository"><a href="#注解-Repository" class="headerlink" title="注解 @Repository"></a>注解 @Repository</h4><p>@Repository 标记该对象扮演数据仓库的角色，负责数据管理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Repository &#123;</span><br><span class="line">	<span class="meta">@AliasFor(annotation = Component.class)</span></span><br><span class="line">	String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>参考书籍<br>《深入浅出Spring Boot 2.x》</p>
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-introduction">Spring Core Technologies</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Spring-Boot/">Spring Boot</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Spring-Boot/">Spring Boot</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

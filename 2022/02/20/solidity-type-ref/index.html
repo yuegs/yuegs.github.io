@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Solidity-引用类型 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="所谓引用类型，实际上是提供了一个指向内容的指针赋值给引用类型的变量。这么做的原因，在于其数据内容本身就是复合类型的，不像内置的基础类型，是可以直接表达出来的。
+对于引用类型的变量，在进行参数传递或者变量赋值的时候，会存在这样一个问题：传递过去的到底是这个值的拷贝还是这个值的引用。其造成的影响就是，修改传递过去的内容是否会对原内容产生影响。
+因此，本节讨论的主题就是：引用类型有哪些？影响其深拷贝的因素有哪些？删除时需要注意什么。">
+  
+
+  
+  
+  <meta name="keywords" content="storage,mapping,array,struct">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Solidity-引用类型"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Solidity-引用类型</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/20/solidity-type-ref/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-20T10:35:08.000Z">
+          2022-02-20
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/solidity-ref/solidity-reference.png?raw=true"></p>
+<p>所谓引用类型，实际上是提供了一个指向内容的指针赋值给引用类型的变量。这么做的原因，在于其数据内容本身就是复合类型的，不像内置的基础类型，是可以直接表达出来的。</p>
+<p>对于引用类型的变量，在进行参数传递或者变量赋值的时候，会存在这样一个问题：传递过去的到底是这个值的拷贝还是这个值的引用。其造成的影响就是，修改传递过去的内容是否会对原内容产生影响。</p>
+<p>因此，本节讨论的主题就是：引用类型有哪些？影响其深拷贝的因素有哪些？删除时需要注意什么。</p>
+<span id="more"></span>
+
+<h3 id="1-数据位置"><a href="#1-数据位置" class="headerlink" title="1 数据位置"></a>1 数据位置</h3><p><strong><strong>对于引用类型，需要指定其数据位置，这关乎到数据存储在哪里，生命周期有多长。</strong></strong> 数据位置有三种：</p>
+<ul>
+<li><code>memory</code>: EVM 中的临时存储空间，生命周期限制在一个函数调用中。</li>
+<li><code>storage</code>: EVM 中的进行持久化存储空间。生命周期在整个合约的生命周期内。</li>
+<li><code>calldata</code>:用于函数参数，有点像 <code>memory</code>，生命周期都是函数中，但是，值不可修改。</li>
+</ul>
+<blockquote>
+<p>注意，如果可以，尽可能使用 <code>calldata</code> 作为存储位置，它将避免数据被修改。</p>
+</blockquote>
+<blockquote>
+<p>在 <code>0.6.9</code> 之前，引用类型数据位置的使用在函数可见性上有所限制，比如 <code>calldata</code> 被限制只能使用在外部函数中。现在 <code>memory</code> 和 <code>calldata</code> 的使用，不再有函数可见性上的限制。</p>
+</blockquote>
+<blockquote>
+<p>在 <code>0.5.0</code> 之前，数据位置可以被省略，根据不同的变量类型&#x2F;函数类型等会有不同的默认的数据位置。但是，对于所有的复合类型（由基础类型组合而成）来说，都必须指定一个显式的数据位置。</p>
+</blockquote>
+<p><img src="https://camo.githubusercontent.com/7d43420e4cd0083af6ca479c9273a96b687cec54bd41f15652532a377327718a/68747470733a2f2f692e696d6775722e636f6d2f374832317031452e6a7067"><br><a target="_blank" rel="noopener" href="https://github.com/thanhnguyennguyen/smart-contract-practice#memory-and-storage-">图片来源</a></p>
+<br/>
+
+<h4 id="1-1-赋值行为和数据位置"><a href="#1-1-赋值行为和数据位置" class="headerlink" title="1.1 赋值行为和数据位置"></a>1.1 赋值行为和数据位置</h4><p>赋值行为与数据位置有关：</p>
+<ul>
+<li>在 <code>storage</code> 和 <code>memory</code>（或者 <code>calldata</code>） 之间赋值会涉及到数据拷贝。</li>
+<li>将一个 <code>memory</code> 赋值到另外一个 <code>memory</code>，仅仅是创建了一个引用。这就意味着其中一个引发的改变，在另外一个 <code>memory</code> 中也是可见的。两个 <code>memory</code> 指向同一块存储空间。</li>
+<li>将一个 <code>storage</code> 赋值给一个本地 <code>storage</code> 变量（local storage variable），实际上赋值的也是一个引用。</li>
+<li>除上述，所有其它到 <code>storage</code> 的赋值，通常都是 copy。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.5</span><span class="number">.0</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">    <span class="comment">// 这里，数据 x 的存储的位置是 storage，</span></span><br><span class="line">    <span class="comment">// 这有这里，数据位置（data location）是可以省略的。</span></span><br><span class="line">    uint[] x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// memoryArray 的存储位置是 memory，这就意味着它的生命周期只是在这个函数调用中</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">uint[] memory memoryArray</span>) public &#123;</span><br><span class="line">        x = memoryArray; <span class="comment">// 将 memoryArray 拷贝给 x，x 的存储位置是 storage</span></span><br><span class="line">        uint[] storage y = x; <span class="comment">// y 是一个 local storage，将 storage 赋值给 local storage，属于引用赋值</span></span><br><span class="line">        y[<span class="number">7</span>]; <span class="comment">// 将返回 x 中第八个元素</span></span><br><span class="line">        y.<span class="title function_">pop</span>(); <span class="comment">// 通过 y 来修改 x，x 和 y 指向同一块存储区域</span></span><br><span class="line">        <span class="keyword">delete</span> x; <span class="comment">// 清空数组，此时，y 也被清理</span></span><br><span class="line">        <span class="comment">// 下述方式，是不可取的。。</span></span><br><span class="line">        <span class="comment">// y = memoryArray;</span></span><br><span class="line">        <span class="comment">// This does not work either, since it would &quot;reset&quot; the pointer, but there</span></span><br><span class="line">        <span class="comment">// is no sensible location it could point to.</span></span><br><span class="line">        <span class="comment">// delete y;</span></span><br><span class="line">        <span class="title function_">g</span>(x); <span class="comment">// g 在调用时，传递的是 x 的引用，这就意味着在 g 中可以修改 x</span></span><br><span class="line">        <span class="title function_">h</span>(x); <span class="comment">// h 在调用时，将拷贝 x 进行参数传递</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">g</span>(<span class="params">uint[] storage</span>) internal pure &#123;&#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">h</span>(<span class="params">uint[] memory</span>) public pure &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里需要注意的是：The type of the local variable x is uint[] storage, but since <strong><strong>storage is not dynamically allocated</strong></strong>, it has to be assigned from a state variable before it can be used.<br><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.4.21/frequently-asked-questions.html#what-is-the-memory-keyword-what-does-it-do">来源</a></p>
+</blockquote>
+<br/>
+
+<h3 id="2-引用类型"><a href="#2-引用类型" class="headerlink" title="2 引用类型"></a>2 引用类型</h3><p>引用类型有三种，数组，结构体以及mapping。</p>
+<br/>
+
+<h4 id="2-1-数组"><a href="#2-1-数组" class="headerlink" title="2.1 数组"></a>2.1 数组</h4><p>我们可以创建一个在编译时就确定的固定（长度）数组，也可以使用动态数组。<br>固定长度为 <code>k</code> 类型为 <code>T</code> 的数组即 <code>T[k]</code>，动态长度的数组可以写成 <code>T[]</code>。<br>比如说，一个拥有 5 个动态数组的数组，可以写成 <code>uint[][5]</code>，<strong><strong>需要注意的是，这种写法和有些语言是相反的</strong></strong>。在 Solidity 中，<code>X[3]</code> 表示数组中存在三个类型为 <code>X</code> 的元素，即使 <code>X</code> 本身是一个数组。这种使用，和某些语言（比如 C） 是不一样的。</p>
+<p>索引是从零开始的，访问可以相对位置。</p>
+<p>举个例子，如果有一个 <code>uint[][5] memory x</code>，你可以通过 <code>x[2][6]</code> 访问第三个动态数组中的第七个元素，如果要访问第三个动态数组，可以使用 <code>x[2]</code>。同样的，如果你有一个 <code>T[5] a</code> 数组，那么，<code>a[2]</code> 的类型就是 <code>T</code>。</p>
+<p>数组中的元素可以是任意类型，包括结构体和map。但是对于 map 类型的数组，会存在一个限制，其实，这本身是对 map 自身的限制，即，mapping 应该存储在 <code>storage</code> 区域，否则会编译不通过。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">contract TestContract is ReentrancyGuard &#123;</span><br><span class="line">    // 这种是可行的</span><br><span class="line">    mapping (uint256=&gt;address) []  test ;</span><br><span class="line">    int [] array ;</span><br><span class="line">    function a()public&#123;</span><br><span class="line">      // 这种是不行的，编译不通过</span><br><span class="line">      // 报错：&quot;Type mapping(uint256 =&gt; address) is only valid in storage because it contains a (nested) mapping.&quot;</span><br><span class="line">      // mapping (uint256=&gt;address) [] memory test ;</span><br><span class="line">      // 这种操作也是不被允许的</span><br><span class="line">      // 报错：&quot;TypeError: Unary operator delete cannot be applied to type int256[] storage pointer&quot;</span><br><span class="line">      // int [] storage array1 = array;</span><br><span class="line">      // delete array1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h5 id="2-1-1-bytes-和-string"><a href="#2-1-1-bytes-和-string" class="headerlink" title="2.1.1 bytes 和 string"></a>2.1.1 bytes 和 string</h5><p>变量类型 <code>bytes</code> 和 <code>string</code> 都是特殊的数组。<code>bytes</code> 和 <code>bytes1[]</code> 比较相似，但是，在 <code>calldata</code> 和 <code>memory</code> 中，它是会被   ，<code>string</code> 等于 <code>bytes</code>，但是不允许通过索引访问。</p>
+<p>Solidity 中没有关于 <code>string</code> 的操作方法，但是仍然有一些第三方库可以使用。你也可以通过 <code>keccak256(abi.encodePacked(s1))==keccak256(abi.encodePacked(s2))</code> 比较两个字符串。</p>
+<p>根据官方文档的描述：</p>
+<blockquote>
+<p>You should use bytes over bytes1[] because it is cheaper, since using bytes1[] in memory adds 31 padding bytes between the elements. </p>
+</blockquote>
+<p>虽然，<code>bytes</code> 和 <code>bytes1[]</code> 相类似，但是，在 <code>memory</code> 中，<code>bytes</code> 是压缩存储的，而 <code>bytes1[]</code> 会根据填充算法，补充 31 个字节。因此，在 <code>memory</code> 中 <code>bytes</code> 要高效些。</p>
+<br/>
+
+<h5 id="2-1-2-为数组分配-memory"><a href="#2-1-2-为数组分配-memory" class="headerlink" title="2.1.2 为数组分配 memory"></a>2.1.2 为数组分配 memory</h5><p>如果数组的位置是 <code>memory</code>，那么，数组的大小需要事先确定好。与位置在 <code>storage</code> 中的数组不同，<code>memory</code> 下，无法执行 ‘.push’ 方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.16</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">uint len</span>) public pure &#123;</span><br><span class="line">        uint[] memory a = <span class="keyword">new</span> uint[](<span class="number">7</span>);</span><br><span class="line">        bytes memory b = <span class="keyword">new</span> <span class="title function_">bytes</span>(len);</span><br><span class="line">        <span class="title function_">assert</span>(a.<span class="property">length</span> == <span class="number">7</span>);</span><br><span class="line">        <span class="title function_">assert</span>(b.<span class="property">length</span> == len);</span><br><span class="line">        a[<span class="number">6</span>] = <span class="number">8</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h5 id="2-1-3-数组字面值"><a href="#2-1-3-数组字面值" class="headerlink" title="2.1.3 数组字面值"></a>2.1.3 数组字面值</h5><p>数组字面值，是用方括号包裹起来的以逗号分隔的一个或者多个表达式列，形式为 <code>[1,a,f(3)]</code>。这种数组字面值类型需要满足下述需要：</p>
+<ul>
+<li>数组的大小是静态的，其大小为其中表达式的个数；</li>
+<li>数组中的元素类型，是由数组中第一个元素的类型确定的，其他表达式将进行类型的隐式转换，如果无法转换，将报错。</li>
+</ul>
+<p>在下述示例中，<code>[1,2,3]</code> 的类型是 <code>uint8[3] memory</code>，如果要用到 <code>uint[3] memory</code>，只需要将第一个元素进行强制转换即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.16</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) public pure &#123;</span><br><span class="line">        <span class="title function_">g</span>([<span class="title function_">uint</span>(<span class="number">1</span>), <span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">g</span>(<span class="params">uint[<span class="number">3</span>] memory</span>) public pure &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数组字面 <code>[1,-1]</code> 就是不合法的，因为第一个表达式是 <code>uint8</code>，而第二个表达式的类型是 <code>int8</code>，为此，需要进行类型转换：<code>[int8(1),-1]</code>。</p>
+<p>如果是二位数组，该怎么办呢？内部数组元素的类型也需要保持一致。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.16</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) public pure returns (uint24[<span class="number">2</span>][<span class="number">4</span>] memory) &#123;</span><br><span class="line">        uint24[<span class="number">2</span>][<span class="number">4</span>] memory x = [[<span class="title function_">uint24</span>(<span class="number">0x1</span>), <span class="number">1</span>], [<span class="number">0xffffff</span>, <span class="number">2</span>], [<span class="title function_">uint24</span>(<span class="number">0xff</span>), <span class="number">3</span>], [<span class="title function_">uint24</span>(<span class="number">0xffff</span>), <span class="number">4</span>]];</span><br><span class="line">        <span class="comment">// The following does not work, because some of the inner arrays are not of the right type.</span></span><br><span class="line">        <span class="comment">// uint[2][4] memory x = [[0x1, 1], [0xffffff, 2], [0xff, 3], [0xffff, 4]];</span></span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>固定大小的数组，是无法直接赋值给动态数组的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.0</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This will not compile.</span></span><br><span class="line">contract C &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        <span class="comment">// The next line creates a type error because uint[3] memory</span></span><br><span class="line">        <span class="comment">// cannot be converted to uint[] memory.</span></span><br><span class="line">        uint[] memory x = [<span class="title function_">uint</span>(<span class="number">1</span>), <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h5 id="2-1-4-数组成员函数"><a href="#2-1-4-数组成员函数" class="headerlink" title="2.1.4 数组成员函数"></a>2.1.4 数组成员函数</h5><ul>
+<li><p><strong><strong>length</strong></strong>：返回数组当前长度。静态数组的长度是固定的；动态数组的长度依赖于运行时。</p>
+</li>
+<li><p><strong><strong>push()</strong></strong>:动态的 <code>storage</code> 数组和  <code>storage</code> <code>bytes</code> 拥有此函数。它将返回元素的引用。因此，可以这么使用 <code>x.push().t = 2</code> 或者 <code>x.push() = b</code></p>
+</li>
+<li><p><strong><strong>push(x)</strong></strong>:动态的 <code>storage</code> 数组和  <code>storage</code> <code>bytes</code> 拥有此函数。在数组尾部增加一个 <code>x</code>，该函数不返回任何东西。</p>
+</li>
+<li><p><strong><strong>pop()</strong></strong>:动态的 <code>storage</code> 数组和  <code>storage</code> <code>bytes</code> 拥有此函数。返回并删除数组的最后一个元素。这个函数将在最后一个数组元素上隐式调用调用 <code>delete</code>。</p>
+</li>
+</ul>
+<blockquote>
+<p>注意，<code>push</code> 将消耗常量的 gas，因为这个过程将涉及到元素初始化。</p>
+</blockquote>
+<br/>
+
+<h4 id="2-2-结构体"><a href="#2-2-结构体" class="headerlink" title="2.2 结构体"></a>2.2 结构体</h4><p>以结构的形式定义一种新的数据类型：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.6</span><span class="number">.0</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个拥有两个成员的类型</span></span><br><span class="line"><span class="comment">// 在合约外部定义该结构体，该结构体可以在多个合约中共享。这里，其实并没有这种必要性。</span></span><br><span class="line">struct <span class="title class_">Funder</span> &#123;</span><br><span class="line">    address addr;</span><br><span class="line">    uint amount;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">CrowdFunding</span> &#123;</span><br><span class="line">    <span class="comment">// 结构体也可以定义在合约内部，这样，其可见性只有合约及其派生合约中。</span></span><br><span class="line">    struct <span class="title class_">Campaign</span> &#123;</span><br><span class="line">        address payable beneficiary;</span><br><span class="line">        uint fundingGoal;</span><br><span class="line">        uint numFunders;</span><br><span class="line">        uint amount;</span><br><span class="line">        mapping (<span class="function"><span class="params">uint</span> =&gt;</span> <span class="title class_">Funder</span>) funders;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    uint numCampaigns;</span><br><span class="line">    mapping (<span class="function"><span class="params">uint</span> =&gt;</span> <span class="title class_">Campaign</span>) campaigns;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">newCampaign</span>(<span class="params">address payable beneficiary, uint goal</span>) public returns (uint campaignID) &#123;</span><br><span class="line">        campaignID = numCampaigns++; <span class="comment">// campaignID 是返回的变量</span></span><br><span class="line">        <span class="comment">// 我们不能使用 &quot;campaigns[campaignID] = Campaign(beneficiary, goal, 0, 0)&quot;</span></span><br><span class="line">        <span class="comment">// 因为，&quot;Campaign&quot; 包含由 mapping</span></span><br><span class="line">        <span class="title class_">Campaign</span> storage c = campaigns[campaignID];</span><br><span class="line">        c.<span class="property">beneficiary</span> = beneficiary;</span><br><span class="line">        c.<span class="property">fundingGoal</span> = goal;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">contribute</span>(<span class="params">uint campaignID</span>) public payable &#123;</span><br><span class="line">        <span class="title class_">Campaign</span> storage c = campaigns[campaignID];</span><br><span class="line">        <span class="comment">// 创建一个临时的 memory 中的 Funder，</span></span><br><span class="line">        <span class="comment">// 并将其拷贝给 c.funders[i]</span></span><br><span class="line">        <span class="comment">// Note that you can also use Funder(msg.sender, msg.value) to initialise.</span></span><br><span class="line">        c.<span class="property">funders</span>[c.<span class="property">numFunders</span>++] = <span class="title class_">Funder</span>(&#123;<span class="attr">addr</span>: msg.<span class="property">sender</span>, <span class="attr">amount</span>: msg.<span class="property">value</span>&#125;);</span><br><span class="line">        c.<span class="property">amount</span> += msg.<span class="property">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">checkGoalReached</span>(<span class="params">uint campaignID</span>) public returns (bool reached) &#123;</span><br><span class="line">        <span class="title class_">Campaign</span> storage c = campaigns[campaignID];</span><br><span class="line">        <span class="keyword">if</span> (c.<span class="property">amount</span> &lt; c.<span class="property">fundingGoal</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        uint amount = c.<span class="property">amount</span>;</span><br><span class="line">        c.<span class="property">amount</span> = <span class="number">0</span>;</span><br><span class="line">        c.<span class="property">beneficiary</span>.<span class="title function_">transfer</span>(amount);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h4 id="2-3-mapping"><a href="#2-3-mapping" class="headerlink" title="2.3 mapping"></a>2.3 mapping</h4><p>使用 <code>mapping(_KeyType =&gt; _ValueType)</code> 来表达映射关系。<br><code>_KeyType</code> 可以是任意内置类型，比如 <code>bytes</code>，<code>string</code>，合约或者是枚举类型。<br>其他用户定义的以及一些复合类型，比如 mapping，结构体，数组，是不允许作为 key 的。<code>_ValueType</code> 可以是任何类型，包括 mapping，结构体，以及数组。</p>
+<p><strong><strong>mapping 类型的数据位置，只能是在 <code>storage</code> 中，作为一个状态变量存在；</strong></strong>在函数内部，其可以作为 <code>storage</code> 的引用出现；作为参数时，还需要出现在一些库函数中。<br>mapping 无法作为合约中公共函数的参数的类型，也无法作为其返回参数的类型。这个限制，也适用于包含了 mapping 的数组和结构体。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.0</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">MappingExample</span> &#123;</span><br><span class="line">    <span class="title function_">mapping</span>(<span class="function"><span class="params">address</span> =&gt;</span> uint) public balances;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">update</span>(<span class="params">uint newBalance</span>) public &#123;</span><br><span class="line">        balances[msg.<span class="property">sender</span>] = newBalance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">MappingUser</span> &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) public returns (uint) &#123;</span><br><span class="line">        <span class="title class_">MappingExample</span> m = <span class="keyword">new</span> <span class="title class_">MappingExample</span>();</span><br><span class="line">        m.<span class="title function_">update</span>(<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">return</span> m.<span class="title function_">balances</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h5 id="2-3-1-mapping-遍历"><a href="#2-3-1-mapping-遍历" class="headerlink" title="2.3.1 mapping 遍历"></a>2.3.1 mapping 遍历</h5><p>mapping 是无法直接遍历的，因为无法穷举 key。<br>变通的做法，通过定义结构体可以实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.6</span><span class="number">.8</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">struct <span class="title class_">IndexValue</span> &#123; uint keyIndex; uint value; &#125;</span><br><span class="line">struct <span class="title class_">KeyFlag</span> &#123; uint key; bool deleted; &#125;</span><br><span class="line"></span><br><span class="line">struct itmap &#123;</span><br><span class="line">    <span class="title function_">mapping</span>(<span class="function"><span class="params">uint</span> =&gt;</span> <span class="title class_">IndexValue</span>) data;</span><br><span class="line">    <span class="title class_">KeyFlag</span>[] keys;</span><br><span class="line">    uint size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">library <span class="title class_">IterableMapping</span> &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">insert</span>(<span class="params">itmap storage self, uint key, uint value</span>) internal returns (bool replaced) &#123;</span><br><span class="line">        uint keyIndex = self.<span class="property">data</span>[key].<span class="property">keyIndex</span>;</span><br><span class="line">        self.<span class="property">data</span>[key].<span class="property">value</span> = value;</span><br><span class="line">        <span class="keyword">if</span> (keyIndex &gt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            keyIndex = self.<span class="property">keys</span>.<span class="property">length</span>;</span><br><span class="line">            self.<span class="property">keys</span>.<span class="title function_">push</span>();</span><br><span class="line">            self.<span class="property">data</span>[key].<span class="property">keyIndex</span> = keyIndex + <span class="number">1</span>;</span><br><span class="line">            self.<span class="property">keys</span>[keyIndex].<span class="property">key</span> = key;</span><br><span class="line">            self.<span class="property">size</span>++;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">remove</span>(<span class="params">itmap storage self, uint key</span>) internal returns (bool success) &#123;</span><br><span class="line">        uint keyIndex = self.<span class="property">data</span>[key].<span class="property">keyIndex</span>;</span><br><span class="line">        <span class="keyword">if</span> (keyIndex == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">delete</span> self.<span class="property">data</span>[key];</span><br><span class="line">        self.<span class="property">keys</span>[keyIndex - <span class="number">1</span>].<span class="property">deleted</span> = <span class="literal">true</span>;</span><br><span class="line">        self.<span class="property">size</span> --;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">contains</span>(<span class="params">itmap storage self, uint key</span>) internal view returns (bool) &#123;</span><br><span class="line">        <span class="keyword">return</span> self.<span class="property">data</span>[key].<span class="property">keyIndex</span> &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">iterate_start</span>(<span class="params">itmap storage self</span>) internal view returns (uint keyIndex) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">iterate_next</span>(self, <span class="title function_">type</span>(uint).<span class="property">max</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">iterate_valid</span>(<span class="params">itmap storage self, uint keyIndex</span>) internal view returns (bool) &#123;</span><br><span class="line">        <span class="keyword">return</span> keyIndex &lt; self.<span class="property">keys</span>.<span class="property">length</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">iterate_next</span>(<span class="params">itmap storage self, uint keyIndex</span>) internal view returns (uint r_keyIndex) &#123;</span><br><span class="line">        keyIndex++;</span><br><span class="line">        <span class="keyword">while</span> (keyIndex &lt; self.<span class="property">keys</span>.<span class="property">length</span> &amp;&amp; self.<span class="property">keys</span>[keyIndex].<span class="property">deleted</span>)</span><br><span class="line">            keyIndex++;</span><br><span class="line">        <span class="keyword">return</span> keyIndex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">iterate_get</span>(<span class="params">itmap storage self, uint keyIndex</span>) internal view returns (uint key, uint value) &#123;</span><br><span class="line">        key = self.<span class="property">keys</span>[keyIndex].<span class="property">key</span>;</span><br><span class="line">        value = self.<span class="property">data</span>[key].<span class="property">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// How to use it</span></span><br><span class="line">contract <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="comment">// Just a struct holding our data.</span></span><br><span class="line">    itmap data;</span><br><span class="line">    <span class="comment">// Apply library functions to the data type.</span></span><br><span class="line">    using <span class="title class_">IterableMapping</span> <span class="keyword">for</span> itmap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Insert something</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">insert</span>(<span class="params">uint k, uint v</span>) public returns (uint size) &#123;</span><br><span class="line">        <span class="comment">// This calls IterableMapping.insert(data, k, v)</span></span><br><span class="line">        data.<span class="title function_">insert</span>(k, v);</span><br><span class="line">        <span class="comment">// We can still access members of the struct,</span></span><br><span class="line">        <span class="comment">// but we should take care not to mess with them.</span></span><br><span class="line">        <span class="keyword">return</span> data.<span class="property">size</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Computes the sum of all stored data.</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">sum</span>(<span class="params"></span>) public view returns (uint s) &#123;</span><br><span class="line">        <span class="keyword">for</span> (</span><br><span class="line">            uint i = data.<span class="title function_">iterate_start</span>();</span><br><span class="line">            data.<span class="title function_">iterate_valid</span>(i);</span><br><span class="line">            i = data.<span class="title function_">iterate_next</span>(i)</span><br><span class="line">        ) &#123;</span><br><span class="line">            (, uint value) = data.<span class="title function_">iterate_get</span>(i);</span><br><span class="line">            s += value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="3-delete-操作符"><a href="#3-delete-操作符" class="headerlink" title="3 delete 操作符"></a>3 delete 操作符</h3><p><strong><strong><code>delete a</code> 意味着将为 <code>a</code> 赋值一个初始值。</strong></strong><br>对于整型来说，<code>a</code> 的初始值就是 <code>0</code>。但是，当 <code>a</code> 是数组时，如果是静态数组，其中的每个元素将被初始化；如果是动态数组，数组的长度将归零；<code>delete a[x]</code> 将仅仅删除索引为 <code>x</code> 的数组 item。</p>
+<p>对于结构体而言，<code>delete a</code> 意味着 <code>a</code> 中的所有成员将被重置。换句话说，<code>delete a</code> 之后，<code>a</code> 的值就像是声明但是为赋值的状态。</p>
+<p><code>delete</code> 对 mapping 不产生影响(没法给 key 初始化)。<strong><strong>因此，如果在结构体中有一个 mapping，则 mapping 并不会被重置。</strong></strong>然而，对于却可以 <code>delete a[x]</code>,此时，<code>a</code> 是 mapping，<code>x</code> 是 key。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SPDX-License-Identifier: GPL-3.0</span></span><br><span class="line">pragma solidity &gt;=<span class="number">0.4</span><span class="number">.0</span> &lt;<span class="number">0.9</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">DeleteExample</span> &#123;</span><br><span class="line">    uint data;</span><br><span class="line">    uint[] dataArray;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        uint x = data;</span><br><span class="line">        <span class="keyword">delete</span> x; <span class="comment">// x 被赋值为 0，但是不会影响 data</span></span><br><span class="line">        <span class="keyword">delete</span> data; <span class="comment">// data 被赋值为 0，同样不会影响 x</span></span><br><span class="line">        uint[] storage y = dataArray;</span><br><span class="line">        <span class="keyword">delete</span> dataArray; <span class="comment">// 动态数组 dataArray 的长度被重置为 0，这种改变同样会影响到 y</span></span><br><span class="line">        <span class="comment">// 然而 &quot;delete y&quot; 就是不合法的，y 的赋值初始化只能由一个已经存在的 storage 对象来做</span></span><br><span class="line">        <span class="title function_">assert</span>(y.<span class="property">length</span> == <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.8.12/types.html">Types</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/storage/">storage</a><a href="/tags/mapping/">mapping</a><a href="/tags/array/">array</a><a href="/tags/struct/">struct</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>数字签名及其应用 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="&amp;amp;emsp;家长签名，领导签名，合同签名，这些签名实际上都是在说明一件事：签名人通过签署自己名字的方式，向公众表示他们已经审核过这个文档，并对文档内容负责。&amp;amp;emsp;在计算机领域，也有这样一套签名机制，称之为数字签名，或电子签章。它的作用也是如此：对一段信息进行签署，对这段信息的完整性、正确性负责。最初了解这个概念是在使用 Https 的时候。Android 的打包过程肯定也遇到了，但是并没有过多留意，直到有一天，需要对 apk 进行系统签名。接下来，就讨论下什么是签名，以及，它是怎么应用到 Android 应用中的。">
+  
+
+  
+  
+  <meta name="keywords" content="安全,Android">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="数字签名及其应用"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>数字签名及其应用</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/04/24/数字签名及其应用/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-04-24T13:40:05.000Z">
+          2018-04-24
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>&amp;emsp;家长签名，领导签名，合同签名，这些签名实际上都是在说明一件事：签名人通过签署自己名字的方式，向公众表示他们已经审核过这个文档，并对文档内容负责。<br>&amp;emsp;在计算机领域，也有这样一套签名机制，称之为数字签名，或电子签章。它的作用也是如此：对一段信息进行签署，对这段信息的完整性、正确性负责。最初了解这个概念是在使用 Https 的时候。Android 的打包过程肯定也遇到了，但是并没有过多留意，直到有一天，需要对 apk 进行系统签名。接下来，就讨论下什么是签名，以及，它是怎么应用到 Android 应用中的。</p>
+<span id="more"></span>
+<h3 id="什么是签名"><a href="#什么是签名" class="headerlink" title="什么是签名"></a>什么是签名</h3><p>&amp;emsp;签名，与现实中类似，是对我们的信息完整性进行认证，确认我们的信息在传输过程中没有被篡改，即使被篡改了也能被发现。从计算机实现的角度来说，对内容加密应该是一种最快捷便利的方式，而签名正是利用了 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">非对称加密技术</a> （只能用公钥解密私钥加密过的内容，反之亦然）实现了这一点。<strong>用可靠私钥对需要判断信息完整性的内容进行加密，加密后的结果就是签名的本质。</strong>在需要验证的时候，使用公钥对私钥加密过的内容解密。私钥由创建者保存，并保证它的安全，而公钥是公开的。私钥加密过的内容，只能由相应的公钥解密，这样就保证了这段信息的完整性。<br>&amp;emsp;接下来我们来看下经典的 Alice 和 Bolb 通信实例（实例来源于 NetPayClient用户手册）：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="数字签名示意图"></p>
+<ul>
+<li>Alice 准备了一份合同 M；</li>
+<li>Alice 用摘要算法计算出该合同 M 的消息摘要 MD；</li>
+<li>Alice 用非对称算法和自己的私钥对合同消息摘要 MD 进行加密，该密文 S 就是合同的数字签名；</li>
+<li>Alice 将合同 M 和合同的数字签名 S 合并在一起，通过网络传送到合同的接受者 Bob；</li>
+<li>Bob 收到 Alice 的合同 M 及合同的数字签名 S；</li>
+<li>Bob 用 Alice 的公钥对合同签名 S 进行解密，得到 Alice 计算的合同摘要 MD；</li>
+<li>Bob 采用相同摘要算法对收到的合同重新计算消息摘要 MD’；</li>
+<li>Bob 比较 MD 与 MD’ 是否相等？</li>
+<li>如结果相等，根据摘要算法的特性表明合同在传输过程中未被篡改。同时由于非对称加密算法的特性可以断定合同确实是 Alice 发送的，因为用 Alice 公钥能解密成功的数据只有 Alice 用她自己私钥对其进行加密才能产生，而她的私钥其它人是无法获取的。</li>
+</ul>
+<p>&amp;emsp;M 和 S 的合并，在进行通信传输的时候实际上就构成了一个证书。<strong>这里，其实也已经透露出了证书的本质，即</strong> *** 信息 + 公钥 + 与公钥所对应的私钥对信息加密过后形成的签名。***</p>
+<h3 id="在通信过程中使用签名"><a href="#在通信过程中使用签名" class="headerlink" title="在通信过程中使用签名"></a>在通信过程中使用签名</h3><p>&amp;emsp;上面的实例中，有一个非常重要的安全问题没有解决，那就是万一有中间人 Doug 截获了信息，然后使用自己的私钥对信息进行签名，并把 Bob 保留的 Alice 的公钥换成了自己的公钥，那么，后来 Alice 发过来的信息无法通过验证，只能由 Doug 才能和 Bob 保持通信。<br>&amp;emsp;为了解决这样重大的安全隐患，需要有一个第三方的可信机构站出来，对我们发过去的公钥做一个认证，这就是 CA 出现的起因。接下来，有几个概念我们需要澄清。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E8%AF%81%E4%B9%A6%E9%A2%81%E5%8F%91%E6%9C%BA%E6%9E%84">CA(certification authority (CA) ，an entity that issues digital certificates)</a>:  数字证书认证机构.也称为电子商务认证中心、电子商务认证授权机构，是负责发放和管理数字证书的权威机构，并作为电子商务交易中受信任的第三方，承担公钥体系中公钥的合法性检验的责任。</p>
+</blockquote>
+<p>&amp;emsp;实际上，这就是具有公信力、值得大众信任的第三方。只要是它所签发的证书，大家都认为是安全的。厂商预先在客户端植入这些 CA 的根证书，根证书中包含了它的公钥。后面需要验证其他证书的可靠性时，只需要使用这个公钥解密出所对应的私钥加密过的签名，对信息完整性做一个校验，就可以知道要验证的证书是否可信。<strong>所以说，根证书是信任链的起点。</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%A0%B9%E8%AF%81%E4%B9%A6">根证书</a> :   在信任链中作为信任锚的起点角色 在密码学和计算机安全领域，根证书（root certificate）是属于根证书颁发机构（CA）的公钥证书，是在公开密钥基础建设中，信任链的起点.</p>
+</blockquote>
+<p>&amp;emsp;根证书，是信任链的起点。我们申请的证书，经过根证书的签名，才是可信任的。这时，根证书的安全性就变得非常重要。所以，在信任链设计中，绝大部分的根证书都不会直接为客户签名，而是先签名一个（或多个）中继证书，再由中继证书为客户签名，这可以加强控管能力及控制一旦签名私钥被泄时的损失。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">非对称加密</a> : 是密码学的一种算法，它需要两个密钥，一个是公开密钥，另一个是私有密钥；一个用作加密的时候，另一个则用作解密。使用其中一个密钥把明文加密后所得的密文，只能用相对应的另一个密钥才能解密得到原本的明文；甚至连最初用来加密的密钥也不能用作解密。由于加密和解密需要两个不同的密钥，故被称为非对称加密；不同于加密和解密都使用同一个密钥的对称加密。</p>
+</blockquote>
+<p>&amp;emsp;非对称加密是技术基础。<br>&amp;emsp;接下来，我们可以来看下证书的定义格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Certificate ::= SEQUENCE &#123;</span><br><span class="line">	tbsCertificate TBSCertificate,</span><br><span class="line">	signatureAlgorithm AlgorithmIdentifier,</span><br><span class="line">   signatureValue BIT STRING &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;以上是一种 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ASN.1">ASN</a> 语法描述，表示的是证书中包括了：要被签名的证书（tbs &#x3D; to be signed），签名算法，签名。其中，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">TBSCertificate ::= SEQUENCE &#123;</span><br><span class="line"> 	version [0] EXPLICIT Version DEFAULT v1,</span><br><span class="line"> 	serialNumber CertificateSerialNumber,</span><br><span class="line"> 	signature AlgorithmIdentifier,</span><br><span class="line"> 	issuer Name,</span><br><span class="line"> 	validity Validity,</span><br><span class="line"> 	subject Name,</span><br><span class="line"> 	subjectPublicKeyInfo SubjectPublicKeyInfo,   //包含算法描述和公钥</span><br><span class="line"> 	issuerUniqueID [1] IMPLICIT UniqueIdentifier OPTIONAL, -- If present, version MUST be v2 or v3</span><br><span class="line">     subjectUniqueID [2] IMPLICIT UniqueIdentifier OPTIONAL, -- If present, version MUST be v2 or v3</span><br><span class="line">  	extensions [3] EXPLICIT Extensions OPTIONAL -- If present, version MUST be v3</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;<strong>要被签名的证书中，包含了它自己的公钥。而且，tbsCertificate 的信息内容，将作为签名函数的输入，生成 signatureValue 。</strong>让我们来看一个实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">//解压一个 apk 包，在 META-INF 夹下运行下面的命令，当然，首先你要安装 openssl 才行。</span><br><span class="line">//openssl pkcs7 -inform DER -in CERT.RSA -noout -print_certs -text</span><br><span class="line">Certificate:</span><br><span class="line">    Data:</span><br><span class="line">        Version: 3 (0x2)</span><br><span class="line">        Serial Number:</span><br><span class="line">            c8:e2:fe:c5:ee:08:ad:f5</span><br><span class="line">    Signature Algorithm: sha1WithRSAEncryption</span><br><span class="line">        Issuer: C=US, ST=California, L=Mountain View, O=Android, OU=Android, CN=Android/emailAddress=android@android.com</span><br><span class="line">        Validity</span><br><span class="line">            Not Before: Dec  3 01:47:50 2013 GMT</span><br><span class="line">            Not After : Apr 20 01:47:50 2041 GMT</span><br><span class="line">        Subject: C=US, ST=California, L=Mountain View, O=Android, OU=Android, CN=Android/emailAddress=android@android.com</span><br><span class="line">        Subject Public Key Info:</span><br><span class="line">            Public Key Algorithm: rsaEncryption</span><br><span class="line">                Public-Key: (2048 bit)</span><br><span class="line">                Modulus:</span><br><span class="line">                    00:c7:02:06:48:be:7c:2d:8a:84:7b:79:14:04:65:</span><br><span class="line">                    dc:5d:53:06:3e:27:29:8d:76:b4:5b:ec:37:72:95:</span><br><span class="line">                    f1:b1:6a:72:53:d6:80:46:e1:86:58:c5:4a:30:86:</span><br><span class="line">                    e0:5e:d1:f1:07:b5:84:59:66:47:9f:04:3d:b5:0f:</span><br><span class="line">                    e6:a5:12:31:e8:f7:19:4a:77:6f:c0:09:f0:86:0d:</span><br><span class="line">                    22:55:0b:5a:05:e9:12:27:e5:86:1d:9b:63:81:94:</span><br><span class="line">                    e5:f3:14:4d:07:01:7f:bc:aa:19:c9:90:f6:d6:51:</span><br><span class="line">                    77:66:8b:13:92:3f:33:17:b8:6d:1a:e6:53:82:b7:</span><br><span class="line">                    9d:7c:22:cf:0d:bd:ce:6d:0f:ba:5a:9d:c3:ab:ab:</span><br><span class="line">                    72:4d:01:3f:4f:54:52:5f:62:ae:58:07:5b:81:12:</span><br><span class="line">                    2f:4d:41:10:fe:de:b7:45:a9:24:8a:14:6c:4b:89:</span><br><span class="line">                    04:a0:d1:42:49:0b:8a:75:c2:f2:f8:5b:c0:1a:51:</span><br><span class="line">                    2a:62:22:5f:ac:6f:4f:cc:e8:f7:16:23:b8:a7:3f:</span><br><span class="line">                    dc:48:f0:e5:26:c2:0a:2f:e3:88:52:26:cf:6a:48:</span><br><span class="line">                    2c:41:00:12:67:8c:09:c8:fa:18:51:28:13:75:68:</span><br><span class="line">                    d0:5c:fe:70:23:e0:e7:3d:73:32:55:a4:6b:1a:bc:</span><br><span class="line">                    37:5a:e2:b7:2e:55:ed:55:03:c8:3c:36:19:cb:1f:</span><br><span class="line">                    8f:cb</span><br><span class="line">                Exponent: 3 (0x3)</span><br><span class="line">        X509v3 extensions:</span><br><span class="line">            X509v3 Subject Key Identifier:</span><br><span class="line">                44:27:80:B6:31:50:AB:CC:05:1F:18:DC:66:ED:BA:7C:CF:47:CF:74</span><br><span class="line">            X509v3 Authority Key Identifier:</span><br><span class="line">                keyid:44:27:80:B6:31:50:AB:CC:05:1F:18:DC:66:ED:BA:7C:CF:47:CF:74</span><br><span class="line">                DirName:/C=US/ST=California/L=Mountain View/O=Android/OU=Android/CN=Android/emailAddress=android@android.com</span><br><span class="line">                serial:C8:E2:FE:C5:EE:08:AD:F5</span><br><span class="line"></span><br><span class="line">            X509v3 Basic Constraints:</span><br><span class="line">                CA:TRUE</span><br><span class="line">    Signature Algorithm: sha1WithRSAEncryption</span><br><span class="line">         ac:77:d1:86:a9:5c:29:68:c2:26:4c:bc:05:62:84:fa:25:bf:</span><br><span class="line">         30:ce:d3:dd:1c:30:b6:0e:7a:55:64:8b:c6:04:9f:86:f3:66:</span><br><span class="line">         c7:79:a4:8a:c4:2d:36:4a:be:b3:bb:db:88:4f:72:24:76:71:</span><br><span class="line">         a1:7b:c0:75:00:4f:04:bb:99:8d:d0:eb:d5:42:0f:c3:a5:eb:</span><br><span class="line">         b8:34:8c:d9:6c:4a:98:5a:62:72:26:40:c6:1a:53:79:07:9d:</span><br><span class="line">         88:60:fd:40:ff:b8:6f:44:9a:95:8d:ad:b6:4c:2b:29:a0:6d:</span><br><span class="line">         94:e4:4f:01:29:5d:41:49:17:a9:c4:14:82:b7:63:0b:a8:3f:</span><br><span class="line">         d5:d1:18:63:c4:8c:00:29:5f:02:f6:c1:b3:7c:5a:97:5d:ab:</span><br><span class="line">         6b:25:6c:d9:9f:bc:ae:31:b5:62:ff:60:36:5f:2e:5d:2d:1f:</span><br><span class="line">         cd:31:b9:d1:36:2b:93:dd:c0:9b:23:43:7a:a9:a0:5e:9e:fe:</span><br><span class="line">         cc:f2:c4:74:39:0c:84:f8:5a:9e:b0:58:5f:ee:3b:78:4e:54:</span><br><span class="line">         a8:14:45:d1:df:25:90:ff:f9:f2:33:b5:33:e6:4b:2c:8a:99:</span><br><span class="line">         9d:06:d1:1a:03:18:f7:cf:cd:5f:a4:66:c3:c5:ea:ad:be:2b:</span><br><span class="line">         ae:18:67:23:e2:9f:b4:32:d1:ea:71:a9:21:d6:1a:9f:84:c7:</span><br><span class="line">         97:e7:c1:e1</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;目前，证书的格式和验证方法普遍遵循 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/X.509">X.509</a> 国际标准。</p>
+<h3 id="Https-中的签名"><a href="#Https-中的签名" class="headerlink" title="Https 中的签名"></a>Https 中的签名</h3><p>&amp;emsp;通过这种非对称加密的方式完成了双方对于后面需要使用的对称加密的密钥的协商（非对称加密太消耗资源，所以 https 同时使用了对称加密和非对称加密的方式）。这个协商过程是这样的（图片来源：图解HTTP）：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/https%E5%8D%8F%E5%95%86.png"></p>
+<p>&amp;emsp;接下来我们看下实例，由 GlobalSign 颁发给维基百科的证书 ：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/%E8%AF%81%E4%B9%A6.png"><br>&amp;emsp;顺便说一句，实际上我们可以自己给自己颁发证书。但问题在于浏览器等客户端根本不认你的证书，不具有权威性，它被标记你的网站为不安全的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//1. 生成私钥</span><br><span class="line">openssl genrsa -des3 -out server.key 2048</span><br><span class="line">//2. 生成 CA 证书</span><br><span class="line">openssl req -new -x509 -key server.key -out ca.crt -days 3650</span><br><span class="line">//3. 生成请求证书文件</span><br><span class="line">openssl req -new -key server.key -out server.csr</span><br><span class="line">//4. 通过请求文件给自己发证书</span><br><span class="line">openssl x509 -req -days 3650 -in server.csr \</span><br><span class="line">  -CA ca.crt -CAkey server.key \</span><br><span class="line">  -CAcreateserial -out server.crt</span><br><span class="line">// 查看证书中的公钥</span><br><span class="line">openssl x509 -in ca.crt -pubkey -noout</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;以上过程，我们就是用自制的 CA 证书，给自己颁发了一个证书。 CA 证书的意义在于像公证处一样，公证后的信息对所有人具有可靠性；但是如果是自制的，就失去了这样的意义。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/crt.png" alt="ca.crt"><br>&amp;emsp;颁发信息是自己在创建时随便填的，邮箱信息为 <a href="mailto:&#x6e;&#111;&#x72;&#101;&#112;&#108;&#97;&#x79;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#x6e;&#111;&#x72;&#101;&#112;&#108;&#97;&#x79;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>. 我们看到，此处的颁发者和使用者是同一个实体。这个是我们自建的 CA 证书，显然并没有通过 CA 认证。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/servercrt.png" alt="servercrt"></p>
+<p>&amp;emsp;这里可以看到，这个证书是通过上面那个 ca.cert 证书认证过的，邮箱为 <a href="mailto:&#99;&#108;&#105;&#x65;&#x6e;&#x74;&#x4e;&#111;&#82;&#101;&#112;&#108;&#x61;&#121;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;">&#99;&#108;&#105;&#x65;&#x6e;&#x74;&#x4e;&#111;&#82;&#101;&#112;&#108;&#x61;&#121;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;</a>,信息也是随便填写的，然而，ca.cert 并没有经过认证，所以，这个 server.crt 也是不受信任的。在浏览器中使用，会被标记为不安全：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/unsafe.png"></p>
+<p>&amp;emsp;回到 Android 中，<strong>Android 要求所有 APK 必须先使用证书（包含公钥）进行数字签名，然后才能安装。通过这种手段，确保应用的所有权，因为证书中公钥相对应的私钥在应用的开发者手中。</strong></p>
+<h3 id="为-APK-签名"><a href="#为-APK-签名" class="headerlink" title="为 APK 签名"></a>为 APK 签名</h3><p>&amp;emsp;APK 的签名，和上面通信过程对签名的使用有些不同。打包所需要的证书并不需要 CA 签署，而是一个自签名的证书。对 APK 的签名，是为了验证：我们是 APK 的拥有者，并可以对 APK 进行后续升级管理，这样自签名证书就足够了。<br>&amp;emsp;签名时，有两种工具可以选择，一种是 java 提供的 jarsigner；另外一种，是 Andoroid 专用的 apksigner 。无论使用哪种方式，都要首先生成私钥：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;现在我们通过 Java 的 keytool 工具生成了别名为 my-alias 的 PrivateKeyEntry ，并把它存储在 my-release-key.jks 文件中。<strong>在 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/java/security/KeyStore.PrivateKeyEntry">PrivateKeyEntry</a> 包含了一个私钥以及相对应的证书链（我们自己打包时，证书链长度通常为1，我们可以通过证书链获取私钥所对应的公钥）。</strong>可以通过以下命令查看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\YueGs\Desktop\test\t&gt;keytool -list -keystore my-release-key.jks</span><br><span class="line">输入密钥库口令:</span><br><span class="line"></span><br><span class="line">密钥库类型: JKS</span><br><span class="line">密钥库提供方: SUN</span><br><span class="line"></span><br><span class="line">您的密钥库包含 1 个条目</span><br><span class="line"></span><br><span class="line">my-alias, 2018-5-2, PrivateKeyEntry,</span><br><span class="line">证书指纹 (SHA1): E8:04:09:52:91:EF:E9:30:95:DC:BD:96:32:E8:12:22:AA:37:CC:55</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;下面，我们可以通过 jarsinger 来签名了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// signed.apk 签名后的apk；unsigned.apk ，用来签名的 apk；</span><br><span class="line">// my-alias ， 存储在 my-release-key.jks 中 PrivateKeyEntry 的别名</span><br><span class="line">jarsigner -verbose -keystore my-release-key.jks -signedjar signed.apk unsigned.apk my-alias</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;在没有打包签名之前，apk 包里是没有 META-INF 文件夹的，而在打包过后，多了这个文件夹，里面包含了验证文件完整性的文件。同样，如果里面已经有了这个文件夹，即已经进行过签名，是无法重复签名的。<br>&amp;emsp;用 apksigner 进行签名，其实也就是一句话的事：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apksigner sign --ks my-release-key.jks --out signed.apk unsigned.apk</span><br></pre></td></tr></table></figure>
+<p>&amp;emsp;注意，apksigner 这个命令是在 “sdk\build-tools\xxx” (xxx 为 android 版本号)文件夹下面。签名之后，META-INF 文件夹中会出现文件 MY-ALIAS.RSA。我们比较一下该文件和 my-release-key.jks 中的信息：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/cer-keystore-metainf.PNG"></p>
+<p>&amp;emsp;下面，我们对两种工具做个比较。<br>&amp;emsp;jarsiger 是用 JAR 文件设计的，所以它对 APK 文件结构一无所知，它只会把 APK 当做一个 JAR 文件（原因： apk 实际上是个 zip 压缩包，而 zip 压缩包可以被认为是一个 jar 包）。而 apksigner 是专门为 APK 文件设计的。比如，jarsigner 不知道怎样生成在 Android Nougat 中引入的 Scheme v2 类型的签名，但是 apksigner 可以这么做。jarsigner 对于需要在 API 17 或者以下运行时，不能使用 sha-256 的数字签名，但是 apksigner 知道。<br>&amp;emsp;上面已经提到，当前的签名有两种 Scheme，分别是 v1 和 v2 。这里再做一个简单的介绍。在 Android 7.0 中，可以根据 APK 签名方案 v2（v2 方案）或 JAR 签名（v1 方案）验证 APK。更低版本的平台会忽略 v2 签名，仅验证 v1 签名。v1 和 v2 的区别，根据 **<a target="_blank" rel="noopener" href="https://source.android.com/security/apksigning/v2#verification">官网</a> **的说法，大概就是 v2 能够提供对整个 apk 签名（v1 对于 metainf 文件夹下的文件是没有验证的），而且 v2 更加验证过程更快（v1 需要解压 apk 逐条验证）。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/android/%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6/APK%20%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%E8%BF%87%E7%A8%8B.png" alt="APK 签名过程"></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&amp;emsp;这篇文章写的有点久，主要是这一块平时接触的也比较少，所以需要查的资料也比较多。原本想写 Android 中的签名验证机制，后面才发现光是签名部分能说的都太多了。<br>&amp;emsp;签名的底层，是非对称加密，密码学的范畴，非专业人士就不展开了。信任链那部分，我觉得还是挺有意思的。如果 A 是绝对可信的，那么 A 相信并签署的 B 也是可信的，那么 B 相信并签署的 C 也是可信的，以此类推。我们的证书被 Z 相信并签署，因此，也在这条信任链中，也是可信的。</p>
+<p>参考<br><a target="_blank" rel="noopener" href="http://console.chinapay.com/NetPayClient/new/netpayClient.doc">netpayClient.doc</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/studio/publish/app-signing.html#certificates-keystores">签署您的应用</a><br><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc5280#section-4.1">Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a><br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/44153144/what-is-the-difference-between-jar-signer-and-apk-signer">what-is-the-difference-between-jar-signer-and-apk-signer</a><br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/35706687/why-jarsigner-can-sign-android-apk">https://stackoverflow.com/questions/35706687/why-jarsigner-can-sign-android-apk</a><br><a target="_blank" rel="noopener" href="https://source.android.com/security/apksigning/v2#verification">APK 验证</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Android/">Android</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/安全/">安全</a><a href="/tags/Android/">Android</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

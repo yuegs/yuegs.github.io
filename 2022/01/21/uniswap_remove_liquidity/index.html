@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>UniswapV2-移除流动性 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="移除流动性，实际上是造市商进行 “资金” 赎回的一种方式。造市商按照一定比例往 “资金池” 注入一定量的 token 对，以使其他人可以在这个池子中完成 token 兑换；赎回时，自然也是按照一定“参股”比例，收回自己原本注入的 token 对。">
+  
+
+  
+  
+  <meta name="keywords" content="Uniswap,removeLiquidity,流动性">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="UniswapV2-移除流动性"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>UniswapV2-移除流动性</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/01/21/uniswap_remove_liquidity/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-01-21T14:13:01.000Z">
+          2022-01-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-remove-lp/banner-min.png?raw=true"><br>移除流动性，实际上是造市商进行 “资金” 赎回的一种方式。<br>造市商按照一定比例往 “资金池” 注入一定量的 token 对，以使其他人可以在这个池子中完成 token 兑换；赎回时，自然也是按照一定“参股”比例，收回自己原本注入的 token 对。</p>
+<span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/18/uniswap_create_pair/">UniswapV2-创建 UniswapV2Pair</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/20/uniswap_add_liquidity/">UniswapV2-添加流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/21/uniswap_remove_liquidity/">UniswapV2-移除流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/23/uniswap-swap/">UniswapV2-兑换(swap)</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/25/uniswap-analysis/">UniswapV2-公式分析</a></p>
+<h3 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h3><p>如下代码块所示，在移除移动性时，需要如下步骤（下述 pair 代表持有 token对 的合约）：</p>
+<ol>
+<li>确定当前要在哪个 pair 中移除流动性； </li>
+<li>将用户的 lp token 转移到 pair 地址；</li>
+<li>pair 将收到的 lp token 销毁，并按照 pair 中 lp token 的总量，以及 tokenA 和 tokenB 的数量，将兑换出来的 tokenA 和 tokenB 发送到指定接收地址；</li>
+<li>检查兑换出来的 tokenA 和 tokenB 的数量，是否满足预期设定，如不满足，则整个移除流动性的交易失败。</li>
+</ol>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-remove-lp/uniswap-remove-lp-min.png?raw=true"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/Uniswap/v2-periphery/blob/master/contracts/UniswapV2Router02.sol#L103</span></span><br><span class="line"><span class="comment">// **** REMOVE LIQUIDITY ****</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">**<span class="doctag">@tokenA</span> pool 中的一个 token</span></span><br><span class="line"><span class="comment">**<span class="doctag">@tokenB</span> pool 中的另一个 token</span></span><br><span class="line"><span class="comment">**<span class="doctag">@liquidity</span> 想要取出的流动量</span></span><br><span class="line"><span class="comment">**<span class="doctag">@amountAmin</span> 移除流动性后，需收到的 tokenA 的最小量</span></span><br><span class="line"><span class="comment">**<span class="doctag">@amountBmin</span> 移除流动性后，需收到的 tokenB 的最小量</span></span><br><span class="line"><span class="comment">**<span class="doctag">@to</span> 接收相关资产的地址</span></span><br><span class="line"><span class="comment">**<span class="doctag">@deadline</span> 交易完成所允许的最大时间</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">removeLiquidity</span>(<span class="params"></span></span><br><span class="line"><span class="params">    address tokenA,</span></span><br><span class="line"><span class="params">    address tokenB,</span></span><br><span class="line"><span class="params">    uint liquidity,</span></span><br><span class="line"><span class="params">    uint amountAMin,</span></span><br><span class="line"><span class="params">    uint amountBMin,</span></span><br><span class="line"><span class="params">    address to,</span></span><br><span class="line"><span class="params">    uint deadline</span></span><br><span class="line"><span class="params"></span>) public virtual override <span class="title function_">ensure</span>(deadline) returns (uint amountA, uint amountB) &#123;</span><br><span class="line">    <span class="comment">// 获取当前 pair</span></span><br><span class="line">    address pair = <span class="title class_">UniswapV2Library</span>.<span class="title function_">pairFor</span>(factory, tokenA, tokenB);</span><br><span class="line">    <span class="comment">// 从 msg.sender 转入 liquidity 到 pair</span></span><br><span class="line">    <span class="title class_">IUniswapV</span>2Pair(pair).<span class="title function_">transferFrom</span>(msg.<span class="property">sender</span>, pair, liquidity); <span class="comment">// send liquidity to pair</span></span><br><span class="line">    <span class="comment">// 在 pair 中销毁 liquidity 后，将相关资产转移到 to 地址</span></span><br><span class="line">    (uint amount0, uint amount1) = <span class="title class_">IUniswapV</span>2Pair(pair).<span class="title function_">burn</span>(to);</span><br><span class="line">    <span class="comment">// 地址对齐</span></span><br><span class="line">    (address token0,) = <span class="title class_">UniswapV2Library</span>.<span class="title function_">sortTokens</span>(tokenA, tokenB);</span><br><span class="line">    (amountA, amountB) = tokenA == token0 ? (amount0, amount1) : (amount1, amount0);</span><br><span class="line">    <span class="comment">// 收回的 token 数量应能满足输入时设定的最小数量，否则交易失败。</span></span><br><span class="line">    <span class="built_in">require</span>(amountA &gt;= amountAMin, <span class="string">&#x27;UniswapV2Router: INSUFFICIENT_A_AMOUNT&#x27;</span>);</span><br><span class="line">    <span class="built_in">require</span>(amountB &gt;= amountBMin, <span class="string">&#x27;UniswapV2Router: INSUFFICIENT_B_AMOUNT&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、将持有的-lp-token-转移给-pair"><a href="#二、将持有的-lp-token-转移给-pair" class="headerlink" title="二、将持有的 lp token 转移给 pair"></a>二、将持有的 lp token 转移给 pair</h3><p>通过 transferFrom 方法，将 lp token 发给 pair，后续将在 pair合约 内统一完成 lp token 销毁以及​ token对 的赎回。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上述代码块中，调用了 send liquidity to pair 的方法：</span></span><br><span class="line"><span class="comment">//  IUniswapV2Pair(pair).transferFrom(msg.sender, pair, liquidity); </span></span><br><span class="line"><span class="comment">//https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2ERC20.sol#L73</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">transferFrom</span>(<span class="params">address <span class="keyword">from</span>, address to, uint value</span>) external returns (bool) &#123;</span><br><span class="line">    <span class="keyword">if</span> (allowance[<span class="keyword">from</span>][msg.<span class="property">sender</span>] != <span class="title function_">uint</span>(-<span class="number">1</span>)) &#123;</span><br><span class="line">        allowance[<span class="keyword">from</span>][msg.<span class="property">sender</span>] = allowance[<span class="keyword">from</span>][msg.<span class="property">sender</span>].<span class="title function_">sub</span>(value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">_transfer</span>(<span class="keyword">from</span>, to, value);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2ERC20.sol#L57</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_transfer</span>(<span class="params">address <span class="keyword">from</span>, address to, uint value</span>) private &#123;</span><br><span class="line">    balanceOf[<span class="keyword">from</span>] = balanceOf[<span class="keyword">from</span>].<span class="title function_">sub</span>(value);</span><br><span class="line">    balanceOf[to] = balanceOf[to].<span class="title function_">add</span>(value);</span><br><span class="line">    emit <span class="title class_">Transfer</span>(<span class="keyword">from</span>, to, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、在-pair-中销毁-lp-token-及-token-赎回"><a href="#三、在-pair-中销毁-lp-token-及-token-赎回" class="headerlink" title="三、在 pair 中销毁 lp token 及 token 赎回"></a>三、在 pair 中销毁 lp token 及 token 赎回</h3><p>先删除用户的 lp token，并根据其 “占股” 情况，返回​用户的 token对。<br>可以注意到，仅在 lp token 添加和销毁的时候，会涉及到协议费的相关逻辑。用户在 “取现” 或者 “参股” 的时候才会导致分红的变化，这个时候，平台就来 “薅” LP 羊毛了​（目前收费开关还没打开）。协议费的计算过程，在 <a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/20/uniswap_add_liquidity/">添加流动性</a> 时已经介绍，这里不再赘述。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Pair.sol#L134</span></span><br><span class="line"><span class="comment">// this low-level function should be called from a contract which performs important safety checks</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">burn</span>(<span class="params">address to</span>) external lock returns (uint amount0, uint amount1) &#123;</span><br><span class="line">    (uint112 _reserve0, uint112 _reserve1,) = <span class="title function_">getReserves</span>(); <span class="comment">// gas savings</span></span><br><span class="line">    address _token0 = token0;                                <span class="comment">// gas savings</span></span><br><span class="line">    address _token1 = token1;                                <span class="comment">// gas savings</span></span><br><span class="line">    <span class="comment">// pair 所持有的 _token0 的余额，这个值，这里应该就是 _reverse0</span></span><br><span class="line">    uint balance0 = <span class="title class_">IERC20</span>(_token0).<span class="title function_">balanceOf</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    <span class="comment">// pair 所持有的 _token1 的余额，这个值，这里应该就是 _reverse1</span></span><br><span class="line">    uint balance1 = <span class="title class_">IERC20</span>(_token1).<span class="title function_">balanceOf</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    <span class="comment">// 获取 lp token amount</span></span><br><span class="line">    uint liquidity = balanceOf[<span class="title function_">address</span>(<span class="variable language_">this</span>)];</span><br><span class="line"></span><br><span class="line">    bool feeOn = <span class="title function_">_mintFee</span>(_reserve0, _reserve1);</span><br><span class="line">    uint _totalSupply = totalSupply; <span class="comment">// gas savings, must be defined here since totalSupply can update in _mintFee</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以取回的 token0 的数量</span></span><br><span class="line">    amount0 = liquidity.<span class="title function_">mul</span>(balance0) / _totalSupply; <span class="comment">// using balances ensures pro-rata distribution</span></span><br><span class="line">    <span class="comment">// 可以取回的 token1 的数量</span></span><br><span class="line">    amount1 = liquidity.<span class="title function_">mul</span>(balance1) / _totalSupply; <span class="comment">// using balances ensures pro-rata distribution</span></span><br><span class="line">    <span class="built_in">require</span>(amount0 &gt; <span class="number">0</span> &amp;&amp; amount1 &gt; <span class="number">0</span>, <span class="string">&#x27;UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED&#x27;</span>);</span><br><span class="line">    <span class="comment">// 从 pair 中，删除 liquidity 的 lp token</span></span><br><span class="line">    <span class="title function_">_burn</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>), liquidity);</span><br><span class="line">    <span class="comment">// 从 pair 向 to 地址转入 amount0 的 _token0</span></span><br><span class="line">    <span class="title function_">_safeTransfer</span>(_token0, to, amount0);</span><br><span class="line">    <span class="comment">// 从 pair 向 to 地址转入 amount1 的 _token1</span></span><br><span class="line">    <span class="title function_">_safeTransfer</span>(_token1, to, amount1);</span><br><span class="line">    <span class="comment">// pair 在 _token0 中的余额</span></span><br><span class="line">    balance0 = <span class="title class_">IERC20</span>(_token0).<span class="title function_">balanceOf</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    <span class="comment">// pair 在 _token1 中的余额</span></span><br><span class="line">    balance1 = <span class="title class_">IERC20</span>(_token1).<span class="title function_">balanceOf</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line"></span><br><span class="line">    <span class="title function_">_update</span>(balance0, balance1, _reserve0, _reserve1);</span><br><span class="line">    <span class="keyword">if</span> (feeOn) kLast = <span class="title function_">uint</span>(reserve0).<span class="title function_">mul</span>(reserve1); <span class="comment">// reserve0 and reserve1 are up-to-date</span></span><br><span class="line">    emit <span class="title class_">Burn</span>(msg.<span class="property">sender</span>, amount0, amount1, to);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、pair-数据更新"><a href="#四、pair-数据更新" class="headerlink" title="四、pair 数据更新"></a>四、pair 数据更新</h3><p>这里主要涉及到 pair 中，token 存量的更新。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// update reserves and, on the first call per block, price accumulators</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_update</span>(<span class="params">uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1</span>) private &#123;</span><br><span class="line">    <span class="built_in">require</span>(balance0 &lt;= <span class="title function_">uint112</span>(-<span class="number">1</span>) &amp;&amp; balance1 &lt;= <span class="title function_">uint112</span>(-<span class="number">1</span>), <span class="string">&#x27;UniswapV2: OVERFLOW&#x27;</span>);</span><br><span class="line">    uint32 blockTimestamp = <span class="title function_">uint32</span>(block.<span class="property">timestamp</span> % <span class="number">2</span>**<span class="number">32</span>);</span><br><span class="line">    uint32 timeElapsed = blockTimestamp - blockTimestampLast; <span class="comment">// overflow is desired</span></span><br><span class="line">    <span class="keyword">if</span> (timeElapsed &gt; <span class="number">0</span> &amp;&amp; _reserve0 != <span class="number">0</span> &amp;&amp; _reserve1 != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// * never overflows, and + overflow is desired</span></span><br><span class="line">        price0CumulativeLast += <span class="title function_">uint</span>(<span class="title class_">UQ112</span>x112.<span class="title function_">encode</span>(_reserve1).<span class="title function_">uqdiv</span>(_reserve0)) * timeElapsed;</span><br><span class="line">        price1CumulativeLast += <span class="title function_">uint</span>(<span class="title class_">UQ112</span>x112.<span class="title function_">encode</span>(_reserve0).<span class="title function_">uqdiv</span>(_reserve1)) * timeElapsed;</span><br><span class="line">    &#125;</span><br><span class="line">    reserve0 = <span class="title function_">uint112</span>(balance0);</span><br><span class="line">    reserve1 = <span class="title function_">uint112</span>(balance1);</span><br><span class="line">    blockTimestampLast = blockTimestamp;</span><br><span class="line">    emit <span class="title class_">Sync</span>(reserve0, reserve1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Uniswap/">Uniswap</a><a href="/tags/removeLiquidity/">removeLiquidity</a><a href="/tags/流动性/">流动性</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

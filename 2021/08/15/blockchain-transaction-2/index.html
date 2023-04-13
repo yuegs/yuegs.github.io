@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>交易（二） | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="图片来源
+本篇是一篇译文，原文地址。本篇承接上篇《交易（一）》，是交易过程的第二个部分。">
+  
+
+  
+  
+  <meta name="keywords" content="区块链">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="交易（二）"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>交易（二）</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/08/15/blockchain-transaction-2/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-08-15T15:01:28.000Z">
+          2021-08-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://images.unsplash.com/photo-1550565118-3a14e8d0386f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"><br><a target="_blank" rel="noopener" href="https://images.unsplash.com/photo-1550565118-3a14e8d0386f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80">图片来源</a></p>
+<p>本篇是一篇译文，<a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch05.html">原文地址</a>。本篇承接上篇<a target="_blank" rel="noopener" href="https://blog.yuegs.com/2021/08/08/blockchain-transaction-1/">《交易（一）》</a>，是交易过程的第二个部分。</p>
+<span id="more"></span>
+
+<h3 id="交易费用"><a href="#交易费用" class="headerlink" title="交易费用"></a>交易费用</h3><p>很多交易中，包含了交易费用，该费用是对矿工的补偿。矿工的挖矿&#x2F;费用以及奖励更多细节将在 <a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch08.html">第八章</a> 详细讨论。本部分将说明交易费用是如何被包含在一个典型的交易中。</p>
+<p>交易费用的目的，在于刺激矿工将交易包含在下一个区块中，同时，抑制“垃圾”交易或者任何系统滥用。交易的费用，将归属于将该交易打包到区块的矿工手中。</p>
+<p>交易费用的计算是基于交易数据的千字节数，而不是其进行交易的比特币数。总体而言，交易费用是基于比特币网络中的市场力量而设定的。矿工基于很多不同的因素按照优先级处理交易，这些因素就包括交易费用，在某些特定情况下，他们甚至会免费处理交易。<br>交易费用不是强制的，但是交易费用影响了处理优先级，这意味着具有较高交易费用的交易更有可能被包含在下一个被挖出来的区块中，反之，交易将被延迟处理，甚至根本不处理。<br>随着时间，交易费用的计算方式及其对优先级的影响也在发展。起初，交易费用是固定的，<strong><strong>逐渐地，费用结构更加宽松，可以被市场的力量&#x2F;（网络能力和交易数量）所影响。</strong></strong>目前，最小的交易费用固定为 0.0001 比特币&#x2F;千字节。通常，交易都不会超过 1KB；但是那些有多个输入和输出的交易会大些。<br>未来，随着比特币协议的不断修订，钱包应用有望通过统计分析，计算出当前交易交易最合适的费用。</p>
+<p>矿工基于交易费用优先处理交易的算法的细节将在 <a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch08.html">第八章</a> 讨论。</p>
+<h3 id="添加费用到交易中"><a href="#添加费用到交易中" class="headerlink" title="添加费用到交易中"></a>添加费用到交易中</h3><p>在交易的数据结构中，是没有费用这个变量的。费用的表达是隐式的，其计算公式为：<br><code>Fees = Sum(Inputs) - Sum(Outputs)</code></p>
+<p>这是一个容易让人混淆但是又必须理解的点，当你在构建自己的交易时，你必须确保自己不是无意地投入了非常大的交易费用。这就意味着，你必须清楚所有的交易输入，如果有必要，创建一个找零的交易输出，否则，你将给矿工一个非常大的小费。</p>
+<p>举个例子，如果你消耗了 20 个比特币的 UTXO，去支付 1 比特币，你必须创建一个 19 个比特币的输出，将找零返回到钱包中。否则，19 比特币将作为交易费用发送给了矿工。虽然，这样会加快交易的处理速度，并同时让矿工非常高兴，但是，这可能不是你的真实意图。</p>
+<blockquote>
+<p>警告<br>如果你忘记在输出中添加一个找零的输出，那么这些零钱将被作为交易费用。“不用找零了”可能不是你的真实意图。</p>
+</blockquote>
+<p>让我们看看实际过程中是如何工作的，同样以 Alice 购买咖啡为例。Alice 想要花费 0.015 个比特币支付咖啡费用。为了确保交易能够被立即处理，她想添加一些交易费，0.001 比特币。这就意味着她总共需要支付 0.016 个比特币。她的钱包因此必须找到一个相加等于 0.016 的比特币 UTXO 集合，甚至，大于该值，如果大于该值，需要创建找零。<br>假设，它的钱包中有 0.2 个比特币可用，它需要消耗这个 UTXO，其中，0.015 的输出是给 Bob，另外 0.184 的输出是返回到自己钱包的找零，剩下的 0，001 未分配，这个就是给隐式的交易费用。</p>
+<p>现在，让我们看一个不同的场景，尤金尼亚，我们孩子在费率并的慈善总监，已经完成了为孩子们购买课本的筹款活动，她收到了数千个来自世界各地的捐赠，共 50 个比特币，因此，她的钱包中充满了很多小的 UTXO，现在，她想从本地的出版社购买几百本课本，并通过比特币支付费用。<br>尤金尼亚的钱包应用试图构建单个大笔支付，它必须从所有可用的 UTXO 集合中去寻找，而这些 UTXO 都是由小额组成。这就意味着，可能需要数百个 UTXO 作为输入，一个支付给出版商的支出。这笔交易由于有很多的输入，因此其大小可能会超过 1KB，也许有 2 到 3KB，结果，她可能需要交付超过 0.0001 比特币的交易费。<br>尤金尼亚的钱包应用将通过计算交易大小和每千字节交易费的乘积，来计算出最合适的交易费用。<br>很多钱包都会在大额交易中支付交易费，以期望其快速处理。高额的交易额并不需要花费高额的交易费用，交易费用和交易额是独立的。</p>
+<h3 id="交易链接和孤儿交易"><a href="#交易链接和孤儿交易" class="headerlink" title="交易链接和孤儿交易"></a>交易链接和孤儿交易</h3><p>如我们所见，交易构成一条链，一个交易花费的是前一个交易（父交易）的输出，再输出到下一个交易（孩子交易）中。有时，整个交易链相互依赖，即，父交易，孩子交易，孙子交易同时创建。为了完成这种复杂的交易工作流，需要先验证孩子交易，再验证父交易。举例而言，这是一种称为 CoinJoin 交易的技术，多个部分共同参与到交易中，以保护隐私。<br>当一个交易链开始在整个网路中传输，它们到达到节点上时通常是无序的。有时，孩子交易可能要比父交易先到达节点。在这种情况下，节点先看到子交易，并在子交易中看到了父交易的引用。此时，节点并不不会丢弃孩子交易，而是将它们丢进了临时的池子中，等待父交易的到来。没有父交易的交易池称之为 <strong><strong>孤儿交易池</strong></strong> ，一旦父交易到达，相关孤儿将会从池中释放，重新验证合法性，验证通过后将它们打包进区块，准备挖矿。</p>
+<p>内存中，为了避免来自节点的<code>拒绝服务攻击</code>，可以存储的孤儿交易的数量是有限的。<code>MAX_ORPHAN_TRANSACTIONS</code> 在比特币客户端相关源码中被定义。如果孤儿交易超出了这个值，一个或多个交易会被删除，直到池子的数量恢复到限定值。</p>
+<h3 id="交易脚本和交易语言"><a href="#交易脚本和交易语言" class="headerlink" title="交易脚本和交易语言"></a>交易脚本和交易语言</h3><p>比特币客户端通过执行脚本来验证交易的合法性，脚本语言是一种 类Forth 的语言。锁定脚本（锁定 UTXO）和解锁脚本（通常包含签名）都是使用同一种脚本语言。如果一个交易是合法的，输入中的解锁脚本将被执行，与此同时，相应的锁定脚本将检查输出其是否满足花费条件。</p>
+<p>现今，在比特币网络中，更多的交易是处理”Alice 支付给 Bob”这种形式，基于同样的 Pay-to-Public-Key-Hash 脚本。然而，通过编程语言使用脚本去锁定输出和解锁输入，意味这在交易中可以包含无限数量的条件。比特币交易没有限制必须是 “Alice 支付给 Bob” 这种形式。</p>
+<blockquote>
+<p>提示<br><strong><strong>比特币交易合法性的验证，并不是基于一种静态的模式，而是其是否能够通过脚本语言的验证。这种语言，允许你去表达各种各种的近乎无限的条件。这，就为比特币加持了 “可编程货币” 的力量。</strong></strong></p>
+</blockquote>
+<h4 id="脚本构建（锁定和解锁）"><a href="#脚本构建（锁定和解锁）" class="headerlink" title="脚本构建（锁定和解锁）"></a>脚本构建（锁定和解锁）</h4><p>比特币交易验证引擎通过两种脚本验证交易的合法性：锁定脚本和解锁脚本。</p>
+<p>锁定脚本被放置在输出中，它指定了未来输出可以被花费出去而必须满足的条件。历史上，锁定脚本也被称为 <code>scriptPubKey</code>，因为它通常包含了公钥或者比特币地址。在本书中，我们使用锁定脚本，其在脚本技术上有更加广泛的意义。在大部分比特币应用中，我们提供到锁定脚本在源码中就是 <code>scripttPubKey</code>。</p>
+<p>解锁脚本，<strong><strong>是为了解决或者说满足放置在输出中的锁定脚本中的条件。</strong></strong>解锁脚本是每个输入的一部分，大部分情况下，它们包含了由用户钱包通过私钥生成的数字签名。因此，历史上，解锁脚本也被称为 <code>scriptSig</code>。在大多数比特币应用中，源码使用 <code>scriptSig</code> 这个变量，我们将其称为 <code>解锁脚本</code> 是为了锁定脚本更广泛的验证需要，不是所有的解锁脚本都需要包含签名。</p>
+<p>每个比特币客户端通过同时执行锁定脚本和解锁脚本来验证交易的合法性。对于交易的每个输入，验证软件将首先检索输入中所提到的 UTXO，UTXO 包含的锁定脚本中所定义了满足花费的条件。接着，验证软件将取出输入中的解锁脚本，并通知执行这两个脚本。</p>
+<p>在最初的比特币客户端上，解锁和锁定脚本是顺序执行的，出于安全考虑，在 2010 年这种方式发生了变化，因为一个漏洞：允许一个有缺陷的解锁脚本往堆栈中推送数据，污染锁定脚本的执行。在当前的实现中，两个脚本分开执行，并利用堆栈传递数据。</p>
+<p>首先，解锁脚本被堆栈执行引擎执行。如果解锁脚本执行成功后（比如，没有 dangling 操作符），主栈将被复制，锁定脚本将执行。如果锁定脚本执行的结果和从解锁脚本复制到主栈的数据一致，则解锁脚本成功的解决了锁定脚本中的条件，因此，输入中要花费的 UTXO 是合法的。否则，输入不合法。<br>注意，UTXO 被永久的记录在区块链上，它是不可变的，且不会被错误的花费（译注：比如输入不合法）所影响。只有合法的满足条件 UTXO，才会被标记为已花费，并从未花费的 UTXO 集合中被移除。</p>
+<p><img src="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/images/msbt_0501.png"></p>
+<h4 id="脚本语言"><a href="#脚本语言" class="headerlink" title="脚本语言"></a>脚本语言</h4><p>比特币交易脚本语言，或者说脚本，是一种 类Forth 的逆波兰式 基于堆栈的 可执行语言。脚本是一种比较简单的语言，通常被设计为有限的用途&#x2F;执行在某些硬件设备上，比如嵌入式设备或手持计算器。它需要最低限度的计算能力，且无法做一些现代变成语言可以实现的炫酷的事情。<br>以上，在可编程货币领域，这些其实都是一些经过深思熟虑的安全特性。</p>
+<p>比特币脚本语言之所以是基于栈的，是因为它（译注：它的执行过程）使用了栈这种数据结构。栈是一种很简单的数据结构，你可以把它想象成堆状的卡片。栈允许两种操作：入栈和出栈。入栈时数据在栈顶部，出栈时数据也从顶部删除。</p>
+<p>脚本语句在执行过程中，是从左到右执行的。数字被压入到栈中，操作符（Operators）将一个或多个参数压入或推出栈中，它们操作数据，最后也可能将操作结果压回栈中。举个例子，OP_ADD 将从栈中弹出两个数字，并将它们相加，其结果在压回栈中。</p>
+<p>条件操作符将根据条件，生成一个 TRUE 或 FALSE 的布尔值。举个例子，OP_EQUAL 从栈中弹出两个数据，如果这两个数据相等，则压回 TRUE(TRUE 代表1)，否则压回 FALSE(FALSE 代表0)。比特币交易脚本通常会包含条件操作符，如果签名结果是合法的，会产生 TRUE。</p>
+<p>如下图所示，脚本 <code>2 3 OP_ADD 5 OP_EQUAL</code> 使用了算术加法操作符 <code>OP_ADD</code>，将两个数字相加，并将结果压回栈中，接着，使用条件操作符 <code>OP_EQUAL</code> ，将检查上一步的求和是否等于 5。很简洁，<code>OP_</code>前缀的操作符一步一步被触发执行。</p>
+<p>下面，是一个稍微复杂些的脚本。计算 <code>2+7-3+1</code>。注意，当多个操作符在同一行，栈机制前面的计算结果作为后一个操作的输入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> <span class="number">7</span> OP_ADD <span class="number">3</span> OP_SUB <span class="number">1</span> OP_ADD <span class="number">7</span> OP_EQUAL</span><br></pre></td></tr></table></figure>
+<p>可以尝试在纸上用笔画一下上面的流程。脚本执行完后，就剩下 TRUE 还在栈中。</p>
+<p>几乎所有锁定脚本都和比特币地址或者说公钥有关。因此，为了证明花费后资金的拥有者，其脚本也不会很复杂。<br><strong><strong>任何锁定脚本和解锁脚本，只要最终结果是 TRUE，则交易就是合法的。</strong></strong><br>前面，我们使用简单算术的实例，也可以用于锁定一个交易输出。</p>
+<p>使用算术结算的部分例子作为锁定脚本：<br><code>3 OP_ADD 5 OP_EQUAL</code><br>为了满足条件，输入的解锁脚本应该是：<br><code>2</code><br>验证程序将两个相结合，最终结果就是：<br><code>2 3 OP_ADD 5 OP_EQUAL</code></p>
+<p><img src="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/images/msbt_0502.png"></p>
+<blockquote>
+<p>提示<br>如果最终栈顶的结果是 TRUE(即 {0x01})，或者，任意非0数，或者是空的，则验证交易合法。否则，如果栈顶值是 FALSE(一个零长度的空值，即 {})，或者被操作符（如 OP_VERIFY,OP_RETURN，或条件终止操作符 OP_ENDIF）显式停止，则验证不合法。具体可见<a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/apa.html">附录A</a>。</p>
+</blockquote>
+<h3 id="图灵不完备"><a href="#图灵不完备" class="headerlink" title="图灵不完备"></a>图灵不完备</h3><p>比特币交易脚本语言，包含了很多的操作符，但是，它被故意设计为没有循环和复杂的流程控制能力，而仅有 一些条件控制能力。这导致了该语言不是图灵完备的，这也意味着脚本复杂度有限，且执行时间是可预测的（译注：没有循环，没有除条件以外的流控机制）。<br>这种脚本，并非通用意义的语言，这些限制会确保语言不会创建出无限循环和植入在交易中的“逻辑炸弹”，这些会导致比特币网络受到 DoS 攻击。<br>记住，比特币网路中，交易的合法性会被每个全节点验证。一个被限制的语言，会保护交易验证机制，避免漏洞。</p>
+<p>译者添加的其他参考连接<br><a target="_blank" rel="noopener" href="https://librehash.org/rbf-transaction-double-spend-analysis/">RBF Transaction Double Spend Analysis</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/区块链/">区块链</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/区块链/">区块链</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

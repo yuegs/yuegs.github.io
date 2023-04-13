@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>IPFS 概述 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="去中心化也许会成为未来的主题，但是，但是我觉得应该也不会实现真正的“去中心化”。虽然节点的地位是平等的，依照现有的思路，节点群体在决策时，仍然无法保证它百分百就是对的，大部分节点仍然可能会被把持在某些手中，形成较大的决策影响力，当然，这种影响力有限，也不是绝对的。
+回到正题，IPFS 正是一种去中心化的分布式文件存储系统，它的出现，将会对基于 C&amp;#x2F;S 模式和地址寻址的中心化文件访问策略带来一定的挑战。
+本文中，将对 IPFS 的运行原理做一个综述。由于并没有阅读源码，内容上主要来自于基于对网络 IPFS 上的描述的理解。">
+  
+
+  
+  
+  <meta name="keywords" content="IPFS,IPNS,CID,Bitswap">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="IPFS 概述"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>IPFS 概述</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/12/ipfs-guide/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-12T06:51:12.000Z">
+          2022-02-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/first-meet/node-ex.jpg?raw=true"></p>
+<p>去中心化也许会成为未来的主题，但是，但是我觉得应该也不会实现真正的“去中心化”。<br>虽然节点的地位是平等的，依照现有的思路，节点群体在决策时，仍然无法保证它百分百就是对的，大部分节点仍然可能会被把持在某些手中，形成较大的决策影响力，当然，这种影响力有限，也不是绝对的。</p>
+<p>回到正题，IPFS 正是一种去中心化的分布式文件存储系统，它的出现，将会对基于 C&#x2F;S 模式和地址寻址的中心化文件访问策略带来一定的挑战。</p>
+<p>本文中，将对 IPFS 的运行原理做一个综述。由于并没有阅读源码，内容上主要来自于基于对网络 IPFS 上的描述的理解。</p>
+<span id="more"></span>
+
+<h3 id="1-IPFS-概述"><a href="#1-IPFS-概述" class="headerlink" title="1. IPFS 概述"></a>1. IPFS 概述</h3><p>IPFS 试图去解决 C&#x2F;S 模式下的缺陷，并通过 p2p 文件共享系统来定位内容。<br>它的实现，其实并没有什么新的技术，更多的，是基于当前正在流行的网络技术的整合。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/first-meet/main-components.png?raw=true"></p>
+<p>使用 DHT 技术，解决 P2P 网络中资源的快速定位和访问；使用 IPNS 实现一个更加安全更加友好的用户访问模式；使用 Bitswap 实现文件块可靠稳定的传输。当然，其涉及的技术，也不仅仅是这些，还包括 Git 等，本文暂不涉及这些。</p>
+<h3 id="2-分布式哈希表（DHT）"><a href="#2-分布式哈希表（DHT）" class="headerlink" title="2. 分布式哈希表（DHT）"></a>2. 分布式哈希表（DHT）</h3><p>分布式哈希表，是通过 <strong><strong>映射关系</strong></strong> 完成 <strong><strong>路由</strong></strong> 的 <strong><strong>分布式定位系统</strong></strong>。<br>因此，这张分布式表主要作用应当是记录 <strong><strong>谁，在哪里，有什么</strong></strong>。</p>
+<h5 id="2-1-映射什么？"><a href="#2-1-映射什么？" class="headerlink" title="2.1 映射什么？"></a>2.1 映射什么？</h5><p>要映射的内容，其实应该围绕着资源的定位展开的。这个过程中，涉及到节点和节点上的内容。<br>在 IPFS 中存在三种键值映射对使用了 DHT.</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="center">作用</th>
+<th align="right">使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Provider records</td>
+<td align="center">建立内容id（CID）和节点之间的映射，实际上这也是在向外部广播它的内容，并愿意对外提供</td>
+<td align="right">在 IPFS 中查找内容</td>
+</tr>
+<tr>
+<td align="left">IPNS records</td>
+<td align="center">建立 IPNS key（比如公钥哈希）和 IPNS record （内部包含签名和指向当前版本的路径，格式类似于<code>ipfs/bafxyxz...</code>）之间的映射。</td>
+<td align="right">IPFS</td>
+</tr>
+<tr>
+<td align="left">Peer records</td>
+<td align="center">建立 peerID 和一系列节点可以到达的 MultiAddr 之间的映射</td>
+<td align="right">在 IPFS 中，当你知道某个拥有某些内容的节点id，但是不知道它的网络地址</td>
+</tr>
+</tbody></table>
+<p>在 Kademlia 实现算法中，其查找和定位过程对应着几种消息类型：</p>
+<ul>
+<li><strong><strong>PING</strong></strong>—用来测试节点是否仍然在线。</li>
+<li><strong><strong>STORE</strong></strong>—在某个节点中存储一个键值对。</li>
+<li><strong><strong>FIND_NODE</strong></strong>—消息请求的接收者将返回自己桶中离请求键值最近的K个节点。</li>
+<li><strong><strong>FIND_VALUE</strong></strong>，与FIND_NODE一样，不过当请求的接收者存有请求者所请求的键的时候，它将返回相应键的值。每一个RPC消息中都包含一个发起者加入的随机值，这一点确保响应消息在收到的时候能够与前面发送的请求消息匹配。</li>
+</ul>
+<h5 id="2-2-路由过程"><a href="#2-2-路由过程" class="headerlink" title="2.2 路由过程"></a>2.2 路由过程</h5><p>以下，我们以节点定位来探索它的路由过程。实际上 DHT 路由的实现方式有很多，这里只介绍 Kademlia 算法实现。</p>
+<p>在这种分布式存储网络中，数据通常都是被冗余记录和存储的。这就带来了一个问题：到底谁应该来提供指定的内容。</p>
+<p>路由规则中，有个很重要的部分，就是计算两个节点中的“距离”。当然，这里肯定不是指节点之间的物理距离。然而，我们需要引入 <strong><strong>距离</strong></strong> 这个概念，来决定 “怎么做最合适” 的问题。</p>
+<p>在 Kademlia 中，使用 异或 操作，来计算距离。异或操作具有以下属性，这就像我们在现实社会中的距离属性一样。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/first-meet/xor.png?raw=true"></p>
+<p>上述，参与异或计算的 x 和 y 实际上是两个节点的节点id，而这个id。即，两个节点的id异或的结果，就是节点间的距离。比如 <code>1010</code> 和 <code>1111</code> 异或后，就是 <code>0101</code>，则距离就是 5.</p>
+<p>在这里可以看到，这个 <code>距离</code> 似乎没有什么用处。然而，事实上，<code>距离</code> 实际上为节点定位和节点发现的实现方式奠定了理论基础。</p>
+<p>每个节点中，其内部都使用 哈希表 记录了其周围的节点信息。哈希表中，key 为节点id，键值为其所对应的网络地址。<br>当一个节点（这里定义为节点A）要去找另外一个节点时（FIND_NODE），是通过节点id查询的。通过目标节点id，以及其本身记录的周围节点的id，将计算出周围哪些节点离目标节点比较 <strong><strong>近</strong></strong>（就是通过上述的距离计算），进而去询问这些节点关于目标节点的信息。<br>附近节点会返回与目标节点相近的节点，这样，节点A附近的节点记录将会被扩充。同时，如果返回的节点中，并没有目标节点，节点A 将排除已经询问过的节点，并递归上述过程。</p>
+<h4 id="2-3-节点入网"><a href="#2-3-节点入网" class="headerlink" title="2.3 节点入网"></a>2.3 节点入网</h4><p>节点入网，其实与节点定位过程相似。<br>不同之处在于，一个新节点A，如果想要加入到 IPFS 网络中，需要事先知道一个已经在该网络中的节点B。<br>节点A 向节点 B 查询自己，这是，节点B 将记录节点A 的信息在自己的记录表中，同时向节点A 返回其附近表中与节点A 相近的节点。<br>以此往复，直到节点A 中记录足够多的路由信息。记录过程中，节点A 的信息也 “渗入” 到了网络里。</p>
+<h4 id="2-4-资源定位"><a href="#2-4-资源定位" class="headerlink" title="2.4 资源定位"></a>2.4 资源定位</h4><p>定位资源的过程，和查找节点的过程类似。</p>
+<ul>
+<li>每个 block 都有自己的 <code>key</code>(或者说 CID)，将 <code>key</code> 和路由表中的节点做距离运算，向最近的 k 个节点查询相关内容；</li>
+<li>如果被查询的节点上没有数据，则被查询节点将返回它所找到的最近 k 个节点给查询者，否则，将直接返回数据；</li>
+<li>查询者如果没有收到数据，由于路由表更新，则重新进行上述查找过程，循环往复。</li>
+</ul>
+<p>关于资源缓存（冗余），在网上查找到两种说法，都是合理的，记录在此。</p>
+<ul>
+<li>被查询者如果没有该资源，将缓存该资源 <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000023417884">来源</a>；</li>
+<li>储存值的节点将定期搜索网络中与储存值所对应的键接近的K个节点并且把值复制到这些节点上，这些节点可作为那些下线的节点的补充 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Kademlia">来源</a>。</li>
+</ul>
+<p>以上，其实算是一种比较 “重” 的资源冗余方式。在某些实现中，可能不会提供这种缓存，只是通过 FIND_NODE消息和 STORE消息 向其他节点广播自己的存储数据。</p>
+<h3 id="3-内容交换（Bitswap协议）"><a href="#3-内容交换（Bitswap协议）" class="headerlink" title="3. 内容交换（Bitswap协议）"></a>3. 内容交换（Bitswap协议）</h3><p>数据内容，是如何在分布式存储网络中存储的呢？又是如何在如此大的网络中，尽可能做到低延时和高速度，并确保数据的安全性？</p>
+<p>一个大的文件，在节点上会被分割成 256KB 的块，每个块都会有自己的哈希（也就是CID）。如下图示，哈希可以再经过多层哈希，最终得到了根哈希。根哈希将确保文件的完整性。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/first-meet/tree.png?raw=true"></p>
+<p>最终，上述每一步得到的哈希值和所有块，都将被同步到 IPFS 网络中。</p>
+<p>需要注意的是，根据官网的<a target="_blank" rel="noopener" href="https://docs.ipfs.io/reference/cli/#ipfs-add">描述</a>，如果节点上 IPFS 伴随进程没有开启，添加则只是添加到了本地，否则，其将</p>
+<p>如果一个节点想要获取文件，则其过程如下所示：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/first-meet/ipfs_get.gif?raw=true"></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/news/277198">图片来源</a></p>
+<p>换取文件后，文件数据将同时缓存到本地。这样，整个网络中，就相当于多了一份源数据的拷贝，该节点将也可以向其它节点发送该文件。</p>
+<h3 id="4-IPNS"><a href="#4-IPNS" class="headerlink" title="4. IPNS"></a>4. IPNS</h3><p>每个文件在上传后都拥有一个唯一的 CID，如果文件要更新，这个 CID 必然会发生变化，因为它是这个文件的 哈希。<br>如果这是一个网站的文件，那么同时我们也必然面临着文件更新和访问的问题。</p>
+<p>另外一个问题，就是文件所有权的归属问题，在分布式文件系统中，没有账号，没有登陆密码，所有节点的身份都是平等的，如何该确定文件的归属？</p>
+<p>IPNS 可以有效解决以上两个问题，它是一个 <strong><strong>全球化的基于公钥的名称系统</strong></strong>。</p>
+<p>IPNS 下文件路径的格式如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/ipns/&#123;hash&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述 哈希值 实际上是节点公钥的哈希。该哈希被映射到包含了其所指向的文件哈希以及私钥的签名等信息的 record 中，因此，要想更新该 record，你需要有相应的私钥。<br>随后在更新文件的时候，只需要在 record 中将其指向最新的的文件哈希即可。</p>
+<p>可以使用DNS TXT记录域名对应的 IPNS 哈希 ID，就可以域名来替换 IPNS 哈希 ID 来进行访问，从而实现更容易读写和记忆。</p>
+<h3 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h3><p><a target="_blank" rel="noopener" href="https://hackernoon.com/a-beginners-guide-to-ipfs-20673fedd3f">What is IPFS? - A Beginner’s Guide</a><br><a target="_blank" rel="noopener" href="https://docs.ipfs.io/concepts/dht/#distributed-hash-tables-dhts">Distributed Hash Tables (DHTs)</a><br><a target="_blank" rel="noopener" href="https://flyingzumwalt.gitbooks.io/decentralized-web-primer/content/publishing-changes/lessons/generate-keypair.html">Lesson: Generate and Use a New IPNS Name Keypair</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/40286711">P2P 网络核心技术：Kademlia 协议</a><br><a target="_blank" rel="noopener" href="https://zjuturtle.com/2017/11/01/Kademlia/">Kademlia 算法抄写</a><br><a target="_blank" rel="noopener" href="https://colobu.com/2018/03/26/distributed-hash-table/">DHT 分布式哈希表</a><br><a target="_blank" rel="noopener" href="https://docs.ipfs.io/concepts/bitswap/">Bitswap</a><br><a target="_blank" rel="noopener" href="https://www.pseudoyu.com/en/2021/03/25/blockchain_ipfs_structure/">IPFS 分布式存储协议分析与思考</a><br><a target="_blank" rel="noopener" href="https://www.whcsrl.com/blog/3154">简单讲解IPFS技术原理</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/267658109">IPFS如何解决冷门资源丢失的问题？</a><br><a target="_blank" rel="noopener" href="https://docs.ipfs.io/concepts/ipns/#example-ipns-setup-with-cli">InterPlanetary Name System (IPNS)</a><br><a target="_blank" rel="noopener" href="https://hackernoon.com/understanding-ipfs-in-depth-3-6-what-is-interplanetary-naming-system-ipns-9aca71e4c13b"></a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Kademlia">Kademlia</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/IPFS/">IPFS</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/IPFS/">IPFS</a><a href="/tags/IPNS/">IPNS</a><a href="/tags/CID/">CID</a><a href="/tags/Bitswap/">Bitswap</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

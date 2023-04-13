@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Solana - PoH 共识机制 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="正如比特币创世区块中，中本聪留下了当天《泰晤士报》的头版头条文章——The Times 03&amp;#x2F;Jan&amp;#x2F;2009 Chancellor on brink of second bailout for banks。这证明了创世区块是在 2009 年 1月 3 日当天或者之后被矿工 mint。后续所有的比特币交易，也发生在这个时间节点之后。那么，如果后续所有的交易（或者说事件），都是顺序的，并且加盖了 “时间戳” 的，事实上这就是一个基于时间的历史事件序列。我们要证明某个交易事件在这个序列中，只要从这个历史序列中去求证即可。和许多加密应用使用的基础技术一样，这里也将使用 hash 函数将这个序列串联起来。">
+  
+
+  
+  
+  <meta name="keywords" content="Solana,PoH,共识,机制">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Solana - PoH 共识机制"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Solana - PoH 共识机制</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/06/02/solana-poh/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-06-01T22:07:28.000Z">
+          2022-06-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/paper.png"></p>
+<p>正如比特币创世区块中，中本聪留下了当天《泰晤士报》的头版头条文章——The Times 03&#x2F;Jan&#x2F;2009 Chancellor on brink of second bailout for banks。这证明了创世区块是在 2009 年 1月 3 日当天或者之后被矿工 mint。后续所有的比特币交易，也发生在这个时间节点之后。<br>那么，如果后续所有的交易（或者说事件），都是顺序的，并且加盖了 “时间戳” 的，事实上这就是一个基于时间的历史事件序列。我们要证明某个交易事件在这个序列中，只要从这个历史序列中去求证即可。<br>和许多加密应用使用的基础技术一样，这里也将使用 hash 函数将这个序列串联起来。</p>
+<span id="more"></span>
+
+<h3 id="1-历史证明"><a href="#1-历史证明" class="headerlink" title="1. 历史证明"></a>1. 历史证明</h3><p>历史证明（Proof of History），就是一个经过计算的序列，这个序列，可以提供一种基于密码学的方式验证两个事件之间时间的流逝。<br>由于其密码学安全性（其实就是单向散列算法，hash 运算），输出的内容，并不能通过输入预测出来。安全函数是执行在 GPU 单核中，它的上一个输出，将作为当前的输入，周期性的记录当前输出和调用次数。输出的结果可以被 <strong><strong>验证节点</strong></strong> 以并行计算的方式通过重新计算并验证。</p>
+<h4 id="1-1-描述"><a href="#1-1-描述" class="headerlink" title="1.1 描述"></a>1.1 描述</h4><p>系统被设计为如下的工作模式：<br>从一个随机值开始，运行 hash 函数，并将输出（output）作为输入（input）再次运行该函数。记录函数执行的次数以及每次调用的结果（output). 次数，提供了顺序和时间两个维度的支持；将输出作为输入，依次头尾相连，形成了一条完整的证据链。</p>
+<p>随机值的选择，可以选择纽约时报当天的标题，或者其他的事实。<br>比如：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-1.png"></p>
+<p>hashN 代表实际的 Hash 输出。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-2.png"></p>
+<p>只要选择的哈希函数是抗碰撞的，这个哈希集和就只能被单线程顺序计算出来。这满足了在 index 为 300 时，如果不通过算法实际运行 300 次，无法获得这样的结果的设定。</p>
+<p>因此，我们可以从数据结构中推测出从 index 0 到 index 300 真实的过去的时间。这样以来，每次 hash，是不是就向沙漏中一粒沙子落下。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/time.png"></p>
+<p>如下图所示，当次数为 510144806912 时，哈希值为 62f51643c1，当次数为 510146904064 时，哈希值为 c43d5862d88。根据前面提到的 PoH 算法，我们可以相信从 510144806912 到 510146904064 过去的时间。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-4.png"></p>
+<h4 id="1-2-事件的时间戳"><a href="#1-2-事件的时间戳" class="headerlink" title="1.2 事件的时间戳"></a>1.2 事件的时间戳</h4><p>哈希序列中也可以被用来记录数据。使用 “combine” 函数将数据和 哈希值结合起来。数据部分，可以被简化为任意事件数据的哈希，此时，生成的哈希就代表了数据的时间戳，因为，它一定是指定的数据被插入之后生成的。</p>
+<p>比如：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-5.png"></p>
+<p>这时，一些外部事件发生了，比如拍照，或者其他数据被创建：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-6.png"></p>
+<p>Hash336 的计算，是从 hash335 以及照片的 sha256 联合起来，再经过 hash256 结算的结果。索引 和 照片的 sha256 将被记录下来作为输出序列的一部分。因此，任何人验证数据的可靠性，甚至这种验证可以并行执行。</p>
+<p>由于整个过程就是有序执行的，因此，我们可以断定进入队列的事件一定发生在未来某个被计算的hash事件之前。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-table-1.png"></p>
+<p>如表一所示，photograph2 在 hash600 之前被创建，photograph1 在 hash 336 之前被创建。在哈希序列中插入数据，将会导致后续整个子序列的变化。</p>
+<p>如下图 3 所示，输入的 cfd40df8… 被插入到 PoH 序列中，计数器为 510145855488，最终被插入的哈希是 3d039eef3。<br>所有后续的 哈希值都将因这个变化而被修改，这种变化在下面通过颜色做了区分。</p>
+<p>每个发现这个序列的节点，可以通过序列确定所有事件的顺序，并且评估两次插入之间的真实时间。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-7.png"></p>
+<h4 id="1-3-验证"><a href="#1-3-验证" class="headerlink" title="1.3 验证"></a>1.3 验证</h4><p>序列可以被多核 CPU 验证，相比生成序列，这将大幅降低时间。<br>举个例子：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-13-1.png"></p>
+<p>比如，如果 GPU 有 4000 个核心，验证器可以将哈希序列分割成 4000 份做并行运算，确保每个分片从开始的 hash 到最后的 hash 都是正确的。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-13-2.png"></p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-13-3.png"></p>
+<h4 id="1-4-一致性"><a href="#1-4-一致性" class="headerlink" title="1.4 一致性"></a>1.4 一致性</h4><p>不管在任何情况下，用户都希望生成的序列能保持一致性，并且能够防止在最后一个插入的事件后再插入事件。<br>为了防止恶意的 领导者节点 伪造序列数据，每一任领导者在生成序列的时候，第一个 Hash 来自于其记录的自己信任的上一个序列的最后一个 Hash。</p>
+<p>为了防止 领导者 节点重写事件，每个事件，又都是用户签名后的结果。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-14-1.png"></p>
+<h3 id="2-网络设计"><a href="#2-网络设计" class="headerlink" title="2. 网络设计"></a>2. 网络设计</h3><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/poh-2-1.png"></p>
+<p>如上图所示，生成 PoH 历史序列的领导者(Leader)，提供全网读一致性和可验证的时间。<br>领导者将用户消息按照顺序排列，以便它们可以被系统中的其他节点高效地处理，从而获得最大化的吞吐量。<br>它将基于当前 RAM 存储的状态（current state），执行交易，最终发布交易和最后状态的签名（signature of the final state）到被称为验证器的复制节点上。</p>
+<p>验证器将基于其状态的拷贝，执行相同的交易，并将最终计算出来的状态的签名（signature of state）作为验证结果发布出去。<br>发布出去的验证结果，将作为一致性算法的投票。</p>
+<p>在非分区状态下，网络中始终都只有一个领导者。<br>每个验证器节点和领导者拥有相同的硬件能力，且验证器可以被选举为领导者，这种选举是基于 PoS 的。<br>根据 CAP（一致性&#x2F;可用性&#x2F;分区容错性） 理论，对一致性（Consistency）的要求，总是要高于可用性（Availability）以分区容错性（Partition Tolerance）。</p>
+<p>这种网络设计，我们可以看出，在出块速度上相比于以太坊将会有大幅度提升，但是，在去中心化程度上，却不如以太坊。</p>
+<p>参考链接：<br><a target="_blank" rel="noopener" href="https://cointelegraphcn.com/news/what-is-solana-and-how-does-it-work">https://cointelegraphcn.com/news/what-is-solana-and-how-does-it-work</a><br><a target="_blank" rel="noopener" href="https://solana.com/solana-whitepaper.pdf">https://solana.com/solana-whitepaper.pdf</a><br><a target="_blank" rel="noopener" href="https://www.naukri.com/learning/articles/delegated-proof-of-stake-dpos/">https://www.naukri.com/learning/articles/delegated-proof-of-stake-dpos/</a><br><a target="_blank" rel="noopener" href="https://medium.com/solana-labs/solanas-network-architecture-8e913e1d5a40">https://medium.com/solana-labs/solanas-network-architecture-8e913e1d5a40</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Solana/">Solana</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Solana/">Solana</a><a href="/tags/PoH/">PoH</a><a href="/tags/共识/">共识</a><a href="/tags/机制/">机制</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

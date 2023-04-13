@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>IPFS 垃圾回收和持久化存储 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="IPFS 节点默认将其 存储的数据 当作一种缓存。这就意味着它其实并不保证数据的持久化。资源总是有限的，是需要维护的，在条件具备的情况下，它会进行垃圾回收。
+但同时，有些数据我们是不希望按照 gc 规则回收的，这是就需要将这些数据 pin 在节点上。">
+  
+
+  
+  
+  <meta name="keywords" content="IPFS,CID,GC,PIN">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="IPFS 垃圾回收和持久化存储"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>IPFS 垃圾回收和持久化存储</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/17/ipfs-gc-pin/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-17T07:45:12.000Z">
+          2022-02-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/pin-gc/ipfs-gc.jpg?raw=true"></p>
+<p>IPFS 节点默认将其 存储的数据 当作一种缓存。这就意味着它其实并不保证数据的持久化。资源总是有限的，是需要维护的，在条件具备的情况下，它会进行垃圾回收。</p>
+<p>但同时，有些数据我们是不希望按照 gc 规则回收的，这是就需要将这些数据 <code>pin</code> 在节点上。</p>
+<span id="more"></span>
+
+
+<h3 id="1-垃圾回收"><a href="#1-垃圾回收" class="headerlink" title="1 垃圾回收"></a>1 垃圾回收</h3><p>IPFS 节点中垃圾回收器的配置，是在 <a target="_blank" rel="noopener" href="https://github.com/ipfs/go-ipfs/blob/master/docs/config.md">ipfs 配置文件</a> 中的 <code>Datastore 配置</code> 中完成的。关于回收器，相关的重要参数包括：</p>
+<ul>
+<li><code>StorageMax</code>: ipfs 数据仓库的存储上限。该值的默认 10GB</li>
+<li><code>StorageGCWatermark</code>: <code>StorageMax</code> 的百分比，一旦超过这个数值，如果 ipfs 守护进程运行且 gc 使能，将自动出发 gc 运行。该值的默认值是 90，即，超过 <code>StorageMax</code> 的 90%，将触发。</li>
+<li><code>GCPeriod</code>: gc 运行的频率。前提是 gc 被允许运行。默认值为 1 小时。</li>
+</ul>
+<p>你也可以手动出发 gc：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ipfs repo gc</span><br><span class="line"></span><br><span class="line">&gt; removed QmPZhyTu8D7NqR5NvgkgNYsSYD4CNjnyuFejB8i23itJvA</span><br><span class="line">&gt; removed QmSYQFVAZgEnpa6NxiW5agyj3XU9VR4CbERShXiLhuPPPE</span><br><span class="line">&gt; removed QmS6SJXApoi59hqD8Naktgakc6UNHK1XDhqhtMg9sBhY8g</span><br></pre></td></tr></table></figure>
+
+<p>为了使 gc 能够运行，需要开启 ipfs 守护进程以及 gc 使能：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ipfs daemon --enable-gc</span><br><span class="line"></span><br><span class="line">&gt; Initializing daemon...</span><br><span class="line">&gt; go-ipfs version: 0.9.0</span><br><span class="line">&gt; Repo version: 10</span><br><span class="line">&gt; ...</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h3 id="2-Pin-在本地"><a href="#2-Pin-在本地" class="headerlink" title="2 Pin 在本地"></a>2 Pin 在本地</h3><p>垃圾回收按照一定规则是自动进行的，我们也可以通过几种方式，来保护数据，避免其被回收：</p>
+<ul>
+<li><p>通常，我们可以将数据 <a target="_blank" rel="noopener" href="https://docs.ipfs.io/how-to/pin-files/">pin 在本地</a>。当你在命令行客户端使用 <code>ipfs add</code> 指令添加文件时，将自动完成这个 <code>pin</code> 的动作，当然，你也可以手动去做，粒度更小（pin 一个 block；pin 一个 block 及其孩子；向上（父级）递归的 pin block）。</p>
+</li>
+<li><p>当我们将文件放入本地的 <a target="_blank" rel="noopener" href="https://docs.ipfs.io/concepts/glossary/#mfs"><code>MFS</code></a>，其实也可以达到在本地 <code>pin</code> 一样的效果。但是，这种方式更加容易实现对文件的管理。</p>
+</li>
+</ul>
+<br/>
+
+<h3 id="3-Pin-在远程"><a href="#3-Pin-在远程" class="headerlink" title="3 Pin 在远程"></a>3 Pin 在远程</h3><p>为了确保重要的数据能够被持续保留，你也可以使用 Pin 服务。这些服务运行在很多 IPFS 节点上，并允许用户将数据 pin 在他们的节点上，一些服务会提供一个的免费使用额度。在如下情况下，应当使用 pin 服务：</p>
+<ul>
+<li>本地磁盘存储不足，但是你有需要数据的持久化存储。</li>
+<li>你可能在使用手机&#x2F;笔记本&#x2F;平板，这些设备可能不是一直连接着网络，但是你希望能够随时访问到 IPFS 上的数据。</li>
+<li>你希望备份，并确保数据是持久化存储的，在其他电脑上仍然可见，即使本地已经删除了这些数据。</li>
+</ul>
+<p>可以提供 pin 服务的第三方包括：<a target="_blank" rel="noopener" href="https://www.axel.org/2019/07/23/qa-with-the-developers-of-axel-ipfs/">Axel</a> &#x2F; <a target="_blank" rel="noopener" href="https://www.eternum.io/">Eternum</a> &#x2F; <a target="_blank" rel="noopener" href="https://infura.io/">Infura</a> &#x2F; <a target="_blank" rel="noopener" href="https://pinata.cloud/">Pinata</a> &#x2F; <a target="_blank" rel="noopener" href="https://temporal.cloud/">Temporal</a> &#x2F; <a target="_blank" rel="noopener" href="https://crust.network/">Crust Network</a> 等.</p>
+<br/>
+
+<h3 id="4-持久化存储"><a href="#4-持久化存储" class="headerlink" title="4 持久化存储"></a>4 持久化存储</h3><p>通过个人的 IPFS 节点存储数据是非常简单的，但这时，你需要自己管理好硬盘。<br>这个问题，导致了那些允许你在远程存储数据的节点的兴起（通过 pin 服务，付费）。虽然这很方便，但是，也可能也会担心随之而来的花费问题，如果你不持续付费，数据同样面临者被删除的风险。</p>
+<p>IPFS 确保其网络的任何数据都是可以被发现&#x2F;被访问的，但是它并不确保这些内容是持久化可用的。这时，<a target="_blank" rel="noopener" href="https://filecoin.io/">Filecoin</a> 应运而生。</p>
+<br/>
+
+<h4 id="4-1-Filecoin-的解决方案"><a href="#4-1-Filecoin-的解决方案" class="headerlink" title="4.1 Filecoin 的解决方案"></a>4.1 Filecoin 的解决方案</h4><p><strong><strong><a target="_blank" rel="noopener" href="https://filecoin.io/">Filecoin</a> 是运行在 IPFS 上的激励层,</strong></strong> 是一个去中心化的存储网络，它允许存储提供者向外出租他们的存储空间。<br>用户和存储提供者之间，就多少数据将被存储&#x2F;存储多长时间&#x2F;花费多少上，达成一致。这个约定被称为一个 <code>deal</code>.一旦双方达成这个 <code>deal</code>,用户可以将数据发送给存储提供者，也可以检查数据是否被正确的存储。当用户想取回数据时，向这些 provider 发起数据即可。<br>花费的，就是 Filecoin 这种 token。</p>
+<p>和 IPFS 相比，Filecoin 自然没有 IPFS 数据取回过程快；Filecoin 接受的数据最小需要达到 GiB 级别；同时，对于用户而言，Filecoin 的操作过程要更加复杂。</p>
+<p>参考链接：<br><a target="_blank" rel="noopener" href="https://docs.ipfs.io/concepts/persistence/#persistence-versus-permanence">persistence-versus-permanence</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ipfs/go-ipfs/blob/master/docs/config.md#datastore">IPFS Config-DataStore</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/IPFS/">IPFS</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/IPFS/">IPFS</a><a href="/tags/CID/">CID</a><a href="/tags/GC/">GC</a><a href="/tags/PIN/">PIN</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

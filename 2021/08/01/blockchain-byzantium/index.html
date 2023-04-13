@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>拜占庭将军问题 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="拜占庭将军问题，是经典的共识问题。将所有将军，视为网络中的节点，这就是一个区块链共识问题。">
+  
+
+  
+  
+  <meta name="keywords" content="区块链">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="拜占庭将军问题"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>拜占庭将军问题</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/08/01/blockchain-byzantium/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-08-01T15:01:28.000Z">
+          2021-08-01
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/byzantium/b.jpg?raw=true"></p>
+<p>拜占庭将军问题，是经典的共识问题。将所有将军，视为网络中的节点，这就是一个区块链共识问题。</p>
+<span id="more"></span>
+
+<h3 id="从拜占庭将军问题开始"><a href="#从拜占庭将军问题开始" class="headerlink" title="从拜占庭将军问题开始"></a>从拜占庭将军问题开始</h3><p>它并不是一个真实的历史事件，只是 Leslie Lamport 在自己论文中抽象出来的非常经典的共识问题（网上可以找到很多描述版本，大意不变）。<br>据说：<br>1&gt; 拜占庭帝国派出 10 支分队攻打一个城堡；<br>2&gt; 这10支分队分别由 10 个将军带领，将军之间，无法直接进行通信，只能通过信使传递消息；<br>3&gt; 10 支分队，需要在同一时间，至少 5 支分队发起进攻，才能将城堡攻破，否则，帝国将失败；<br>4&gt; 10 个将军，需要在进攻后者撤退上，达成共识；<br>5&gt; 10 个将军中，有叛徒，会混淆进攻或撤退的消息，比如，他会对有些将军说自己要进攻，对另一些将领说自己会撤退；<br>6&gt; 在这种环境下，忠诚的将军，应如何达成共识，获得一个正确的进攻指令，从而，解决这场战斗。</p>
+<h3 id="解决拜占庭将军问题"><a href="#解决拜占庭将军问题" class="headerlink" title="解决拜占庭将军问题"></a>解决拜占庭将军问题</h3><p>让我们来分析上面的问题，归根到底，确保战斗胜利，就是确保忠诚将军之间能有一个满足一致性、正确性的结论。</p>
+<ol>
+<li>如果叛徒在 10 个将领中超过一半，那么这个问题没有解决方案，所以，这里应假设叛徒只是少数；</li>
+<li>首先，忠诚的将军之间，应有一个一致的结论，无论是进攻或撤退；</li>
+<li>其次，为了取得战斗的胜利，这个结论，应该是正确的，不受叛徒干扰的。</li>
+</ol>
+<p>为了解决这个问题，兰伯特提出了两种方案：口头协议和书面协议。</p>
+<h4 id="口头协议"><a href="#口头协议" class="headerlink" title="口头协议"></a>口头协议</h4><p>首先，不要考虑通信信道的安全问题，指令的接收者只能指令是从谁那里发出的，且接收者知道谁没有发出指令。</p>
+<p><strong><strong>兰伯特指出，假设叛徒的数量是 m 个，那么，只要总将军个数 n &gt; 3m，那么，这个问题是可解的。</strong></strong></p>
+<p>在此条件下，具体来说，选择一个将军作为指挥官，由指挥官先发出指令。<br>指挥官一旦发出向其它 <code>n-1</code> 个将军发出指令，由于无法确认指挥官的忠诚性，因此，其余的将军之间也都会转发指挥官的指令，即如果 G1 在收到指挥官指令后，并不会立即执行指挥官的指令，会询问其他将军收到的指挥官的指令是什么，然后根据收到的指令（包括指挥官发出的以及其他将军转发过来的）所构成的指令集合，遵照少数服从多数的原则，如果进攻指令多，则进攻，否则撤退。<br><strong><strong>任意将军收到的来自指挥官的指令，其指令结果，是由一个指令集合确定的。</strong></strong></p>
+<p>因此：<br>IC1. 所有忠诚的将军，最终都会执行一致的指令；<br>IC2. 如果指挥官是忠诚的，那么，所有将军都将执行他的指令，这样指令在满足一致性的同时，也满足了正确性。</p>
+<p>如下图示，红色代表叛徒，绿色代表忠诚，A 代表进攻，R 代表撤退，X 代表进攻或撤退。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/byzantium/OM_1.png?raw=true"></p>
+<p>对于将军 G1 来说，收到了 C 的进攻指令；收到了 G2 告诉他的 G2 收到了 C 的进攻指令；收到 G3 收到的 C 的指令。<br>此时 G1 收到的指令集合为 (A,A,X)，不管叛徒 G3 告诉 G1 是进攻还是撤退，最终 G1 都会进攻。同理，G2 也会进攻。<br>综上，进攻分队的个数超过半数，战斗将胜利。</p>
+<p>如果假设指挥官 C 是叛徒，如下图所示：<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/byzantium/OM_2.png?raw=true"></p>
+<p>对于将军 G1 来说，收到了 C 的进攻指令；收到了 G2 告诉他的 G2 收到了 C 的撤退指令；收到 G3 收到的撤退指令。<br>此时 G1 收到的指令集合未（A,R,R），因此，不管 C 是不是叛徒，他都将撤退；<br>同理，G2&#x2F;G3 都将撤退。</p>
+<h5 id="引理"><a href="#引理" class="headerlink" title="引理"></a>引理</h5><blockquote>
+<p>对于任意 m 和 k ，如果有超过 2k+m 个将军和最多 k 个背叛者，那么算法 OM(m) 满足 IC2 。</p>
+</blockquote>
+<p>注意，这里，k 是最大叛徒的数量， m 是指实际叛徒的数量。</p>
+<p><code>OM(0)</code> 显然是符合 IC2 的。当 m ≥ 1，指挥官发出指令后，将军 G1 收到了指令，并同时向其他将军询问指挥官发出的指令，最后根据这个指令集合，判断指挥官发出的指令是什么，指令集合的大小是 <code>n-1</code>。</p>
+<ol>
+<li>根据条件，n&gt;2k+m ;</li>
+<li>每个将军收到的指令集合中，根据上式，集合大小 n-1&gt;2k+m-1;</li>
+<li>综上，2k+m-1 ≥ 2k;</li>
+</ol>
+<p>我们可以看到，在这种情况下，指令集合中，至少有一半以上是来自忠诚将军的反馈。那么，如果指挥官是忠诚的，最终，所有的忠诚将军都会执行指挥官的指令，无论叛徒反馈的指令是什么。</p>
+<h5 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h5><blockquote>
+<p>对于任意的 m(m 是最大叛徒数)，如果将军总数 n &gt; 3m，算法 <code>OM(m)</code> 总能满足 IC1 和 IC2.</p>
+</blockquote>
+<p>在没有叛徒的情况下，即 <code>OM(0)</code> 显然是满足 IC1 和 IC2 的。<br>现在，我们通过归纳法，假设 <code>OM(m-1)</code> 是正确的，从而证明 <code>OM(m)</code> 是正确的。<br>首先，考虑指挥官是忠诚的情况，根据引理，可以看到 <code>OM(m)</code> 是符合 IC2 的，在指挥官是忠诚的情况下，可以通过 IC2 推出 IC1。<br>因此，我们只需要证明当指挥官为叛徒时可以满足 IC1 的情况即可。</p>
+<p>这里，有最多 m 个叛徒，指挥官是其中一员，因此，将军中最多有 m-1 个叛徒。由于将军的个数大于 3m，此时，应该有超过 3m-1 个将。 3m-1 &gt; 3(m-1)。<br>因此，我们可以得出归纳假设 <code>OM(m-1)</code> 满足 IC1 和 IC2。<br>由此，对于任意 j，任意两个忠诚的将军可以获取到相同的 vj。<br>因此，任意两个忠诚的将军得到的向量值 v1,…,v(n-1)都是一样的。<br>因此，所有忠诚的将军，<code>majority(v1,...v(n-1))</code> 都是一样的，IC1 得证。</p>
+<h4 id="书面协议"><a href="#书面协议" class="headerlink" title="书面协议"></a>书面协议</h4><p>正是由于叛徒可以在消息传递过程中胡说八道，才使得拜占庭将军问题如此困难。如果我们让叛徒撒谎的能力进一步做限制，解决这个问题将会变得简单。<br>我们在原有的假设基础上，增加一个假设：<br>a. 忠诚的将军的签名不能被伪造，任何内容的篡改都将被识别出来。<br>b. 任何人都可以检查将军签名的有效性。</p>
+<p>注意，我们对叛徒的签名没有做任何限制，我们允许叛徒之间可以相互伪造对方的签名，即允许他们之间相互勾结。</p>
+<h3 id="区块链共识方案"><a href="#区块链共识方案" class="headerlink" title="区块链共识方案"></a>区块链共识方案</h3><p>如果将拜占庭将军视为节点，这个问题，其实就变成了节点之间的共识问题。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/byzantium/trans_blockchain.png?raw=true"><br>无论是拜占庭将军中的口头协议，还是书面协议，都存在一定弊端。<br>而区块链本身，也有着自己的容错、共识协议。</p>
+<h4 id="PoW（Proof-of-Work）"><a href="#PoW（Proof-of-Work）" class="headerlink" title="PoW（Proof of Work）"></a>PoW（Proof of Work）</h4><p>工作量证明，这种共识机制的本质，是增大对恶意节点的惩罚力度，而具体的实现方式，就是解题。如下所示：<br><code>mine(Hash(nonce,Block)) &lt; difficulty</code><br><code>Hash(nonce,Block)</code>是一个哈希值求取函数，其中，<code>Block</code> 为不变值，<code>nonce</code> 为随机数，<code>mine</code> 函数，将计算哈希结果中前 n 为包含的连续 0 的个数，如果该数量大于等于难度系数 <code>difficulty</code>，则节点将向其他节点广播该区块，并将其添加在自己的区块上。<br>在区块链网络中，会出现多个节点同时计算出 <code>nonce</code> 值的情况，这是，区块链分叉就发生了。<br>PoW 采用最长链共识，所有节点，当发现比自己长的链后，将放弃自己的链，而同步成对方的长链，从而解决分叉的问题。<br>如下图示，假设，共识下最长链的尾部，目前为蓝色区块，我们暂定其为蓝链。此时，左边发现了新的红色区块，开始了广播，其他节点收到广播后，校验合法后将其放在自己的链上，以此块为父块，计算新的 <code>nonce</code>值；而右边发现了绿色区块，也开始广播。此时，有两条链都认为自己是最长的，它们互不相让，不相上下。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/byzantium/long_chain_1.png?raw=true"></p>
+<p>没关系，此时，在绿链基础上，存在一个节点又计算出新的 <code>nonce</code> 值，区块为粉红色，并放到自己的链上，进行广播。这时，红链发现新的长链，将放弃红色区块，同步到粉红色的长链上。所有节点达成共识，采用绿链作为粉红色链。而红色区块，将被放弃，重新计算 <code>nonce</code> 值。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/blockChain/byzantium/long_chain_2.png?raw=true"></p>
+<p>这种机制下，其弊端，目前来看其实是造成了算力、电力资源的浪费。<br>且同时，在节点规模较小的前期阶段，容易引发双花攻击，或者说 51%攻击。超过半数的节点都作弊，再利用最长链共识，进行舞弊。</p>
+<p>对于一些大的区块链，双花攻击只是在技术上可以实现，但实际并没有人愿意这么做，因为这并不符合所有人的利益。攻击需要消耗非常大的资源，同时，攻击会导致该链不再被信任，从而失去了价值。在如此大的资源下，不如通过挖矿获取稳定的受益。</p>
+<h4 id="PoS（Proof-of-Stake）"><a href="#PoS（Proof-of-Stake）" class="headerlink" title="PoS（Proof of Stake）"></a>PoS（Proof of Stake）</h4><p>为了解决 PoW 空耗大量资源的问题，PoW （股权证明）机制产生了。<br>PoS 不像 PoW 那样由矿工争夺广播一个区块，而是使用伪随机选择的验证器系统创建下一个区块。伪随机选择时，由其质押（比如代币）的数量，从而获得不同的随机概率。</p>
+<p>如果验证区块的节点是恶意节点呢？其质押将被自动消减。</p>
+<p>这种机制，虽然大大降低了资源的消耗，更容易造成强者恒强的局面。</p>
+<hr>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d399e8d8dff8">拜占庭问题 口头协议递归算法的思考</a><br><a target="_blank" rel="noopener" href="https://github.com/alan2lin/byzantine_demo">拜占庭将军问题学习手记</a><br><a target="_blank" rel="noopener" href="http://blog.foool.net/2012/04/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98/">拜占庭将军问题</a><br><a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/The-Byzantine-Generals-Problem.pdf">The Byzantine Generals Problem</a><br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=e9KVmyI1eCg">拜占庭将军问题是什么？区块链如何解决防范恶意节点？</a><br><a target="_blank" rel="noopener" href="https://www.bilibili.com/s/video/BV1Ap4y1x7sq">深蓝解读区块链技术（18）最长链共识</a><br><a target="_blank" rel="noopener" href="https://medium.com/centrality/%E4%BA%86%E8%A7%A3%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6-%E5%B7%A5%E4%BD%9C%E8%AF%81%E6%98%8E-pow-%E8%BF%98%E6%98%AF%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E-pos-94a0e0530624">了解共识机制：工作证明（POW）还是权益证明（POS）？</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/区块链/">区块链</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/区块链/">区块链</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

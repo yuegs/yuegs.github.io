@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 5 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2021/05/28/springboot-redis/"><span>在 Spring Boot 中使用 Redis 进行缓存</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/05/28/springboot-redis/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-05-28T15:01:28.000Z">
+          2021-05-28
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇译文，<a target="_blank" rel="noopener" href="https://medium.com/@MatthewFTech/spring-boot-cache-with-redis-56026f7da83a">原文地址</a>。</p>
+<p>系统运行变慢，是一种很普遍的问题。即使代码非常优秀，但是在高负载下，可能也会不堪一击。缓存，是一种快速的、廉价的提升性能以及响应事件的重要方式。</p>
+<p>简而言之，缓存是一种性能策略。调用结果被放置在内存中，因此再下次使用时，将不必再重新执行。我们可以看到，如果请求的数据再缓存中（称之为缓存命中），我们将节省很多时间和资源。红色的数据快，代表了一种糟糕的情况，即缓存缺失，这种情况下，就需要加载并重新计算，这也将增加响应时间。</p>
+        
+          <p><a class="excerpt-btn" href="/2021/05/28/springboot-redis/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Spring-Boot/">Spring Boot</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Spring-Boot/">Spring Boot</a><a href="/tags/Cache/">Cache</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2021/05/27/use-bridge-networks/"><span>在 Docker 中使用桥接网络</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/05/27/use-bridge-networks/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-05-27T15:01:28.000Z">
+          2021-05-27
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇译文，<a target="_blank" rel="noopener" href="https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge">原文地址</a>。<br>在 Docker 中使用的桥接网络是通过软件桥接的方式，允许连接在同一个桥接网络下的容器可以相互访问，同时，隔离没有连接在该桥接网络下的容器。Docker 桥接驱动器自动在宿主设备上安装了协议，因此，不同桥接网络下的容器，无法直接进行相互访问。</p>
+<p>桥接网络，适用于通过同一个 Docker 伴随进程宿主的容器之间。不同伴随进程宿主之间，可以通过 OS 层的路由或者通过 <a target="_blank" rel="noopener" href="https://docs.docker.com/network/overlay/">overlay network</a> 完成。</p>
+<p>当启动 Docker 时，默认桥接网络将会被自动创建。新加进来的容器自动连接到该网络中，除非你指定了不同。当然，你也可以创建用户自定义网络。</p>
+        
+          <p><a class="excerpt-btn" href="/2021/05/27/use-bridge-networks/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Docker/">Docker</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Docker/">Docker</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2019/07/23/create-simple-blockchain-java-tutorial-2/"><span>Part2 ：使用 Java 创建你的第一个区块链[译]</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/07/23/create-simple-blockchain-java-tutorial-2/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-07-23T01:22:01.000Z">
+          2019-07-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>&amp;emsp;本篇是该系列的第二篇，你可以在这里找到<a target="_blank" rel="noopener" href="https://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/">第一篇</a>。原文链接<a target="_blank" rel="noopener" href="https://medium.com/programmers-blockchain/creating-your-first-blockchain-with-java-part-2-transactions-2cdac335e0ce">在此</a>。<br>&amp;emsp;在第本篇，我们将</p>
+<ul>
+<li>创建一个简单的钱包</li>
+<li>在我们的区块链上签发一个交易。</li>
+</ul>
+<p>&amp;emsp;上面的这些过程，其实就产生了我们自己的加密货币。<br>&amp;emsp;在<a target="_blank" rel="noopener" href="https://blog.yuegs.com/2018/05/26/create-simple-blockchain-java-tutorial-1/">上一篇文章</a>中，我们有了一个可验证的、基本的区块链。但是，我们的链中仅仅存储了一些无用的信息。今天，我们将把这些无用的信息替换为交易数据。这允许我们可以创建一个简单的加密货币，我们称之为 “NoobCoin”。</p>
+        
+          <p><a class="excerpt-btn" href="/2019/07/23/create-simple-blockchain-java-tutorial-2/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/区块链/">区块链</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/区块链/">区块链</a><a href="/tags/Java/">Java</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2018/05/26/create-simple-blockchain-java-tutorial-1/"><span>Part1 ：使用 Java 创建你的第一个区块链[译]</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/05/26/create-simple-blockchain-java-tutorial-1/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-05-26T05:02:00.000Z">
+          2018-05-26
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>&amp;emsp;理解一个新事物，我觉得对于程序员来说，最好的方式就是用尝试用代码着去实现它。当然，区块链并不是一个新事物，2008 年由中本聪提出，至今也有十年了，但是对于我而言，它确实又是新的，这种严重迟到，绝对不是一件好事情。平时没事，还是要多逛逛技术论坛，看看新事物，最起码不会距离这个世界太远。<br>&amp;emsp;回到正题，近来终于找到一篇关于如何使用 Java 创建区块链的入门文章，本意是借此熟练掌握区块链相关概念，<a target="_blank" rel="noopener" href="https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa">原文地址在此</a>，以下是我翻译的内容。<br>&amp;emsp;这个系列的教程，旨在帮助你理解区块链技术的开发。在本教程中，我们将</p>
+<ul>
+<li>创建一个非常基本的 区块链</li>
+<li>实现一个很简单的 Proof of Work 系统（挖矿）</li>
+<li>惊叹这种可行性、可能性</li>
+</ul>
+<p>&amp;emsp;值得注意的是，这不是一个功能完备的、产品级别的区域链，而是对这些概念实现做了一个验证，以帮助更好的在后续章节中理解区块链。</p>
+        
+          <p><a class="excerpt-btn" href="/2018/05/26/create-simple-blockchain-java-tutorial-1/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/区块链/">区块链</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/区块链/">区块链</a><a href="/tags/Java/">Java</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2018/04/24/数字签名及其应用/"><span>数字签名及其应用</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/04/24/数字签名及其应用/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-04-24T13:40:05.000Z">
+          2018-04-24
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>&amp;emsp;家长签名，领导签名，合同签名，这些签名实际上都是在说明一件事：签名人通过签署自己名字的方式，向公众表示他们已经审核过这个文档，并对文档内容负责。<br>&amp;emsp;在计算机领域，也有这样一套签名机制，称之为数字签名，或电子签章。它的作用也是如此：对一段信息进行签署，对这段信息的完整性、正确性负责。最初了解这个概念是在使用 Https 的时候。Android 的打包过程肯定也遇到了，但是并没有过多留意，直到有一天，需要对 apk 进行系统签名。接下来，就讨论下什么是签名，以及，它是怎么应用到 Android 应用中的。</p>
+        
+          <p><a class="excerpt-btn" href="/2018/04/24/数字签名及其应用/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Android/">Android</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/安全/">安全</a><a href="/tags/Android/">Android</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/4/" class="pagination-prev">Prev</a>
+  
+  
+</nav>
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

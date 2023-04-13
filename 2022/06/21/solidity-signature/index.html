@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>EIP712 &amp; EIP1271 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="签名，证明事件是在钱包的实际持有者授权的情况下执行的；验证，是通过加密算法对签名有效性的检测。签名并验证通过，是交易和授权的基础。本文，主要围绕着结构化数据的签名&amp;#x2F;验证以及合约签名&amp;#x2F;验证展开。其对应着 EIP712 以及 EIP1271 协议。">
+  
+
+  
+  
+  <meta name="keywords" content="EIP712,EIP1271">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="EIP712 &amp; EIP1271"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>EIP712 &amp; EIP1271</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/06/21/solidity-signature/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-06-20T17:07:28.000Z">
+          2022-06-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/smart-contract-signature/signature.png"></p>
+<p>签名，证明事件是在钱包的实际持有者授权的情况下执行的；验证，是通过加密算法对签名有效性的检测。签名并验证通过，是交易和授权的基础。<br>本文，主要围绕着结构化数据的签名&#x2F;验证以及合约签名&#x2F;验证展开。其对应着 EIP712 以及 EIP1271 协议。</p>
+<span id="more"></span>
+
+<h3 id="1-数据签名和验证"><a href="#1-数据签名和验证" class="headerlink" title="1. 数据签名和验证"></a>1. 数据签名和验证</h3><blockquote>
+<p>The set of signable messages is extended from transactions and bytestrings 𝕋 ∪ 𝔹⁸ⁿ to also include structured data 𝕊. The new set of signable messages is thus 𝕋 ∪ 𝔹⁸ⁿ ∪ 𝕊. They are encoded to bytestrings suitable for hashing and signing as follows:<br><strong><strong>encode(transaction : 𝕋)</strong></strong> &#x3D; RLP_encode(transaction)<br><strong><strong>encode(message : 𝔹⁸ⁿ)</strong></strong> &#x3D; “\x19Ethereum Signed Message:\n” ‖ len(message) ‖ message where len(message) is the non-zero-padded ascii-decimal encoding of the number of bytes in message.<br><strong><strong>encode(domainSeparator : 𝔹²⁵⁶, message : 𝕊)</strong></strong> &#x3D; “\x19\x01” ‖ domainSeparator ‖ hashStruct(message) where domainSeparator and hashStruct(message) are defined below：<br><strong><strong>hashStruct(s : 𝕊)</strong></strong> &#x3D; keccak256(typeHash ‖ encodeData(s)) where typeHash &#x3D; keccak256(encodeType(typeOf(s)))<br><strong><strong>domainSeparator</strong></strong> &#x3D; hashStruct(eip712Domain)<br><a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-712">引用来源</a></p>
+</blockquote>
+<p>可以看到，基于非结构化数据 byte 的签名和基于结构化数据的签名，都包含一些特殊前缀，这种设计主要是为了<strong><strong>降低不同签名方式的碰撞风险，避免重放攻击。</strong></strong></p>
+<p>对于交易的签名和非结构化数据的签名，这里不再赘述，下述重点关注结构化数据签名。</p>
+<h3 id="2-EIP712"><a href="#2-EIP712" class="headerlink" title="2. EIP712"></a>2. EIP712</h3><p>对结构化数据的签名，将遵循 EIP712 协议。该协议将使得签名过程中数据具有更好的可读性和透明性。<br>以下，是在 Wyvern 协议中，构建卖单的过程。将调用 MetaMask 进行签名。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> domain = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;Wyvern Exchange Contract&#x27;</span>,</span><br><span class="line">  <span class="attr">version</span>: <span class="string">&#x27;2.3&#x27;</span>,</span><br><span class="line">  <span class="attr">chainId</span>: <span class="number">4</span>,</span><br><span class="line">  <span class="attr">verifyingContract</span>: <span class="variable constant_">MARKETPLACE_ADDR</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// The named list of all type definitions</span></span><br><span class="line"><span class="keyword">const</span> types = &#123;</span><br><span class="line">  <span class="title class_">Order</span>: [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;exchange&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> </span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;maker&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;taker&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;makerRelayerFee&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;takerRelayerFee&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;makerProtocolFee&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;takerProtocolFee&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;feeRecipient&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;feeMethod&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint8&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;side&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint8&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;saleKind&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint8&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;target&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;howToCall&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint8&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;calldata&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;bytes&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;replacementPattern&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;bytes&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;staticTarget&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;staticExtradata&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;bytes&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;paymentToken&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;address&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;basePrice&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;extra&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;listingTime&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;expirationTime&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;salt&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;nonce&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;uint256&#x27;</span> &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// The data to sign</span></span><br><span class="line"><span class="keyword">const</span> value = &#123;</span><br><span class="line">      <span class="attr">exchange</span>: <span class="variable constant_">MARKETPLACE_ADDR</span>,</span><br><span class="line">      <span class="attr">maker</span>: maker,</span><br><span class="line">      <span class="attr">taker</span>: taker,</span><br><span class="line">      <span class="attr">makerRelayerFee</span>: <span class="variable constant_">MAKER_RELAYER_FEE</span>,</span><br><span class="line">      <span class="attr">takerRelayerFee</span>: <span class="variable constant_">TAKER_RELAYER_FEE</span>,</span><br><span class="line">      <span class="attr">makerProtocolFee</span>: <span class="variable constant_">MAKER_PROTOCOL_FEE</span>,</span><br><span class="line">      <span class="attr">takerProtocolFee</span>: <span class="variable constant_">TAKER_PROTOCOL_FEE</span>,</span><br><span class="line">      <span class="attr">feeRecipient</span>: <span class="variable constant_">FEE_RECIPIENT</span>,</span><br><span class="line">      <span class="attr">feeMethod</span>: feeMethod,</span><br><span class="line">      <span class="attr">side</span>: side,</span><br><span class="line">      <span class="attr">saleKind</span>: saleKind,</span><br><span class="line">      <span class="attr">target</span>: <span class="variable constant_">ORDER_TARGET</span>,</span><br><span class="line">      <span class="attr">howToCall</span>: howToCall,</span><br><span class="line">      <span class="attr">calldata</span>: calldata,</span><br><span class="line">      <span class="attr">replacementPattern</span>: <span class="variable constant_">SELL_REPLACEMENT_PATTERN</span>,</span><br><span class="line">      <span class="attr">staticTarget</span>: <span class="variable constant_">ZEOR_ADDRESS</span>,</span><br><span class="line">      <span class="attr">staticExtradata</span>: <span class="variable constant_">EMPTY_DATA</span>,</span><br><span class="line">      <span class="attr">paymentToken</span>: paymentToken,</span><br><span class="line">      <span class="attr">basePrice</span>: basePrice,</span><br><span class="line">      <span class="attr">extra</span>: extra,</span><br><span class="line">      <span class="attr">listingTime</span>: <span class="title class_">Web3</span>.<span class="property">utils</span>.<span class="title function_">toBN</span>(listingTime).<span class="title function_">toString</span>(),</span><br><span class="line">      <span class="attr">expirationTime</span>: <span class="title class_">Web3</span>.<span class="property">utils</span>.<span class="title function_">toBN</span>(expirationTime).<span class="title function_">toString</span>(),</span><br><span class="line">      <span class="attr">salt</span>: <span class="title function_">generatePseudoRandomSalt</span>(),</span><br><span class="line">      <span class="attr">nonce</span>: <span class="number">0</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">signature = <span class="keyword">await</span> signer.<span class="title function_">_signTypedData</span>(domain, types, value);</span><br></pre></td></tr></table></figure>
+
+<p>合约中的验证过程如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@dev</span> Derive the domain separator for EIP-712 signatures.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> The domain separator.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_deriveDomainSeparator</span>(<span class="params"></span>) private view returns (bytes32) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">keccak256</span>(</span><br><span class="line">        abi.<span class="title function_">encode</span>(</span><br><span class="line">            _EIP_712_DOMAIN_TYPEHASH, <span class="comment">// keccak256(&quot;EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)&quot;)</span></span><br><span class="line">            _NAME_HASH, <span class="comment">// keccak256(&quot;Wyvern Exchange Contract&quot;)</span></span><br><span class="line">            _VERSION_HASH, <span class="comment">// keccak256(bytes(&quot;2.3&quot;))</span></span><br><span class="line">            _CHAIN_ID, <span class="comment">// <span class="doctag">NOTE:</span> this is fixed, need to use solidity 0.5+ or make external call to support!</span></span><br><span class="line">            <span class="title function_">address</span>(<span class="variable language_">this</span>)</span><br><span class="line">        )</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@dev</span> Hash an order, returning the hash that a client must sign via EIP-712 including the message prefix</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> order Order to hash</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> nonce Nonce to hash</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> Hash of message prefix and order hash per Ethereum format</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">hashToSign</span>(<span class="params">Order memory order, uint nonce</span>)</span><br><span class="line">internal</span><br><span class="line">view</span><br><span class="line">returns (bytes32)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">keccak256</span>(</span><br><span class="line">        abi.<span class="title function_">encodePacked</span>(<span class="string">&quot;\x19\x01&quot;</span>, <span class="variable constant_">DOMAIN_SEPARATOR</span>, <span class="title function_">hashOrder</span>(order, nonce))</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@dev</span> Assert an order is valid and return its hash</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> order Order to validate</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> nonce Nonce to validate</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> sig ECDSA signature</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">requireValidOrder</span>(<span class="params">Order memory order, Sig memory sig, uint nonce</span>)</span><br><span class="line">internal</span><br><span class="line">view</span><br><span class="line">returns (bytes32)</span><br><span class="line">&#123;</span><br><span class="line">    bytes32 hash = <span class="title function_">hashToSign</span>(order, nonce);</span><br><span class="line">    <span class="built_in">require</span>(<span class="title function_">validateOrder</span>(hash, order, sig));</span><br><span class="line">    <span class="keyword">return</span> hash;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@dev</span> Validate a provided previously approved / signed order, hash, and signature.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> hash Order hash (already calculated, passed to avoid recalculation)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> order Order to validate</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> sig ECDSA signature</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">validateOrder</span>(<span class="params">bytes32 hash, Order memory order, Sig memory sig</span>)</span><br><span class="line">internal</span><br><span class="line">view</span><br><span class="line">returns (bool)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/* recover via ECDSA, signed by maker (already verified as non-zero). */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">ecrecover</span>(hash, sig.<span class="property">v</span>, sig.<span class="property">r</span>, sig.<span class="property">s</span>) == order.<span class="property">maker</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>外部账户签名、第三方验证签名的有效性这个过程本身是非常简单的。对于合约账户而言，并不具备有私钥，也无法完成数据的常规签名。 </p>
+<h3 id="3-EIP1271"><a href="#3-EIP1271" class="headerlink" title="3. EIP1271"></a>3. EIP1271</h3><p><strong><strong><a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-1271">EIP1271</a>  就是为合约提供签名和验证的标准。</strong></strong> 它的标准接口：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.5</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">ERC1271</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// bytes4(keccak256(&quot;isValidSignature(bytes32,bytes)&quot;)</span></span><br><span class="line">  bytes4 constant internal <span class="variable constant_">MAGICVALUE</span> = <span class="number">0x1626ba7e</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@dev</span> Should return whether the signature provided is valid for the provided hash</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> _hash      Hash of the data to be signed</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> _signature Signature byte array associated with _hash</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * MUST return the bytes4 magic value 0x1626ba7e when function passes.</span></span><br><span class="line"><span class="comment">   * MUST NOT modify state (using STATICCALL for solc &lt; 0.5, view modifier for solc &gt; 0.5)</span></span><br><span class="line"><span class="comment">   * MUST allow external calls</span></span><br><span class="line"><span class="comment">   */</span> </span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">isValidSignature</span>(<span class="params"></span></span><br><span class="line"><span class="params">    bytes32 _hash, </span></span><br><span class="line"><span class="params">    bytes memory _signature</span>)</span><br><span class="line">    public</span><br><span class="line">    view </span><br><span class="line">    returns (bytes4 magicValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可知，具体的验证过程，实际上是在 <code>isValidSignature</code> 中完成的，如果验证过程通过，最终应当返回这个魔数 <code>0x1626ba7e</code>。该方法的实现者，通常是签名的合约本身，即 <strong><strong>谁签名谁验证</strong></strong>。</p>
+<p>接下来，我们找两个合约实例看。<br>第一个来自于爱死机的<a target="_blank" rel="noopener" href="https://etherscan.io/address/0xfd43d1da000558473822302e1d44d81da2e4cc0d#code">合约</a>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isSignatureValid</span>(<span class="params">uint256 _category, bytes memory _signature</span>)</span><br><span class="line">internal</span><br><span class="line">view</span><br><span class="line">returns (bool)</span><br><span class="line">&#123;</span><br><span class="line">    bytes32 result = <span class="title function_">keccak256</span>(abi.<span class="title function_">encodePacked</span>(msg.<span class="property">sender</span>, _category));</span><br><span class="line">    bytes32 hash = <span class="title function_">keccak256</span>(abi.<span class="title function_">encodePacked</span>(<span class="string">&quot;\x19Ethereum Signed Message:\n32&quot;</span>, result));</span><br><span class="line">    <span class="keyword">return</span> signer.<span class="title function_">isValidSignatureNow</span>(hash, _signature);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，它并不是一个标准的 EIP1271 实现，但是思路上具有一致性，均是通过线下由第三方签名，线上由第三方验证的过程。<br>用户在线下，（通过 http 访问）向第三方获取到签名，并向合约提交该签名，最终，在合约中验证签名的有效性。<br>这里，线下签名和签署者和线上签名的验证者，应是同一个账户。</p>
+<p>接下来，再看一个来自 Gonisis 中 <a target="_blank" rel="noopener" href="https://github.com/safe-global/safe-contracts/blob/v1.3.0/contracts/handler/CompatibilityFallbackHandler.sol#L28">CompatibilityFallbackHandler</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Implementation of ISignatureValidator (see `interfaces/ISignatureValidator.sol`)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@dev</span> Should return whether the signature provided is valid for the provided data.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> _data Arbitrary length data signed on the behalf of address(msg.sender)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> _signature Signature byte array associated with _data</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> a bool upon valid or invalid signature with corresponding _data</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isValidSignature</span>(<span class="params">bytes calldata _data, bytes calldata _signature</span>) public view override returns (bytes4) &#123;</span><br><span class="line">    <span class="comment">// Caller should be a Safe</span></span><br><span class="line">    <span class="title class_">GnosisSafe</span> safe = <span class="title class_">GnosisSafe</span>(<span class="title function_">payable</span>(msg.<span class="property">sender</span>));</span><br><span class="line">    bytes32 messageHash = <span class="title function_">getMessageHashForSafe</span>(safe, _data);</span><br><span class="line">    <span class="keyword">if</span> (_signature.<span class="property">length</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">require</span>(safe.<span class="title function_">signedMessages</span>(messageHash) != <span class="number">0</span>, <span class="string">&quot;Hash not approved&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        safe.<span class="title function_">checkSignatures</span>(messageHash, _data, _signature);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">EIP1271</span>_MAGIC_VALUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，调用者需要是 Gnosis，将会检查 Gnosis 中是否已经记录了特定消息的签名，如果是，则表示验证通过，否则不通过。</p>
+<br/>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/EIP/">EIP</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/EIP712/">EIP712</a><a href="/tags/EIP1271/">EIP1271</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

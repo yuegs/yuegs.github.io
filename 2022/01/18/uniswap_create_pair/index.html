@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>UniswapV2-创建 UniswapV2Pair | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="图片来源
+Uniswap 通过能够孵化出其它合约的超级合约，建立 ERC20 协议上的合约工厂。其孵化出来的合约，定义了用户交易&amp;#x2F;分红&amp;#x2F;流动性管理的具体规则。所以，它也扮演了一个去中心化交易所的角色。
+本文，基于 Uniswap V2 版本的 UniswapV2Factory 源码，分析 UniswapV2Pair  的创建过程。">
+  
+
+  
+  
+  <meta name="keywords" content="Uniswap,UniswapV2Factory,ERC20">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="UniswapV2-创建 UniswapV2Pair"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>UniswapV2-创建 UniswapV2Pair</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/01/18/uniswap_create_pair/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-01-18T14:13:01.000Z">
+          2022-01-18
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-create-pair/factory-circle.jpg?raw=true"><br><a target="_blank" rel="noopener" href="https://pixabay.com/photos/circle-gear-sprocket-cooperation-4868493/">图片来源</a></p>
+<p><code>Uniswap</code> 通过能够<code>孵化</code>出其它合约的超级合约，建立 ERC20 协议上的合约工厂。<br>其<code>孵化</code>出来的合约，定义了用户交易&#x2F;分红&#x2F;流动性管理的具体规则。所以，它也扮演了一个去中心化交易所的角色。</p>
+<p>本文，基于 Uniswap V2 版本的 UniswapV2Factory 源码，分析 UniswapV2Pair  的创建过程。</p>
+<span id="more"></span>
+<p><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/18/uniswap_create_pair/">UniswapV2-创建 UniswapV2Pair</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/20/uniswap_add_liquidity/">UniswapV2-添加流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/21/uniswap_remove_liquidity/">UniswapV2-移除流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/23/uniswap-swap/">UniswapV2-兑换(swap)</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/25/uniswap-analysis/">UniswapV2-公式分析</a></p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><code>Uniswap</code> 本质上，实际上是一组 ERC20 合约。<br>它的职责，主要是根据用户操作，将其它 <code>ERC20 Token 对</code> 进行绑定，并将这种绑定结果，定义在其生成的合约内，即创建 Uniswap Pair。这个过程，也可以说是 <strong><strong>用合约创建合约</strong></strong>。</p>
+<p>绑定完成之后，任何人都可以来 SWAP，即通过输入 <code>ERC20 Token 对</code> 中的一种 token 以兑换另外以一种 token；任何人也都可以通过提供注入<strong><strong>流动性</strong></strong>的方式，成为做市商。<br>整个过程，都由合约自动完成，这就是去中心化的根本。</p>
+<p>基于 Uniswap V2 版本，计划做一个系列，介绍 createPair&#x2F;swap&#x2F;addLiquidity&#x2F;removeLiquidity&#x2F;分红&#x2F;无常损失等。本文是第一篇。</p>
+<h3 id="创建-UniswapV2Pair"><a href="#创建-UniswapV2Pair" class="headerlink" title="创建 UniswapV2Pair"></a>创建 UniswapV2Pair</h3><p>创建过程比较简单，主要是通过 <code>create2</code> 操作符，完成合约的生成。通过源码我们可知：</p>
+<ol>
+<li>任意两个 token 对（非零） ，都可以生成一个 pair。这两个 token 地址非零即可，UniswapV2Factory 甚至不会去检查这两个 token 是否真的存在。</li>
+<li>协议费（Protocol Fees）发给谁，由谁来管理发给谁，这些是在 UniswapV2Factory 中控制的。UniswapV2Factory 在构造的时候，确定了 feeSetter; 而是否收取协议费，是通过 feeTo 是否是零地址判断的(这一点后文中 mint 环节将介绍，目前 feeTo 还是零地址，即平台的协议费还没有还是收取)。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Factory.sol#L6</span></span><br><span class="line">contract <span class="title class_">UniswapV2Factory</span> is <span class="title class_">IUniswapV</span>2Factory &#123;</span><br><span class="line">    <span class="comment">// 收费地址</span></span><br><span class="line">    address public feeTo;</span><br><span class="line">    <span class="comment">// 拥有权限设置收费地址的 setter</span></span><br><span class="line">    address public feeToSetter;</span><br><span class="line">    <span class="comment">//  getPair[token0][token1] = pair;</span></span><br><span class="line">    <span class="comment">//  getPair[token1][token0] = pair;</span></span><br><span class="line">    <span class="title function_">mapping</span>(<span class="function"><span class="params">address</span> =&gt;</span> <span class="title function_">mapping</span>(<span class="function"><span class="params">address</span> =&gt;</span> address)) public getPair;</span><br><span class="line"></span><br><span class="line">    address[] public allPairs;</span><br><span class="line"></span><br><span class="line">    event <span class="title class_">PairCreated</span>(address indexed token0, address indexed token1, address pair, uint);</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">address _feeToSetter</span>) public &#123;</span><br><span class="line">        feeToSetter = _feeToSetter;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">allPairsLength</span>(<span class="params"></span>) external view returns (uint) &#123;</span><br><span class="line">        <span class="keyword">return</span> allPairs.<span class="property">length</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">createPair</span>(<span class="params">address tokenA, address tokenB</span>) external returns (address pair) &#123;</span><br><span class="line">        <span class="built_in">require</span>(tokenA != tokenB, <span class="string">&#x27;UniswapV2: IDENTICAL_ADDRESSES&#x27;</span>);</span><br><span class="line">        (address token0, address token1) = tokenA &lt; tokenB ? (tokenA, tokenB) : (tokenB, tokenA);</span><br><span class="line">        <span class="comment">// token0 和 token1 address 不能为 0</span></span><br><span class="line">        <span class="built_in">require</span>(token0 != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&#x27;UniswapV2: ZERO_ADDRESS&#x27;</span>);</span><br><span class="line">        <span class="comment">// 该 pair 并不存在于本 factory 中</span></span><br><span class="line">        <span class="built_in">require</span>(getPair[token0][token1] == <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&#x27;UniswapV2: PAIR_EXISTS&#x27;</span>); <span class="comment">// single check is sufficient</span></span><br><span class="line">        <span class="comment">// 获取包含 UniswapV2Pair 合约创建的字节码（数组），即创建代码，用以创建合约。</span></span><br><span class="line">        <span class="comment">// 创建代码中，包含了合约本身/构造函数以及构造函数的参数。</span></span><br><span class="line">        <span class="comment">// https://docs.soliditylang.org/en/v0.5.3/units-and-global-variables.html#type-information</span></span><br><span class="line">        bytes memory bytecode = <span class="title function_">type</span>(<span class="title class_">UniswapV2Pair</span>).<span class="property">creationCode</span>;</span><br><span class="line">        bytes32 salt = <span class="title function_">keccak256</span>(abi.<span class="title function_">encodePacked</span>(token0, token1));</span><br><span class="line">        assembly &#123;</span><br><span class="line">            <span class="comment">// CREATE2 操作符 部署合约</span></span><br><span class="line">            pair := <span class="title function_">create2</span>(<span class="number">0</span>, <span class="title function_">add</span>(bytecode, <span class="number">32</span>), <span class="title function_">mload</span>(bytecode), salt)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 将 pair 邦迪在 token0 和 token1 上。</span></span><br><span class="line">        <span class="title class_">IUniswapV</span>2Pair(pair).<span class="title function_">initialize</span>(token0, token1);</span><br><span class="line">        <span class="comment">// 如此这番，可以通过 (token0/token1) or (token1/token0) 的形式都可以找到这个 token pair</span></span><br><span class="line">        getPair[token0][token1] = pair;</span><br><span class="line">        getPair[token1][token0] = pair; <span class="comment">// populate mapping in the reverse direction</span></span><br><span class="line">        <span class="comment">// 将这个 pair 放入到数组中存储，方便索引</span></span><br><span class="line">        allPairs.<span class="title function_">push</span>(pair);</span><br><span class="line">        <span class="comment">// 发射日志</span></span><br><span class="line">        emit <span class="title class_">PairCreated</span>(token0, token1, pair, allPairs.<span class="property">length</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setFeeTo</span>(<span class="params">address _feeTo</span>) external &#123;</span><br><span class="line">        <span class="built_in">require</span>(msg.<span class="property">sender</span> == feeToSetter, <span class="string">&#x27;UniswapV2: FORBIDDEN&#x27;</span>);</span><br><span class="line">        feeTo = _feeTo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setFeeToSetter</span>(<span class="params">address _feeToSetter</span>) external &#123;</span><br><span class="line">        <span class="built_in">require</span>(msg.<span class="property">sender</span> == feeToSetter, <span class="string">&#x27;UniswapV2: FORBIDDEN&#x27;</span>);</span><br><span class="line">        feeToSetter = _feeToSetter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://uniswap.org/whitepaper.pdf">Uniswap v2 Core</a><br><a target="_blank" rel="noopener" href="https://docs.uniswap.org/protocol/V2/reference/smart-contracts/factory">UniswapV2Factory</a><br><a target="_blank" rel="noopener" href="https://docs.openzeppelin.com/cli/2.8/deploying-with-create2">Deploying Smart Contracts Using CREATE2</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Uniswap/">Uniswap</a><a href="/tags/UniswapV2Factory/">UniswapV2Factory</a><a href="/tags/ERC20/">ERC20</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

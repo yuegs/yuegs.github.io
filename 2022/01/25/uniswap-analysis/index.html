@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Uniswap V2-公式分析 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本节，对 Uniswap V2 版本中，出现的各类公式做一总结。">
+  
+
+  
+  
+  <meta name="keywords" content="Uniswap,恒定乘积,公式">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Uniswap V2-公式分析"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Uniswap V2-公式分析</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/01/25/uniswap-analysis/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-01-25T00:02:00.000Z">
+          2022-01-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-analysis/uniswapv2-formula.png?raw=true"><br>本节，对 Uniswap V2 版本中，出现的各类公式做一总结。</p>
+<span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/18/uniswap_create_pair/">UniswapV2-创建 UniswapV2Pair</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/20/uniswap_add_liquidity/">UniswapV2-添加流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/21/uniswap_remove_liquidity/">UniswapV2-移除流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/23/uniswap-swap/">UniswapV2-兑换(swap)</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/25/uniswap-analysis/">UniswapV2-公式分析</a></p>
+<h3 id="一、恒定乘积公式"><a href="#一、恒定乘积公式" class="headerlink" title="一、恒定乘积公式"></a>一、恒定乘积公式</h3><p>恒定乘积公式，是在 Uniswap V2 版本上进行 Swap 的基础。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-analysis/constant-k.png?raw=true"></p>
+<p>其变化曲线如下：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-analysis/constant-product-curve.png?raw=true"></p>
+<ol>
+<li>k 值始终保持不变，因此，无论怎么兑换，只要流通性还在，兑换池中两种 token 的余额永远不会为 0，交易可以永远继续下去。</li>
+<li>x 和 y 的增长，是成反比的。一种 token 可能会趋近于 0，且当其趋近于 0 时，其（使用另外一种 token）兑换价格也越来越高。这是符合价值平衡原理的。</li>
+<li>兑换过程，需要在 恒定乘积公式 上，自动完成。汇率的变化，也将体现在这条曲线上。</li>
+</ol>
+<h3 id="二、swap-公式"><a href="#二、swap-公式" class="headerlink" title="二、swap 公式"></a>二、swap 公式</h3><p>实际上，交互过程在恒定乘积公式的基础上，做了一些改动，增加了收取手续费的过程。<br>假设，输入了 <code>dx</code> 的 token0，实际只有 99.7% 实际参与兑换过程，而 0.3% 转到了 token 池中，仅仅是增大了 token0 的容量。造市商手中的 lp token 数量没变，假设在一段时间内，也没有新增流动性，那么，根据公式 （4），在移除流动性时，造市商获取到的 token0 的数量就增大了，增大的部分，就来源于这 0.3% 的交易费。（此处暂时不考虑协议费）。</p>
+<p>由于 0.3% 手续费的收取，每个兑换的过程，实际上都导致了 K 值增大。<br>K 值会带来哪些影响呢？<br>根据公式（5），实际上，一段时间内，sqrt(k) 的差值，可以代表这段时间内的收益。</p>
+<h3 id="三、添加流动性公式"><a href="#三、添加流动性公式" class="headerlink" title="三、添加流动性公式"></a>三、添加流动性公式</h3><p>首次提供流动性时，采用 sqrt(k) 作为流动性。但是，这里，将使用 MINIMUM_LIQUIDITY 增大 LP 首次提供流动性的门槛，减少第一次铸币时四舍五入的误差。</p>
+<p>非首次提供流动性时，造市商按照当前现存的两种 token 的比例，注入对应的量，再根据当前 lp token 的机制，获取一定额度的 lp token。</p>
+<p>假设当前有 2ether 的 token0，4ether 的 token1，以及 2ether 的 lp token。则此时，1ether 的 lp token 的价值，就是 1ether 的 token0 和 2ether 的 token1.</p>
+<h3 id="四、移除流动性公式"><a href="#四、移除流动性公式" class="headerlink" title="四、移除流动性公式"></a>四、移除流动性公式</h3><p>移除流动性的公式比较好理解。在注入流动性时，获取的 lp token 的数量，代表了份额。移除的过程，就是根据这个份额，取出池子中，那对属于自己的 token 额度。</p>
+<p>所有 token 总量，就是 totalSupply，当前已经拥有的 lp 份额，就是 liquidity，因此，其对 token0 的占比就是 liquidity&#x2F;totalSupply，token1 也是如此。取出时，也将按照这个比例取出即可。</p>
+<h3 id="五、协议费（Protocol-fee）公式"><a href="#五、协议费（Protocol-fee）公式" class="headerlink" title="五、协议费（Protocol fee）公式"></a>五、协议费（Protocol fee）公式</h3><p>协议费，实际上是平台方薅 LP 的羊毛。这笔费用是从 LP 的收益中获取的（当前协议费开关并没有打开，所有交易费收益归 LP 所有），即那 0.3% 的交易手续费中。</p>
+<p>目前，协议费开关并没有打开，feeTo 地址仍然是 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f#readContract">零地址</a>。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-add-lp/protocol-fee-min.png?raw=true"></p>
+<p>关于协议费用的计算， 是在 k 值实现增长且 feeTo 地址不为零地址时才进行的。</p>
+<ol>
+<li>以 sqrt(k) 作为当前 lp token 流动性的体现。 sqrt(k2)-sqrt(k1) 则代表了一段时间内的收益。因此，上式（1）代表了这段时间内收益占当前流动性的比重；</li>
+<li>我们将收益的 1&#x2F;6 算做协议费，平台管理方收到的费用为 sm，则可以得到上式（2）；</li>
+<li>将公式（2）变换后，可得到公式（4），即，可推算出这段时间内平台方的协议费收益。</li>
+</ol>
+<h3 id="六、无常损失"><a href="#六、无常损失" class="headerlink" title="六、无常损失"></a>六、无常损失</h3><p>价值波动是非常正常的，而去中心化交易所，面对价值波动的反应相较于中心化交易所还要慢些，它需要人们在若干次交易过程中，逐步调整 token 池中两种 token 的比例，从而实现 <strong><strong>价值回归</strong></strong>。</p>
+<p>因此，LP 提供了流动性，但是并不意味着他能从中盈利，虽然他能参与 0.3% 手续费的瓜分。当其失利时（兑换成法币&#x2F;稳定币时，数量变少了），这就是无常损失，<strong><strong>所谓无常，是在说明这种损失是暂时性的，会随着交易过程变化，如果在无常损失下移除流动性，这时的损失才是永久性的。</strong></strong></p>
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://docs.balancer.fi/v/v1/core-concepts/protocol/background-1">AMMs Background</a><br><a target="_blank" rel="noopener" href="https://docs.uniswap.org/protocol/V2/concepts/protocol-overview/smart-contracts#minimum-liquidity">Minimum Liquidity</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Uniswap/">Uniswap</a><a href="/tags/恒定乘积/">恒定乘积</a><a href="/tags/公式/">公式</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

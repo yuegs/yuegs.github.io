@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MetaMask-账户生成过程 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本节，来聊聊 MetaMask 钱包中，账户、密钥的生成过程，最后讨论下账户、密钥碰撞的概率。">
+  
+
+  
+  
+  <meta name="keywords" content="智能合约">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="MetaMask-账户生成过程"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>MetaMask-账户生成过程</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/12/13/smart-contract-about-wallet/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-12-13T02:33:05.000Z">
+          2021-12-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://metamask.io/images/mm-logo.svg"></p>
+<p>本节，来聊聊 MetaMask 钱包中，账户、密钥的生成过程，最后讨论下账户、密钥碰撞的概率。</p>
+<span id="more"></span>
+<h3 id="MetaMask"><a href="#MetaMask" class="headerlink" title="MetaMask"></a><a target="_blank" rel="noopener" href="https://github.com/MetaMask/metamask-extension/blob/889e49a4a2ced31de005ce068130f0737fec7c95/app/scripts/metamask-controller.js#L1863">MetaMask</a></h3><h4 id="私钥生成"><a href="#私钥生成" class="headerlink" title="私钥生成"></a>私钥生成</h4><p>私钥的本质是 32 位随机数。主要通过 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues">Crypto.getRandomValues()</a> 完成。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/MetaMask/eth-simple-keyring/blob/a1ce8d2c360e348d49e980915a4a94feb270e4e2/index.js#L16</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">generateKey</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> privateKey = <span class="title function_">randomBytes</span>(<span class="number">32</span>);</span><br><span class="line">  <span class="comment">// I don&#x27;t think this is possible, but this validation was here previously,</span></span><br><span class="line">  <span class="comment">// so it has been preserved just in case.</span></span><br><span class="line">  <span class="comment">// istanbul ignore next</span></span><br><span class="line">  <span class="keyword">if</span> (!ethUtil.<span class="title function_">isValidPrivate</span>(privateKey)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(</span><br><span class="line">      <span class="string">&#x27;Private key does not satisfy the curve requirements (ie. it is invalid)&#x27;</span>,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> privateKey;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// generate random bytes.</span></span><br><span class="line"><span class="comment">// https://github.com/crypto-browserify/randombytes/blob/master/browser.jshttps://github.com/crypto-browserify/randombytes/blob/master/browser.js</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">randomBytes</span> (size, cb) &#123;</span><br><span class="line">  <span class="comment">// phantomjs needs to throw</span></span><br><span class="line">  <span class="keyword">if</span> (size &gt; <span class="variable constant_">MAX_UINT32</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RangeError</span>(<span class="string">&#x27;requested too many random bytes&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> bytes = <span class="title class_">Buffer</span>.<span class="title function_">allocUnsafe</span>(size)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (size &gt; <span class="number">0</span>) &#123;  <span class="comment">// getRandomValues fails on IE if size == 0</span></span><br><span class="line">    <span class="keyword">if</span> (size &gt; <span class="variable constant_">MAX_BYTES</span>) &#123; <span class="comment">// this is the max bytes crypto.getRandomValues</span></span><br><span class="line">      <span class="comment">// can do at once see .</span></span><br><span class="line">      <span class="comment">// https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> generated = <span class="number">0</span>; generated &lt; size; generated += <span class="variable constant_">MAX_BYTES</span>) &#123;</span><br><span class="line">        <span class="comment">// buffer.slice automatically checks if the end is past the end of</span></span><br><span class="line">        <span class="comment">// the buffer so we don&#x27;t have to here.</span></span><br><span class="line">        <span class="comment">// generate random numbers.The Crypto.getRandomValues() method lets you get cryptographically strong random values. </span></span><br><span class="line">        crypto.<span class="title function_">getRandomValues</span>(bytes.<span class="title function_">slice</span>(generated, generated + <span class="variable constant_">MAX_BYTES</span>))</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      crypto.<span class="title function_">getRandomValues</span>(bytes)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> cb === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> process.<span class="title function_">nextTick</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="title function_">cb</span>(<span class="literal">null</span>, bytes)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> bytes</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="生成公钥"><a href="#生成公钥" class="headerlink" title="生成公钥"></a>生成公钥</h4><p>从私钥中，计算出公钥。<br><code>public_key = Point.BASE * private_key</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/MetaMask/eth-simple-keyring/blob/a1ce8d2c360e348d49e980915a4a94feb270e4e2/index.js#L16</span></span><br><span class="line"><span class="keyword">async</span> <span class="title function_">addAccounts</span>(<span class="params">n = <span class="number">1</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> newWallets = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> privateKey = <span class="title function_">generateKey</span>();</span><br><span class="line">    <span class="comment">// get public key from private key.</span></span><br><span class="line">    <span class="keyword">const</span> publicKey = ethUtil.<span class="title function_">privateToPublic</span>(privateKey);</span><br><span class="line">    newWallets.<span class="title function_">push</span>(&#123; privateKey, publicKey &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_wallets</span> = <span class="variable language_">this</span>.<span class="property">_wallets</span>.<span class="title function_">concat</span>(newWallets);</span><br><span class="line">  <span class="keyword">const</span> hexWallets = newWallets.<span class="title function_">map</span>(<span class="function">(<span class="params">&#123; publicKey &#125;</span>) =&gt;</span></span><br><span class="line">    ethUtil.<span class="title function_">bufferToHex</span>(ethUtil.<span class="title function_">publicToAddress</span>(publicKey)),</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> hexWallets;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/ethereumjs/ethereumjs-util/blob/ebf40a0fba8b00ba9acae58405bca4415e383a0d/src/account.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> privateToPublic = <span class="keyword">function</span>(<span class="params">privateKey: Buffer</span>): <span class="title class_">Buffer</span> &#123;</span><br><span class="line">  <span class="title function_">assertIsBuffer</span>(privateKey)</span><br><span class="line">  <span class="comment">// skip the type flag and use the X, Y points</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Buffer</span>.<span class="title function_">from</span>(<span class="title function_">publicKeyCreate</span>(privateKey, <span class="literal">false</span>)).<span class="title function_">slice</span>(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/ethereum/js-ethereum-cryptography/blob/master/src/secp256k1-compat.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">publicKeyCreate</span>(<span class="params"></span></span><br><span class="line"><span class="params">  privateKey: <span class="built_in">Uint8Array</span>,</span></span><br><span class="line"><span class="params">  compressed = <span class="literal">true</span>,</span></span><br><span class="line"><span class="params">  out?: Output</span></span><br><span class="line"><span class="params"></span>): <span class="title class_">Uint8Array</span> &#123; </span><br><span class="line">  <span class="comment">// private key must has 32 bytes.</span></span><br><span class="line">  <span class="title function_">assertBytes</span>(privateKey, <span class="number">32</span>);</span><br><span class="line">  <span class="title function_">assertBool</span>(compressed);</span><br><span class="line">  <span class="keyword">const</span> res = secp.<span class="title function_">getPublicKey</span>(privateKey, compressed);</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">output</span>(out, compressed ? <span class="number">33</span> : <span class="number">65</span>, res);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/paulmillr/noble-secp256k1/blob/88c35c2b30ae6f803e57bb3c78ddebbb4f6f0eaa/index.ts#L918</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getPublicKey</span>(<span class="params">privateKey: PrivKey, isCompressed = <span class="literal">false</span></span>): <span class="title class_">PubKey</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> point = <span class="title class_">Point</span>.<span class="title function_">fromPrivateKey</span>(privateKey);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> privateKey === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> point.<span class="title function_">toHex</span>(isCompressed);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> point.<span class="title function_">toRawBytes</span>(isCompressed);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/paulmillr/noble-secp256k1/blob/88c35c2b30ae6f803e57bb3c78ddebbb4f6f0eaa/index.ts#L325</span></span><br><span class="line"><span class="comment">// public_key = Point.BASE * private_key</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/paulmillr/noble-secp256k1/blob/88c35c2b30ae6f803e57bb3c78ddebbb4f6f0eaa/index.ts#L386</span></span><br><span class="line"><span class="keyword">static</span> <span class="title function_">fromPrivateKey</span>(<span class="params">privateKey: PrivKey</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Point</span>.<span class="property">BASE</span>.<span class="title function_">multiply</span>(<span class="title function_">normalizePrivateKey</span>(privateKey));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// transform the private key to a number(value).</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">normalizePrivateKey</span>(<span class="params">key: PrivKey</span>): bigint &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">num</span>: bigint;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> key === <span class="string">&#x27;bigint&#x27;</span>) &#123;</span><br><span class="line">    num = key;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> key === <span class="string">&#x27;number&#x27;</span> &amp;&amp; <span class="title class_">Number</span>.<span class="title function_">isSafeInteger</span>(key) &amp;&amp; key &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    num = <span class="title class_">BigInt</span>(key);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> key === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (key.<span class="property">length</span> !== <span class="number">64</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Expected 32 bytes of private key&#x27;</span>);</span><br><span class="line">    num = <span class="title function_">hexToNumber</span>(key);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key <span class="keyword">instanceof</span> <span class="title class_">Uint8Array</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (key.<span class="property">length</span> !== <span class="number">32</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Expected 32 bytes of private key&#x27;</span>);</span><br><span class="line">    num = <span class="title function_">bytesToNumber</span>(key);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&#x27;Expected valid private key&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isWithinCurveOrder</span>(num)) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Expected private key: 0 &lt; key &lt; n&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/paulmillr/noble-secp256k1/blob/88c35c2b30ae6f803e57bb3c78ddebbb4f6f0eaa/index.ts#L861</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isWithinCurveOrder</span>(<span class="params">num: bigint</span>): boolean &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span> &lt; num &amp;&amp; num &lt; <span class="variable constant_">CURVE</span>.<span class="property">n</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/paulmillr/noble-secp256k1/blob/88c35c2b30ae6f803e57bb3c78ddebbb4f6f0eaa/index.ts#L21</span></span><br><span class="line"><span class="comment">// CAUTION:</span></span><br><span class="line"><span class="comment">//this is the max private key value.</span></span><br><span class="line"><span class="comment">// 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141</span></span><br><span class="line"><span class="variable constant_">CURVE</span>.<span class="property">n</span> = <span class="variable constant_">POW_2_256</span> - <span class="title class_">BigInt</span>(<span class="string">&#x27;432420386565659656852420866394968145599&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="椭圆曲线方程"><a href="#椭圆曲线方程" class="headerlink" title="椭圆曲线方程"></a>椭圆曲线方程</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/paulmillr/noble-secp256k1/blob/88c35c2b30ae6f803e57bb3c78ddebbb4f6f0eaa/index.ts#L13</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">CURVE</span> = &#123;</span><br><span class="line">  <span class="comment">// Params: a, b</span></span><br><span class="line">  <span class="attr">a</span>: _0n,</span><br><span class="line">  <span class="attr">b</span>: <span class="title class_">BigInt</span>(<span class="number">7</span>),</span><br><span class="line">  <span class="comment">// Field over which we&#x27;ll do calculations</span></span><br><span class="line">  <span class="attr">P</span>: <span class="variable constant_">POW_2_256</span> - _2n ** <span class="title class_">BigInt</span>(<span class="number">32</span>) - <span class="title class_">BigInt</span>(<span class="number">977</span>),</span><br><span class="line">  <span class="comment">// Curve order. Specifically, it belongs to prime-order subgroup;</span></span><br><span class="line">  <span class="comment">// but our curve is h=1, so other subgroups don&#x27;t exist</span></span><br><span class="line">  <span class="attr">n</span>: <span class="variable constant_">POW_2_256</span> - <span class="title class_">BigInt</span>(<span class="string">&#x27;432420386565659656852420866394968145599&#x27;</span>),</span><br><span class="line">  <span class="comment">// Cofactor</span></span><br><span class="line">  <span class="attr">h</span>: _1n,</span><br><span class="line">  <span class="comment">// Base point (x, y) aka generator point</span></span><br><span class="line">  <span class="title class_">Gx</span>: <span class="title class_">BigInt</span>(<span class="string">&#x27;55066263022277343669578718895168534326250603453777594175500187360389116729240&#x27;</span>),</span><br><span class="line">  <span class="title class_">Gy</span>: <span class="title class_">BigInt</span>(<span class="string">&#x27;32670510020758816978083085130507043184471273380659243275938904335757337482424&#x27;</span>),</span><br><span class="line">  <span class="comment">// For endomorphism, see below</span></span><br><span class="line">  <span class="attr">beta</span>: <span class="title class_">BigInt</span>(<span class="string">&#x27;0x7ae96a2b657c07106e64479eac3434e99cf0497512f58995c1396c28719501ee&#x27;</span>),</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="生成账户地址"><a href="#生成账户地址" class="headerlink" title="生成账户地址"></a>生成账户地址</h4><p>账户地址，来自于公钥。具体来说，是一个 64 bytes 的 hash 的 后20 个 bytes。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/MetaMask/eth-simple-keyring/blob/a1ce8d2c360e348d49e980915a4a94feb270e4e2/index.js#L64</span></span><br><span class="line"><span class="keyword">async</span> <span class="title function_">getAccounts</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_wallets</span>.<span class="title function_">map</span>(<span class="function">(<span class="params">&#123; publicKey &#125;</span>) =&gt;</span></span><br><span class="line">    ethUtil.<span class="title function_">bufferToHex</span>(ethUtil.<span class="title function_">publicToAddress</span>(publicKey)),</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/ethereumjs/ethereumjs-util/blob/ebf40a0fba8b00ba9acae58405bca4415e383a0d/src/account.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> pubToAddress = <span class="keyword">function</span>(<span class="params">pubKey: Buffer, sanitize: boolean = <span class="literal">false</span></span>): <span class="title class_">Buffer</span> &#123;</span><br><span class="line">  <span class="title function_">assertIsBuffer</span>(pubKey)</span><br><span class="line">  <span class="keyword">if</span> (sanitize &amp;&amp; pubKey.<span class="property">length</span> !== <span class="number">64</span>) &#123;</span><br><span class="line">    pubKey = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(<span class="title function_">publicKeyConvert</span>(pubKey, <span class="literal">false</span>).<span class="title function_">slice</span>(<span class="number">1</span>))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// public key length should 64</span></span><br><span class="line">  <span class="title function_">assert</span>(pubKey.<span class="property">length</span> === <span class="number">64</span>)</span><br><span class="line">  <span class="comment">// Only take the lower 160bits of the hash</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">keccak</span>(pubKey).<span class="title function_">slice</span>(-<span class="number">20</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/ethereum/js-ethereum-cryptography/blob/bce953bceb9b7bf125c276e10e69e4de3eb96eed/src/secp256k1-compat.ts</span></span><br><span class="line"><span class="comment">// guarantee the length should be 64,if public key length can not satisfied.</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">publicKeyConvert</span>(<span class="params"></span></span><br><span class="line"><span class="params">  publicKey: <span class="built_in">Uint8Array</span>,</span></span><br><span class="line"><span class="params">  compressed = <span class="literal">true</span>, <span class="comment">// binary or hex.</span></span></span><br><span class="line"><span class="params">  out?: Output</span></span><br><span class="line"><span class="params"></span>): <span class="title class_">Uint8Array</span> &#123;</span><br><span class="line">    <span class="comment">// So, public key length should in [32,64] .</span></span><br><span class="line">  <span class="title function_">assertBytes</span>(publicKey, <span class="number">33</span>, <span class="number">65</span>);</span><br><span class="line">  <span class="title function_">assertBool</span>(compressed);</span><br><span class="line">  <span class="keyword">const</span> res = secp.<span class="property">Point</span>.<span class="title function_">fromHex</span>(publicKey).<span class="title function_">toRawBytes</span>(compressed);</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">output</span>(out, compressed ? <span class="number">33</span> : <span class="number">65</span>, res);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="空间"><a href="#空间" class="headerlink" title="空间"></a>空间</h4><p>接下来，有几个问题值得我们思考：</p>
+<ul>
+<li>私钥会不会重复；</li>
+<li>私钥和公钥是一一对应的吗？</li>
+<li>账户会不会重复。</li>
+</ul>
+<p>根据上面的代码，其实我们容易发现：</p>
+<ul>
+<li>私钥的可使用空间为 <code>2^256</code> ，在推出公钥的时候，我们发现私钥需要小于 <code>CURVE.n</code>，因此，私钥的实际使用空间大约为 <code>2^128</code>(16个字节)；</li>
+<li>公钥的实际长度是 32 位（压缩后），因此其可使用空间为 <code>2^256</code> ，但是实际范围，不会高于私钥,它是由私钥推导出来的；</li>
+<li>地址的可用空间为 <code>2^160</code>(将公钥 hash 后的后20个字节)，但是实际使用范围，不会高于公钥，它是由公钥推导出来的。</li>
+</ul>
+<p>那么，私钥会不会重复？依照现有的计算能力，基本上是不可能的。<br>账户会不会重复？账户的可用空间比私钥的可用空间大，但是实际使用空间应不大于私钥空间，然而，账户相同仍然是一个非常小的概率，小到不可能（这一点应该有数学证明）。<br>私钥和公钥的对应关系，目前从找到的资料表明，根据数学理论，应是一一对应的，这一点暂时不太理解这个数学过程。</p>
+<h4 id="关于黑洞账户（Black-Hole）"><a href="#关于黑洞账户（Black-Hole）" class="headerlink" title="关于黑洞账户（Black Hole）"></a>关于黑洞账户（Black Hole）</h4><blockquote>
+<p>黑洞（英语：black hole）是时空展现出极端强大的引力，以致于所有粒子、甚至光这样的电磁辐射都不能逃逸的区域。 —<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%BB%91%E6%B4%9E">维基百科</a></p>
+</blockquote>
+<p>因此，所谓 eth 上的黑洞账户，即，只是接收输入，而从不输出。输出是受私钥控制的，也因此，没有私钥，或者私钥被销毁，这种账户就是一种黑洞账户。比如我们常用的黑洞账户 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x0000000000000000000000000000000000000000">0x0000000000000000000000000000000000000000</a> 。</p>
+<p>从上一节可知，账户（或者说账户地址），实际上是公钥经过 hash 过后，取后 20 个字节的结果。而公钥的实际使用空间，大概为 <code>2^128</code> 。<br>关于是否存在一个可以控制黑洞账户的私钥，我没有找到一个理论依据。但是，我认为我们无法确认这么大的空间中，公钥经过 hash 后，不会产生一个最后 20 位全部为 0 的地址，hash 过程是单向的，就现有技术而言，我们也无法实现全域的穷举，去证明这一点。</p>
+<p>正如我们不需要去担心世界上会出现两个相同的私钥（私钥是随机生成的），我们也不必担心这个世界上有谁拥有者这个黑洞地址的私钥，因为其概率低到不可能（就现在的技术能力而言）。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/10055/is-each-ethereum-address-shared-by-theoretically-2-96-private-keys">Is each Ethereum address shared by (theoretically) 2 ** 96 private keys?</a></p>
+<p><a target="_blank" rel="noopener" href="https://cryptopotato.com/two-same-identical-private-keys-is-it-possible-at-all/">Two same identical private keys: Is it possible at all?</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/96937623">比特币私钥总数有2的256次方 , 这个数有多大？</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=0_XmvNu0J40">椭圆曲线加密与哈希函数是什么？非对称加密是什么？比特币中的数学原理</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=wSSKz6-ivQU">ECC椭圆曲线的特性</a></p>
+<p><a target="_blank" rel="noopener" href="https://cryptobook.nakov.com/asymmetric-key-ciphers/elliptic-curve-cryptography-ecc#named-curves-example">Named Curves - Example</a></p>
+<p><a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?topic=5376202.0">Verifying G on y² &#x3D; x³ + 7 mod p</a></p>
+<p><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/4299/account-uniqueness-guaranteed">Account uniqueness guaranteed?</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

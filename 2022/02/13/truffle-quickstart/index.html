@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Truffle 快速开始 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="Truffle 是一个合约部署、管理工具。本文，将结合官网的描述和自己的理解，使用 Truffle 快速完成合约的部署（到本地网络和以太坊测试网络）。">
+  
+
+  
+  
+  <meta name="keywords" content="truffle,metacoin,Ganache">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Truffle 快速开始"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Truffle 快速开始</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/13/truffle-quickstart/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-13T00:51:12.000Z">
+          2022-02-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/truffle-quick/truffle-icon.png?raw=true"></p>
+<p>Truffle 是一个合约部署、管理工具。本文，将结合<a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/quickstart">官网</a>的描述和自己的理解，使用 Truffle 快速完成合约的部署（到本地网络和以太坊测试网络）。</p>
+<span id="more"></span>
+
+<h3 id="1-创建一个项目"><a href="#1-创建一个项目" class="headerlink" title="1. 创建一个项目"></a>1. 创建一个项目</h3><p>我们从头开始，创建一个 Truffle 项目，以使用&#x2F;熟悉常用的 Truffle 指令。<br>你可以创建一个空的项目模板，对于一个新手，也可以使用 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/boxes">Truffle Boxes</a>, 那里有一些应用的实例和模板。接下来，我们使用 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/boxes/metacoin">MetaCoin box</a>，创建一个可以在账户之间交易的 token。</p>
+<ol>
+<li>创建一个新的文件夹</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> MetaCoin</span><br><span class="line"><span class="built_in">cd</span> MetaCoin</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>下载 (使用 “unbox”) MetaCoin box</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle unbox metacoin</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，你也可以使用 <code>truffle unbox &lt;box-name&gt;</code> 指令下载其它 Truffle Boxes.</p>
+</blockquote>
+<blockquote>
+<p>注意，可以使用 <code>truffle init</code> 来创建一个空的不包含智能合约的 Truffle 项目。</p>
+</blockquote>
+<p>一旦上述操作完成，你的项目结构如下所示：</p>
+<ul>
+<li><code>contracts/</code>: 存放 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/getting-started/interacting-with-your-contracts">Solidity contracts</a></li>
+<li><code>migrations/</code>: 存放 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/getting-started/running-migrations#migration-files">部署脚本文件</a></li>
+<li><code>test/</code>: 存放测试文件，<a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/testing/testing-your-contracts">测试你的应用和合约</a></li>
+<li><code>truffle.js</code>: Truffle <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/reference/configuration">配置文件</a></li>
+</ul>
+<h3 id="2-进一步探索这个项目"><a href="#2-进一步探索这个项目" class="headerlink" title="2. 进一步探索这个项目"></a>2. 进一步探索这个项目</h3><blockquote>
+<p>注意，该文档只是一个快速指引，不提供更详细的内容。</p>
+</blockquote>
+<ol>
+<li>打开 <code>contracts/MetaCoin.sol</code> 文件，这是一个使用 Solidity 编写的智能合约，以创建 MetaCoin token。注意，这里有一个引用同级目录下的其它 Solidity 文件 <code>contracts/ConvertLib.sol</code>。</li>
+<li>打开 <code>contracts/Migrations.sol</code> 文件，这是一个单独的 Solidity 文件，用于管理和更新 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/getting-started/running-migrations">已经部署的智能合约的状态</a>。这个文件，每个 Truffle 项目中都有，通常不需要编辑。</li>
+<li>打开 <code>migrations/1_initial_migration.js</code> 文件，这个文件是 <code>Migrations.sol</code> 文件的迁移（部署）脚本。</li>
+<li>打开 <code>migrations/2_deploy_contracts.js</code> 文件，这个文件用于部署 <code>MetaCoin</code> 合约。（迁移脚本是按照顺序执行的，因此，以 2 开头的文件，在以 1 开头的文件后执行）</li>
+<li>打开 <code>test/TestMetaCoin.sol</code> 文件，这个一个<a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-solidity">以 Solidity 编写的测试文件</a>，确保合约能够按照预期运行。</li>
+<li>打开 <code>test/metacoin.js</code> 文件，这个文件<a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript">使用 JavaScript 编写的测试文件</a>，其执行和上述 Solidity 测试类似的功能。</li>
+<li>打开 <code>truffle-config.js</code> 文件，这个文件是 Truffle 的<a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/reference/configuration">配置文件</a>，主要是设置网络信息，以及项目相关的设置。目前来说它是空的，但是没有关系，因为我们将使用一些具有默认值的内置 Truffle 命令。</li>
+</ol>
+<h3 id="3-使用-Ganache-完成迁移"><a href="#3-使用-Ganache-完成迁移" class="headerlink" title="3. 使用 Ganache 完成迁移"></a>3. 使用 Ganache 完成迁移</h3><p>虽然 Truffle Develop 提供了个人私链和控制台，但是你也可以选择使用 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/ganache">Ganache</a>，它是一个可以启动个人私链的桌面程序。Ganache 对于以太坊和区块链的新手来说，更容易理解些，所有信息它都通过 UI 显示在了前端。</p>
+<p>启动 Ganache，编辑 Truffle 配置文件，将网络指向 Ganache 实例。</p>
+<ol>
+<li>下载并安装 <a target="_blank" rel="noopener" href="https://www.trufflesuite.com/ganache">Ganache</a>。</li>
+<li>打开 <code>truffle-config.js</code> 文件，使用下面的内容替换：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">development</span>: &#123;</span><br><span class="line">      <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">7545</span>,</span><br><span class="line">      <span class="attr">network_id</span>: <span class="string">&quot;*&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上述的配置，是 Ganache 的默认连接参数。</p>
+<ol start="3">
+<li>保存并关闭文件。</li>
+<li>启动 Ganache。</li>
+</ol>
+<p><img src="https://www.trufflesuite.com/img/docs/ganache/quickstart/accounts.png" alt="Ganache"></p>
+<ol start="5">
+<li>在终端上，将合约迁移部署到 Ganache 创建的区块链上。<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle migrate</span><br></pre></td></tr></table></figure>
+你将看到如下输出：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">Compiling your contracts...</span><br><span class="line">===========================</span><br><span class="line">&gt; Compiling ./contracts/ConvertLib.sol</span><br><span class="line">&gt; Compiling ./contracts/MetaCoin.sol</span><br><span class="line">&gt; Compiling ./contracts/Migrations.sol</span><br><span class="line">&gt; Artifacts written to /home/david/work/MetaCoin/build/contracts</span><br><span class="line">&gt; Compiled successfully using:</span><br><span class="line">   - solc: 0.5.16+commit.9c3226ce.Emscripten.clang</span><br><span class="line"></span><br><span class="line">Starting migrations...</span><br><span class="line">======================</span><br><span class="line">&gt; Network name:    <span class="string">&#x27;development&#x27;</span></span><br><span class="line">&gt; Network <span class="built_in">id</span>:      5777</span><br><span class="line">&gt; Block gas <span class="built_in">limit</span>: 6721975 (0x6691b7)</span><br><span class="line"></span><br><span class="line">1_initial_migration.js</span><br><span class="line">======================</span><br><span class="line"></span><br><span class="line">   Deploying <span class="string">&#x27;Migrations&#x27;</span></span><br><span class="line">   ----------------------</span><br><span class="line">   &gt; transaction <span class="built_in">hash</span>:    0x3eef05e35ce694c0b7112cc22ba462b9cc0563abc2cc444ee9683b6d89865e3c</span><br><span class="line">   &gt; Blocks: 0            Seconds: 0</span><br><span class="line">   &gt; contract address:    0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0</span><br><span class="line">   &gt; block number:        1</span><br><span class="line">   &gt; block timestamp:     1587421933</span><br><span class="line">   &gt; account:             0x627306090abaB3A6e1400e9345bC60c78a8BEf57</span><br><span class="line">   &gt; balance:             99.9967165</span><br><span class="line">   &gt; gas used:            164175 (0x2814f)</span><br><span class="line">   &gt; gas price:           20 gwei</span><br><span class="line">   &gt; value sent:          0 ETH</span><br><span class="line">   &gt; total cost:          0.0032835 ETH</span><br><span class="line"></span><br><span class="line">   &gt; Saving migration to chain.</span><br><span class="line">   &gt; Saving artifacts</span><br><span class="line">   -------------------------------------</span><br><span class="line">   &gt; Total cost:           0.0032835 ETH</span><br><span class="line"></span><br><span class="line">2_deploy_contracts.js</span><br><span class="line">=====================</span><br><span class="line"></span><br><span class="line">   Deploying <span class="string">&#x27;ConvertLib&#x27;</span></span><br><span class="line">   ----------------------</span><br><span class="line">   &gt; transaction <span class="built_in">hash</span>:    0x23de020bafa41e30615b1d775d2fa9604e876415408e012d1f0faf79eed3a32f</span><br><span class="line">   &gt; Blocks: 0            Seconds: 0</span><br><span class="line">   &gt; contract address:    0x345cA3e014Aaf5dcA488057592ee47305D9B3e10</span><br><span class="line">   &gt; block number:        3</span><br><span class="line">   &gt; block timestamp:     1587421933</span><br><span class="line">   &gt; account:             0x627306090abaB3A6e1400e9345bC60c78a8BEf57</span><br><span class="line">   &gt; balance:             99.99396028</span><br><span class="line">   &gt; gas used:            95470 (0x174ee)</span><br><span class="line">   &gt; gas price:           20 gwei</span><br><span class="line">   &gt; value sent:          0 ETH</span><br><span class="line">   &gt; total cost:          0.0019094 ETH</span><br><span class="line"></span><br><span class="line">   Linking</span><br><span class="line">   -------</span><br><span class="line">   * Contract: MetaCoin &lt;--&gt; Library: ConvertLib (at address: 0x345cA3e014Aaf5dcA488057592ee47305D9B3e10)</span><br><span class="line"></span><br><span class="line">   Deploying <span class="string">&#x27;MetaCoin&#x27;</span></span><br><span class="line">   --------------------</span><br><span class="line">   &gt; transaction <span class="built_in">hash</span>:    0x0cc20353422c4d435f72e8e7850f8178f43bf8d00c8c0d09cc8e0ccdfa81b799</span><br><span class="line">   &gt; Blocks: 0            Seconds: 0</span><br><span class="line">   &gt; contract address:    0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF</span><br><span class="line">   &gt; block number:        4</span><br><span class="line">   &gt; block timestamp:     1587421934</span><br><span class="line">   &gt; account:             0x627306090abaB3A6e1400e9345bC60c78a8BEf57</span><br><span class="line">   &gt; balance:             99.98822922</span><br><span class="line">   &gt; gas used:            286553 (0x45f59)</span><br><span class="line">   &gt; gas price:           20 gwei</span><br><span class="line">   &gt; value sent:          0 ETH</span><br><span class="line">   &gt; total cost:          0.00573106 ETH</span><br><span class="line"></span><br><span class="line">   &gt; Saving migration to chain.</span><br><span class="line">   &gt; Saving artifacts</span><br><span class="line">   -------------------------------------</span><br><span class="line">   &gt; Total cost:          0.00764046 ETH</span><br><span class="line"></span><br><span class="line">Summary</span><br><span class="line">=======</span><br><span class="line">&gt; Total deployments:   3</span><br><span class="line">&gt; Final cost:          0.01092396 ETH</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>上面显示了 transaction ID 及部署的合约地址。它也包含了花费概述以及实时状态更新。</p>
+<blockquote>
+<p>注意，你的 transaction ID 和 合约地址可能跟上面的不一样。</p>
+</blockquote>
+<ol start="6">
+<li>在 Ganache 中，点击 “Transactions” 按钮，可以看到交易的处理过程。</li>
+<li>可以使用 Truffle 控制台和合约交互。Truffle 控制台类似于 Truffle Develop，只是它是连接到了 Ganache。<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle console</span><br></pre></td></tr></table></figure>
+你将看到下面的提示符：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>注意，如果运行在 windows 电脑上，且 node 版本为 17.x,则需要配置$env:NODE_OPTIONS&#x3D;”–openssl-legacy-provider”</p>
+</blockquote>
+<h3 id="4-与合约交互"><a href="#4-与合约交互" class="headerlink" title="4. 与合约交互"></a>4. 与合约交互</h3><p>可以使用下面的方式，通过控制台和合约进行交互：</p>
+<blockquote>
+<p>注意：在这些例子中，我们使用 <code>web3.eth.getAccounts()</code> 返回合约的地址, 实际上，它就相当于助记词。<code>(await web3.eth.getAccounts()[0])</code> 就等价与 <code>0x627306090abab3a6e1400e9345bc60c78a8bef57</code>。</p>
+</blockquote>
+<p>自 Truffle v5 版本起，控制台支持 async&#x2F;await 函数，可以使得合约的交互的过程更加简单。</p>
+<ul>
+<li>首先，创建已经部署得 MetaCoin 合约实例以及由 Truffle 内置区块链或者 Ganache 创建得账户：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt; <span class="built_in">let</span> instance = await MetaCoin.deployed()</span><br><span class="line">truffle(development)&gt; <span class="built_in">let</span> accounts = await web3.eth.getAccounts()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>查询已部署合约中，账户余额：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt; <span class="built_in">let</span> balance = await instance.getBalance(accounts[0])</span><br><span class="line">truffle(development)&gt; balance.toNumber()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查询这些余额价值多少 以太币（注意，合约中定义了两种币的价值转换公式）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt; <span class="built_in">let</span> ether = await instance.getBalanceInEth(accounts[0])</span><br><span class="line">truffle(development)&gt; ether.toNumber()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>metacoin 转账：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt; instance.sendCoin(accounts[1], 500)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看接收之后的 metacoin 余额：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt; <span class="built_in">let</span> received = await instance.getBalance(accounts[1])</span><br><span class="line">truffle(development)&gt; received.toNumber()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看发送之后的账户余额：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(development)&gt; <span class="built_in">let</span> newBalance = await instance.getBalance(accounts[0])</span><br><span class="line">truffle(development)&gt; newBalance.toNumber()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="5-进一步的网路配置"><a href="#5-进一步的网路配置" class="headerlink" title="5. 进一步的网路配置"></a>5. 进一步的网路配置</h3><p>在进行合约迁移的时候，可以指定网络以及在交易参数（比如 gas 费用，部署来源账户等）。在编译或者在指定网络中运行迁移指令时，都将保存合约目标文件 artifacts 以备后用。当你的合约抽象（Truffle 提供了合约抽象用于和你的合约交互，可以通过<code>truffle(development)&gt; const myContract = await MyContract.deployed();</code> 获取合约抽象，在做测试的时候，测试js中，也可以使用<code>const MyContract = artifacts.require(&quot;MyContract&quot;);</code>获取）检测到以太坊客户端连接到了指定的网络。网络的确定是通过区块链 URI 以及以太坊 <a target="_blank" rel="noopener" href="http://man.hubwiz.com/docset/Ethereum.docset/Contents/Resources/Documents/net_version.html"><code>net_version</code></a> (返回当前网络id) 的 RPC 调用完成。</p>
+<p>一旦指定了网络，就可以通过在命令行的命令中添加这个配置名，来确定后续其运行的网络：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ truffle migrate --network live</span><br></pre></td></tr></table></figure>
+
+<p>注意，如果不提供 <code>--network</code> 选项指定运行的网络，Truffle 将默认寻找在 <code>truffle-config.js</code> 文件中命名为 <code>development</code> 的配置。</p>
+<p>紧接着，Truffle 将使用这些配置进行网络连接。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">networks<span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  development<span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    host<span class="punctuation">:</span> <span class="string">&quot;127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    port<span class="punctuation">:</span> <span class="number">8545</span><span class="punctuation">,</span></span><br><span class="line">    network_id<span class="punctuation">:</span> <span class="string">&quot;*&quot;</span><span class="punctuation">,</span> <span class="comment">// match any network</span></span><br><span class="line">    websockets<span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  live<span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    host<span class="punctuation">:</span> <span class="string">&quot;178.25.19.88&quot;</span><span class="punctuation">,</span> <span class="comment">// Random IP for example purposes (do not use)</span></span><br><span class="line">    port<span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">    network_id<span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>        <span class="comment">// Ethereum public network</span></span><br><span class="line">    <span class="comment">// optional config values:</span></span><br><span class="line">    <span class="comment">// gas                  -</span></span><br><span class="line">    <span class="comment">// gasPrice             - use gas and gasPrice if creating type 0 transactions</span></span><br><span class="line">    <span class="comment">// maxFeePerGas         -</span></span><br><span class="line">    <span class="comment">// maxPriorityFeePerGas - use maxFeePerGas and maxPriorityFeePerGas if creating type 2 transactions (https://eips.ethereum.org/EIPS/eip-1559)</span></span><br><span class="line">    <span class="comment">// from - default address to use for any transaction Truffle makes during migrations</span></span><br><span class="line">    <span class="comment">// provider - web3 provider instance Truffle should use to talk to the Ethereum network.</span></span><br><span class="line">    <span class="comment">//          - function that returns a web3 provider instance (see below.)</span></span><br><span class="line">    <span class="comment">//          - if specified, host and port are ignored.</span></span><br><span class="line">    <span class="comment">// skipDryRun: - true if you don&#x27;t want to test run the migration locally before the actual migration (default is false)</span></span><br><span class="line">    <span class="comment">// confirmations: - number of confirmations to wait between deployments (default: 0)</span></span><br><span class="line">    <span class="comment">// timeoutBlocks: - if a transaction is not mined, keep waiting for this number of blocks (default is 50)</span></span><br><span class="line">    <span class="comment">// deploymentPollingInterval: - duration between checks for completion of deployment transactions</span></span><br><span class="line">    <span class="comment">// disableConfirmationListener: - true to disable web3&#x27;s confirmation listener</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于每个配置项，如果没有指定，将使用默认值。</p>
+<ul>
+<li><code>gas</code>: 限制部署的 gas。默认为 <code>6721975</code></li>
+<li><code>gasPrice</code>:gas 的价格。默认为 <code>20000000000</code> 20Gwei</li>
+<li><code>from</code>:迁移（migrations）过程中的任何交易使用的地址。默认，是你的 以太坊客户端 返回的第一个可用地址。</li>
+<li><code>provider</code>:默认的 web3 provider 使用 <code>host</code> 和 <code>port</code> 选项来构建：<code>new Web3.providers.HttpProvider(&quot;https://&lt;host&gt;:&lt;port&gt;&quot;)</code></li>
+<li><code>websockets</code>:</li>
+<li><code>deploymentPollingInterval</code>:这个属性决定了当合约被部署后检查交易是否成功的时间周期，单位为毫秒，默认 <code>4000</code>.注意，这个轮询周期和 <code>provider</code> 使用的是不一样的。如果你使用了 <code>HDWalletProvider</code>，可以查看 <a target="_blank" rel="noopener" href="https://github.com/trufflesuite/truffle/blob/develop/packages/hdwallet-provider/README.md#instantiation">@truffle&#x2F;hdwallet-provider</a> 来指定 <code>pollingInterval</code>.</li>
+</ul>
+<h3 id="6-部署到以太坊测试网络中去"><a href="#6-部署到以太坊测试网络中去" class="headerlink" title="6. 部署到以太坊测试网络中去"></a>6. 部署到以太坊测试网络中去</h3><p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/truffle-quick/truffle-config-min.png?raw=true"><br>图片来源- 《Blockchain in Action》</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">HDWalletProvider</span> = <span class="built_in">require</span>(<span class="string">&#x27;truffle-hdwallet-provider&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">networks</span>: &#123;</span><br><span class="line">        <span class="attr">development</span>: &#123;</span><br><span class="line">            <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">            <span class="attr">port</span>: <span class="number">7545</span>,</span><br><span class="line">            <span class="attr">network_id</span>: <span class="string">&quot;*&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">ropsten</span>: &#123;</span><br><span class="line">            <span class="attr">provider</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HDWalletProvider</span>(<span class="string">&quot;你的钱包助记词&quot;</span>, <span class="string">&quot;https://ropsten.infura.io/v3/2228eee1cb694aa4aa2c22b10f71d3dc&quot;</span>)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">websockets</span>:<span class="literal">true</span>,</span><br><span class="line">            <span class="attr">network_id</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">confirmations</span>:<span class="number">2</span>,    </span><br><span class="line">            <span class="attr">gas</span>: <span class="number">4000000</span>      <span class="comment">//make sure this gas allocation isn&#x27;t over 4M, which is the max</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">compilers</span>: &#123;</span><br><span class="line">        <span class="attr">solc</span>: &#123;</span><br><span class="line">            <span class="attr">version</span>: <span class="string">&quot;^0.8.0&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h3><p> <a target="_blank" rel="noopener" href="https://trufflesuite.github.io/artifact-updates/background.html#what-are-artifacts">What are “Artifacts”?</a><br> <a target="_blank" rel="noopener" href="https://trufflesuite.com/docs/truffle/reference/contract-abstractions.html">Contract Abstractions</a><br> <a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/what-is-network-id-and-host-id-in-ip-addresses/">What is “network ID” and “host ID” in IP Addresses?</a><br> <a target="_blank" rel="noopener" href="https://trufflesuite.com/docs/truffle/getting-started/running-migrations#deployer">deployer</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/truffle/">truffle</a><a href="/tags/metacoin/">metacoin</a><a href="/tags/Ganache/">Ganache</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Uniswap V2-兑换(swap) | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="一旦一个 token pair 具有了流动性，任何用户都可以进行兑换（swap）。兑换过程，是按照 恒定乘积公式 进行的，即 x * y = k。其中，x 表示其中一种 token 的存量；y 表示另外一种 token 的存量。k 值是一个常量，任何一次交易之后，x 与 y 的乘积，需要始终保持常量 k。">
+  
+
+  
+  
+  <meta name="keywords" content="Uniswap,兑换,swap">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Uniswap V2-兑换(swap)"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Uniswap V2-兑换(swap)</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/01/23/uniswap-swap/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-01-23T10:02:00.000Z">
+          2022-01-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-swap/swap.png?raw=true"><br>一旦一个 token pair 具有了<a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/20/uniswap_add_liquidity/">流动性</a>，任何用户都可以进行兑换（swap）。<br>兑换过程，是按照 <a target="_blank" rel="noopener" href="https://docs.uniswap.org/protocol/V2/concepts/protocol-overview/glossary#constant-product-formula">恒定乘积公式</a> 进行的，即 <code>x * y = k</code>。其中，x 表示其中一种 token 的存量；y 表示另外一种 token 的存量。k 值是一个常量，任何一次交易之后，x 与 y 的乘积，需要始终保持常量 k。</p>
+<span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/18/uniswap_create_pair/">UniswapV2-创建 UniswapV2Pair</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/20/uniswap_add_liquidity/">UniswapV2-添加流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/21/uniswap_remove_liquidity/">UniswapV2-移除流动性</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/23/uniswap-swap/">UniswapV2-兑换(swap)</a><br><a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/25/uniswap-analysis/">UniswapV2-公式分析</a></p>
+<h3 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h3><p>实际上，每次用户在兑换时，都需要提供手续费给 LP，这种机制，对 LP 是一种激励。<br>我们假定用户输入了 dx 数量的 token0，并希望兑取 token1。如果 Uniswap 中存在 token0 和 token1 的 pair，则其兑换过程会满足：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-swap/uniswap-fee-cal.png?raw=true"></p>
+<p>其中，dy 就是兑换后可以收到的 token1 的数量。<br>如果，Uniswap 中并没有直接的 token0 和 token1 对，但是可以通过路由接力的方式进行兑换，则这个过程中，每经过一次路由，都需要收取 0.3% 的手续费，这 0.3% 实际上从输入量（本金）上扣除的，类似于“砍头息”。</p>
+<p>那么，0.3% 的手续费​去哪里了呢？直接进入了 pair 中 token0 的池子里，-<a target="_blank" rel="noopener" href="https://blog.yuegs.com/2022/01/21/uniswap_remove_liquidity/">造市商移除流动性</a> 的时候，会根据 “占股” 瓜分 token0，平台也可能会参与到瓜分过程中，如果​协议费开关打开的话。</p>
+<p>如下图所示，如果从 From 无法达到 to，是无法完成兑换的。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-swap/uniswap-v2-route-swap.png?raw=true"></p>
+<p>假设，我们希望兑换指定数量的 ETH</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://docs.uniswap.org/protocol/V2/reference/smart-contracts/router-02#swapexacttokensfortokens</span></span><br><span class="line"><span class="comment">// https://github.com/Uniswap/v2-periphery/blob/master/contracts/UniswapV2Router02.sol#L224</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@amountIn</span> 输入的 token 总量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@amountOutMin</span> 要接收到的最小 token 总量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@path</span> 从输入的 token 地址到输出的 token 地址之间的路径。因此，数组的第一个元素，就输入，最后一个元素是输出，中间，如果有的话，就是路由路径。path 的长度，必须 ≥ 2。</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@to</span> 接收地址</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@deadline</span> </span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">swapExactTokensForTokens</span>(<span class="params"></span></span><br><span class="line"><span class="params">    uint amountIn,</span></span><br><span class="line"><span class="params">    uint amountOutMin,</span></span><br><span class="line"><span class="params">    address[] calldata path,</span></span><br><span class="line"><span class="params">    address to,</span></span><br><span class="line"><span class="params">    uint deadline</span></span><br><span class="line"><span class="params"></span>) external virtual override <span class="title function_">ensure</span>(deadline) returns (uint[] memory amounts) &#123;</span><br><span class="line">    <span class="comment">// 获取 token 交易路由路径下的所有额度。</span></span><br><span class="line">    <span class="comment">// 注意，这里，每次路由，都会消耗手续费。先扣掉手续费再往下算。</span></span><br><span class="line">    amounts = <span class="title class_">UniswapV2Library</span>.<span class="title function_">getAmountsOut</span>(factory, amountIn, path);</span><br><span class="line">    <span class="built_in">require</span>(amounts[amounts.<span class="property">length</span> - <span class="number">1</span>] &gt;= amountOutMin, <span class="string">&#x27;UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT&#x27;</span>);</span><br><span class="line">    <span class="comment">// 先将全额 token （amounts[0] = amountIn）转入第一个 pair </span></span><br><span class="line">    <span class="title class_">TransferHelper</span>.<span class="title function_">safeTransferFrom</span>(</span><br><span class="line">        path[<span class="number">0</span>], msg.<span class="property">sender</span>, <span class="title class_">UniswapV2Library</span>.<span class="title function_">pairFor</span>(factory, path[<span class="number">0</span>], path[<span class="number">1</span>]), amounts[<span class="number">0</span>]</span><br><span class="line">    );</span><br><span class="line">    <span class="title function_">_swap</span>(amounts, path, to);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二、计算每次路由的输入和输出（扣除手续费）"><a href="#二、计算每次路由的输入和输出（扣除手续费）" class="headerlink" title="二、计算每次路由的输入和输出（扣除手续费）"></a>二、计算每次路由的输入和输出（扣除手续费）</h3><p>这个过程，实际上会就计算好最初的用户输入额度途径每个 pair 后的输入和输出。<br>在下述代码块中的循环中，我们可以看到，每次路过一个 pair，都会扣除 0.3% 的手续费。所以，如果能够直接兑换，所付手续费是最小的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/Uniswap/v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol#L62</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getAmountsOut</span>(<span class="params">address factory, uint amountIn, address[] memory path</span>) internal view returns (uint[] memory amounts) &#123;</span><br><span class="line">    <span class="built_in">require</span>(path.<span class="property">length</span> &gt;= <span class="number">2</span>, <span class="string">&#x27;UniswapV2Library: INVALID_PATH&#x27;</span>);</span><br><span class="line">    amounts = <span class="keyword">new</span> uint[](path.<span class="property">length</span>);</span><br><span class="line">    <span class="comment">// 第一个值，是 token 的输入量。中间，是路由时需要的转换量。最后一个值，是最终的输出量。</span></span><br><span class="line">    amounts[<span class="number">0</span>] = amountIn;</span><br><span class="line">    <span class="keyword">for</span> (uint i; i &lt; path.<span class="property">length</span> - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        (uint reserveIn, uint reserveOut) = <span class="title function_">getReserves</span>(factory, path[i], path[i + <span class="number">1</span>]);</span><br><span class="line">        <span class="comment">// 转换的时候，需要花费手续费了。</span></span><br><span class="line">        amounts[i + <span class="number">1</span>] = <span class="title function_">getAmountOut</span>(amounts[i], reserveIn, reserveOut);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将输入量 amountIn 先扣除 0.3% 的手续费，再通过恒定乘积公式得到 amountOut.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset</span></span><br><span class="line"><span class="comment">// https://github.com/Uniswap/v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol#L43</span></span><br><span class="line"><span class="comment">// 给定了输入量，得到输出量。</span></span><br><span class="line"><span class="comment">// 注意，这里在计算 amountOut 的时候，amountIn 将按照 99.7% 计算，</span></span><br><span class="line"><span class="comment">// dx * 99.7%</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getAmountOut</span>(<span class="params">uint amountIn, uint reserveIn, uint reserveOut</span>) internal pure returns (uint amountOut) &#123;</span><br><span class="line">    <span class="built_in">require</span>(amountIn &gt; <span class="number">0</span>, <span class="string">&#x27;UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT&#x27;</span>);</span><br><span class="line">    <span class="built_in">require</span>(reserveIn &gt; <span class="number">0</span> &amp;&amp; reserveOut &gt; <span class="number">0</span>, <span class="string">&#x27;UniswapV2Library: INSUFFICIENT_LIQUIDITY&#x27;</span>);</span><br><span class="line">    uint amountInWithFee = amountIn.<span class="title function_">mul</span>(<span class="number">997</span>);</span><br><span class="line">    uint numerator = amountInWithFee.<span class="title function_">mul</span>(reserveOut);</span><br><span class="line">    uint denominator = reserveIn.<span class="title function_">mul</span>(<span class="number">1000</span>).<span class="title function_">add</span>(amountInWithFee);</span><br><span class="line">    amountOut = numerator / denominator;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、转账"><a href="#三、转账" class="headerlink" title="三、转账"></a>三、转账</h3><p>在第二步骤中，已经计算好了途经每个 pair 的输入和输出数量，这里，将在每个途经的 pair 中，完成转账动作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// **** SWAP ****</span></span><br><span class="line"><span class="comment">// requires the initial amount to have already been sent to the first pair</span></span><br><span class="line"><span class="comment">// https://github.com/Uniswap/v2-periphery/blob/master/contracts/UniswapV2Router02.sol#L212</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_swap</span>(<span class="params">uint[] memory amounts, address[] memory path, address _to</span>) internal virtual &#123;</span><br><span class="line">    <span class="comment">// 路由接力</span></span><br><span class="line">    <span class="keyword">for</span> (uint i; i &lt; path.<span class="property">length</span> - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        (address input, address output) = (path[i], path[i + <span class="number">1</span>]);</span><br><span class="line">        <span class="comment">// sortTokens 将地址从小到大排序，并要求地址中，不得有 零地址，否则将抛出异常，终止执行。</span></span><br><span class="line">        <span class="comment">// 为什么这里要排序呢？因为在一个 pair 中，token0 总是对应这小地址，token1 总是对应着大地址。</span></span><br><span class="line">        <span class="comment">// 需要做参数对其</span></span><br><span class="line">        (address token0,) = <span class="title class_">UniswapV2Library</span>.<span class="title function_">sortTokens</span>(input, output);</span><br><span class="line">        <span class="comment">// 第 i+1（i是从零开始的） 次路由时输出的金额。当 amounts[0] = amountIn.</span></span><br><span class="line">        uint amountOut = amounts[i + <span class="number">1</span>];</span><br><span class="line">        <span class="comment">// 确定一个 pair 中，哪一个 token 是需要被输出的，如果 input 是小地址，则其对应着 pair 中的 token0，此时需要输出的就是 token1；反之亦然。</span></span><br><span class="line">        <span class="comment">// amount0Out 最终由 pair 中的 token0 输出；amount1Out 最终由 pair 中的 token1 输出。</span></span><br><span class="line">        (uint amount0Out, uint amount1Out) = input == token0 ? (<span class="title function_">uint</span>(<span class="number">0</span>), amountOut) : (amountOut, <span class="title function_">uint</span>(<span class="number">0</span>));</span><br><span class="line">        <span class="comment">// 输出到 to 地址。其实 UniswapV2Library.pairFor(factory, output, path[path.length - 1]) = _to</span></span><br><span class="line">        address to = i &lt; path.<span class="property">length</span> - <span class="number">2</span> ? <span class="title class_">UniswapV2Library</span>.<span class="title function_">pairFor</span>(factory, output, path[i + <span class="number">2</span>]) : _to;</span><br><span class="line">        <span class="comment">// 在 pair 中，开始输出金额到 to。从第一个 pair 开始。</span></span><br><span class="line">        <span class="title class_">IUniswapV</span>2Pair(<span class="title class_">UniswapV2Library</span>.<span class="title function_">pairFor</span>(factory, input, output)).<span class="title function_">swap</span>(</span><br><span class="line">            amount0Out, amount1Out, to, <span class="keyword">new</span> <span class="title function_">bytes</span>(<span class="number">0</span>)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>真正的 swap，是在 UniswapV2Pair 中完成的。 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@amount</span>0Out 将收到的 token0 的额度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@amount</span>1Out 将收到的 token1 的额度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@to</span> 将收到的 token 发送到 to</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@data</span> </span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="comment">// this low-level function should be called from a contract which performs important safety checks</span></span><br><span class="line"><span class="comment">// https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Pair.sol#L159</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">swap</span>(<span class="params">uint amount0Out, uint amount1Out, address to, bytes calldata data</span>) external lock &#123;</span><br><span class="line">    <span class="built_in">require</span>(amount0Out &gt; <span class="number">0</span> || amount1Out &gt; <span class="number">0</span>, <span class="string">&#x27;UniswapV2: INSUFFICIENT_OUTPUT_AMOUNT&#x27;</span>);</span><br><span class="line">    <span class="comment">// 获取 pair 中，当前两种币种的金额。</span></span><br><span class="line">    (uint112 _reserve0, uint112 _reserve1,) = <span class="title function_">getReserves</span>(); <span class="comment">// gas savings</span></span><br><span class="line">    <span class="comment">// 剩余金额应能满足想要兑换金额的数量。</span></span><br><span class="line">    <span class="built_in">require</span>(amount0Out &lt; _reserve0 &amp;&amp; amount1Out &lt; _reserve1, <span class="string">&#x27;UniswapV2: INSUFFICIENT_LIQUIDITY&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    uint balance0;</span><br><span class="line">    uint balance1;</span><br><span class="line">    &#123; <span class="comment">// scope for _token&#123;0,1&#125;, avoids stack too deep errors</span></span><br><span class="line">        address _token0 = token0;</span><br><span class="line">        address _token1 = token1;</span><br><span class="line">        <span class="built_in">require</span>(to != _token0 &amp;&amp; to != _token1, <span class="string">&#x27;UniswapV2: INVALID_TO&#x27;</span>);</span><br><span class="line">        <span class="comment">// 从 _token0 向 to 转入 amount0Out</span></span><br><span class="line">        <span class="keyword">if</span> (amount0Out &gt; <span class="number">0</span>) <span class="title function_">_safeTransfer</span>(_token0, to, amount0Out); <span class="comment">// optimistically transfer tokens</span></span><br><span class="line">        <span class="comment">// 从 _token1 向 to 转入 amount0Out</span></span><br><span class="line">        <span class="keyword">if</span> (amount1Out &gt; <span class="number">0</span>) <span class="title function_">_safeTransfer</span>(_token1, to, amount1Out); <span class="comment">// optimistically transfer tokens</span></span><br><span class="line">        <span class="keyword">if</span> (data.<span class="property">length</span> &gt; <span class="number">0</span>) <span class="title class_">IUniswapV</span>2Callee(to).<span class="title function_">uniswapV2Call</span>(msg.<span class="property">sender</span>, amount0Out, amount1Out, data);</span><br><span class="line">        <span class="comment">// _token0 在 pair 中所剩下的余额</span></span><br><span class="line">        balance0 = <span class="title class_">IERC20</span>(_token0).<span class="title function_">balanceOf</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">        <span class="comment">// _token1 在 pair 中所剩下的余额</span></span><br><span class="line">        balance1 = <span class="title class_">IERC20</span>(_token1).<span class="title function_">balanceOf</span>(<span class="title function_">address</span>(<span class="variable language_">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// token0 的输入量</span></span><br><span class="line">    uint amount0In = balance0 &gt; _reserve0 - amount0Out ? balance0 - (_reserve0 - amount0Out) : <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// token1 的输入量</span></span><br><span class="line">    uint amount1In = balance1 &gt; _reserve1 - amount1Out ? balance1 - (_reserve1 - amount1Out) : <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">require</span>(amount0In &gt; <span class="number">0</span> || amount1In &gt; <span class="number">0</span>, <span class="string">&#x27;UniswapV2: INSUFFICIENT_INPUT_AMOUNT&#x27;</span>);</span><br><span class="line">    &#123; <span class="comment">// scope for reserve&#123;0,1&#125;Adjusted, avoids stack too deep errors</span></span><br><span class="line">        uint balance0Adjusted = balance0.<span class="title function_">mul</span>(<span class="number">1000</span>).<span class="title function_">sub</span>(amount0In.<span class="title function_">mul</span>(<span class="number">3</span>));</span><br><span class="line">        uint balance1Adjusted = balance1.<span class="title function_">mul</span>(<span class="number">1000</span>).<span class="title function_">sub</span>(amount1In.<span class="title function_">mul</span>(<span class="number">3</span>));</span><br><span class="line">        <span class="comment">// K 值需要满足的条件</span></span><br><span class="line">        <span class="built_in">require</span>(balance0Adjusted.<span class="title function_">mul</span>(balance1Adjusted) &gt;= <span class="title function_">uint</span>(_reserve0).<span class="title function_">mul</span>(_reserve1).<span class="title function_">mul</span>(<span class="number">1000</span>**<span class="number">2</span>), <span class="string">&#x27;UniswapV2: K&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">_update</span>(balance0, balance1, _reserve0, _reserve1);</span><br><span class="line">    emit <span class="title class_">Swap</span>(msg.<span class="property">sender</span>, amount0In, amount1In, amount0Out, amount1Out, to);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Transfer 方法如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bytes4 private constant <span class="variable constant_">SELECTOR</span> = <span class="title function_">bytes4</span>(<span class="title function_">keccak256</span>(<span class="title function_">bytes</span>(<span class="string">&#x27;transfer(address,uint256)&#x27;</span>)));</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_safeTransfer</span>(<span class="params">address token, address to, uint value</span>) private &#123;</span><br><span class="line">    (bool success, bytes memory data) = token.<span class="title function_">call</span>(abi.<span class="title function_">encodeWithSelector</span>(<span class="variable constant_">SELECTOR</span>, to, value));</span><br><span class="line">    <span class="built_in">require</span>(success &amp;&amp; (data.<span class="property">length</span> == <span class="number">0</span> || abi.<span class="title function_">decode</span>(data, (bool))), <span class="string">&#x27;UniswapV2: TRANSFER_FAILED&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、更新余额"><a href="#四、更新余额" class="headerlink" title="四、更新余额"></a>四、更新余额</h3><p>​转账完成后，更新 pair 中 token 的存量。更新完成后，​则兑换过程顺利结束。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// update reserves and, on the first call per block, price accumulators</span></span><br><span class="line"><span class="comment">// https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Pair.sol#L73</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_update</span>(<span class="params">uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1</span>) private &#123;</span><br><span class="line">    <span class="built_in">require</span>(balance0 &lt;= <span class="title function_">uint112</span>(-<span class="number">1</span>) &amp;&amp; balance1 &lt;= <span class="title function_">uint112</span>(-<span class="number">1</span>), <span class="string">&#x27;UniswapV2: OVERFLOW&#x27;</span>);</span><br><span class="line">    uint32 blockTimestamp = <span class="title function_">uint32</span>(block.<span class="property">timestamp</span> % <span class="number">2</span>**<span class="number">32</span>);</span><br><span class="line">    uint32 timeElapsed = blockTimestamp - blockTimestampLast; <span class="comment">// overflow is desired</span></span><br><span class="line">    <span class="keyword">if</span> (timeElapsed &gt; <span class="number">0</span> &amp;&amp; _reserve0 != <span class="number">0</span> &amp;&amp; _reserve1 != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// * never overflows, and + overflow is desired</span></span><br><span class="line">        price0CumulativeLast += <span class="title function_">uint</span>(<span class="title class_">UQ112</span>x112.<span class="title function_">encode</span>(_reserve1).<span class="title function_">uqdiv</span>(_reserve0)) * timeElapsed;</span><br><span class="line">        price1CumulativeLast += <span class="title function_">uint</span>(<span class="title class_">UQ112</span>x112.<span class="title function_">encode</span>(_reserve0).<span class="title function_">uqdiv</span>(_reserve1)) * timeElapsed;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 更新当前 token0 所存储的金额</span></span><br><span class="line">    reserve0 = <span class="title function_">uint112</span>(balance0);</span><br><span class="line">    <span class="comment">// 更新当前 token1 所存储的金额</span></span><br><span class="line">    reserve1 = <span class="title function_">uint112</span>(balance1);</span><br><span class="line">    blockTimestampLast = blockTimestamp;</span><br><span class="line">    emit <span class="title class_">Sync</span>(reserve0, reserve1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="​五、小结"><a href="#​五、小结" class="headerlink" title="​五、小结"></a>​五、小结</h3><p>无论是添加流动性，还是兑换过程，都是在智能合约内完成的，谓之“去中心化”，用数学构建的 “去中心化”。</p>
+<p>兑换导致价值改变，即只要兑换持续，价值波动也将一直存在，起起伏伏，谓之“无常”，市场价值的 “无常”。</p>
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://docs.uniswap.org/protocol/V2/reference/smart-contracts/router-02">Router02</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Uniswap/">Uniswap</a><a href="/tags/兑换/">兑换</a><a href="/tags/swap/">swap</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

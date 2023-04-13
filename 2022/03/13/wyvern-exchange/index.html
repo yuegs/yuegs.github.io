@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Wyvern 订单匹配协议 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文讨论 OpenSea 中使用的 Wyvern 协议 的订单匹配过程，该过程主要是用户和 Wyvern Exchange Contract 的交互。
+匹配过程围绕 买&amp;#x2F;卖双方的订单 展开。卖方创建销售订单，以固定价格或者竞拍的方式，将 NFT 挂出去；买方创建购买订单，并将卖方创建的销售订单一起，发给交换合约 Wyvern Exchange Contract。交换合约将对订单校验，校验通过后，完成两个转移：
+
+支付费用转移；
+NFT 产品转移。">
+  
+
+  
+  
+  <meta name="keywords" content="智能合约,OpenSea,Wyvern,AtomicMatch,订单">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Wyvern 订单匹配协议"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Wyvern 订单匹配协议</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/03/13/wyvern-exchange/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-03-12T16:33:20.000Z">
+          2022-03-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange.png?raw=true"></p>
+<p>本文讨论 OpenSea 中使用的 <a target="_blank" rel="noopener" href="https://wyvernprotocol.com/">Wyvern 协议</a> 的订单匹配过程，该过程主要是用户和 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#code">Wyvern Exchange Contract</a> 的交互。</p>
+<p>匹配过程围绕 <strong><strong>买&#x2F;卖双方的订单</strong></strong> 展开。卖方创建销售订单，以固定价格或者竞拍的方式，将 NFT 挂出去；买方创建购买订单，并将卖方创建的销售订单一起，发给交换合约 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#code">Wyvern Exchange Contract</a>。交换合约将对订单校验，校验通过后，完成两个转移：</p>
+<ul>
+<li>支付费用转移；</li>
+<li>NFT 产品转移。<span id="more"></span></li>
+</ul>
+<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h3><p>交易过程，主要涉及订单 Order（Order 实体&#x2F; Order 参数校验&#x2F; Order 校验），费用转移，NFT 转移，因此，本文也将按照这样的顺序展开。</p>
+<h3 id="2-订单-Order"><a href="#2-订单-Order" class="headerlink" title="2 订单(Order)"></a>2 订单(Order)</h3><h4 id="2-1-订单实体"><a href="#2-1-订单实体" class="headerlink" title="2.1 订单实体"></a>2.1 订单实体</h4><p>订单实体定义如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">struct <span class="title class_">Order</span> &#123;</span><br><span class="line">    <span class="comment">// 交换合约 Wyvern Exchange Contracrt 的地址</span></span><br><span class="line">    address exchange;</span><br><span class="line">    <span class="comment">// 订单创建者，对于卖方订单来说，是卖方账户；对于买方订单来说，是买方账户</span></span><br><span class="line">    address maker;</span><br><span class="line">    <span class="comment">// 订单另一方，即，订单参与者。对于卖单，该地址为零地址；对于买单，该地址是卖方账户地址</span></span><br><span class="line">    address taker;</span><br><span class="line">    <span class="comment">// 订单创建者需要支付的 relayerFee，这部分费用支付给了平台方</span></span><br><span class="line">    uint makerRelayerFee;</span><br><span class="line">    <span class="comment">// 订单参与方需要支付的 relayerFee，费用仍然是支付给了平台方</span></span><br><span class="line">    uint takerRelayerFee;</span><br><span class="line">    <span class="comment">// 订单创建者需要支付的协议费，这部分费用将支付给 Wyvern</span></span><br><span class="line">    uint makerProtocolFee;</span><br><span class="line">    <span class="comment">// 订单参与者方需要支付的协议费，这部分费用将支付给 Wyvern</span></span><br><span class="line">    uint takerProtocolFee;</span><br><span class="line">    <span class="comment">// 平台方费用接收账户</span></span><br><span class="line">    address feeRecipient;</span><br><span class="line">    <span class="comment">// 费用收取方法：只用支付协议费，或者是需要同时支付协议费和平台费</span></span><br><span class="line">    <span class="title class_">FeeMethod</span> feeMethod;</span><br><span class="line">    <span class="comment">// 该订单是卖方单还是买方单</span></span><br><span class="line">    <span class="title class_">SaleKindInterface</span>.<span class="property">Side</span> side;</span><br><span class="line">    <span class="comment">// 销售方式是固定价格，还是采用竞拍的方式</span></span><br><span class="line">    <span class="title class_">SaleKindInterface</span>.<span class="property">SaleKind</span> saleKind;</span><br><span class="line">    <span class="comment">// 需要借助该账户，完成 NFT 转移</span></span><br><span class="line">    address target;</span><br><span class="line">    <span class="comment">// 调用方式是 call 还是 delegatecall</span></span><br><span class="line">    <span class="title class_">AuthenticatedProxy</span>.<span class="property">HowToCall</span> howToCall;</span><br><span class="line">    <span class="comment">// target 执行时的 calldata</span></span><br><span class="line">    bytes calldata;</span><br><span class="line">    <span class="comment">/* Calldata replacement pattern, or an empty byte array for no replacement. */</span></span><br><span class="line">    bytes replacementPattern;</span><br><span class="line">    <span class="comment">// 静态调用（不修改状态）的 target 账户地址；为 0 表示没有这种调用</span></span><br><span class="line">    address staticTarget;</span><br><span class="line">    <span class="comment">// 静态调用时设置的额外数据，最终交给 staticTarget 处理</span></span><br><span class="line">    bytes staticExtradata;</span><br><span class="line">    <span class="comment">// 该地址为 0 ，表示使用 ether 支付，否则，表示使用一个 erc20 token 支付</span></span><br><span class="line">    address paymentToken;</span><br><span class="line">    <span class="comment">/* Base price of the order (in paymentTokens). */</span></span><br><span class="line">    <span class="comment">// 如果是 saleKind 固定价格，则该值就表示固定价格；否则，真正的价格，还包括 extra 部分. 价格单位为 Wei</span></span><br><span class="line">    uint basePrice;</span><br><span class="line">    <span class="comment">// 竞拍方式下，extra 表示需要额外的最大值. 价格单位为 Wei</span></span><br><span class="line">    uint extra;</span><br><span class="line">    <span class="comment">// 挂单时间</span></span><br><span class="line">    uint listingTime;</span><br><span class="line">    <span class="comment">// 订单过期失效时间</span></span><br><span class="line">    uint expirationTime;</span><br><span class="line">    <span class="comment">// 给订单加盐，防止 hash 重复</span></span><br><span class="line">    uint salt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在订单中，根据销售方式不同，订单中销售价格的确定流程为：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-order-price.png?raw=true"></p>
+<p>由于在卖单&#x2F;买单中，都会存在价格计算，因此，<strong><strong>最终最后的价格结算</strong></strong>，是根据下述流程过程的：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-order-final-price.png?raw=true"></p>
+<p><strong><strong>注意，最终的出来的价格，就是会转给卖家的价格。<br>但是，protocolFee 和 relayerFee 都并不包含在这个价格里，这两个费用由买卖双方根据订单中的相关记录自己出。对于每一种 fee，卖家订单中订单中 feeRecipient 为有效地址，卖家需要支付 makerRelayerFee 给 feeRecipient，买家需要支付 takerRelayerFee 给 feeRecipient，反之亦然。对于 protocolFee，逻辑亦是如此。</strong></strong><br><strong><strong>实际上，在 OpenSea 的实践中，卖方 feeRecipient 为合法地址，makerRelayerFee 为 250，takerRelayerFee 为 0，因此，只有卖方支付了 relayerFee 给 OpenSea，支付的金额是其收入的 2.5%。买方没有其它额外支付。</strong></strong></p>
+<h4 id="2-2-订单构建"><a href="#2-2-订单构建" class="headerlink" title="2.2 订单构建"></a>2.2 订单构建</h4><p>用户在与 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#code">Wyvern Exchange Contract</a> 交互，需要完成订单匹配时，需要将 买&#x2F;卖 双方的订单都传递给交互合约。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">atomicMatch_</span>(<span class="params"></span></span><br><span class="line"><span class="params">        address[<span class="number">14</span>] addrs,uint[<span class="number">18</span>] uints,uint8[<span class="number">8</span>] feeMethodsSidesKindsHowToCalls,bytes calldataBuy,bytes calldataSell,bytes replacementPatternBuy,bytes replacementPatternSell,bytes staticExtradataBuy,bytes staticExtradataSell,uint8[<span class="number">2</span>] vs,bytes32[<span class="number">5</span>] rssMetadata</span>)</span><br><span class="line">    public</span><br><span class="line">    payable</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">atomicMatch</span>(</span><br><span class="line">            <span class="comment">// 买单</span></span><br><span class="line">            <span class="title class_">Order</span>(addrs[<span class="number">0</span>], addrs[<span class="number">1</span>], addrs[<span class="number">2</span>], uints[<span class="number">0</span>], uints[<span class="number">1</span>], uints[<span class="number">2</span>], uints[<span class="number">3</span>], addrs[<span class="number">3</span>], <span class="title class_">FeeMethod</span>(feeMethodsSidesKindsHowToCalls[<span class="number">0</span>]), <span class="title class_">SaleKindInterface</span>.<span class="title class_">Side</span>(feeMethodsSidesKindsHowToCalls[<span class="number">1</span>]), <span class="title class_">SaleKindInterface</span>.<span class="title class_">SaleKind</span>(feeMethodsSidesKindsHowToCalls[<span class="number">2</span>]), addrs[<span class="number">4</span>], <span class="title class_">AuthenticatedProxy</span>.<span class="title class_">HowToCall</span>(feeMethodsSidesKindsHowToCalls[<span class="number">3</span>]), calldataBuy, replacementPatternBuy, addrs[<span class="number">5</span>], staticExtradataBuy, <span class="title class_">ERC20</span>(addrs[<span class="number">6</span>]), uints[<span class="number">4</span>], uints[<span class="number">5</span>], uints[<span class="number">6</span>], uints[<span class="number">7</span>], uints[<span class="number">8</span>]),</span><br><span class="line">            <span class="comment">// 签名</span></span><br><span class="line">            <span class="title class_">Sig</span>(vs[<span class="number">0</span>], rssMetadata[<span class="number">0</span>], rssMetadata[<span class="number">1</span>]),</span><br><span class="line">            <span class="comment">// 卖单</span></span><br><span class="line">            <span class="title class_">Order</span>(addrs[<span class="number">7</span>], addrs[<span class="number">8</span>], addrs[<span class="number">9</span>], uints[<span class="number">9</span>], uints[<span class="number">10</span>], uints[<span class="number">11</span>], uints[<span class="number">12</span>], addrs[<span class="number">10</span>], <span class="title class_">FeeMethod</span>(feeMethodsSidesKindsHowToCalls[<span class="number">4</span>]), <span class="title class_">SaleKindInterface</span>.<span class="title class_">Side</span>(feeMethodsSidesKindsHowToCalls[<span class="number">5</span>]), <span class="title class_">SaleKindInterface</span>.<span class="title class_">SaleKind</span>(feeMethodsSidesKindsHowToCalls[<span class="number">6</span>]), addrs[<span class="number">11</span>], <span class="title class_">AuthenticatedProxy</span>.<span class="title class_">HowToCall</span>(feeMethodsSidesKindsHowToCalls[<span class="number">7</span>]), calldataSell, replacementPatternSell, addrs[<span class="number">12</span>], staticExtradataSell, <span class="title class_">ERC20</span>(addrs[<span class="number">13</span>]), uints[<span class="number">13</span>], uints[<span class="number">14</span>], uints[<span class="number">15</span>], uints[<span class="number">16</span>], uints[<span class="number">17</span>]),</span><br><span class="line">            <span class="comment">// 签名</span></span><br><span class="line">            <span class="title class_">Sig</span>(vs[<span class="number">1</span>], rssMetadata[<span class="number">2</span>], rssMetadata[<span class="number">3</span>]),</span><br><span class="line">            rssMetadata[<span class="number">4</span>]</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-订单校验"><a href="#2-3-订单校验" class="headerlink" title="2.3 订单校验"></a>2.3 订单校验</h4><p>订单校验，可以分为参数校验和订单合法性校验。<br>参数校验过程如下：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-order-params-check.png?raw=true"></p>
+<p>订单合法性校验过程如下：</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-order-check.png?raw=true"></p>
+<p>可以看到，合法性校验包含了参数校验。<br>这两种校验方式，分别用于两种不同的场景，如果交易发起者是买家，买家只需要进行参数校验，反之，需要进行合法性校验，验证订单的签名。<br>这是一种减少不必要 gas 消耗的过程。</p>
+<h3 id="3-费用支付"><a href="#3-费用支付" class="headerlink" title="3 费用支付"></a>3 费用支付</h3><p>费用是由卖单中的 <code>feeMethod</code> 指定的，收取方式有两种：</p>
+<ul>
+<li><strong><strong>SplitFee：</strong></strong> 根据卖方或者买方中的订单记录（二选一），买卖双方按照卖方订单中指定的支付币种（ether 或 erc20 token）各自支付 RelayerFee 给订单指定的 FeeRecipient，由买卖双方各自支付 ProtocolFee 给交易合约（<a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#readContract">Wyvern Exchange Contract</a>）中指定的 protocolFeeRecipient.</li>
+<li><strong><strong>ProtocolFee：</strong></strong> 根据卖方或者买方中的订单记录，使用交易合约中指定的 exchangeToken 支付</li>
+</ul>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-relayer-fee.png?raw=true"></p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-protocol-fee.png?raw=true"></p>
+<p>在 OpenSea 平台上，makerRelayerFee 为 250，且只是从卖家收入中扣除，因此，其收入为交易额度的 2.5%，protocolFee 为 0，暂时还是没有给 Wyvern 协议费。</p>
+<h3 id="4-交易转账"><a href="#4-交易转账" class="headerlink" title="4 交易转账"></a>4 交易转账</h3><p>NFT 交易需要转账。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-pay.png?raw=true"></p>
+<h3 id="5-NFT-转移"><a href="#5-NFT-转移" class="headerlink" title="5 NFT 转移"></a>5 NFT 转移</h3><p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange-match.png?raw=true"></p>
+<p>参考链接：<br><a target="_blank" rel="noopener" href="https://wyvernprotocol.com/docs/protocol-components#authorizing-an-order">Wyvern 官网关于授权订单的介绍</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a><a href="/tags/OpenSea/">OpenSea</a><a href="/tags/Wyvern/">Wyvern</a><a href="/tags/AtomicMatch/">AtomicMatch</a><a href="/tags/订单/">订单</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

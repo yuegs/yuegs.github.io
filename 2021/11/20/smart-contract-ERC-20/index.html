@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>TokenMintERC20Token | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文主要介绍 SHIBA INU 合约。该合约是一个简单的 ERC20 代币合约。目前，本文包括两部分：
+
+第一部分是 SafeMath 库 ，包含了基础算术运算。
+第二部分，是合约中出现的主要函数。">
+  
+
+  
+  
+  <meta name="keywords" content="智能合约">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="TokenMintERC20Token"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>TokenMintERC20Token</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/11/20/smart-contract-ERC-20/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-11-19T17:28:01.000Z">
+          2021-11-20
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文主要介绍 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce#code">SHIBA INU 合约</a>。<br>该合约是一个简单的 ERC20 代币合约。<br>目前，本文包括两部分：</p>
+<ul>
+<li>第一部分是 SafeMath 库 ，包含了基础算术运算。</li>
+<li>第二部分，是合约中出现的主要函数。</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="SafeMath"><a href="#SafeMath" class="headerlink" title="SafeMath"></a>SafeMath</h3><p>SafeMath 是一个在合约中定义的库。在 SHIB 合约中，它被实现为对基本算术：加减乘除的安全操作。并且，这些操作将被应用在所有 uint256 变量上。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">library <span class="title class_">SafeMath</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">add</span>(<span class="params">uint256 a, uint256 b</span>) internal pure returns (uint256) &#123;</span><br><span class="line">        uint256 c = a + b;</span><br><span class="line">        <span class="built_in">require</span>(c &gt;= a, <span class="string">&quot;SafeMath: addition overflow&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">sub</span>(<span class="params">uint256 a, uint256 b</span>) internal pure returns (uint256) &#123;</span><br><span class="line">        <span class="built_in">require</span>(b &lt;= a, <span class="string">&quot;SafeMath: subtraction overflow&quot;</span>);</span><br><span class="line">        uint256 c = a - b;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">      </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mul</span>(<span class="params">uint256 a, uint256 b</span>) internal pure returns (uint256) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        uint256 c = a * b;</span><br><span class="line">        <span class="built_in">require</span>(c / a == b, <span class="string">&quot;SafeMath: multiplication overflow&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">div</span>(<span class="params">uint256 a, uint256 b</span>) internal pure returns (uint256) &#123;</span><br><span class="line">        <span class="built_in">require</span>(b &gt; <span class="number">0</span>, <span class="string">&quot;SafeMath: division by zero&quot;</span>);</span><br><span class="line">        uint256 c = a / b;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mod</span>(<span class="params">uint256 a, uint256 b</span>) internal pure returns (uint256) &#123;</span><br><span class="line">        <span class="built_in">require</span>(b != <span class="number">0</span>, <span class="string">&quot;SafeMath: modulo by zero&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> a % b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码可知，一旦不满足计算需求（require），将抛出异常，终止合约执行。</p>
+<p>根据 <a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.5.9/contracts.html#libraries">官方文档</a>，库和合约类似，但是它的目的，被定位为一次部署，其它代码复用（使用 EVM 的消息调用特性完成调用）。这就意味着，库中函数的调用，是执行在调用合约的上下文环境中，也因此，其中的 <code>this</code> 是指向调用合约（calling contract）。<br>库中的函数，应是无状态的（stateless）,因此，即为 <code>view</code> 或者 <code>pure</code>，它不修改状态。<br>同时，它还具有以下特性：</p>
+<ul>
+<li>无法被继承也无法继承</li>
+<li>不能发送 eth</li>
+<li>无法被销毁</li>
+</ul>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="totalSupply-gt-uint256"><a href="#totalSupply-gt-uint256" class="headerlink" title="totalSupply() -&gt; uint256"></a>totalSupply() -&gt; uint256</h4><p>现存的 token 总量。这个函数是一个 getter 方法，因此不会修改合约状态。需要注意的是，在 Solidity 中没有浮点（早期版本），因此，对于一个采用了 18位小数精度的 token，返回值 1000000000000000000 代表 1 个 token。<br>如果合约允许，total supply 是可变的。比如，你可以挖出新的 token，这时，total supply 就是增加的，如果你销毁了部分 token，此时 total supply 将减少相应的数额。<br>一种另类的销毁 token 的方式，是将 token 发送到一个不知道私钥的账户地址，比如 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x0000000000000000000000000000000000000000">0 地址</a>，这种方式和销毁有着相同的功效，但是，其并不会使 token 的总量变少。</p>
+<h4 id="balanceOf-address-account-→-uint256"><a href="#balanceOf-address-account-→-uint256" class="headerlink" title="balanceOf(address account) → uint256"></a>balanceOf(address account) → uint256</h4><p>获取指定账户所拥有的 token 量。只要有 address，都可以查询该地址所拥有的 token，所有数据都公开在区块链上。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">mapping</span>(<span class="function"><span class="params">address</span> =&gt;</span> uint256) private _balances;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">balanceOf</span>(<span class="params">address account</span>) public view returns (uint256) &#123;</span><br><span class="line">    <span class="keyword">return</span> _balances[account];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="transfer-address-recipient-uint256-amount-→-bool"><a href="#transfer-address-recipient-uint256-amount-→-bool" class="headerlink" title="transfer(address recipient, uint256 amount) → bool"></a>transfer(address recipient, uint256 amount) → bool</h4><p>从调用者处转移指定 <code>amount</code> 的 token 给 <code>recipient</code>。如果转账成功，将返回 true。需要注意的是，该方法不会检查接收地址的有效性。<strong><strong>换句话说，任何 40 个十六进制字符，都是合法地址。转账时，也不会验证接收方是否存在。</strong></strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">transfer</span>(<span class="params">address recipient, uint256 amount</span>) public returns (bool) &#123;</span><br><span class="line">    <span class="title function_">_transfer</span>(msg.<span class="property">sender</span>, recipient, amount);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_transfer</span>(<span class="params">address sender, address recipient, uint256 amount</span>) internal &#123;</span><br><span class="line">    <span class="built_in">require</span>(sender != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;ERC20: transfer from the zero address&quot;</span>);</span><br><span class="line">    <span class="built_in">require</span>(recipient != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;ERC20: transfer to the zero address&quot;</span>);</span><br><span class="line"></span><br><span class="line">    _balances[sender] = _balances[sender].<span class="title function_">sub</span>(amount);  <span class="comment">// sender 余额减少 amount</span></span><br><span class="line">    _balances[recipient] = _balances[recipient].<span class="title function_">add</span>(amount);<span class="comment">// recipient 余额增加 amount </span></span><br><span class="line">    emit <span class="title class_">Transfer</span>(sender, recipient, amount);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="approve-address-spender-uint256-amount-→-bool"><a href="#approve-address-spender-uint256-amount-→-bool" class="headerlink" title="approve(address spender, uint256 amount) → bool"></a>approve(address spender, uint256 amount) → bool</h4><p>调用者（委托方）给 spender 授权 <code>amount</code> 数量的 token（限额），使得 spender 作为受托方可以从委托方账户中完成最多 <code>amount</code> 数量的交易给其它第三方。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">approve</span>(<span class="params">address spender, uint256 value</span>) public returns (bool) &#123;</span><br><span class="line">    <span class="title function_">_approve</span>(msg.<span class="property">sender</span>, spender, value);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_approve</span>(<span class="params">address owner, address spender, uint256 value</span>) internal &#123;</span><br><span class="line">    <span class="built_in">require</span>(owner != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;ERC20: approve from the zero address&quot;</span>);</span><br><span class="line">    <span class="built_in">require</span>(spender != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;ERC20: approve to the zero address&quot;</span>);</span><br><span class="line"></span><br><span class="line">    _allowances[owner][spender] = value;</span><br><span class="line">    emit <span class="title class_">Approval</span>(owner, spender, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><strong>从上述关系中，我们可以知道这种授权关系，其实是记录在 <code>_allowances</code> map 中，其建立了所有从 <code>owner</code> 到 <code>spender</code> 的授权额度。</strong></strong>而且，这个额度也是可以调整的，下面将进行介绍。</p>
+<h4 id="allowance-address-owner-address-spender-→-uint256"><a href="#allowance-address-owner-address-spender-→-uint256" class="headerlink" title="allowance(address owner, address spender) → uint256"></a>allowance(address owner, address spender) → uint256</h4><p>查询当前 <code>owner</code> 授权给 <code>sender</code> token 的数量。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询某个地址的授权额度</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">allowance</span>(<span class="params">address owner, address spender</span>) public view virtual override returns (uint256) &#123;</span><br><span class="line">    <span class="keyword">return</span> _allowances[owner][spender];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 增加对 spender 的授权额度</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">increaseAllowance</span>(<span class="params">address spender, uint256 addedValue</span>) public returns (bool) &#123;</span><br><span class="line">    <span class="title function_">_approve</span>(msg.<span class="property">sender</span>, spender, _allowances[msg.<span class="property">sender</span>][spender].<span class="title function_">add</span>(addedValue));</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 减少对 spender 的授权额度</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">decreaseAllowance</span>(<span class="params">address spender, uint256 subtractedValue</span>) public returns (bool) &#123;</span><br><span class="line">    <span class="title function_">_approve</span>(msg.<span class="property">sender</span>, spender, _allowances[msg.<span class="property">sender</span>][spender].<span class="title function_">sub</span>(subtractedValue));</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="transferFrom-address-sender-address-recipient-uint256-amount-→-bool"><a href="#transferFrom-address-sender-address-recipient-uint256-amount-→-bool" class="headerlink" title="transferFrom(address sender, address recipient, uint256 amount) → bool"></a>transferFrom(address sender, address recipient, uint256 amount) → bool</h4><p>approve 调用完成了委托方向受托方的 token 定量授权。此后，受托方调用合约中的 transferFrom 方法，帮助委托方完成交易。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">transferFrom</span>(<span class="params">address sender, address recipient, uint256 amount</span>) public returns (bool) &#123;</span><br><span class="line">    <span class="comment">// 从 sender 转账 amount 给 recipient，当前，前提是 sender 有超过 amount 数量的 token</span></span><br><span class="line">    <span class="title function_">_transfer</span>(sender, recipient, amount);   </span><br><span class="line">    <span class="comment">// 减少 msg.sender 的授权额度，如果授权额度在此之前已经用完，整个交易会回滚</span></span><br><span class="line">    <span class="title function_">_approve</span>(sender, msg.<span class="property">sender</span>, _allowances[sender][msg.<span class="property">sender</span>].<span class="title function_">sub</span>(amount));  </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>approve/transferFrom</code> 机制，主要解决 三方 之间的转账问题。有时，发送者希望授权第二方能够代表他完成有限数量 token 的转移。</p>
+<p>举个例子：</p>
+<ul>
+<li>调用 <code>X合约</code>(我随便定义的一个合约，以和 <code>Uniswap合约</code> 对比)中 <code>approve</code> 方法将允许 <code>Uniswap合约</code> 在自己账户中转移出 N 个 token</li>
+<li>此时，可以调用 <code>Uniswap 合约</code> 中的 <strong><strong>兑换</strong></strong>函数，兑换一些 ETH。该函数将自动调用 <code>X合约</code> 中的 <code>transferFrom</code> 函数，实现从你的账户中转移出 N 个 token ，并将对应的 ETH 转入到你的账户。所有上述过程，将发生在同一个交易中。</li>
+</ul>
+<h4 id="burn-address-account-uint256-amount-internal"><a href="#burn-address-account-uint256-amount-internal" class="headerlink" title="_burn(address account, uint256 amount) internal"></a>_burn(address account, uint256 amount) internal</h4><p>该方法也不属于标准的 ERC20 协议。账户销毁指定 amount 的 token。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">_burn</span>(<span class="params">address account, uint256 value</span>) internal &#123;</span><br><span class="line">    <span class="built_in">require</span>(account != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;ERC20: burn from the zero address&quot;</span>);</span><br><span class="line">    <span class="comment">// 供应总量减少</span></span><br><span class="line">    _totalSupply = _totalSupply.<span class="title function_">sub</span>(value);</span><br><span class="line">    <span class="comment">// 账户 token 减少</span></span><br><span class="line">    _balances[account] = _balances[account].<span class="title function_">sub</span>(value);</span><br><span class="line">    emit <span class="title class_">Transfer</span>(account, <span class="title function_">address</span>(<span class="number">0</span>), value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="burnFrom-address-account-uint256-amount-internal"><a href="#burnFrom-address-account-uint256-amount-internal" class="headerlink" title="_burnFrom(address account, uint256 amount) internal"></a>_burnFrom(address account, uint256 amount) internal</h4><p>减少 <code>sender</code> 的授权额度，并将这个额度销毁。其实是 <code>_burn</code> 和 <code>_approve</code> 的结合，二合一，减少外部调用次数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">_burnFrom</span>(<span class="params">address account, uint256 amount</span>) internal &#123;</span><br><span class="line">    <span class="title function_">_burn</span>(account, amount);</span><br><span class="line">    <span class="title function_">_approve</span>(account, msg.<span class="property">sender</span>, _allowances[account][msg.<span class="property">sender</span>].<span class="title function_">sub</span>(amount));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="burn-uint256-value-public"><a href="#burn-uint256-value-public" class="headerlink" title="burn(uint256 value) public"></a>burn(uint256 value) public</h4><p>外部真正暴露的 burn 函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">burn</span>(<span class="params">uint256 value</span>) public &#123;</span><br><span class="line">  <span class="title function_">_burn</span>(msg.<span class="property">sender</span>, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="mint-address-account-uint256-amount-internal"><a href="#mint-address-account-uint256-amount-internal" class="headerlink" title="_mint(address account, uint256 amount) internal"></a>_mint(address account, uint256 amount) internal</h4><p>与 <code>_burn</code> 相对立的函数。同样的，其不仅仅给某个账户新增加了 <code>amount</code> 的token，同时还将增量同步到了 <code>_totalSupply</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">_mint</span>(<span class="params">address account, uint256 amount</span>) internal &#123;</span><br><span class="line">    <span class="built_in">require</span>(account != <span class="title function_">address</span>(<span class="number">0</span>), <span class="string">&quot;ERC20: mint to the zero address&quot;</span>);</span><br><span class="line">    <span class="comment">// 供应总量增加</span></span><br><span class="line">    _totalSupply = _totalSupply.<span class="title function_">add</span>(amount);</span><br><span class="line">    <span class="comment">// 账户 token 增加</span></span><br><span class="line">    _balances[account] = _balances[account].<span class="title function_">add</span>(amount);</span><br><span class="line">    emit <span class="title class_">Transfer</span>(<span class="title function_">address</span>(<span class="number">0</span>), account, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">constructor</span>(<span class="params">string memory name, string memory symbol, uint8 decimals, uint256 totalSupply, address payable feeReceiver, address tokenOwnerAddress</span>) public payable &#123;</span><br><span class="line">  _name = name;</span><br><span class="line">  _symbol = symbol;</span><br><span class="line">  _decimals = decimals;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set tokenOwnerAddress as owner of all tokens</span></span><br><span class="line">  <span class="comment">// 将总供应量转移到指定地址 tokenOwnerAddress</span></span><br><span class="line">  <span class="title function_">_mint</span>(tokenOwnerAddress, totalSupply);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// pay the service fee for contract deployment</span></span><br><span class="line">  feeReceiver.<span class="title function_">transfer</span>(msg.<span class="property">value</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://jeancvllr.medium.com/solidity-tutorial-all-about-libraries-762e5a3692f9">Solidity Tutorial: all about Libraries</a></p>
+<p><a target="_blank" rel="noopener" href="https://ethereum.org/en/developers/tutorials/understand-the-erc-20-token-smart-contract/">UNDERSTAND THE ERC-20 TOKEN SMART CONTRACT</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@jgm.orinoco/understanding-erc-20-token-contracts-a809a7310aa5">understanding-erc-20-token-contracts</a></p>
+<p><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/90708/sending-a-transaction-to-a-non-existent-address">Sending a transaction to a non-existent address</a></p>
+<p><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/91609/what-is-the-use-case-of-transferfrom-function-in-erc20-token-contract">What is the use case of transferFrom function in ERC20 token contract?</a></p>
+<p><a target="_blank" rel="noopener" href="https://ethereum.stackexchange.com/questions/46457/send-tokens-using-approve-and-transferfrom-vs-only-transfer">Send tokens using approve and transferFrom vs only transfer</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol">ERC20.sol</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

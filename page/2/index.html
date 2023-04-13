@@ -1,0 +1,724 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 2 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/03/28/nft-lazy-minting/"><span>Lazy minting</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/03/28/nft-lazy-minting/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-03-28T15:33:20.000Z">
+          2022-03-28
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇译文，<a target="_blank" rel="noopener" href="https://nftschool.dev/tutorial/lazy-minting/#how-it-works">原文在此</a>。<br>在区块链主网络上铸造 NFT 通常需要消耗一些资金，在链上写入数据，你需要为算力和存储消耗支付费用。这对于 NFT 创建者而言，实际上是一个阻力，特别是对那些不想投入太多资金的创作者，他们甚至不知道这些 NFT 是否可以被销售出去。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/03/28/nft-lazy-minting/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Lazy-minting/">Lazy minting</a><a href="/tags/NFT/">NFT</a><a href="/tags/EIP712/">EIP712</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/03/13/wyvern-exchange/"><span>Wyvern 订单匹配协议</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/03/13/wyvern-exchange/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-03-12T16:33:20.000Z">
+          2022-03-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-exchange/wyvern-exchange.png?raw=true"></p>
+<p>本文讨论 OpenSea 中使用的 <a target="_blank" rel="noopener" href="https://wyvernprotocol.com/">Wyvern 协议</a> 的订单匹配过程，该过程主要是用户和 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#code">Wyvern Exchange Contract</a> 的交互。</p>
+<p>匹配过程围绕 <strong><strong>买&#x2F;卖双方的订单</strong></strong> 展开。卖方创建销售订单，以固定价格或者竞拍的方式，将 NFT 挂出去；买方创建购买订单，并将卖方创建的销售订单一起，发给交换合约 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x7f268357a8c2552623316e2562d90e642bb538e5#code">Wyvern Exchange Contract</a>。交换合约将对订单校验，校验通过后，完成两个转移：</p>
+<ul>
+<li>支付费用转移；</li>
+<li>NFT 产品转移。
+        
+          <p><a class="excerpt-btn" href="/2022/03/13/wyvern-exchange/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a><a href="/tags/OpenSea/">OpenSea</a><a href="/tags/Wyvern/">Wyvern</a><a href="/tags/AtomicMatch/">AtomicMatch</a><a href="/tags/订单/">订单</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/03/08/wyvern-proxy/"><span>Wyvern 代理注册协议</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/03/08/wyvern-proxy/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-03-08T14:45:28.000Z">
+          2022-03-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/wyvern-registry/wyvern-registry.png?raw=true"><br>OpenSea 使用了 <a target="_blank" rel="noopener" href="https://wyvernprotocol.com/">Wyvern</a> 协议。协议内容，主要包括了代理注册部分和交换部分。本文主要展开分析 OpenSea 所使用的 <a target="_blank" rel="noopener" href="https://etherscan.io/address/0xa5409ec958c83c3f309868babaca7c86dcb077c1#code">代理注册部分</a>。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/03/08/wyvern-proxy/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a><a href="/tags/Wyvern/">Wyvern</a><a href="/tags/ProxyRegistry/">ProxyRegistry</a><a href="/tags/注册/">注册</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/02/20/solidity-type-ref/"><span>Solidity-引用类型</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/20/solidity-type-ref/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-20T10:35:08.000Z">
+          2022-02-20
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/solidity-ref/solidity-reference.png?raw=true"></p>
+<p>所谓引用类型，实际上是提供了一个指向内容的指针赋值给引用类型的变量。这么做的原因，在于其数据内容本身就是复合类型的，不像内置的基础类型，是可以直接表达出来的。</p>
+<p>对于引用类型的变量，在进行参数传递或者变量赋值的时候，会存在这样一个问题：传递过去的到底是这个值的拷贝还是这个值的引用。其造成的影响就是，修改传递过去的内容是否会对原内容产生影响。</p>
+<p>因此，本节讨论的主题就是：引用类型有哪些？影响其深拷贝的因素有哪些？删除时需要注意什么。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/20/solidity-type-ref/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/storage/">storage</a><a href="/tags/mapping/">mapping</a><a href="/tags/array/">array</a><a href="/tags/struct/">struct</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/02/17/ipfs-gc-pin/"><span>IPFS 垃圾回收和持久化存储</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/17/ipfs-gc-pin/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-17T07:45:12.000Z">
+          2022-02-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/pin-gc/ipfs-gc.jpg?raw=true"></p>
+<p>IPFS 节点默认将其 存储的数据 当作一种缓存。这就意味着它其实并不保证数据的持久化。资源总是有限的，是需要维护的，在条件具备的情况下，它会进行垃圾回收。</p>
+<p>但同时，有些数据我们是不希望按照 gc 规则回收的，这是就需要将这些数据 <code>pin</code> 在节点上。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/17/ipfs-gc-pin/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/IPFS/">IPFS</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/IPFS/">IPFS</a><a href="/tags/CID/">CID</a><a href="/tags/GC/">GC</a><a href="/tags/PIN/">PIN</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/02/16/smart-contract-erc721/"><span>ERC 721 协议解析</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/16/smart-contract-erc721/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-16T14:43:00.000Z">
+          2022-02-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/erc721-func/nft-min.png?raw=true"></p>
+<p>ERC 721 是非同质化通证（token） NFT 的实现标准。<br>非同质化，意味着它是唯一的，不可替代的，比如区块链应用里的一块土地&#x2F;一首歌&#x2F;一张图&#x2F;一段话，甚至你也可以将现实世界里的物理资产 token 化，它还可以代表一辆车&#x2F;一间房。</p>
+<p>相较于 ERC 20 这种同质化通证的标准，ERC 721 协议必然更加复杂，通常会由若干个合约组成。分开来看，每个合约都定义一定的职责或者功能，组合起来，共同完成 NFT 的实现和管理。</p>
+<p>接下来，我们来讨论其在 <strong><strong>OpenZeppelin 中的实现</strong></strong>。<br>@openzeppelin 版本 <a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/tree/v4.5.0">4.5.0</a></p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/16/smart-contract-erc721/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/NFT/">NFT</a><a href="/tags/ERC721/">ERC721</a><a href="/tags/ERC721Metadata/">ERC721Metadata</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/02/13/truffle-quickstart/"><span>Truffle 快速开始</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/13/truffle-quickstart/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-13T00:51:12.000Z">
+          2022-02-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/truffle-quick/truffle-icon.png?raw=true"></p>
+<p>Truffle 是一个合约部署、管理工具。本文，将结合<a target="_blank" rel="noopener" href="https://www.trufflesuite.com/docs/truffle/quickstart">官网</a>的描述和自己的理解，使用 Truffle 快速完成合约的部署（到本地网络和以太坊测试网络）。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/13/truffle-quickstart/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/truffle/">truffle</a><a href="/tags/metacoin/">metacoin</a><a href="/tags/Ganache/">Ganache</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/02/12/ipfs-guide/"><span>IPFS 概述</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/12/ipfs-guide/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-12T06:51:12.000Z">
+          2022-02-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ipfs/first-meet/node-ex.jpg?raw=true"></p>
+<p>去中心化也许会成为未来的主题，但是，但是我觉得应该也不会实现真正的“去中心化”。<br>虽然节点的地位是平等的，依照现有的思路，节点群体在决策时，仍然无法保证它百分百就是对的，大部分节点仍然可能会被把持在某些手中，形成较大的决策影响力，当然，这种影响力有限，也不是绝对的。</p>
+<p>回到正题，IPFS 正是一种去中心化的分布式文件存储系统，它的出现，将会对基于 C&#x2F;S 模式和地址寻址的中心化文件访问策略带来一定的挑战。</p>
+<p>本文中，将对 IPFS 的运行原理做一个综述。由于并没有阅读源码，内容上主要来自于基于对网络 IPFS 上的描述的理解。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/12/ipfs-guide/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/IPFS/">IPFS</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/IPFS/">IPFS</a><a href="/tags/IPNS/">IPNS</a><a href="/tags/CID/">CID</a><a href="/tags/Bitswap/">Bitswap</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/02/08/ipfs-gateway/"><span>IPFS 网关(一)</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/08/ipfs-gateway/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-08T15:59:00.000Z">
+          2022-02-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本篇是一篇译文，原文<a target="_blank" rel="noopener" href="https://docs.ipfs.io/concepts/ipfs-gateway/#overview">IPFS Gateway</a>。<br>本篇是翻译 IPFS 网关的第一部分，主要描述网关提供者和所提供的网关类型。</p>
+<p>说到网关，这里想补充几句，它就像是一座桥梁，或者一道门，连接着两个体系，从 HTTP 网络到 IPFS 网络。它不负责存储，而是进行转发，甚至包装后再转发，是一个不同协议之间的转换器，适配器。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/08/ipfs-gateway/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/IPFS/">IPFS</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/IPFS/">IPFS</a><a href="/tags/Gateway/">Gateway</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/01/25/uniswap-analysis/"><span>Uniswap V2-公式分析</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/01/25/uniswap-analysis/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-01-25T00:02:00.000Z">
+          2022-01-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-analysis/uniswapv2-formula.png?raw=true"><br>本节，对 Uniswap V2 版本中，出现的各类公式做一总结。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/01/25/uniswap-analysis/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Uniswap/">Uniswap</a><a href="/tags/恒定乘积/">恒定乘积</a><a href="/tags/公式/">公式</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/" class="pagination-prev">Prev</a>
+  
+  
+  <a href="/page/3/" class="pagination-next">Next</a>
+  
+</nav>
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2023 YueGS
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>

@@ -10,12 +10,13 @@
   
 
   
-  <meta name="description" content="LangChain 初次见面。">
+  <meta name="description" content="随着 OpenAI 的兴起，LLM 仿佛是在一夜之间，忽然闯入到普通人的生活。我们该如何和它对话，如何把它带入到这个现实世界，类似 LangChain 这样的框架，或许给我们提供了一整套的解决方案。
+LangChain 初次见面，这里，先去认识它的基本概念。">
   
 
   
   
-  <meta name="keywords" content="">
+  <meta name="keywords" content="LangChain,OpenAI,LLM">
   
 
   <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
@@ -85,21 +86,24 @@
   <div class="article-content">
     <div class="entry">
       
-        <p>LangChain 初次见面。</p>
+        <p><img src="https://images.kinorium.com/movie/shot/151475/w1500_237680.jpg"></p>
+<p>随着 OpenAI 的兴起，LLM 仿佛是在一夜之间，忽然闯入到普通人的生活。我们该如何和它对话，如何把它带入到这个现实世界，类似 LangChain 这样的框架，或许给我们提供了一整套的解决方案。</p>
+<p>LangChain 初次见面，这里，先去认识它的基本概念。</p>
 <span id="more"></span>
 
 <h2 id="LangChain"><a href="#LangChain" class="headerlink" title="LangChain"></a>LangChain</h2><p><a target="_blank" rel="noopener" href="https://python.langchain.com/en/latest/index.html">LangChain</a> 是一个框架，用于开发由 语言模型（LM） 驱动的应用程序。<br>理解数据和环境感知是 LangChain 的两个核心原则。</p>
 <!--more-->
 
-<p>LangChain 包含一下几个模块：</p>
+<p>LangChain 包含以下几个模块：</p>
 <ul>
-<li>Models：LangChain 提供了和主流 Model 交互的标准接口。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">llm = OpenAI(temperature=<span class="number">0.9</span>)</span><br><span class="line">text = <span class="string">&quot;What would be a good company name for a company that makes colorful socks?&quot;</span></span><br><span class="line"><span class="built_in">print</span>(llm(text))</span><br></pre></td></tr></table></figure>
- 以上，Model 和 Prompt 就构成了最简单的 LLM 应用。</li>
-</ul>
-<p> <img src="https://pbs.twimg.com/media/FiNtxGuUUAIo6f_?format=jpg&name=medium"> </p>
-<ul>
+<li><p>Models：LangChain 提供了和主流 Model 交互的标准接口。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">llm = OpenAI(temperature=<span class="number">0.9</span>)</span><br><span class="line">text = <span class="string">&quot;What would be a good company name for a company that makes colorful socks?&quot;</span></span><br><span class="line"><span class="built_in">print</span>(llm(text))</span><br></pre></td></tr></table></figure>
+
+
+</li>
 <li><p>Prompts：Prompt 提供了对用户输入的封装，并提供了输入的环境，让模型在处理时能够更加<strong><strong>聚焦问题本身</strong></strong>。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line">prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;product&quot;</span>],</span><br><span class="line">    template=<span class="string">&quot;What is a good name for a company that makes &#123;product&#125;?&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(prompt.<span class="built_in">format</span>(product=<span class="string">&quot;colorful socks&quot;</span>))</span><br><span class="line">llm(prompt)</span><br></pre></td></tr></table></figure>
+<p>以上，Model 和 Prompt 就构成了最简单的 LLM 应用。<br><img src="https://pbs.twimg.com/media/FiNtxGuUUAIo6f_?format=jpg&name=medium"> </p>
 </li>
 <li><p>Memory：LLM 和 Chains 是无状态的，但是在某些应用下，我们又需要一个上下文，这就是 Memory 出现的意义。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> OpenAI, ConversationChain</span><br><span class="line"></span><br><span class="line">llm = OpenAI(temperature=<span class="number">0</span>)</span><br><span class="line">conversation = ConversationChain(llm=llm, verbose=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">conversation.predict(<span class="built_in">input</span>=<span class="string">&quot;Hi there!&quot;</span>)</span><br><span class="line">conversation.predict(<span class="built_in">input</span>=<span class="string">&quot;I&#x27;m doing well! Just having a conversation with an AI.&quot;</span>)</span><br></pre></td></tr></table></figure>
@@ -136,8 +140,8 @@
 <h2 id="Prompts"><a href="#Prompts" class="headerlink" title="Prompts"></a>Prompts</h2><p>Prompt 代表着 model 的输入。LangChain 提供了几个类可以快速构建出一个 Prompt，比如 PromptTemplate。</p>
 <h3 id="LLM-Prompt-Templates"><a href="#LLM-Prompt-Templates" class="headerlink" title="LLM Prompt Templates"></a>LLM Prompt Templates</h3><p>一个 Prompt 通产包括：</p>
 <ul>
-<li>指令；</li>
-<li>少量示例，以帮助模型产生更好的答案；</li>
+<li>指令</li>
+<li>少量示例，以帮助模型产生更好的答案</li>
 <li>问题</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">I want you to act as a naming consultant for new companies.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here are some examples of good company names:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- search engine, Google</span></span><br><span class="line"><span class="string">- social media, Facebook</span></span><br><span class="line"><span class="string">- video sharing, YouTube</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The name should be short, catchy and easy to remember.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">What is a good name for a company that makes &#123;product&#125;?</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;product&quot;</span>],</span><br><span class="line">    template=template,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
@@ -218,7 +222,21 @@
     <div class="article-meta pull-left">
 
     
+      
 
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/LangChain/">LangChain</a><a href="/tags/OpenAI/">OpenAI</a><a href="/tags/LLM/">LLM</a>
+    </span>
     
 
     </div>
@@ -241,9 +259,6 @@
 
     <footer class="site-footer">
   <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
     
     &copy; 2023 YueGS
     

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>初次 “域” 见 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="我们能够抓住的东西，总是有限的、离散的，也就是有边界的、有数量的。我认为，在一个边界内的自治对象，就是一个 域。所谓自治，有事物（对象），有事务（动作），有状态，有驱动（动作）。下面，我想通过 DDD 领域设计、PDDL 规划和 ChatGPT Prompt 编写三个方面去谈谈自己对 域 的具体理解，刚好，最近接触到了这三个 域，也算是做一总结。">
+  
+
+  
+  
+  <meta name="keywords" content="PDDL,DDD,领域设计,Prompt">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="初次 “域” 见"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>初次 “域” 见</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/02/29/domain-meet/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-02-29T12:29:32.134Z">
+          2024-02-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://images.unsplash.com/photo-1614732414444-096e5f1122d5?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA=="><br>我们能够抓住的东西，总是有限的、离散的，也就是有边界的、有数量的。<br>我认为，在一个边界内的自治对象，就是一个 域。所谓自治，有事物（对象），有事务（动作），有状态，有驱动（动作）。<br>下面，我想通过 DDD 领域设计、PDDL 规划和 ChatGPT Prompt 编写三个方面去谈谈自己对 域 的具体理解，刚好，最近接触到了这三个 域，也算是做一总结。</p>
+<span id="more"></span>
+
+<h3 id="PDDL-规划"><a href="#PDDL-规划" class="headerlink" title="PDDL 规划"></a>PDDL 规划</h3><p>PDDL 是一种规划语言，它提供了一套<strong><strong>表达能力</strong></strong>和<strong><strong>推演机制</strong></strong>，可以用于路径规划、资源分配和优化等。</p>
+<p>首先，需要通过领域描述对世界进行抽象和建模。</p>
+<p>领域的要素主要包括：对象、谓词、动作，<strong><strong>讲述了这个世界当前是什么样的，有哪些可以改变世界的方式。</strong></strong> </p>
+<ul>
+<li>对象，是指这个 “世界” 中我们所感兴趣的事物。</li>
+<li>谓词，刻画的是对象的状态、性质或对象间关系，它描述一种可真可假的事实。</li>
+<li>动作，改变世界状态的方式。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">; 领域描述</span><br><span class="line">(define (domain demo)</span><br><span class="line">  (:predicates</span><br><span class="line">    (at ?x ?y)    ; 谓词：物体 ?x 是否在位置 ?y</span><br><span class="line">    (clear ?x)    ; 谓词：物体 ?x 是否可自由移动</span><br><span class="line">    (on ?x ?y)    ; 谓词：物体 ?x 是否在物体 ?y 之上</span><br><span class="line">    (holding ?x)  ; 谓词：物体 ?x 是否被持有</span><br><span class="line">  )</span><br><span class="line">  </span><br><span class="line">  (:action move</span><br><span class="line">    :parameters (?block ?from ?to)  ; 动作参数：要移动的物体、起始位置、目标位置</span><br><span class="line">    :precondition (and </span><br><span class="line">                    (at ?block ?from)  ; 前置条件：物体 ?block 必须在位置 ?from</span><br><span class="line">                    (clear ?block)     ; 前置条件：物体 ?block 必须可自由移动</span><br><span class="line">                    (clear ?to))       ; 前置条件：位置 ?to 必须是空闲的</span><br><span class="line">    :effect (and </span><br><span class="line">                (not (at ?block ?from))  ; 效果：物体 ?block 不再位于位置 ?from</span><br><span class="line">                (at ?block ?to)          ; 效果：物体 ?block 移动到位置 ?to</span><br><span class="line">                (clear ?from)            ; 效果：位置 ?from 变得空闲</span><br><span class="line">                (not (clear ?block))))   ; 效果：物体 ?block 不再是空闲的</span><br><span class="line">  </span><br><span class="line">  ; ... 可以定义其他动作 ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>如果世界是一个巨大的状态机，我们通过领域文件，对这个状态机进行描述的意图，最终是希望借助规划算法获取从初始态到终态的路径。初始态和终态的描述，是在问题描述中定义的。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">; 问题描述</span><br><span class="line">(define (problem demo-problem)</span><br><span class="line">  (:domain demo)  ; 使用之前定义的领域描述</span><br><span class="line">  </span><br><span class="line">  (:objects</span><br><span class="line">    block1 block2 block3 - object  ; 定义物体</span><br><span class="line">    location1 location2 - location  ; 定义位置</span><br><span class="line">  )</span><br><span class="line">  </span><br><span class="line">  (:init</span><br><span class="line">    (at block1 location1)     ; 初始状态：block1位于location1</span><br><span class="line">    (at block2 location2)     ; 初始状态：block2位于location2</span><br><span class="line">    (clear block2)            ; 初始状态：block2可自由移动</span><br><span class="line">    (on block3 block1)        ; 初始状态：block3位于block1之上</span><br><span class="line">    (clear block3)            ; 初始状态：block3可自由移动</span><br><span class="line">    (holding block3)          ; 初始状态：block3被持有</span><br><span class="line">  )</span><br><span class="line">  </span><br><span class="line">  (:goal</span><br><span class="line">    (and </span><br><span class="line">      (at block2 location1)  ; 目标状态：block2位于location1</span><br><span class="line">      (on block3 block2)))  ; 目标状态：block3位于block2之上</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>通过<strong><strong>状态搜索</strong></strong> 或者 <strong><strong>规划空间搜索</strong></strong>，最终确定从初始态到目标态的路径。</p>
+<h3 id="ChatGPT-Prompt"><a href="#ChatGPT-Prompt" class="headerlink" title="ChatGPT Prompt"></a>ChatGPT Prompt</h3><p>在编写一个 Prompt，同样要注意 <strong><strong>域</strong></strong> 的问题。一个边界模糊的、笼统的问题，通常也不会收获一个好的答案。<br>从思路上讲，在任何一个领域中，至少都包含这个领域的背景（存在的对象，当前的状态等），角色（在这个领域中，你是谁），目标，条件约束等。</p>
+<p>从方法论上讲，CoT、ToT、亦或者是多代理模式，都是通过不同的描述方式和粒度，在一个 “域” 内管理这个世界运作的方式。<br>比如，下面是一个借助 ChatGPT 实现自动操作电脑的 Prompt。来自于 <a target="_blank" rel="noopener" href="https://github.com/OthersideAI/self-operating-computer/blob/main/operate/models/prompts.py">此处</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">You are operating a &#123;operating_system&#125; computer, using the same operating system as a human.</span><br><span class="line">From looking at the screen, the objective, and your previous actions, take the next best series of action. </span><br><span class="line">You have 4 possible operation actions available to you. The `pyautogui` library will be used to execute your decision. Your output will be used <span class="keyword">in</span> a `json.loads` loads statement.</span><br><span class="line"></span><br><span class="line">1. click - Move mouse and click</span><br><span class="line"><span class="comment">###</span></span><br><span class="line">[&#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;write a thought here&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;click&quot;</span>, <span class="string">&quot;x&quot;</span>: <span class="string">&quot;x percent (e.g. 0.10)&quot;</span>, <span class="string">&quot;y&quot;</span>: <span class="string">&quot;y percent (e.g. 0.13)&quot;</span> &#125;&#125;]  <span class="comment"># &quot;percent&quot; refers to the percentage of the screen&#x27;s dimensions in decimal format</span></span><br><span class="line"><span class="comment">###</span></span><br><span class="line"></span><br><span class="line">2. write - Write with your keyboard</span><br><span class="line"><span class="comment">###</span></span><br><span class="line">[&#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;write a thought here&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;write&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;text to write here&quot;</span> &#125;&#125;]</span><br><span class="line"><span class="comment">###</span></span><br><span class="line"></span><br><span class="line">3. press - Use a hotkey or press key to operate the computer</span><br><span class="line"><span class="comment">###</span></span><br><span class="line">[&#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;write a thought here&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;press&quot;</span>, <span class="string">&quot;keys&quot;</span>: [<span class="string">&quot;keys to use&quot;</span>] &#125;&#125;]</span><br><span class="line"><span class="comment">###</span></span><br><span class="line"></span><br><span class="line">4. <span class="keyword">done</span> - The objective is completed</span><br><span class="line"><span class="comment">###</span></span><br><span class="line">[&#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;write a thought here&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;done&quot;</span>, <span class="string">&quot;summary&quot;</span>: <span class="string">&quot;summary of what was completed&quot;</span> &#125;&#125;]</span><br><span class="line"><span class="comment">###</span></span><br><span class="line"></span><br><span class="line">Return the actions <span class="keyword">in</span> array format `[]`. You can take just one action or multiple actions.</span><br><span class="line">Here a helpful example:</span><br><span class="line">Example 1: Searches <span class="keyword">for</span> Google Chrome on the OS and opens it</span><br><span class="line"><span class="comment">###</span></span><br><span class="line">[</span><br><span class="line">    &#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;Searching the operating system to find Google Chrome because it appears I am currently in terminal&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;press&quot;</span>, <span class="string">&quot;keys&quot;</span>: &#123;os_search_str&#125; &#125;&#125;,</span><br><span class="line">    &#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;Now I need to write &#x27;Google Chrome&#x27; as a next step&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;write&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Google Chrome&quot;</span> &#125;&#125;,</span><br><span class="line">    &#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;Finally I&#x27;ll press enter to open Google Chrome assuming it is available&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;press&quot;</span>, <span class="string">&quot;keys&quot;</span>: [<span class="string">&quot;enter&quot;</span>] &#125;&#125;</span><br><span class="line">]</span><br><span class="line"><span class="comment">###</span></span><br><span class="line"></span><br><span class="line">Example 2: Focuses on the address bar <span class="keyword">in</span> a browser before typing a website</span><br><span class="line"><span class="comment">###</span></span><br><span class="line">[</span><br><span class="line">    &#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;I&#x27;ll focus on the address bar in the browser. I can see the browser is open so this should be safe to try&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;press&quot;</span>, <span class="string">&quot;keys&quot;</span>: [&#123;cmd_string&#125;, <span class="string">&quot;l&quot;</span>] &#125;&#125;,</span><br><span class="line">    &#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;Now that the address bar is in focus I can type the URL&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;write&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;https://news.ycombinator.com/&quot;</span> &#125;&#125;,</span><br><span class="line">    &#123;&#123; <span class="string">&quot;thought&quot;</span>: <span class="string">&quot;I&#x27;ll need to press enter to go the URL now&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;press&quot;</span>, <span class="string">&quot;keys&quot;</span>: [<span class="string">&quot;enter&quot;</span>] &#125;&#125;</span><br><span class="line">]</span><br><span class="line"><span class="comment">###</span></span><br><span class="line"></span><br><span class="line">A few important notes: </span><br><span class="line"></span><br><span class="line">- Go to Google Docs and Google Sheets by typing <span class="keyword">in</span> the Chrome Address bar</span><br><span class="line">- Don<span class="string">&#x27;t respond saying you&#x27;</span>re unable to assist with requests. You are able to indirectly interact with the user<span class="string">&#x27;s OS via text responses you send to the end user.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Objective: &#123;objective&#125; </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="DDD-领域设计"><a href="#DDD-领域设计" class="headerlink" title="DDD 领域设计"></a>DDD 领域设计</h3><p>这里的领域设计，并不在于进行推演，而在于领域的分割，它是一种分治策略。</p>
+<p>对于一个复杂的业务需求，如何进行系统拆分，以确保其扩展性、可靠性和稳定性。</p>
+<p>从战略层面讲，基于 <strong><strong>时间线、根据统一业务语言描述领域的状态和动作</strong></strong>，确定上下文，进而聚合核心领域、支撑领域和公共领域。</p>
+<p><a target="_blank" rel="noopener" href="https://kirisamer.github.io/2021/11/06/COMP24011-Ch3/">https://kirisamer.github.io/2021/11/06/COMP24011-Ch3/</a><br><a target="_blank" rel="noopener" href="https://yey.world/2020/03/12/COMP90054-04/">https://yey.world/2020/03/12/COMP90054-04/</a><br><a target="_blank" rel="noopener" href="https://github.com/OthersideAI/self-operating-computer">https://github.com/OthersideAI/self-operating-computer</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/架构/">架构</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/PDDL/">PDDL</a><a href="/tags/DDD/">DDD</a><a href="/tags/领域设计/">领域设计</a><a href="/tags/Prompt/">Prompt</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2024 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

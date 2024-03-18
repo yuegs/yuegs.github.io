@@ -123,6 +123,128 @@
 
   
     
+    <h3 class="article-title"><a href="/2024/02/29/lcel/"><span>LCEL 概述</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/02/29/lcel/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-02-29T12:29:32.134Z">
+          2024-02-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://cdn.pixabay.com/photo/2015/03/11/21/53/minecraft-669310_1280.jpg"></p>
+<p>LECE（LangChain Expression Language）提供了 <strong><strong>可高度组合化</strong></strong> 的组件，涵盖 Prompt（输入）、Retriever（检索）、LLMs（大语言模型）、Tool（工具&#x2F;函数） 以及 OutputParser（输出处理） 等。它隐藏了诸多底层的实现细节，以声明式的形式，简化 AI 产品的实现过程。<br>这些组件，实现了<strong><strong>统一的底层协议</strong></strong> – Runnable 接口。<br>Runnable 接口中，定义了以 <strong><strong>同步 或 异步</strong></strong> 的方式对数据的流式处理、对 Chain 的调用、批处理等功能。</p>
+<h3 id="一、环环相扣的组件"><a href="#一、环环相扣的组件" class="headerlink" title="一、环环相扣的组件"></a>一、环环相扣的组件</h3><p><img src="https://js.langchain.com/assets/images/langchain-js-runnable-cheatsheet-17e8dcc53c6636dd6f3fad0fbdb65115.png"><br>数据，在这些组件中流淌，在进入到一个组件之前，应满足一定的 Schema。每个组件负责处理一段流经的数据或业务逻辑，并将处理结果转交给下一个处理对象，作为下一个组件的输入，环环相扣，依次类推。<br>LCEL 中使用的主要组件及每个组件接收的输入、输出如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Component</th>
+<th align="center">Input Type</th>
+<th align="center">Output Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Prompt</td>
+<td align="center">Dictionary</td>
+<td align="center">PromptValue</td>
+</tr>
+<tr>
+<td align="center">ChatModel</td>
+<td align="center">Single string, list of chat messages or a PromptValue</td>
+<td align="center">ChatMessage</td>
+</tr>
+<tr>
+<td align="center">LLM</td>
+<td align="center">Single string, list of chat messages or a PromptValue</td>
+<td align="center">String</td>
+</tr>
+<tr>
+<td align="center">OutputParser</td>
+<td align="center">The output of an LLM or ChatModel</td>
+<td align="center">Depends on the parser</td>
+</tr>
+<tr>
+<td align="center">Retriever</td>
+<td align="center">Single string</td>
+<td align="center">List of Documents</td>
+</tr>
+<tr>
+<td align="center">Tool</td>
+<td align="center">Single string or dictionary, depending on the tool</td>
+<td align="center">Depends on the tool</td>
+</tr>
+</tbody></table>
+<p>Runnable 对象通过输入和输出的 schema 来约束和检查输入和输出的数据。这些 schema 是由 Pydantic 模型根据 Runnable 结构自动生成的。 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(<span class="string">&quot;tell me a joke about &#123;topic&#125;&quot;</span>)</span><br><span class="line">parser = StrOutputParser()</span><br><span class="line">chain = prompt | model | parser</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">for</span> chunk <span class="keyword">in</span> chain.astream(&#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;parrot&quot;</span>&#125;):</span><br><span class="line">    <span class="built_in">print</span>(chunk, end=<span class="string">&quot;|&quot;</span>, flush=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Prompt，可以描述事物的背景，定义角色，创建指令，引导模型给出期望的结果。让模型理解你的需求。</li>
+<li>LLMs，大语言模型，根据 Prompt 响应结果。就像人的大脑。</li>
+<li>Retriever，用于检索外界（互联网、私域数据等）有用的信息，丰富 Context。</li>
+<li>Tool，可以执行一个特定的任务。Retriever 和 Tool 就像人的四肢。</li>
+</ul>
+<h3 id="二、Runnable-标准协议"><a href="#二、Runnable-标准协议" class="headerlink" title="二、Runnable 标准协议"></a>二、Runnable 标准协议</h3><p><a target="_blank" rel="noopener" href="https://api.python.langchain.com/en/stable/runnables/langchain_core.runnables.base.Runnable.html#langchain_core.runnables.base.Runnable">Runnable 标准协议</a>，定义了组件共同所支持的通用功能。</p>
+<ul>
+<li>invoke&#x2F;ainvoke: 将输入转化成输出。</li>
+<li>batch&#x2F;abatch: 将多个输入同时转化成输出，提高处理效率。</li>
+<li>stream&#x2F;astream: 根据输入，得到一个流式输出。旨在提升响应时间，优化用户体验。</li>
+</ul>
+<h3 id="三、并行处理能力"><a href="#三、并行处理能力" class="headerlink" title="三、并行处理能力"></a>三、并行处理能力</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(<span class="string">&quot;tell me a joke about &#123;topic&#125;&quot;</span>)</span><br><span class="line">parser = StrOutputParser()</span><br><span class="line">chain = prompt | model | parser</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">for</span> chunk <span class="keyword">in</span> chain.astream(&#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;parrot&quot;</span>&#125;):</span><br><span class="line">    <span class="built_in">print</span>(chunk, end=<span class="string">&quot;|&quot;</span>, flush=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://python.langchain.com/docs/expression_language/interface">https://python.langchain.com/docs/expression_language/interface</a><br><a target="_blank" rel="noopener" href="https://blog.langchain.dev/building-chat-langchain-2/">https://blog.langchain.dev/building-chat-langchain-2/</a><br><a target="_blank" rel="noopener" href="https://agi-talks.vercel.app/202-langchain-chains/1">https://agi-talks.vercel.app/202-langchain-chains/1</a> </p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Prompt/">Prompt</a><a href="/tags/LangChain/">LangChain</a><a href="/tags/LLM/">LLM</a><a href="/tags/LCEL/">LCEL</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2023/10/06/milvus-first/"><span>Milvus 初识</span></a></h3>
     
   
@@ -611,69 +733,6 @@
     <span class="post-tags">
       <i class="icon-tags"></i>
         <a href="/tags/DAO/">DAO</a><a href="/tags/去中心化自治组织/">去中心化自治组织</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2022/06/02/solana-poh/"><span>Solana - PoH 共识机制</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2022/06/02/solana-poh/" rel="bookmark">
-        <time class="entry-date published" datetime="2022-06-01T22:07:28.000Z">
-          2022-06-02
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/blockChain/solana/poh/paper.png"></p>
-<p>正如比特币创世区块中，中本聪留下了当天《泰晤士报》的头版头条文章——The Times 03&#x2F;Jan&#x2F;2009 Chancellor on brink of second bailout for banks。这证明了创世区块是在 2009 年 1月 3 日当天或者之后被矿工 mint。后续所有的比特币交易，也发生在这个时间节点之后。<br>那么，如果后续所有的交易（或者说事件），都是顺序的，并且加盖了 “时间戳” 的，事实上这就是一个基于时间的历史事件序列。我们要证明某个交易事件在这个序列中，只要从这个历史序列中去求证即可。<br>和许多加密应用使用的基础技术一样，这里也将使用 hash 函数将这个序列串联起来。</p>
-        
-          <p><a class="excerpt-btn" href="/2022/06/02/solana-poh/"><span>...More</span></a></p>
-        
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/Solana/">Solana</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Solana/">Solana</a><a href="/tags/PoH/">PoH</a><a href="/tags/共识/">共识</a><a href="/tags/机制/">机制</a>
     </span>
     
 

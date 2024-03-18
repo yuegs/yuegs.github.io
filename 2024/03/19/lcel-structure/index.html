@@ -10,7 +10,7 @@
   
 
   
-  <meta name="description" content="LECE（LangChain Expression Language）提供了 可高度组合化 的组件，涵盖 Prompt（输入）、Retriever（检索）、LLMs（大语言模型）、Tool（工具&amp;#x2F;函数） 以及 OutputParser（输出处理） 等。它隐藏了诸多底层的实现细节，以声明式的">
+  <meta name="description" content="LECE（LangChain Expression Language）提供了 可高度组合化 的组件，涵盖 Prompt（输入）、Retriever（检索）、LLMs（大语言模型）、Tool（工具&amp;#x2F;函数） 以及 OutputParser（输出处理） 等。它隐藏了诸多底层的实现细节，以声明式的形式，简化 AI 产品的实现过程。这些组件，实现了统一的底层协议 – Runnable 接口。Runnable 接口中，定义了以 同步 或 异步 的方式对数据的流式处理、对 Chain 的调用、批处理等功能。">
   
 
   
@@ -87,6 +87,7 @@
       
         <p><img src="https://cdn.pixabay.com/photo/2015/03/11/21/53/minecraft-669310_1280.jpg"></p>
 <p>LECE（LangChain Expression Language）提供了 <strong><strong>可高度组合化</strong></strong> 的组件，涵盖 Prompt（输入）、Retriever（检索）、LLMs（大语言模型）、Tool（工具&#x2F;函数） 以及 OutputParser（输出处理） 等。它隐藏了诸多底层的实现细节，以声明式的形式，简化 AI 产品的实现过程。<br>这些组件，实现了<strong><strong>统一的底层协议</strong></strong> – Runnable 接口。<br>Runnable 接口中，定义了以 <strong><strong>同步 或 异步</strong></strong> 的方式对数据的流式处理、对 Chain 的调用、批处理等功能。</p>
+<span id="more"></span>
 <h3 id="一、环环相扣的组件"><a href="#一、环环相扣的组件" class="headerlink" title="一、环环相扣的组件"></a>一、环环相扣的组件</h3><p><img src="https://js.langchain.com/assets/images/langchain-js-runnable-cheatsheet-17e8dcc53c6636dd6f3fad0fbdb65115.png"><br>数据，在这些组件中流淌，在进入到一个组件之前，应满足一定的 Schema。每个组件负责处理一段流经的数据或业务逻辑，并将处理结果转交给下一个处理对象，作为下一个组件的输入，环环相扣，依次类推。<br>LCEL 中使用的主要组件及每个组件接收的输入、输出如下：</p>
 <table>
 <thead>

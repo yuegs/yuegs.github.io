@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LangChain Runnables | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="在实际的应用场景中，输入、决策、输出过程是复杂、递进、动态的。可能需要路由、并行、串行、甚至这些机制的进一步组合。">
+  
+
+  
+  
+  <meta name="keywords" content="LangChain,LLM,Runnable,RunnableBranch">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="LangChain Runnables"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>LangChain Runnables</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/03/26/langchain-router/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-03-26T00:59:16.662Z">
+          2024-03-26
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://images.unsplash.com/photo-1543996991-8e851c2dc841?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA=="><br>在实际的应用场景中，输入、决策、输出过程是复杂、递进、动态的。可能需要路由、并行、串行、甚至这些机制的进一步组合。</p>
+<span id="more"></span>
+
+<h3 id="Runnables-路由"><a href="#Runnables-路由" class="headerlink" title="Runnables 路由"></a>Runnables 路由</h3><p>一个常见的需求，是根据用户的输入动态决定一条由多个 Runnable 执行的 <strong><strong>任务链</strong></strong>。<br>决策的实现机制有两种：</p>
+<ul>
+<li>RunnableLambda：运行任何的函数</li>
+<li>RunnableBranch：基于用户输入动态路由</li>
+</ul>
+<h4 id="使用-RunnableLambda-进行动态路由"><a href="#使用-RunnableLambda-进行动态路由" class="headerlink" title="使用 RunnableLambda 进行动态路由"></a>使用 RunnableLambda 进行动态路由</h4><p>我们可以在管道上，使用任意被 RunnableLambda 函数。<br>需要注意的是，这里的函数必须是单个入参。如果你有多个入参，那需要进行 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9F%AF%E9%87%8C%E5%8C%96">柯里化</a>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">route</span>(<span class="params">info</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;anthropic&quot;</span> <span class="keyword">in</span> info[<span class="string">&quot;topic&quot;</span>].lower():</span><br><span class="line">        <span class="keyword">return</span> anthropic_chain</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&quot;langchain&quot;</span> <span class="keyword">in</span> info[<span class="string">&quot;topic&quot;</span>].lower():</span><br><span class="line">        <span class="keyword">return</span> langchain_chain</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> general_chain</span><br><span class="line"></span><br><span class="line">full_chain = &#123;<span class="string">&quot;topic&quot;</span>: chain, <span class="string">&quot;question&quot;</span>: <span class="keyword">lambda</span> x: x[<span class="string">&quot;question&quot;</span>]&#125; | RunnableLambda(</span><br><span class="line">    route</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>RunnableLambda 可以接受一个 RunnableConfig。</p>
+<h4 id="使用-RunnableBranch-进行动态路由"><a href="#使用-RunnableBranch-进行动态路由" class="headerlink" title="使用 RunnableBranch 进行动态路由"></a>使用 RunnableBranch 进行动态路由</h4><p>由用户的输入，动态决定执行哪一条链。相比而言，通过 RunnableLambda 实现的路由策略可以更加灵活。<br><a target="_blank" rel="noopener" href="https://js.langchain.com/docs/expression_language/how_to/routing">如下代码块中</a>，接收一个用户输入。当输入中包含”anthropic”，则执行 anthropicChain；如果输入中包含 “langchain”，则执行 langChainChain；默认执行 generalChain。<br>感受下下面声明式的优雅逻辑写法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">const branch = RunnableBranch.<span class="keyword">from</span>([</span><br><span class="line">  [</span><br><span class="line">    (x: &#123; topic: string; question: string &#125;) =&gt;</span><br><span class="line">      x.topic.toLowerCase().includes(<span class="string">&quot;anthropic&quot;</span>),</span><br><span class="line">    anthropicChain,</span><br><span class="line">  ],</span><br><span class="line">  [</span><br><span class="line">    (x: &#123; topic: string; question: string &#125;) =&gt;</span><br><span class="line">      x.topic.toLowerCase().includes(<span class="string">&quot;langchain&quot;</span>),</span><br><span class="line">    langChainChain,</span><br><span class="line">  ],</span><br><span class="line">  generalChain,</span><br><span class="line">]);</span><br><span class="line"></span><br><span class="line">const fullChain = RunnableSequence.<span class="keyword">from</span>([</span><br><span class="line">  /*下面这个 Map，将会被自动转换为 RunnableMap。RunnableMap 所对应的两个键值，都是 Runnable 对象，两个 Runnable 对象并行执行。question 所对应的 Lambda 表达式被自动转换为 RunnableLambda */</span><br><span class="line">  &#123;</span><br><span class="line">    topic: classificationChain,</span><br><span class="line">    question: (<span class="built_in">input</span>: &#123; question: string &#125;) =&gt; <span class="built_in">input</span>.question,</span><br><span class="line">  &#125;,</span><br><span class="line">  branch,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Runnables-并行"><a href="#Runnables-并行" class="headerlink" title="Runnables 并行"></a>Runnables 并行</h3><h4 id="使用-RunnableMap"><a href="#使用-RunnableMap" class="headerlink" title="使用 RunnableMap"></a>使用 RunnableMap</h4><p>RunnableMap 允许可以并行执行多个 Runnable，并以 Map 的形式返回结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">model = ChatOpenAI()</span><br><span class="line">mapChain = RunnableMap.<span class="keyword">from</span>(&#123;</span><br><span class="line">  joke: PromptTemplate.fromTemplate(<span class="string">&quot;Tell me a joke about &#123;topic&#125;&quot;</span>) | model,</span><br><span class="line">  ),</span><br><span class="line">  poem: PromptTemplate.fromTemplate(<span class="string">&quot;write a 2-line poem about &#123;topic&#125;&quot;</span>) |</span><br><span class="line">    new ChatAnthropic(&#123;&#125;),,</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">await</span> mapChain.invoke(&#123; topic: <span class="string">&quot;bear&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>RunnableMap 也等同于 RunnableParallel，是一种机制的两种名称。即 RunnableMap &#x3D; RunnableParallel。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">map_chain = RunnableParallel(joke=joke_chain, poem=poem_chain)</span><br><span class="line"></span><br><span class="line">map_chain.invoke(&#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;bear&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-Runnable-的-batch"><a href="#使用-Runnable-的-batch" class="headerlink" title="使用 Runnable 的 batch"></a>使用 Runnable 的 batch</h4><p>对于同一个 Runnable，也可以同时执行多个请求。<br>如下所示，max_concurrency 代表并发请求的最大个数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chain.batch([&#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;bears&quot;</span>&#125;, &#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;cats&quot;</span>&#125;], config=&#123;<span class="string">&quot;max_concurrency&quot;</span>: <span class="number">5</span>&#125;) </span><br></pre></td></tr></table></figure>
+
+<h3 id="Runnables-串行"><a href="#Runnables-串行" class="headerlink" title="Runnables 串行"></a>Runnables 串行</h3><p><code>RunnableSequence</code> 可以允许多个 Runnable 被串行执行。串联起来的 Runnable，前一个 Runnable 的输出应是后一个 Runnable 的输入。当然，根据需求场景，串行任务和并行任务也可以进一步组合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fullChain = RunnableSequence.<span class="keyword">from</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    topic: classificationChain,</span><br><span class="line">    question: (<span class="built_in">input</span>: &#123; question: string &#125;) =&gt; <span class="built_in">input</span>.question,</span><br><span class="line">  &#125;,</span><br><span class="line">  branch,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+
+<p><a target="_blank" rel="noopener" href="https://python.langchain.com/docs/expression_language/how_to/functions">https://python.langchain.com/docs/expression_language/how_to/functions</a><br><a target="_blank" rel="noopener" href="https://agi-talks.vercel.app/202-langchain-chains/3">https://agi-talks.vercel.app/202-langchain-chains/3</a><br><a target="_blank" rel="noopener" href="https://api.python.langchain.com/en/latest/core_api_reference.html">https://api.python.langchain.com/en/latest/core_api_reference.html</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/LangChain/">LangChain</a><a href="/tags/LLM/">LLM</a><a href="/tags/Runnable/">Runnable</a><a href="/tags/RunnableBranch/">RunnableBranch</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2024 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

@@ -3,25 +3,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>风雪围城</title>
+  <title>神经网络隐藏层中的过拟合问题 | 风雪围城</title>
 
   
   <meta name="author" content="YueGS">
   
 
   
-  <meta name="description" content="title:神经网络隐藏层中的过拟合问题
-
-回顾一下，在 上一篇文章中，我们提到了在反向传播过程中的梯度计算。梯度，是损失函数（成本函数）对参数的偏导数组成的向量。它的方向是损失函数上升最快的方向，它的值是损失函数上升最快的速率。如上图示，是一张3D的损失函数图，其中，x轴和y轴分别是参数 w 和 ">
+  <meta name="description" content="回顾一下，在 上一篇文章中，我们提到了在反向传播过程中的梯度计算。梯度，是损失函数（成本函数）对参数的偏导数组成的向量。它的方向是损失函数上升最快的方向，它的值是损失函数上升最快的速率。如上图示，是一张3D的损失函数图，其中，x轴和y轴分别是参数 w 和 b，z轴是损失函数的值。我们最终的目标是希望损失函数最小，即找到最优的参数 w 和 b。这就像是一个下山的过程，我们需要找到那个下山最快的方向，但是，山路是曲折的，我们需要不断的调整方向，逐步跨步(按照一个学习率)。跨步太大，可能会错过最优解，跨步太小，可能会收敛太慢。当然，实际过程要复杂的多，在神经网络中往往会存在很多的隐藏层，而每一层都需要计算梯度，而每一层的梯度计算都需要依赖于前一层的输出以及对后一层结果产生的影响。影响可能会被放大，也可能会被缩小，这就是梯度消失和梯度爆炸的本质原因。">
   
 
+  
+  
+  <meta name="keywords" content="神经网络,Overfitting,正则化">
   
 
   <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  
+  <meta property="og:title" content="神经网络隐藏层中的过拟合问题"/>
 
   <meta property="og:site_name" content="风雪围城"/>
 
@@ -64,15 +65,15 @@
 
   
     
-    <h3 class="article-title"><span></span></h3>
+    <h3 class="article-title"><span>神经网络隐藏层中的过拟合问题</span></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/draft/gradient.html" rel="bookmark">
-        <time class="entry-date published" datetime="2024-12-31T15:40:29.022Z">
-          2024-12-31
+      <a href="/2024/12/22/overfitting/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-12-22T15:37:48.576Z">
+          2024-12-22
         </time>
       </a>
     </span>
@@ -84,9 +85,10 @@
   <div class="article-content">
     <div class="entry">
       
-        <p>title:神经网络隐藏层中的过拟合问题</p>
-<p><img src="/gradient3d.png"></p>
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/overfitting/gradient3d.png"></p>
 <p>回顾一下，在 <a href="https://yuegs.com/2024/12/14/neural-forward-back/">上一篇文章中</a>，我们提到了在反向传播过程中的梯度计算。<br>梯度，是损失函数（成本函数）对参数的偏导数组成的向量。它的方向是损失函数上升最快的方向，它的值是损失函数上升最快的速率。<br>如上图示，是一张3D的损失函数图，其中，x轴和y轴分别是参数 w 和 b，z轴是损失函数的值。我们最终的目标是希望损失函数最小，即找到最优的参数 w 和 b。<br>这就像是一个下山的过程，我们需要找到那个下山最快的方向，但是，山路是曲折的，我们需要不断的调整方向，逐步跨步(按照一个学习率)。跨步太大，可能会错过最优解，跨步太小，可能会收敛太慢。<br>当然，实际过程要复杂的多，在神经网络中往往会存在很多的隐藏层，而每一层都需要计算梯度，而每一层的梯度计算都需要依赖于前一层的输出以及对后一层结果产生的影响。影响可能会被放大，也可能会被缩小，这就是梯度消失和梯度爆炸的本质原因。</p>
+<span id="more"></span>
+
 <h3 id="为什么需要这么多的隐藏层"><a href="#为什么需要这么多的隐藏层" class="headerlink" title="为什么需要这么多的隐藏层"></a>为什么需要这么多的隐藏层</h3><p>对于单层神经网络，就像是要求一个人一眼就认出一张图片中的猫，这显然是困难的，实际上，我们是通过各种特征进行的识别。比如，猫的耳朵、眼睛、鼻子等。同理，对于神经网络而言，也需要通过多层神经网络，来提取出更多的特征，从而更好的完成识别，这是应该是一个渐进的过程。<br>我们可以想象，第一层的神经网络主要用于感知。识别出图片的颜色、轮廓等基本纹理和边缘。</p>
 <p>第二层的神经网络主要用于组合，将第一层识别出的特征进行组合，形成更复杂的特征。比如，识别耳朵、眼睛、鼻子等。</p>
 <p>在更深层次的抽象中，往往会基于已有特征抽象出更高级的特征。比如，一对耳朵、毛茸茸的脸等。</p>
@@ -104,7 +106,7 @@
 <li>参数越多，越容易过拟合。</li>
 <li>越容易出现梯度消失和梯度爆炸。</li>
 </ul>
-<h3 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h3><p><img src="/Overfitting_on_Training_Set_Data.pdf.jpg"><br>过拟合，是指模型<code>在训练数据上表现得很好，但在未见过的数据上表现不佳的现象</code>。如上图所示，有多种函数可以拟合样本空间的情况，函数可以很复杂，但可能不够平滑，如上图蓝色线表示；函数也可能会比较简单，足够平滑，如上图绿色线表示。波动太大，往往意味着噪声太多，不够泛化，一个入参变大后，输出结果可能会有很大的变化，不够稳定。</p>
+<h3 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h3><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/overfitting/Overfitting_on_Training_Set_Data.pdf.jpg"><br>过拟合，是指模型<code>在训练数据上表现得很好，但在未见过的数据上表现不佳的现象</code>。如上图所示，有多种函数可以拟合样本空间的情况，函数可以很复杂，但可能不够平滑，如上图蓝色线表示；函数也可能会比较简单，足够平滑，如上图绿色线表示。波动太大，往往意味着噪声太多，不够泛化，一个入参变大后，输出结果可能会有很大的变化，不够稳定。</p>
 <p>这种现象往往是因为模型过于复杂，或者样本数量不够，或训练时长太长，导致模型过度地”记住”了训练数据的细节，以至于学习到了训练数据中的<code>噪声</code>，而不仅仅是数据中的规律，<code>失去了泛化能力</code>。</p>
 <p>为了避免过拟合，可以采取以下措施：</p>
 <ul>
@@ -137,7 +139,21 @@
     <div class="article-meta pull-left">
 
     
+      
 
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/神经网络/">神经网络</a><a href="/tags/Overfitting/">Overfitting</a><a href="/tags/正则化/">正则化</a>
+    </span>
     
 
     </div>

@@ -61,6 +61,69 @@
 
   
     
+    <h3 class="article-title"><a href="/2024/12/22/overfitting/"><span>神经网络隐藏层中的过拟合问题</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/12/22/overfitting/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-12-22T15:37:48.576Z">
+          2024-12-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/overfitting/gradient3d.png"></p>
+<p>回顾一下，在 <a href="https://yuegs.com/2024/12/14/neural-forward-back/">上一篇文章中</a>，我们提到了在反向传播过程中的梯度计算。<br>梯度，是损失函数（成本函数）对参数的偏导数组成的向量。它的方向是损失函数上升最快的方向，它的值是损失函数上升最快的速率。<br>如上图示，是一张3D的损失函数图，其中，x轴和y轴分别是参数 w 和 b，z轴是损失函数的值。我们最终的目标是希望损失函数最小，即找到最优的参数 w 和 b。<br>这就像是一个下山的过程，我们需要找到那个下山最快的方向，但是，山路是曲折的，我们需要不断的调整方向，逐步跨步(按照一个学习率)。跨步太大，可能会错过最优解，跨步太小，可能会收敛太慢。<br>当然，实际过程要复杂的多，在神经网络中往往会存在很多的隐藏层，而每一层都需要计算梯度，而每一层的梯度计算都需要依赖于前一层的输出以及对后一层结果产生的影响。影响可能会被放大，也可能会被缩小，这就是梯度消失和梯度爆炸的本质原因。</p>
+        
+          <p><a class="excerpt-btn" href="/2024/12/22/overfitting/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/神经网络/">神经网络</a><a href="/tags/Overfitting/">Overfitting</a><a href="/tags/正则化/">正则化</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2024/12/14/neural-forward-back/"><span>前向传播和反向传播</span></a></h3>
     
   
@@ -295,7 +358,7 @@
 
     <span class="post-tags">
       <i class="icon-tags"></i>
-        <a href="/tags/Prompt/">Prompt</a><a href="/tags/LangChain/">LangChain</a><a href="/tags/LLM/">LLM</a><a href="/tags/LCEL/">LCEL</a>
+        <a href="/tags/LangChain/">LangChain</a><a href="/tags/LLM/">LLM</a><a href="/tags/Prompt/">Prompt</a><a href="/tags/LCEL/">LCEL</a>
     </span>
     
 
@@ -609,69 +672,7 @@
 
     <span class="post-tags">
       <i class="icon-tags"></i>
-        <a href="/tags/Seaport/">Seaport</a><a href="/tags/智能合约/">智能合约</a><a href="/tags/Order/">Order</a><a href="/tags/OpenSea/">OpenSea</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2022/06/22/gnosis/"><span>Gnosis 多签机制</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2022/06/22/gnosis/" rel="bookmark">
-        <time class="entry-date published" datetime="2022-06-22T15:07:12.000Z">
-          2022-06-22
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/gnosis-analysis/gnosis-multisign.png"><br>Gnosis 提供一种多签名决策&#x2F;执行机制。简单来说，就是多个人可以共同通过签名决定一个提案是否需要被执行。这也体现了 DAO 的思想。<br>本文，将从<a target="_blank" rel="noopener" href="https://github.com/safe-global/safe-contracts/tree/v1.3.0/contracts">源码</a>的角度分析通过 Gnosis 建立组织、发起提案、决策&#x2F;执行的过程。</p>
-        
-          <p><a class="excerpt-btn" href="/2022/06/22/gnosis/"><span>...More</span></a></p>
-        
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/智能合约/">智能合约</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/gnosis/">gnosis</a><a href="/tags/multisig/">multisig</a><a href="/tags/dao/">dao</a>
+        <a href="/tags/Seaport/">Seaport</a><a href="/tags/Order/">Order</a><a href="/tags/智能合约/">智能合约</a><a href="/tags/OpenSea/">OpenSea</a>
     </span>
     
 

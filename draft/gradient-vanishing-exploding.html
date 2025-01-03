@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="在神经网络训练过程中，通过梯度指导参数的更新，使得损失函数尽可能小，以达到对数据集的更好的拟合。在多层网络中，梯度在反向传播过程中，通过链式法则在不同隐藏层中传递时，会出现梯度消失和梯度爆炸的现象，至于是消失还是爆炸，这通常取决于激活函数的选择。
+梯度消失所谓梯度消失，是指在反向传播过程中，梯度在传">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/gradient-vanishing-exploding.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-01-02T13:41:09.761Z">
+          2025-01-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/forward-back/20241211202229.gif"><br>在神经网络训练过程中，通过梯度指导参数的更新，使得损失函数尽可能小，以达到对数据集的更好的拟合。<br>在多层网络中，梯度在反向传播过程中，通过链式法则在不同隐藏层中传递时，会出现梯度消失和梯度爆炸的现象，至于是消失还是爆炸，这通常取决于激活函数的选择。</p>
+<h3 id="梯度消失"><a href="#梯度消失" class="headerlink" title="梯度消失"></a>梯度消失</h3><p>所谓梯度消失，是指在反向传播过程中，梯度在传递过程中逐渐变小，最终趋近于0，导致参数更新缓慢，甚至无法更新。</p>
+<p>假设，我们使用 <code>Sigmoid</code> 函数作为激活函数，那么，在反向传播过程中，梯度在传递过程中会逐渐变小，最终趋近于0。<br><code>Sigmoid</code> 函数及导数曲线如下：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6A3A_rt4YmumHusvTvVTxw.png"><br>我们可以看到，<code>Sigmoid</code> 函数的导数在 0 到 0.25 之间。</p>
+<p>假设一个深度神经网络有 n 层，每一层的线性变换输出为：</p>
+<p><img src="/linear-transform.png"></p>
+<p>对于 Wi 的偏导数，可以表示为：</p>
+<p><img src="/wi-partial.png" alt="alt text"></p>
+<p>我们注意到，对于第一项，<br>我们注意到，对于第二项，由于 <code>Sigmoid</code> 函数的导数在 0 到 1 之间，因此，当层数 n 增加时，梯度会趋近于0。</p>
+<p>残差连接是解决梯度消失的一种方法。</p>
+<h3 id="梯度爆炸"><a href="#梯度爆炸" class="headerlink" title="梯度爆炸"></a>梯度爆炸</h3><p>为了解决梯度爆炸，可以采用梯度裁剪的方法。</p>
+<p>梯度裁剪，是解决梯度爆炸的一种方法。即在反向传播过程中，对梯度进行裁剪，使其不超过一个阈值。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

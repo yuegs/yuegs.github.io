@@ -61,6 +61,71 @@
 
   
     
+    <h3 class="article-title"><a href="/2022/02/20/solidity-type-ref/"><span>Solidity-引用类型</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/02/20/solidity-type-ref/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-02-20T10:35:08.000Z">
+          2022-02-20
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/solidity-ref/solidity-reference.png?raw=true"></p>
+<p>所谓引用类型，实际上是提供了一个指向内容的指针赋值给引用类型的变量。这么做的原因，在于其数据内容本身就是复合类型的，不像内置的基础类型，是可以直接表达出来的。</p>
+<p>对于引用类型的变量，在进行参数传递或者变量赋值的时候，会存在这样一个问题：传递过去的到底是这个值的拷贝还是这个值的引用。其造成的影响就是，修改传递过去的内容是否会对原内容产生影响。</p>
+<p>因此，本节讨论的主题就是：引用类型有哪些？影响其深拷贝的因素有哪些？删除时需要注意什么。</p>
+        
+          <p><a class="excerpt-btn" href="/2022/02/20/solidity-type-ref/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/storage/">storage</a><a href="/tags/mapping/">mapping</a><a href="/tags/array/">array</a><a href="/tags/struct/">struct</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2022/02/17/ipfs-gc-pin/"><span>IPFS 垃圾回收和持久化存储</span></a></h3>
     
   
@@ -626,70 +691,6 @@
 
 
 
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2022/01/18/uniswap_create_pair/"><span>UniswapV2-创建 UniswapV2Pair</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2022/01/18/uniswap_create_pair/" rel="bookmark">
-        <time class="entry-date published" datetime="2022-01-18T14:13:01.000Z">
-          2022-01-18
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/smart-contract/uniswapv2-create-pair/factory-circle.jpg?raw=true"><br><a target="_blank" rel="noopener" href="https://pixabay.com/photos/circle-gear-sprocket-cooperation-4868493/">图片来源</a></p>
-<p><code>Uniswap</code> 通过能够<code>孵化</code>出其它合约的超级合约，建立 ERC20 协议上的合约工厂。<br>其<code>孵化</code>出来的合约，定义了用户交易&#x2F;分红&#x2F;流动性管理的具体规则。所以，它也扮演了一个去中心化交易所的角色。</p>
-<p>本文，基于 Uniswap V2 版本的 UniswapV2Factory 源码，分析 UniswapV2Pair  的创建过程。</p>
-        
-          <p><a class="excerpt-btn" href="/2022/01/18/uniswap_create_pair/"><span>...More</span></a></p>
-        
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/智能合约/">智能合约</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Uniswap/">Uniswap</a><a href="/tags/UniswapV2Factory/">UniswapV2Factory</a><a href="/tags/ERC20/">ERC20</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
 
 <nav class="pagination">
   
@@ -704,7 +705,7 @@
     <footer class="site-footer">
   <p class="site-info">
     
-    &copy; 2024 YueGS
+    &copy; 2025 YueGS
     
   </p>
 </footer>

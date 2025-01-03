@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>AI 代理工作流程设计模式 — 概述 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文是一篇翻译，原文地址
+当前大多数工作流，主要可以分为两种：基于反思的和基于规划的。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,Workflow,Agent">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="AI 代理工作流程设计模式 — 概述"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>AI 代理工作流程设计模式 — 概述</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/01/02/ai-workflow-overview/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-01-02T13:45:17.101Z">
+          2025-01-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文是一篇翻译，<a target="_blank" rel="noopener" href="https://medium.com/binome/ai-agent-workflow-design-patterns-an-overview-cf9e1f609696">原文地址</a></p>
+<p>当前大多数工作流，主要可以分为两种：基于反思的和基于规划的。</p>
+<span id="more"></span>
+
+<h3 id="基于反思的工作流"><a href="#基于反思的工作流" class="headerlink" title="基于反思的工作流"></a>基于反思的工作流</h3><p>这种模式的工作流允许 agent 从经验中学习，以提升适应性和弹性。它强调从过往经验中学习。<br>通过分析过往的动作和输出，以优化（refine）未来的行为。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/reflection/reflection.ipynb">Basic Reflection: Reflecting and learning from the steps.</a><br><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/reflexion/reflexion.ipynb">Reflexion: Enhancing the next steps of the Agent through reinforcement learning.</a><br><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/lats/lats.ipynb">Tree search: TOT + reinforcement learning-based reflection.</a><br><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2402.03620">Self-Discover: Reasoning within the task.</a></p>
+<h3 id="基于规划的工作流"><a href="#基于规划的工作流" class="headerlink" title="基于规划的工作流"></a>基于规划的工作流</h3><p>规划可以被视为一种基于目标的推理，它通过构建一个目标来指导 agent 的行为。<br>它将复杂的任务分解成可管理的子任务，并对它们进行逻辑排序，以实现目标。<br><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb">Plan &amp; Solve: Plan → Task list → RePlan.</a><br><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/llm-compiler/LLMCompiler.ipynb">LLM compiler: Plan → Action in parallel → Joint execution.</a><br><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/rewoo/rewoo.ipynb">REWOO: Plan (including dependencies) → Action (depends on the previous step).</a><br><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/storm/storm.ipynb">Storm: Search for outline → Search each topic in the outline → Summarize into a long text.</a></p>
+<p>我们将这个工作流视为一个协调程序。每个节点可以代表一个 LLM 任务、一个可执行函数、一个 RAG 任务等。我们设计这样一个工作流作为一个灵活的编排器，以处理各种复杂的任务。</p>
+<p>在本文中，我们将两种特定的工作流设计模式：ReAct 模式和 Plan-Slove 模式。</p>
+<h3 id="ReAct-模式"><a href="#ReAct-模式" class="headerlink" title="ReAct 模式"></a>ReAct 模式</h3><p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*08KTKf0vmwm-pTdvhOcoSg.png"><br>ReAct 非常直观的反映了一个人类智能的核心方面：通过语言推理指导行动。<br>在每一步，中间都会有 <code>观察</code> 和 <code>自我反思</code>：我做了什么？我完成了目标了吗？这使得 agent 能够保留短期记忆。</p>
+<p>设想，你正在让某人帮你在你的桌子上找一支笔，然后你给出了分步说明：</p>
+<ol>
+<li>首先检查笔架；</li>
+<li>然后，看看抽屉；</li>
+<li>最后，检查下显示器后面。</li>
+</ol>
+<p>如果没有 ReAct，无论笔在哪里找到，这个人将遵循所有步骤，检查每个位置（Action）。</p>
+<p>当使用 ReAct 时，这个过程就像是这样：</p>
+<ol>
+<li>Action 1：首先，检查笔架；</li>
+<li>Observation 1：没有找到笔，因此，请进行下一步；</li>
+<li>Action 2：然后，看看抽屉；</li>
+<li>Observation 2：观察抽屉中是否有笔；</li>
+<li>Action 3：从抽屉中找到笔。</li>
+</ol>
+<h4 id="ReAct-的实现"><a href="#ReAct-的实现" class="headerlink" title="ReAct 的实现"></a>ReAct 的实现</h4><p>在回顾了几个开源代码之后，让我们专注一个<a target="_blank" rel="noopener" href="https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb">最简单的示例</a>进行分析。你会注意到，<code>从本质上讲，所有 Agent 的设计模式都是围绕着人类思维和管理策略转为为结构化提示展开</code><br><code>all Agent design patterns revolve around translating human thinking and management strategies into structured prompts. </code></p>
+<p>代码逻辑如下图所示：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*yw_98xQCBzzpuJ0nzLEYDw.jpeg"></p>
+<h5 id="1-构建提示词"><a href="#1-构建提示词" class="headerlink" title="1. 构建提示词"></a>1. 构建提示词</h5><p>首先，我们使用 ReAct 模板（问题-&gt;思考-&gt;行动-&gt;观察），作为 Few Shot 的例子。同时，抛出问题。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*xTfOitvz3wL5QAGijgONow.jpeg"></p>
+<h5 id="2-调用-LLM-生成-思考-行动"><a href="#2-调用-LLM-生成-思考-行动" class="headerlink" title="2. 调用 LLM 生成 思考+行动"></a>2. 调用 LLM 生成 思考+行动</h5><p>接着，将 Few Shot 提示词投递给 LLM。LLM 将生成思考，行动以及观察的响应。由于 Action 并未被完整定义，我们通过 Stop.Observation 来终止。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Mph9P_JDiASY5nq_ZI_Qbw.jpeg"></p>
+<h5 id="3-调用外部工具"><a href="#3-调用外部工具" class="headerlink" title="3. 调用外部工具"></a>3. 调用外部工具</h5><p>获取到 Action 之后，我们调用外部工具了。首先，检查结果是否完成，如果不是，模型会使用函数调用功能将 Action 转换成 API 兼容的格式。</p>
+<h5 id="4-生成观察"><a href="#4-生成观察" class="headerlink" title="4. 生成观察"></a>4. 生成观察</h5><p>API 接口返回结果后，转换成自然语言输出，并生成 Observation。然后，观察结果、之前生成的想法以 Action 被输入会模型，重复 2 和 3，直至完成任务。</p>
+<h5 id="5-最终输出"><a href="#5-最终输出" class="headerlink" title="5. 最终输出"></a>5. 最终输出</h5><p>将最终观察的结果转换成自然语言输出给用户。</p>
+<p>由此，我们可以看出，在特定场景下实现Agent需要定制两个关键组件：</p>
+<ol>
+<li>提示模板中的几个例子</li>
+<li>函数调用外部工具的定义</li>
+</ol>
+<p>模板是理解代理设计的好方法。一旦掌握了这种方法，它就可以类似地应用于其他设计模式。</p>
+<h3 id="Plan-Solve-模式"><a href="#Plan-Solve-模式" class="headerlink" title="Plan-Solve 模式"></a>Plan-Solve 模式</h3><p>谋定而后动。<br>如果说，ReAct 更适合那种 “在桌子上找笔” 的场景，那么 Plan-Solve 更适合“泡一杯纯白咖啡”。你需要为此制定一个计划，同时，计划在执行过程中可能会发生变化，<code>You need to plan, and the plan might change during the process</code>. 比如，如果你打开冰箱未发现牛奶，你需要把“购买牛奶”加入到计划中。</p>
+<p>关于提示词的模板，paper 的名字已经很清楚了。 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.04091">Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models</a>。简而言之，它是为了提升零样本的推理能力。下图汇总了一些作者代码中的提示词模板。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*5PDTqST0eh-qYCbX-uhzcQ.png"></p>
+<p>组织架构如下图示：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*WQarFPrWeatrSZHeRoHjTQ.png"></p>
+<h4 id="Planner"><a href="#Planner" class="headerlink" title="Planner"></a>Planner</h4><p>负责让 LLM 生成多步计划，以完成一个复杂任务。<br>在代码层面，又包括了一个 Planner 和 一个Replanner。Planner 负责生成初始计划，Replanner 负责在执行过程中，根据观察结果，根据当前的进度，调整计划。因此，Replanner 的提示词不仅仅包含零样本输入，还包括目标、原始计划以及已完成步骤的状态。</p>
+<h4 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h4><p>接收用户的查询和计划中的步骤，然后调用工具来完成任务。</p>
+<h3 id="其他工作流模式"><a href="#其他工作流模式" class="headerlink" title="其他工作流模式"></a>其他工作流模式</h3><p>这里，我们对上述列出的其他模式进行简要介绍。</p>
+<h4 id="1-Reason-without-Observation-REWOO"><a href="#1-Reason-without-Observation-REWOO" class="headerlink" title="1. Reason without Observation (REWOO)"></a>1. <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/rewoo/rewoo.ipynb">Reason without Observation (REWOO)</a></h4><p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*srID4HdpUFpE-5wlSQHg5g.png"></p>
+<p>REWOO是 ReAct 中观察过程的变体。 ReAct 遵循的结构是：思想 → 行动 → 观察，而 REWOO 通过删除显式观察步骤来简化这一过程。相反，它隐式地将观察嵌入到下一个执行单元中。在实践中，下一个执行者会自动观察上一步的结果，从而简化流程。</p>
+<h4 id="2-LLMCompiler"><a href="#2-LLMCompiler" class="headerlink" title="2. LLMCompiler"></a>2. <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/llm-compiler/LLMCompiler.ipynb">LLMCompiler</a></h4><p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*_8FP1sYMWwcVZaD8tObjVA.png"></p>
+<p>在计算机科学中，编译器指的是协调任务以优化计算效率的过程。原始论文中描述的 LLM 并行函数调用编译器背后的理念简单但有效：它通过启用并行函数调用来提高效率。例如，如果用户询问”AWS Glue 和 MWAA 有什么区别？”，编译器会同时搜索这两个 AWS 服务的定义并合并结果，而不是按顺序处理每个查询。</p>
+<h4 id="3-Basic-Reflection"><a href="#3-Basic-Reflection" class="headerlink" title="3. Basic Reflection"></a>3. <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/reflection/reflection.ipynb">Basic Reflection</a></h4><p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*9543fUoJVC5xq9Ot5aLbvw.png"></p>
+<p>基本反思可以与学生（生成器）和教师（反射器）之间的反馈循环进行比较。学生完成作业，老师提供反馈，学生根据反馈修改作业，重复这个循环，直到任务圆满完成。</p>
+<h4 id="4-Reflexion"><a href="#4-Reflexion" class="headerlink" title="4. Reflexion"></a>4. <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/reflexion/reflexion.ipynb">Reflexion</a></h4><p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*owP9OsMtoMBNT5BnGYR1GA.png"></p>
+<p>反思建立在基本反思的基础上，结合了强化学习的原则。在论文 <code>Language Agents with Verbal Reinforcement Learning</code> 中描述的这种方法超越了简单的反馈。它使用外部数据评估响应，并强制模型解决任何冗余或遗漏，使反思过程更加稳健，输出更加精致。</p>
+<h4 id="5-Language-Agent-Tree-Search-LATS"><a href="#5-Language-Agent-Tree-Search-LATS" class="headerlink" title="5. Language Agent Tree Search (LATS)"></a>5. <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/lats/lats.ipynb">Language Agent Tree Search (LATS)</a></h4><p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*IpwqQIk8i7k-lLf9HRQHSw.png"></p>
+<p>LATS 在论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.04406"> Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models</a>进行了详细介绍。它结合了多种技术，包括树搜索、ReAct 以及 Plan &amp; Solve。 LATS 使用树搜索来评估结果（借鉴强化学习），同时还集成反射以实现最佳结果。本质上，LATS可以用以下公式表示：<br><code>LATS = Tree Search + ReAct + Plan &amp; Solve + Reflection + Reinforcement Learning.</code></p>
+<p>在提示词设计方面，LATS 与早期方法（例如 Reflection、Plan &amp; Solve 和 ReAct）之间的差异很小。关键的补充是树搜索评估步骤以及任务上下文中评估结果的返回。从架构上来说，LATS 涉及多轮基本反射，多个生成器和反射器协同工作。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/Workflow/">Workflow</a><a href="/tags/Agent/">Agent</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>创建自己的大语言模型 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文翻译自Step-by-Step Guide to Creating Your Own Large Language Model。从大语言模型的基本概念开始，逐步介绍如何创建自己的大语言模型。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,LLM">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="创建自己的大语言模型"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>创建自己的大语言模型</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/01/04/create-your-llm/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-01-04T12:22:56.352Z">
+          2025-01-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>本文翻译自<a target="_blank" rel="noopener" href="https://medium.com/sciforce/step-by-step-guide-to-your-own-large-language-model-2b3fed6422d0">Step-by-Step Guide to Creating Your Own Large Language Model</a>。从大语言模型的基本概念开始，逐步介绍如何创建自己的大语言模型。</p>
+<span id="more"></span>
+
+<h2 id="什么是大语言模型（LLM）"><a href="#什么是大语言模型（LLM）" class="headerlink" title="什么是大语言模型（LLM）"></a>什么是大语言模型（LLM）</h2><p>大语言模型是先进的人工智能系统。它能够通过复杂的神经网络（比如 transform）生成人们可以接受、理解的文本。它可以生成内容、翻译语言、回答问题、参与对话等，这使得它在各个行业都具备广泛的应用，包括客服和数据分析。</p>
+<ul>
+<li>自回归 LLM（Autoregressive LLMs）：根据前面的单词预测下一个单词，这使得它非常适合文本生成的任务。</li>
+<li>自动编码的 LLM（Autoencoding LLMs）：专注于编码和文本重建，擅长情感分析和信息任务检索等任务。</li>
+<li>混合 LLM（Hybrid LLMs ）：结合上述两种方法的优势，为复杂的应用提供通用的解决方案。</li>
+</ul>
+<blockquote>
+<p>从架构本质来看，Autoencoding LLMs 最典型的代表是 BERT。这类模型的核心特点是它们可以同时看到输入文本的全部内容，而不是像自回归模型那样只能看到之前的文本。这就像是一个人在做完形填空题 - 虽然某些词被遮住了，但是可以通过上下文的完整信息来推断缺失的部分。 [译注]</p>
+</blockquote>
+<p>LLM 通过大量的来自于各个数据源的文本，学习它们的 语法规则，亦如通过阅读大量的书籍来学习语言。<br>一旦训练完成，他们可以基于已经习得的知识，写作、回答问题、参与对话。</p>
+<p>比如，LLM 可以根据阅读太空冒险故事中的知识，创建一个关于太空的故事，或者通过回顾生物学文本中的信息来解释光合作用。</p>
+<h2 id="构建自己的-LLM"><a href="#构建自己的-LLM" class="headerlink" title="构建自己的 LLM"></a>构建自己的 LLM</h2><h3 id="LLM-的数据管理"><a href="#LLM-的数据管理" class="headerlink" title="LLM 的数据管理"></a>LLM 的数据管理</h3><p>最近的 LLM（比如 Llama 3 和 GPT-4）使用了大量的数据进行训练。<br>Llama 3 使用了 1.5 万亿个 token 进行训练，而 GPT-4 使用了 6.5 万亿个 token 进行训练。</p>
+<p>这些数据集来自不同的环境，包括社交媒体（140 万亿个 token）和私人数据，涵盖数百个 TB 到多个 PB 的数据量。这种广泛的训练确保模型能够深入理解语言，涵盖各种模式、词汇和上下文。</p>
+<ul>
+<li>Web Data：<a target="_blank" rel="noopener" href="https://huggingface.co/datasets/HuggingFaceFW/fineweb">FineWeb</a>(未删除重复数据，完全英文)、<a target="_blank" rel="noopener" href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages.html">Common Crawl</a> (55% 的非英文数据)</li>
+<li>Code：<a target="_blank" rel="noopener" href="https://huggingface.co/datasets/bigcode/the-stack-v2">Publicly Available Code</a> 来自于所有主流的代码托管平台</li>
+<li>学术文本：<a target="_blank" rel="noopener" href="https://annas-archive.org/">Anna’s Archive</a> ，Google Scholar 和 Google Patents</li>
+<li>书籍：Google Books 和 Anna’s Archive</li>
+<li>法院文书：<a target="_blank" rel="noopener" href="https://www.courtlistener.com/recap/">RECAP archive</a>(USA)、<a target="_blank" rel="noopener" href="https://openlegaldata.io/">Open Legal Data</a>(Germany)</li>
+</ul>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*YhCzJH4gzV0gzPSp"></p>
+<h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><p>在为 LLM 整理数据时，清理和结构化之后，需要通过 tokenization、embedding 和注意力机制将数据转换成模型可以学习的格式。</p>
+<ul>
+<li><p>Tokenization：将文本分割成单词或子词，使得模型可以有效地处理和理解每个部分。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*mDuDVR3vIGhC5GLG"></p>
+</li>
+<li><p>Embedding: 将客户评论转换为步骤情感和含义的数值向量，帮助模型分析、反馈并改进。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*QpgQwVB-G8AAIB6D"></p>
+</li>
+<li><p>Attention: 关注句子中的重要部分，确保模型可以精确的抓取关键情感，例如区分产品质量和服务问题。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*XpjukN1lOmDU6bFY"></p>
+</li>
+</ul>
+<blockquote>
+<p>这三个机制协同工作的方式是：首先通过 tokenization 将文本分解成基本单位，然后使用 embedding 将这些单位转换为计算机可以处理的数值形式，最后通过 attention 机制确定不同部分的重要性，从而做出准确的理解和判断。就像是一个精密的翻译系统，不仅要认识每个字（tokenization），理解它们的含义（embedding），还要把握它们在整体语境中的重要性（attention）。 [译注]</p>
+</blockquote>
+<h2 id="LLM-训练循环"><a href="#LLM-训练循环" class="headerlink" title="LLM 训练循环"></a>LLM 训练循环</h2><h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><ol>
+<li>数据摄取：从各个数据源收集并加载数据。</li>
+<li>数据清理：消除噪声、处理丢失数据并编辑敏感信息。</li>
+<li>标准化：标准化文本，处理分析数据，并确保数据一致性。</li>
+<li>分块：将大文本分割成可管理的块，同事保留上下文。</li>
+<li>Tokenization：将文本分割成单词或子词，使得模型可以有效地处理和理解每个部分。</li>
+<li>加载数据：有效加载和洗牌数据以优化训练。</li>
+</ol>
+<blockquote>
+<p>数据准备过程感觉是少了 Embedding 的部分。网络最终能够理解的输入，应该也是 Embedding 后的结果。 [译注]</p>
+</blockquote>
+<h3 id="损耗计算"><a href="#损耗计算" class="headerlink" title="损耗计算"></a>损耗计算</h3><ol>
+<li>计算损失：使用损失函数计算预测值和真实值之间的差异，将这种差异转化为损失值或者误差值。</li>
+<li>性能指标：高损失意味着低准确性；低损失意味着和真实目标更好的对齐。</li>
+</ol>
+<h3 id="超级参数调优"><a href="#超级参数调优" class="headerlink" title="超级参数调优"></a>超级参数调优</h3><ol>
+<li>学习率：控制模型在训练过程中调整参数的速度。太高可能会导致模型在训练过程中震荡，太低可能会导致模型收敛缓慢。</li>
+<li>批量大小：每次迭代中使用的样本数量。批量大小太小可能会导致训练不稳定，批量大小太大可能会导致训练速度变慢。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*Xm8VY0KI_5Tds5bP"></li>
+</ol>
+<blockquote>
+<p>应该还包括正则化、激活函数、残差连接等调优手段。 [译注]</p>
+</blockquote>
+<h3 id="并行化和资源管理"><a href="#并行化和资源管理" class="headerlink" title="并行化和资源管理"></a>并行化和资源管理</h3><ol>
+<li>数据并行化：将数据集拆分到多个 GPU 上并行计算，以加快处理速度。</li>
+<li>模型并行化：将模型划分到 GPU 之间，以处理更大的模型。</li>
+<li>梯度检查点：通过选择性的存储中间结果以减少训练过程中的内存消耗。</li>
+</ol>
+<h3 id="迭代和-Epochs"><a href="#迭代和-Epochs" class="headerlink" title="迭代和 Epochs"></a>迭代和 Epochs</h3><ol>
+<li>迭代：处理批量数据，更新每次的权重。</li>
+<li>Epochs：完成数据集的传递，每次遍历都优化模型参数。</li>
+<li>监控：跟踪每个 epoch 之后的损失和准确率等指标，以防止过度拟合。</li>
+</ol>
+<blockquote>
+<p>一次 epoch 表示整个训练数据集被用来训练模型一次。换句话说，在一个 epoch 内，模型会处理训练集中每一个样本一次。Iterations 是指在一个 epoch 中更新参数的次数，等于总样本数除以批次大小。[译注]</p>
+</blockquote>
+<h2 id="LLM-评估"><a href="#LLM-评估" class="headerlink" title="LLM 评估"></a>LLM 评估</h2><p>在训练之后，评估 LLM 的性能，以确保其符合标准。常用的行业标准基准测试包括：</p>
+<ul>
+<li>MMLU(Massive Multitask Language Understanding)：大规模多任务语言理解，评估自然语言理解和广泛主题上的推理能力。</li>
+<li>GPQA(General Purpose Question Answering)：通用问答，测试模型处理跨域、复杂问题能力。</li>
+<li>MATH：通过解决多步骤问题来测量模型的数学推理。</li>
+<li>HumanEval：评估模型生成准确、功能性代码的能力，以评估编码熟练程度。</li>
+</ul>
+<blockquote>
+<ol>
+<li>MMLU（Massive Multitask Language Understanding）:<br>类型: 多任务基准<br>目标: 评估模型在各种语言理解任务上的表现，涵盖了多个领域，如数学、科学、历史等。<br>数据集: 包含多种类型的问题，通常要求模型理解和生成语言，涉及从简单的问答到复杂的推理任务。</li>
+<li>GPQA（Generalized Pre-trained Question Answering）:<br>类型: 问答基准<br>目标: 测试模型在回答基于文本的问题上的能力，包括对未见过的内容或样本的泛化能力。<br>数据集: 通常包含开放领域的问题，模型需要从上下文中提取相关信息来生成答案。</li>
+<li>MATH:<br>类型: 数学问题解决基准<br>目标: 专注于评估模型解决数学问题的能力，包括基本算术、代数、几何等问题。<br>数据集: 包含各种难度级别的数学题目，旨在考察模型的推理和计算能力。</li>
+<li>HumanEval:<br>类型: 编程基准<br>目标: 设计用于评估代码生成模型（如 OpenAI 的 Codex）在自动编写 Python 函数上的能力。<br>数据集: 包含函数描述及其对应的目标函数，测试模型理解问题并生成有效代码的能力。 [译注]</li>
+</ol>
+</blockquote>
+<p>在为特定任务微调 LLM 时，指标应与应用程序的目标保持一致。例如，在医疗环境中，可以优先考虑将疾病描述与代码匹配的准确性。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*kfnZu52kFLGAu4FV"></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/LLM/">LLM</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

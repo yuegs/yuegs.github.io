@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="什么是时间序列定义
+一组按照时间发生先后顺序进行排列的数据点序列。通常一组时间序列的时间间隔为一恒定值（如1秒，5分钟，12小时，7天，1年），因此时间序列可以作为离散时间数据进行分析处理。
+
+时间序列特征数据在时间序列上的整体表现，具备有以下特征：
+
+趋势：反映时间序列的长期走向和速率。比如线性趋">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/time-serial-init.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-01T08:14:44.376Z">
+          2025-02-01
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="什么是时间序列"><a href="#什么是时间序列" class="headerlink" title="什么是时间序列"></a>什么是时间序列</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<p>一组按照时间发生先后顺序进行排列的数据点序列。通常一组时间序列的时间间隔为一恒定值（如1秒，5分钟，12小时，7天，1年），因此时间序列可以作为离散时间数据进行分析处理。</p>
+</blockquote>
+<h3 id="时间序列特征"><a href="#时间序列特征" class="headerlink" title="时间序列特征"></a>时间序列特征</h3><p>数据在时间序列上的整体表现，具备有以下特征：</p>
+<ul>
+<li>趋势：反映时间序列的长期走向和速率。比如线性趋势、非线性趋势、分段趋势等。</li>
+<li>季节性：数据在固定周期内的规律波动。比如电量使用的早晚高峰-日内季节性；交通流量的工作日模式-周内季节性。</li>
+<li>周期性：与季节性类似，但周期性波动的时间长度不固定。比如经济周期的繁荣-衰退-复苏循环。</li>
+<li>随机性：数据在时间序列上的不可预测的短期波动。比如异常值、噪声等。</li>
+<li>水平：时间序列的基准线或均值水平。<br>这些特征构成了完成的时间序列。<br>[基础水平] + [趋势] + [季节性] + [周期性] + [随机波动]</li>
+</ul>
+<p>通常用于指导数据预处理和模型选择的第一步。<br>初步的数据探索<br>确定是否需要去趋势或季节性调整<br>选择合适的预测模型类型</p>
+<h3 id="时间序列变量特征"><a href="#时间序列变量特征" class="headerlink" title="时间序列变量特征"></a>时间序列变量特征</h3><p>关注的是数据的生成机制和变量的关联性质。</p>
+<ul>
+<li>自相关性</li>
+<li>平稳性</li>
+<li>可预测性</li>
+</ul>
+<p>变量特征主要用于：</p>
+<ul>
+<li>具体的模型参数设定</li>
+<li>统计假设检验</li>
+<li>预测误差的评估和调整</li>
+</ul>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><h2 id="时间序列处理"><a href="#时间序列处理" class="headerlink" title="时间序列处理"></a>时间序列处理</h2><h3 id="数据加载"><a href="#数据加载" class="headerlink" title="数据加载"></a>数据加载</h3><h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><h4 id="数据质量处理"><a href="#数据质量处理" class="headerlink" title="数据质量处理"></a>数据质量处理</h4><ul>
+<li>缺失值处理：前向填充（用前一个值填充）、后向填充（用后一个值填充）、均值填充（用均值填充）等。</li>
+<li>异常值处理：检测出异常值（比如 3σ法则），并修正这些异常点（中位数替换、插值替换等）。<blockquote>
+<p>3σ法则: 三倍标准差法则，是基于正态分布的统计原则。如果数据点超过均值的3倍标准差，则认为该数据点为异常值。<br>插值替换：通过已有数据点的模式，计算并插入合理的数值，使数据更加连续和完成。比如线性插值。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="时序对齐"><a href="#时序对齐" class="headerlink" title="时序对齐"></a>时序对齐</h4><ul>
+<li>频率对齐：调整采样频率。比如降采样或者升采样。</li>
+<li>时间戳对齐：调整时间戳。比如将时间戳对齐到某个固定的时间点。</li>
+</ul>
+<h4 id="平稳性处理"><a href="#平稳性处理" class="headerlink" title="平稳性处理"></a>平稳性处理</h4><h3 id="EDA"><a href="#EDA" class="headerlink" title="EDA"></a>EDA</h3><h3 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h3><h3 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h3><h3 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h3><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/%E6%99%82%E9%96%93%E5%BA%8F%E5%88%97">时间序列</a><br><a target="_blank" rel="noopener" href="https://medium.com/towards-data-science/time-series-from-analyzing-the-past-to-predicting-the-future-249ab99ec52d">Time Series — From Analyzing the Past to Predicting the Future</a><br><a target="_blank" rel="noopener" href="https://medium.com/@nomannayeem/comprehensive-guide-to-time-series-data-analytics-and-forecasting-with-python-2c82de2c8517">Comprehensive Guide to Time Series Data Analytics and Forecasting with Python</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

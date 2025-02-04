@@ -1,0 +1,378 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="本文提供了微调 Transformer 模型的指南，通过情感分类的任务，贯穿整个机器学习的流程。
+我们首先定义问题、准备数据，接着，逐步构建、训练并评估模型。
+
+重点是微调 Transformer 模型，但是，我们也会将它和两种传统深度学习框架进行性能对比，以确保对所涉及的方法有全面的理解。
+深度学">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/sentiment-analysis-with-transformers-a-complete-deep-learning-project.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-01-21T16:46:21.403Z">
+          2025-01-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://towardsdatascience.com/sentiment-analysis-with-transformers-a-complete-deep-learning-project-pt-i-d4ca7e47d676"></p>
+<p>本文提供了微调 Transformer 模型的指南，通过情感分类的任务，贯穿整个机器学习的流程。</p>
+<p>我们首先定义问题、准备数据，接着，逐步构建、训练并评估模型。</p>
+<ul>
+<li>重点是微调 Transformer 模型，但是，我们也会将它和两种传统深度学习框架进行性能对比，以确保对所涉及的方法有全面的理解。</li>
+<li>深度学习建构、指标解释和部署这类关键概念，也在整个项目中得到强调。</li>
+</ul>
+<p>这是一次全面的学习体验，只在加深你对现代机器学习技术的理解。</p>
+<h2 id="2-安装和载入软件包"><a href="#2-安装和载入软件包" class="headerlink" title="2. 安装和载入软件包"></a>2. 安装和载入软件包</h2><p>首先，我们需要安装 Anaconda Python 中未包含的三个包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!pip install -q -U watermark</span><br></pre></td></tr></table></figure>
+<p>watermark 包用于记录代码的运行环境，包括 Python 版本、操作系统、库版本等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!pip install -q spacy</span><br></pre></td></tr></table></figure>
+<p>spacy 包用于处理自然语言处理（NLP）任务，包括分词、词性标注、命名实体识别等，我们将使用它来预处理模型所需的数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!pip install -q transformers</span><br></pre></td></tr></table></figure>
+<p>最后是 <code>transformers</code> 包，它允许我们访问 Hugging Face 平台上预训练的 Transformer 模型，并使用我们自己的数据进行微调。</p>
+<p>接下来，我们将加载将在整个项目中所使用到的所有包：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. Imports</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line"><span class="keyword">import</span> spacy</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> transformers</span><br><span class="line"><span class="keyword">from</span> tokenizers <span class="keyword">import</span> BertWordPieceTokenizer</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> stopwords</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.utils.class_weight <span class="keyword">import</span> compute_class_weight</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix, accuracy_score, classification_report</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> load_model</span><br><span class="line"><span class="keyword">from</span> keras_preprocessing.text <span class="keyword">import</span> Tokenizer</span><br><span class="line"><span class="keyword">from</span> keras_preprocessing.sequence <span class="keyword">import</span> pad_sequences</span><br><span class="line"><span class="keyword">from</span> keras.metrics <span class="keyword">import</span> Precision, Recall, AUC</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Embedding, LSTM, Dense, Dropout, Bidirectional</span><br><span class="line"><span class="keyword">from</span> keras.callbacks <span class="keyword">import</span> EarlyStopping, LearningRateScheduler, CallbackList, ReduceLROnPlateau</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.optimizers <span class="keyword">import</span> Adam</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.regularizers <span class="keyword">import</span> l1_l2</span><br><span class="line"><span class="keyword">from</span> keras.saving <span class="keyword">import</span> register_keras_serializable</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Layer, Dense</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> TFDistilBertModel, DistilBertConfig</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.metrics <span class="keyword">import</span> Precision, Recall, AUC</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line">warnings.filterwarnings(<span class="string">&#x27;ignore&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>虽然一次性预加载所有包并非强制，但是这可以确保所有包都预先加载到计算机内存中（译注：减少了在运行时动态加载的时间，但是也增大了内存占用）。</p>
+<h2 id="3-加载文本数据"><a href="#3-加载文本数据" class="headerlink" title="3. 加载文本数据"></a>3. 加载文本数据</h2><p>现在，让我们加载文本数据集。文本文件提供在文末的 Github 链接中。<br>我们有两个文件：training_data.txt 和 testing_data.txt。让我们使用 pandas 库的 read_csv 函数来加载它们。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2. Load Data</span></span><br><span class="line">train_data = pd.read_csv(<span class="string">&#x27;https://raw.githubusercontent.com/clairett/pytorch-sentiment-classification/master/data/SST2/train.tsv&#x27;</span>, header=<span class="literal">None</span>, delimiter=<span class="string">&#x27;;&#x27;</span>)</span><br><span class="line">test_data = pd.read_csv(<span class="string">&#x27;https://raw.githubusercontent.com/clairett/pytorch-sentiment-classification/master/data/SST2/test.tsv&#x27;</span>, header=<span class="literal">None</span>, delimiter=<span class="string">&#x27;;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这些文件并没有 header，因此我们将 header 指定为 None。列分隔符是分号（;）。</p>
+<p>当加载没有标题的训练和测试数据时，pandas 会自动将索引分配为标题。由于 Python 索引是从 0 开始，因此第一列将被标记为 0，第二列被标记为 1，以此类推。</p>
+<p>使用这种格式的数据很不方便，因此我们将重命名这些列以使它们更有意义。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 3. Adjusting Column Names</span></span><br><span class="line">training_data = training_data.rename(columns=&#123;<span class="number">0</span>: <span class="string">&#x27;text&#x27;</span>, <span class="number">1</span>: <span class="string">&#x27;sentiment&#x27;</span>&#125;)</span><br><span class="line">test_data = test_data.rename(columns=&#123;<span class="number">0</span>: <span class="string">&#x27;text&#x27;</span>, <span class="number">1</span>: <span class="string">&#x27;sentiment&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>第 0 列被命名为 text，第 1 列被重命名为 sentiment。</p>
+<p>重命名后，我们将检查数据集的 shape，以验证行数和列数（译注：维度信息）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 4. Checking Dataset Shape</span></span><br><span class="line">training_data.shape</span><br><span class="line"><span class="comment"># -----&gt; (16000, 2)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. Checking Test Dataset Shape</span></span><br><span class="line">test_data.shape</span><br><span class="line"><span class="comment"># -----&gt; (2000, 2)</span></span><br></pre></td></tr></table></figure>
+<p>在训练集中有 16000 行和 2 列，在测试集中有 2000 行和 2 列。</p>
+<p>让我们通过显示训练集的前几行来查看数据示例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 6. Displaying Training Data</span></span><br><span class="line">training_data.head()</span><br></pre></td></tr></table></figure>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2FPP2bWpGENQ7gcoEIgN5Q.png"></p>
+<p>请注意，我们这里需要的只是一个只有两列的数据集。一列是 text，另外一列是 sentiment.</p>
+<p>如果你想用自己的数据重现这个项目，仅需手机自己的历史数据即可。例如，你可以根据需要从句子或者段落中提取文本，然后执行 labeling 操作。</p>
+<p>什么是 labeling？标注员将检查每个句子，并决定这个句子所表达的情感 - 害怕、高兴、愤怒、悲伤等。这个结果将标注在第二列，列名命名为 sentiment.</p>
+<p>在这个项目中，</p>
+<ul>
+<li>text 列作为输入变量</li>
+<li>sentiment 列作为输出变量</li>
+</ul>
+<p>现在，让我们检查一下每种情绪有多少条记录。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 7. Checking Sentiment Distribution</span></span><br><span class="line">training_data[<span class="string">&#x27;sentiment&#x27;</span>].value_counts()</span><br></pre></td></tr></table></figure>
+<p><img src="https://miro.medium.com/v2/resize:fit:740/format:webp/1*g1pBXYNQsW_ynDw825Ibsw.png"></p>
+<p>对于测试数据集，我们需要确保它也包含相同的情感集。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 8. Checking Test Dataset Sentiment Distribution</span></span><br><span class="line">test_data[<span class="string">&#x27;sentiment&#x27;</span>].value_counts()</span><br></pre></td></tr></table></figure>
+<p><img src="https://miro.medium.com/v2/resize:fit:748/format:webp/1*avVxAB6P6q-eShB7G18X1w.png"></p>
+<h2 id="4-训练数据和测试数据的输出类别可以不一样吗？"><a href="#4-训练数据和测试数据的输出类别可以不一样吗？" class="headerlink" title="4. 训练数据和测试数据的输出类别可以不一样吗？"></a>4. 训练数据和测试数据的输出类别可以不一样吗？</h2><p>从上面的观察，我们可以看到训练数据和测试数据具有相同的情感集。</p>
+<p>但是，如果训练数据和测试数据具有不同的情感集，会发生什么？</p>
+<p>从技术上讲，它们可以拥有不同的类别，这并没有被禁止，然而这会引发问题。</p>
+<p>例如，想象一下，在训练谁中，并没有 Love 这种情况，但是在测试数据集中确有。在这种情况下会发生什么？</p>
+<p>在训练模型时，我们使用训练集教会了模型 text 和它所关联的 sentiment 之间的数学关系。模型会学会 Love 吗？不会。因为我们并没有提供任何关于这种情感的样例。因此，如果 Love 本身在训练数据集中缺失，模型见无法理解这种情感。</p>
+<p>然而，在测试数据集中却有这种情感，现在，会发生什么？模型会尝试将它归类到类似于 Love 的分类中。它会分析短语对吧？它会尝试从已经学到的内容中寻找这种模式。</p>
+<p>和 Love 类似的分类是什么？也许是 Joy、Sadness - 但是这取决于 Love 的上下文，它也可能是 Joy、Sadness 甚至是 Anger。</p>
+<p>换而言之，模型将无法将任何短语或者情感归为 Love，因为它没有学习到这种情感。它只能对它所学到的内容进行分类，即你交给它的类别。</p>
+<p>在测试数据中，我期望会存在完全相同的类别，以便模型的评估。<br><img src="https://miro.medium.com/v2/resize:fit:740/format:webp/1*g1pBXYNQsW_ynDw825Ibsw.png"></p>
+<p><strong>机器学习模型是为特定问题创建的。请记住这一点，它只会执行你所教给它的事情。</strong></p>
+<p>相反的情况呢？例如，如果训练数据集中包含所有情绪，而测试数据集中缺少 Love，这样做的导致我们无法评估该类别。</p>
+<h2 id="5-使用-SpaCy-预处理文本数据"><a href="#5-使用-SpaCy-预处理文本数据" class="headerlink" title="5. 使用 SpaCy 预处理文本数据"></a>5. 使用 SpaCy 预处理文本数据</h2><p>接下来，使用 <a target="_blank" rel="noopener" href="https://spacy.io/">SpaCy</a> 库来预处理文本数据。</p>
+<p>然后，需要下载语言模型(字典)。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!python -m spacy download en_core_web_md -q</span><br></pre></td></tr></table></figure>
+
+<p>加载字典，并把它分配给一个 <code>nlp</code> 的对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 9. Loading SpaCy Dictionary</span></span><br><span class="line">nlp = spacy.load(<span class="string">&#x27;en_core_web_md&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>将文本数据作为输入，数据将通过 <code>nlp</code> 对象进行预处理。数据将通过字典（译注：这里的字典实际上应该是指这个语言模型，而非 Python 中的 dict）进行处理。例如，如果我想改变一个单词的动词形式，我需要使用字典来完成转换。<br>这正是我在这里所做的 – 通过字典处理文本。然后，我将提取词元（它本质上是一个词的根形式）。 nlp 会将文本分解为 tokens。换句话说，是将文本转换成更小的组件（tokens）。<br>接着，将它们转换成小写，并使用 strip 函数去除空格。<br>经过处理后，将文本保存回列中，以供进一步分析。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 10. Definition of the &#x27;preprocess_text&#x27; Function, Which Takes a Text as a Parameter</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess_text</span>(<span class="params">text</span>):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 10.a Process the text using the SpaCy model</span></span><br><span class="line">    doc = nlp(text)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 10.b Create a list of lemmatized tokens, converted to lowercase, stripped of whitespace,</span></span><br><span class="line">    <span class="comment"># excluding stopwords</span></span><br><span class="line">    tokens = [token.lemma_.lower().strip() <span class="keyword">for</span> token <span class="keyword">in</span> doc <span class="keyword">if</span> <span class="keyword">not</span> token.is_stop]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 10.c Return the processed tokens as a single string, joined with spaces</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27; &#x27;</span>.join(tokens)</span><br></pre></td></tr></table></figure>
+
+<p>下一步是使用你的 DataFrame。通过 apply 函数，将上面的预处理函数作用到指定列。</p>
+<p>然后，将结果保存到 processed_text 新列中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 11. Apply the Preprocessing Function to Training Data</span></span><br><span class="line">training_data[<span class="string">&#x27;processed_text&#x27;</span>] = training_data[<span class="string">&#x27;text&#x27;</span>].apply(preprocess_text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 12. Apply the Preprocessing Function to Test Data</span></span><br><span class="line">test_data[<span class="string">&#x27;processed_text&#x27;</span>] = test_data[<span class="string">&#x27;text&#x27;</span>].apply(preprocess_text)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我将展示前几行数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 13. Data Sample</span></span><br><span class="line">training_data.head()</span><br></pre></td></tr></table></figure>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*4idPehAo9CH_OmP3jevdAw.png"></p>
+<p>请注意，左侧是原始句子和情感，最后一列是处理后的文本。</p>
+<p>文本得到了简化，接着，我需要将此文本数据转换为<strong>数字表示</strong>。我将创建带有数值的矩阵，这个过程中的所有内容最终都将转化为数学。<br>如果不简化，所得的矩阵可能会充斥着不必要的、不相关的数据。</p>
+<p>例如，在英语中包含代词的 I  有意义吗？几乎每个句子都以 I 开头 – “I do something,” “I feel something,” “I experienced something.” 既然它出现在每句话中，为什么不删除它？这是简化的一个明显例子。</p>
+<blockquote>
+<p>译注：上面的表述逻辑有些问题。实际上，在某些特定的文本分析任务中，我们可能会选择移除人称代词，因为它们可能不会为我们的分析目标提供额外的有用信息。这是文本简化的一个例子。但是否移除应该取决于具体的分析目的。</p>
+</blockquote>
+<h3 id="简化步骤"><a href="#简化步骤" class="headerlink" title="简化步骤"></a>简化步骤</h3><ol>
+<li>词元化：对于 “Feeling completely overwhelmed.”,作为人类，我们知道 “feeling” 是动词 “feel” 的动名词形式。然而，计算机并不能分辨出这两者的区别。因此，对于 “feeling” 我们仅仅使用它的词根形式 “feel” 即可。这一步消除了对单词形式的需要，并且只关注它们的词根。</li>
+<li>删除停用词：代词、副词和常用的连接词（比如 “and”, “but”, “the” 等），这些词通常对于分析来说是不必要的。这些停用词在大多数情况下没有上下文价值。</li>
+<li>减少冗余：删除动词的完整形式而只保留其词根，可以减少不必要的重复，简化文本数据，并避免创建过大的矩阵。</li>
+</ol>
+<blockquote>
+<p>译注：<br>以 “run” 为例：<br>如果不做词元化，”run”, “runs”, “running”, “ran” 会被当作不同的词</p>
+<ul>
+<li>在向量化时（如词袋模型），每个词形都会占用一个维度</li>
+<li>这样会产生更多的特征（维度），导致矩阵变大<br>做了词元化后：</li>
+<li>所有形式都变成 “run”</li>
+<li>只需要一个维度来表示这个概念</li>
+<li>矩阵变小，计算更高效</li>
+</ul>
+</blockquote>
+<h3 id="为什么要简化"><a href="#为什么要简化" class="headerlink" title="为什么要简化"></a>为什么要简化</h3><ul>
+<li>效率：简化，减少了数据的大小和复杂性，使其更容易转换为数值矩阵。</li>
+<li>关注含义：对于机器来说，只有每个短语的核心含义对于检测情绪很重要。</li>
+<li>避免不相关性：在大多数情况下，包含不必要的单词或完整动词不会增加任何价值。</li>
+</ul>
+<p>通过自然语言处理（NLP），我们简化了文本数据，重点关注每个句子的重要部分。这是一般预处理步骤。</p>
+<h2 id="6-模型（Version-1）-–-使用-TF-IDF-向量化"><a href="#6-模型（Version-1）-–-使用-TF-IDF-向量化" class="headerlink" title="6. 模型（Version 1） – 使用 TF-IDF 向量化"></a>6. 模型（Version 1） – 使用 TF-IDF 向量化</h2><p>让我们来构建模型的第一个版本。第一步是使用 TF-IDF 向量化。</p>
+<p>由于数据是文本格式，我们无法建立文本之上直接进行数学计算，因此，我们需要将其转换为数字表示。</p>
+<p>这个转换过程有很多策略可以实现，TF-IDF 是其中一种。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 14. Create the Vectorizer</span></span><br><span class="line">tfidf_vectorizer = TfidfVectorizer(max_df=<span class="number">0.95</span>, min_df=<span class="number">2</span>, stop_words=<span class="string">&#x27;english&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>TF-IDF(Term Frequency-Inverse Document Frequency) 是一种在自然语言处理中长期使用的技术。现在，实际上我们有更高级的策略：Word Embeddings，它被用于 Transformer 模型中。但是，TF-IDF 仍然是一个很好的起点，对于更简单的文本问题，它甚至可能是理想的解决方案。而使用 Transformr 模型，有时候就像是用大炮打蚊子。</p>
+<h3 id="简单模型的优点"><a href="#简单模型的优点" class="headerlink" title="简单模型的优点"></a>简单模型的优点</h3><ul>
+<li>解释性更强： 模型更容易被理解和解释。</li>
+<li>更快的训练：第一版只需要几分钟即可完成训练。相比之下，后续的 Transformer （V3）将至少需要 45 分钟的训练。</li>
+</ul>
+<h3 id="性能比较"><a href="#性能比较" class="headerlink" title="性能比较"></a>性能比较</h3><p>有趣的是，Transformer 的性能不会明显优于第一个版本。我的目标<strong>不是无休止地创建复杂的架构，而是有效地解决业务问题。</strong></p>
+<p>因此，我将使用向量化策略将输入数据转换为数字表示。</p>
+<p>虽然 TF-IDF 非常出色且运行良好，但是它有一个限制：<strong>无法上下文</strong>。上下文很重要，但请考虑数据集中句子的简单性：</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*4idPehAo9CH_OmP3jevdAw.png"></p>
+<p>这些都是非常简单的句子。对于这种情况，上下文可能本身并不相关，那为什么要使用 Word Embeddings 呢？</p>
+<p>我们可以使用 Word Embeddings 吗？当然。我会在 V3 版本中使用它，但这真的必要吗？会显著提升性能吗？</p>
+<p>作为专业人士，我们必须对此进行分析，避免被最新或最先进的技术所左右。</p>
+<h3 id="关注于业务目标"><a href="#关注于业务目标" class="headerlink" title="关注于业务目标"></a>关注于业务目标</h3><p>如果我们可以使用 TF-IDF 来解决问题，那太好了，我们解决了。<br>你想使用更先进的技术吗？请记住，这需要：</p>
+<ul>
+<li>更多硬件</li>
+<li>更大的计算能力</li>
+<li>更多时间</li>
+</ul>
+<p>然而，性能提升并不总是证明这些额外的成本是合理的。最终，我们需要结合问题的背景和分析情况。</p>
+<p>关于向量化，我在 notebook 中为大家提供了完整的描述：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oWzd0NSOFg5dDpTy6uxilw.png"></p>
+<p>本质上，TF-IDF 计算单词的频率，它检查哪些单词出现的频率较高或者较低，并为它们分配一个分数。<br>这个分数，定义了 TF-IDF.</p>
+<p>使用这些分数，TF-IDF 构建了一个以数字方式表示文本的向量。但是，它不像 Word Embeddings 那样，能够捕捉到单词之间的上下文关系。相反，它提供了基于词频的数字表示，这对于简单文本非常有效。</p>
+<p>接下来，我将开始使用 TF-IDF 函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 15. Apply the Vectorizer</span></span><br><span class="line">train_tfidf = tfidf_vectorizer.fit_transform(training_data[<span class="string">&#x27;processed_text&#x27;</span>])</span><br><span class="line">test_tfidf = tfidf_vectorizer.transform(test_data[<span class="string">&#x27;processed_text&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>注意这个细节，fit_transform 函数用于训练数据，transform 函数用于测试数据。</p>
+<blockquote>
+<ol>
+<li>TF (词频) 计算:<br>对每个文档进行分词<br>统计每个词在文档中出现的次数<br>将词频标准化为相对频率(词出现次数&#x2F;文档总词数)</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>IDF (逆文档频率) 计算:<br>统计每个词在多少个文档中出现<br>使用公式: log(文档总数&#x2F;(出现该词的文档数 + 1))<br>这样可以降低常见词的权重,提高稀有词的权重</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>向量化过程:<br>建立词汇表(所有文档中出现的唯一词)<br>对每个文档:<br>计算其TF值<br>与对应词的IDF值相乘<br>得到该维度的TF-IDF值</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>最终每个文档表示为一个向量,向量维度是词汇表大小</p>
+</blockquote>
+<blockquote>
+<p>代码中包含了详细的输出,可以看到:</p>
+</blockquote>
+<blockquote>
+<p>每个词的TF值<br>每个词的IDF值<br>最终的TF-IDF矩阵</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 16. Check Shape of Training Data TF-IDF Matrix</span></span><br><span class="line">train_tfidf.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># -----&gt; (16000, 5586)</span></span><br></pre></td></tr></table></figure>
+
+<p>最终，TF-IDF 构建了一个 16000 行和 5586 列的稀疏数字矩阵。这种矩阵，和 word embeddings 相比，它不考虑词序和上下文，是稀疏的，而 word embeddings 则相反。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 17. Check Type of Training Data TF-IDF Matrix</span></span><br><span class="line"><span class="built_in">type</span>(train_tfidf)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*9mgUALJKLRqbBGWhrvHYrg.png"></p>
+<p>注意，这个结果是由 <code>scipy</code> 创建的稀疏矩阵。</p>
+<p>因此，这里，我们需要把它转换成数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 18. Convert the TF-IDF Matrix to an Array</span></span><br><span class="line">train_tfidf = train_tfidf.toarray()</span><br><span class="line">test_tfidf = test_tfidf.toarray()</span><br></pre></td></tr></table></figure>
+
+<p>现在，我们已经完成输入数据的处理。</p>
+<h2 id="7-数据准备-编码目标变量"><a href="#7-数据准备-编码目标变量" class="headerlink" title="7. 数据准备 - 编码目标变量"></a>7. 数据准备 - 编码目标变量</h2><p>第一步是为了将输入数据转成数字表示。在本例中，我们是通过 TF-IDF 创建了分数矩阵。</p>
+<p>接下来，我们需要处理 sentiment 列。这里，共有 6 种类型的 sentiment。</p>
+<p>在这里，我将使用 <code>LabelEncoder</code> 来将这些情感编码为数字。使用数字替代这些 sentiment，比如，用 1 代表 Love，依次类推。</p>
+<p>现在，让我们来创建这个 encoder：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 19. Create the Encoder</span></span><br><span class="line">encoder = LabelEncoder()</span><br></pre></td></tr></table></figure>
+
+<p>接着，我们将训练数据中的 sentiment 列进行编码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 20. Fit the Encoder on Training Data</span></span><br><span class="line">encoder.fit(training_data[<span class="string">&#x27;sentiment&#x27;</span>])</span><br><span class="line"><span class="comment"># 21. Transform the Target Variable in Test Data</span></span><br><span class="line">y_test_le = label_encoder_v1.transform(test_data[<span class="string">&#x27;sentiment&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://miro.medium.com/v2/resize:fit:750/format:webp/1*-luXTVspGFsLk_-U1bE_WA.png"></p>
+<p>可以看到，样本空间中，每种 sentiment 的个数是不一样、不平衡的。比如 joy 就在 5362 个句子出现，而 sadness 仅仅出现了 4666 个句子。<br>这种情况，自然也会导致训练的不均衡。</p>
+<h3 id="这意味着什么"><a href="#这意味着什么" class="headerlink" title="这意味着什么"></a>这意味着什么</h3><p>这意味着 joy 的学习量比其他 sentiment 的学习量要大得多。</p>
+<h3 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h3><p>我们有很多可解决的方案…</p>
+<h2 id="8-解决分类不均衡问题"><a href="#8-解决分类不均衡问题" class="headerlink" title="8. 解决分类不均衡问题"></a>8. 解决分类不均衡问题</h2><p>现在，让我们开始处理分类的不均衡问题。</p>
+<p>在进行分类问题时，这是一个常见问题。理想情况下，是每类样本具有相同的数量。然而，在现实社会中，我们会遇到这样的问题。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:750/format:webp/1*-luXTVspGFsLk_-U1bE_WA.png"></p>
+<h3 id="解决策略"><a href="#解决策略" class="headerlink" title="解决策略"></a>解决策略</h3><h4 id="过采样（Over-Sampling）"><a href="#过采样（Over-Sampling）" class="headerlink" title="过采样（Over Sampling）"></a>过采样（Over Sampling）</h4><p>使用统计策略，基于真实数据创建合成数据，增加少数样本数量。</p>
+<h4 id="欠采样（Under-Sampling）"><a href="#欠采样（Under-Sampling）" class="headerlink" title="欠采样（Under Sampling）"></a>欠采样（Under Sampling）</h4><p>减少多数样本数量，使得多数样本和少数样本数量一致。这样做，我们将损失样本。</p>
+<h4 id="过采样和欠采样折中-Trade-offs"><a href="#过采样和欠采样折中-Trade-offs" class="headerlink" title="过采样和欠采样折中(Trade-offs)"></a>过采样和欠采样折中(Trade-offs)</h4><p>过采样和欠采样组合。</p>
+<h4 id="使用加权损失函数"><a href="#使用加权损失函数" class="headerlink" title="使用加权损失函数"></a>使用加权损失函数</h4><p>与其修改数据，我们可以告诉模型增大少数类别的权重，在训练过程中给与他们更多的关注。</p>
+<p>为了完成这一点，我们将使用 compute_class_weight 函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 22. Compute Class Weights</span></span><br><span class="line">class_weights = compute_class_weight(<span class="string">&#x27;balanced&#x27;</span>, classes=np.unique(y_train_le), y=y_train_le)</span><br></pre></td></tr></table></figure>
+
+<p>compute_class_weight 函数来自 sklearn，它计算每个类别的权重。这些权重将用于分类模型，使得模型在训练过程中对少数类别给予更多的关注。它将自动平衡学习。这种方式，也并不会改变数据。</p>
+<p>接下来，我将使用类别权重来训练模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 24. Train the Model with Class Weights</span></span><br><span class="line">X_train, X_val, y_train, y_val = train_test_split(</span><br><span class="line">    X_train_array,</span><br><span class="line">    y_train_le,</span><br><span class="line">    test_size=<span class="number">0.2</span>,</span><br><span class="line">    random_state=<span class="number">42</span>,</span><br><span class="line">    stratify=y_train_le</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># X: 特征数据集（可以是 numpy 数组或 pandas DataFrame）</span></span><br><span class="line"><span class="comment"># y: 目标变量（可以是 numpy 数组或 pandas Series）</span></span><br><span class="line"><span class="comment"># test_size: 测试集的比例（例如 0.2 表示 20% 的数据用于测试）</span></span><br><span class="line"><span class="comment"># random_state: 随机种子，用于确保结果可复现</span></span><br></pre></td></tr></table></figure>
+<p>我将数据分为训练集和测试集。</p>
+<p>请注意，下面这个步骤必须在 splitting 数据之后执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 14. Create the Vectorizer</span></span><br><span class="line">tfidf_vectorizer = TfidfVectorizer(max_df=<span class="number">0.95</span>, min_df=<span class="number">2</span>, stop_words=<span class="string">&#x27;english&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>记住，向量化和编码目标变量必须独立应用于训练集和测试集。<br>现在，我们已经完成这一点。我将训练数据分割成训练子集和验证子集。<br>最后，我将调整输出变量 y 的维度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 25. Convert Target Variable to Categorical Type</span></span><br><span class="line">y_train_encoded = to_categorical(y_train)</span><br><span class="line">y_test_encoded = to_categorical(y_test_le)</span><br><span class="line">y_val_encoded = to_categorical(y_val)</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="9-构建模型"><a href="#9-构建模型" class="headerlink" title="9. 构建模型"></a>9. 构建模型</h2><p>我们现在已经完成了第一步和第二步。在第一步中，我们准备好了输入数据，在第二步中，我们准备好了输出数据。</p>
+<p>接着，我们将数据分割成训练集和验证集，从而进行训练和验证。测试数据集将用于评估模型。</p>
+<p>现在，我们进入了第三步骤，构建模型。</p>
+<p>这里，我将使用一个简单的全连接架构，而不是使用那些特殊的模型。</p>
+<p>我所指的特殊模型：</p>
+<ul>
+<li>卷积模型：主要用于计算机视觉</li>
+<li>双向模型：通常用于自然语言处理，能同时考虑上下文信息</li>
+<li>transform 架构：可以处理各种类型的任务</li>
+</ul>
+<p>这里，不会使用这些特殊的模块，而是使用一种标准的神经网络架构，包含多个隐藏层，这正是定义深度学习的关键概念。</p>
+<blockquote>
+<p>神经网络和深度学习的区别</p>
+</blockquote>
+<p>和那些高级架构相比，它确实是简单的，全连接的。这些全连接架构通常用于更复杂架构的最后组件（这种结构常作为复杂神经网络的最后几层，用于将提取的特征映射到最终的输出）。</p>
+<p>然而，在发展过程中，transformer本身往往缺乏稳健的学习能力。因此，它们会结合一些特殊模块，例如：</p>
+<ul>
+<li>卷积模块</li>
+<li>双向模块</li>
+<li>transformer固有的注意力模块，以及其他模块。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 27. Create the Model</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 27.a Initialize a sequential model. Sequential models are a linear stack of layers.</span></span><br><span class="line">model_v1 = Sequential()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 27.b Add the first dense (fully-connected) layer to the model</span></span><br><span class="line">model_v1.add(Dense(</span><br><span class="line">    <span class="number">4096</span>,</span><br><span class="line">    activation=<span class="string">&#x27;selu&#x27;</span>,  <span class="comment"># Use the SELU (Scaled Exponential Linear Unit) activation function</span></span><br><span class="line">    kernel_initializer=<span class="string">&#x27;lecun_normal&#x27;</span>,  <span class="comment"># Initialize weights with LeCun normal distribution</span></span><br><span class="line">    input_shape=(X_train.shape[<span class="number">1</span>],),  <span class="comment"># Define input shape based on the number of features in X_train</span></span><br><span class="line">    kernel_regularizer=tf.keras.regularizers.l2(<span class="number">0.01</span>)  <span class="comment"># Apply L2 regularization to reduce overfitting</span></span><br><span class="line">))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 27.c Add the second dense layer</span></span><br><span class="line">model_v1.add(Dense(</span><br><span class="line">    <span class="number">2048</span>,</span><br><span class="line">    activation=<span class="string">&#x27;selu&#x27;</span>,</span><br><span class="line">    kernel_initializer=<span class="string">&#x27;lecun_normal&#x27;</span>,</span><br><span class="line">    kernel_regularizer=tf.keras.regularizers.l2(<span class="number">0.01</span>)</span><br><span class="line">))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 27.d Add the third dense layer</span></span><br><span class="line">model_v1.add(Dense(</span><br><span class="line">    <span class="number">1024</span>,</span><br><span class="line">    activation=<span class="string">&#x27;selu&#x27;</span>,</span><br><span class="line">    kernel_initializer=<span class="string">&#x27;lecun_normal&#x27;</span>,</span><br><span class="line">    kernel_regularizer=tf.keras.regularizers.l2(<span class="number">0.1</span>)</span><br><span class="line">))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 27.e Add the fourth dense layer</span></span><br><span class="line"><span class="comment"># Layer with 64 neurons and SELU activation</span></span><br><span class="line">model_v1.add(Dense(<span class="number">64</span>, activation=<span class="string">&#x27;selu&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 27.f Add the output layer</span></span><br><span class="line"><span class="comment"># Output layer with 6 neurons and softmax activation for multi-class classification</span></span><br><span class="line">model_v1.add(Dense(<span class="number">6</span>, activation=<span class="string">&#x27;softmax&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="我们做了什么"><a href="#我们做了什么" class="headerlink" title="我们做了什么"></a>我们做了什么</h3><p>首先，我使用Keras作为TensorFlow（我们的主要框架）的API，创建了一个层序列并定义了model_v1对象。<br>然后，我添加了以下层：</p>
+<ul>
+<li>第一个密集层：一个初始化模型架构的全连接层。</li>
+<li>额外的密集层：第二层和第三层加深了架构。</li>
+<li>最后的密集层：使用Softmax激活函数来生成类别概率。</li>
+</ul>
+<p>密集层的关键细节：</p>
+<ul>
+<li>神经元的数量：每一层都包含自己的数学运算符。每层都有特定数量的神经元。每个神经元都有自己的计算过程。神经元数量影响模型的复杂度和学习能力。</li>
+<li>激活函数：决定神经元如何处理输入。激活函数通常是Sigmoid、ReLU、Tanh等。</li>
+<li>初始化权重：在训练开始时，权重是未知的，必须被初始化。这里，我们使用kernel_initializer&#x3D;’lecun_normal’。</li>
+<li>输入类型：输入格式基于训练数据的列数：X_train.shape[1]指的是向量化数据集中的列数。</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

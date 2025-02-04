@@ -10,8 +10,8 @@
   
 
   
-  <meta name="description" content="在神经网络训练过程中，通过梯度指导参数的更新，使得损失函数尽可能小，以达到对数据集的更好的拟合。在多层网络中，梯度在反向传播过程中，通过链式法则在不同隐藏层中传递时，会出现梯度消失和梯度爆炸的现象，至于是消失还是爆炸，这通常取决于激活函数的选择。
-梯度消失所谓梯度消失，是指在反向传播过程中，梯度在传">
+  <meta name="description" content="在神经网络训练过程中，通过梯度指导参数的更新，使得损失函数尽可能小，以达到对数据集的更好的拟合。在多层网络中，梯度在反向传播过程中，通过链式法则在不同隐藏层中传递时，就可能会出现梯度消失和梯度爆炸的现象。
+梯度消失所谓梯度消失，是指在反向传播过程中，梯度在传递过程中逐渐变小，最终趋近于0，导致参数更">
   
 
   
@@ -70,8 +70,8 @@
   <div class="article-top-meta">
     <span class="posted-on">
       <a href="/draft/gradient-vanishing-exploding.html" rel="bookmark">
-        <time class="entry-date published" datetime="2025-01-07T15:25:39.537Z">
-          2025-01-07
+        <time class="entry-date published" datetime="2025-01-07T16:32:16.627Z">
+          2025-01-08
         </time>
       </a>
     </span>
@@ -83,7 +83,7 @@
   <div class="article-content">
     <div class="entry">
       
-        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/forward-back/20241211202229.gif"><br>在神经网络训练过程中，通过梯度指导参数的更新，使得损失函数尽可能小，以达到对数据集的更好的拟合。<br>在多层网络中，梯度在反向传播过程中，通过链式法则在不同隐藏层中传递时，会出现梯度消失和梯度爆炸的现象，至于是消失还是爆炸，这通常取决于激活函数的选择。</p>
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/forward-back/20241211202229.gif"><br>在神经网络训练过程中，通过梯度指导参数的更新，使得损失函数尽可能小，以达到对数据集的更好的拟合。<br>在多层网络中，梯度在反向传播过程中，通过链式法则在不同隐藏层中传递时，就可能会出现梯度消失和梯度爆炸的现象。</p>
 <h3 id="梯度消失"><a href="#梯度消失" class="headerlink" title="梯度消失"></a>梯度消失</h3><p>所谓梯度消失，是指在反向传播过程中，梯度在传递过程中逐渐变小，最终趋近于0，导致参数更新缓慢，甚至无法更新。</p>
 <p>假设，我们使用 <code>Sigmoid</code> 函数作为激活函数，那么，在反向传播过程中，梯度在传递过程中会逐渐变小，最终趋近于0。<br><code>Sigmoid</code> 函数及导数曲线如下：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6A3A_rt4YmumHusvTvVTxw.png"><br>我们可以看到，<code>Sigmoid</code> 函数的导数在 0 到 0.25 之间。</p>
 <blockquote>

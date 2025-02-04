@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>装饰器和装饰器模式 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="装饰，实际上是对函数、对象行为的改变，或是扩展、增强、甚至替换。它接收一个个体，最终输出一个装饰后的个体。
+这里，装饰器是 Python 中的概念，而装饰器模式来源于设计模式。把它们放在一起，是因为它们都具备有”装饰”的特性，但也有一些不同。">
+  
+
+  
+  
+  <meta name="keywords" content="Python,装饰器,装饰器模式">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="装饰器和装饰器模式"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>装饰器和装饰器模式</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/02/04/decorator/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-04T02:59:18.756Z">
+          2025-02-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://images.unsplash.com/photo-1629450748686-c86699b710ac?q=80&w=3064&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA=="></p>
+<p>装饰，实际上是对函数、对象行为的改变，或是扩展、增强、甚至替换。它接收一个个体，最终输出一个装饰后的个体。</p>
+<p>这里，装饰器是 Python 中的概念，而装饰器模式来源于设计模式。把它们放在一起，是因为它们都具备有”装饰”的特性，但也有一些不同。</p>
+<span id="more"></span>
+
+<h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><p>Python 中的装饰器，本质上是一个可调用对象（函数或者任何实现了 <code>__call__</code> 方法的对象）。</p>
+<h3 id="装饰器使用"><a href="#装饰器使用" class="headerlink" title="装饰器使用"></a>装饰器使用</h3><p>我们定义一个装饰器函数，它接收一个函数或者类作为参数，并返回一个函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;1. 开始&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 函数装饰器</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">log_decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n2. 装饰器被调用&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;2.1 接收到的 func 类型: <span class="subst">&#123;<span class="built_in">type</span>(func)&#125;</span>&quot;</span>)  <span class="comment"># 应该是 function</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;2.2 接收到的 func 名称: <span class="subst">&#123;func.__name__&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n4. wrapper 被调用&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;4.1 wrapper 类型: <span class="subst">&#123;<span class="built_in">type</span>(wrapper)&#125;</span>&quot;</span>)  <span class="comment"># 应该是 function</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;4.2 调用原始函数&quot;</span>)</span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;4.3 原始函数调用完成&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;3. 准备返回 wrapper&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;3.1 返回的 wrapper 类型: <span class="subst">&#123;<span class="built_in">type</span>(wrapper)&#125;</span>&quot;</span>)  <span class="comment"># 应该是 function</span></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@log_decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greeting</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;5. greeting 函数被调用，参数: <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>!&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n--- 装饰器执行完毕 ---&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;6. 最终 greeting 类型: <span class="subst">&#123;<span class="built_in">type</span>(greeting)&#125;</span>&quot;</span>)  <span class="comment"># 现在应该是 wrapper 函数</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;6.1 最终 greeting 名称: <span class="subst">&#123;greeting.__name__&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n--- 调用函数 ---&quot;</span>)</span><br><span class="line">result = greeting(<span class="string">&quot;Alice&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n7. 调用结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>这里，其实我们能够看到，<code>greeting</code> 函数被 <code>log_decorator</code> 装饰器装饰后，变成了 <code>log_decorator</code> 内部的 <code>wrapper</code> 函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 类装饰器</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">singleton</span>(<span class="params">cls</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;修饰前 Database 类型: <span class="subst">&#123;<span class="built_in">type</span>(cls)&#125;</span>&quot;</span>)  <span class="comment"># &lt;class &#x27;type&#x27;&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_instance</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;get_instance 函数类型: <span class="subst">&#123;<span class="built_in">type</span>(get_instance)&#125;</span>&quot;</span>)  <span class="comment"># &lt;class &#x27;function&#x27;&gt;</span></span><br><span class="line">        <span class="keyword">return</span> cls()</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;修饰后返回函数类型: <span class="subst">&#123;<span class="built_in">type</span>(get_instance)&#125;</span>&quot;</span>)  <span class="comment"># &lt;class &#x27;function&#x27;&gt;</span></span><br><span class="line">    <span class="keyword">return</span> get_instance</span><br><span class="line"></span><br><span class="line"><span class="meta">@singleton</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Database</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;最终 Database 类型: <span class="subst">&#123;<span class="built_in">type</span>(Database)&#125;</span>&quot;</span>)  <span class="comment"># &lt;class &#x27;function&#x27;&gt;</span></span><br><span class="line">db = Database()  <span class="comment"># 实际上是调用返回的 get_instance 函数</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;db 对象类型: <span class="subst">&#123;<span class="built_in">type</span>(db)&#125;</span>&quot;</span>)  <span class="comment"># &lt;class &#x27;Database&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用了装饰器之后，<code>Database</code> 类在导入时，装饰器函数被自动执行，<code>Database</code> 类变成了 <code>singleton</code> 内部的 <code>get_instance</code> 函数。</p>
+<p><strong>综上，装饰器函数在本质上，其实是在被装饰个体（函数或者类）被导入时，将个体名字（标识符）指向到了装饰器函数内部的函数上。</strong></p>
+<blockquote>
+<p>名字是一个字符串键（key）,这个键存在于某个命名空间（namespace）的字典中,这个键对应的值（value）就是对象的引用。</p>
+</blockquote>
+<p>我们还可以创建装饰器工厂，从而实现装饰器参数化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">repeat</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">                func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@repeat(<span class="params"><span class="number">3</span></span>)  </span><span class="comment"># 让 say_hi() 运行 3 次</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hi!&quot;</span>)</span><br><span class="line"></span><br><span class="line">say_hi()</span><br></pre></td></tr></table></figure>
+
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p><strong>闭包，就是延伸了变量作用域的函数。</strong></p>
+<p>以上面的 <code>repeat</code> 装饰器为例，<code>repeat</code> 装饰器内部的 <code>decorator</code> 函数，就是闭包，<code>decorator</code> 函数能够访问 <code>repeat</code> 装饰器内部的变量 <code>n</code>。这样，即使 <code>repeat</code> 装饰器执行完毕，<code>decorator</code> 函数仍然能够访问 <code>repeat</code> 装饰器内部的变量 <code>n</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(say_hi.__closure__)  <span class="comment"># 输出闭包元组</span></span><br><span class="line"><span class="built_in">print</span>(say_hi.__closure__[<span class="number">0</span>].cell_contents)  <span class="comment"># 访问闭包变量 n 的值</span></span><br></pre></td></tr></table></figure>
+<p>当然，我们也可以定义一个类来实现类似的功能，但是类需要实例化，而闭包不需要。并且，闭包的性能比类高。</p>
+<p>在变量搜索过程中，其实还涉及了 LEGB 规则，即：</p>
+<ul>
+<li>L: Local 局部作用域</li>
+<li>E: Enclosing 闭包函数外的函数中</li>
+<li>G: Global 全局作用域</li>
+<li>B: Built-in 内置作用域</li>
+</ul>
+<p>尽管，Python 和 JS 中闭包本质上是相同的，但在作用域规则上也存在一些区别。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Python（LEGB 规则）</th>
+<th>JavaScript（作用域链）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作用域规则</td>
+<td>LEGB（Local → Enclosing → Global → Built-in）</td>
+<td>作用域链（Scope Chain）</td>
+</tr>
+<tr>
+<td>变量修改</td>
+<td>默认不能修改外部变量，需要 nonlocal</td>
+<td>可以直接修改外部变量</td>
+</tr>
+<tr>
+<td>变量查找顺序</td>
+<td>从内到外，依次查找</td>
+<td>从内到外，依次查找</td>
+</tr>
+</tbody></table>
+<h2 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h2><p>装饰器模式，是一种常见的设计模式，目的是额外的给对象添加功能，这一点是和装饰器是相同的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基础组件接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Coffee</span> &#123;</span><br><span class="line">    String <span class="title function_">getDescription</span><span class="params">()</span>;</span><br><span class="line">    <span class="type">double</span> <span class="title function_">getCost</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体组件</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleCoffee</span> <span class="keyword">implements</span> <span class="title class_">Coffee</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getDescription</span><span class="params">()</span> &#123; <span class="keyword">return</span> <span class="string">&quot;Simple Coffee&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">getCost</span><span class="params">()</span> &#123; <span class="keyword">return</span> <span class="number">5.0</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 装饰器基类</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">CoffeeDecorator</span> <span class="keyword">implements</span> <span class="title class_">Coffee</span> &#123;</span><br><span class="line">    <span class="keyword">protected</span> Coffee coffee;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">CoffeeDecorator</span><span class="params">(Coffee coffee)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.coffee = coffee;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getDescription</span><span class="params">()</span> &#123; <span class="keyword">return</span> coffee.getDescription(); &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">getCost</span><span class="params">()</span> &#123; <span class="keyword">return</span> coffee.getCost(); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体装饰器</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MilkDecorator</span> <span class="keyword">extends</span> <span class="title class_">CoffeeDecorator</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MilkDecorator</span><span class="params">(Coffee coffee)</span> &#123; <span class="built_in">super</span>(coffee); &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getDescription</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> coffee.getDescription() + <span class="string">&quot;, with Milk&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">getCost</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> coffee.getCost() + <span class="number">2.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Coffee</span> <span class="variable">coffee</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleCoffee</span>();  <span class="comment">// 简单咖啡</span></span><br><span class="line"><span class="type">Coffee</span> <span class="variable">milkCoffee</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MilkDecorator</span>(coffee);  <span class="comment">// 加牛奶</span></span><br><span class="line"></span><br><span class="line">System.out.println(milkCoffee.getDescription());  <span class="comment">// 输出：Simple Coffee, with Milk</span></span><br><span class="line">System.out.println(milkCoffee.getCost());  <span class="comment">// 输出：7.0</span></span><br></pre></td></tr></table></figure>
+<p>以上，我们可以看到：</p>
+<ul>
+<li>每个装饰器都持有一个被装饰对象的引用。</li>
+<li>装饰器可以动态地添加或删除功能。</li>
+<li>装饰器和被装饰者实现相同的接口</li>
+<li>装饰器可以嵌套使用。</li>
+</ul>
+<p>常见的，以 Java 中的 IO 流为例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个普通的 FileInputStream 只能按字节读取</span></span><br><span class="line"><span class="type">FileInputStream</span> <span class="variable">fileIn</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;data.bin&quot;</span>);</span><br><span class="line"><span class="comment">// 只能这样读：</span></span><br><span class="line"><span class="type">int</span> <span class="variable">byte1</span> <span class="operator">=</span> fileIn.read();  <span class="comment">// 读一个字节</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 DataInputStream 装饰后</span></span><br><span class="line"><span class="type">DataInputStream</span> <span class="variable">dataIn</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DataInputStream</span>(fileIn);</span><br><span class="line"><span class="comment">// 可以直接读取基本类型：</span></span><br><span class="line"><span class="type">int</span> <span class="variable">intValue</span> <span class="operator">=</span> dataIn.readInt();         <span class="comment">// 读取 4 字节并转成 int</span></span><br><span class="line"><span class="type">double</span> <span class="variable">doubleValue</span> <span class="operator">=</span> dataIn.readDouble(); <span class="comment">// 读取 8 字节并转成 double</span></span><br><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> dataIn.readUTF();           <span class="comment">// 读取 UTF 编码的字符串</span></span><br></pre></td></tr></table></figure>
+<p>它体现了良好的单一职责原则，动态、灵活地扩展了 <code>FileInputStream</code> 的功能。</p>
+<p>就动态扩展功能这一点，其实代理模式也可以实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代理：注重控制对象访问</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceProxy</span> <span class="keyword">implements</span> <span class="title class_">Service</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Service service;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (hasPermission()) &#123;  <span class="comment">// 控制访问</span></span><br><span class="line">            service.operation(); <span class="comment">// 只是单纯调用原方法</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代理类和装饰器类：</p>
+<ul>
+<li>通过持有被代理对象和被装饰对象的引用，实现对原对象的控制。</li>
+<li>都实现了和被代理对象和被装饰对象相同的接口。</li>
+</ul>
+<p>但是，</p>
+<ul>
+<li>使用意图上，代理模式注重控制对象访问，而装饰器模式注重扩展对象功能。</li>
+<li>代理模式通常只有一个代理类，但装饰器模式可以有多个装饰器类。</li>
+</ul>
+<h2 id="装饰器和装饰器模式的区别"><a href="#装饰器和装饰器模式的区别" class="headerlink" title="装饰器和装饰器模式的区别"></a>装饰器和装饰器模式的区别</h2><ul>
+<li>从实现方式上，Python 中的装饰器体现了函数式编程（高阶函数）的思想，而装饰器模式体现了面向对象编程的思想，使用继承和组合。</li>
+<li>从定义时机上，装饰器在被编译时实现，而装饰器模式在运行时实现。</li>
+<li>从组合方式上，多个装饰器从里到外依次装饰，而装饰器模式可以嵌套使用。</li>
+</ul>
+<p>但是，</p>
+<ul>
+<li>都是对目标进行功能扩展。</li>
+<li>都遵循开闭原则。都体现了单一职责原则。</li>
+<li>都是关注分离点。即功能和业务逻辑的分离。</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Python/">Python</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Python/">Python</a><a href="/tags/装饰器/">装饰器</a><a href="/tags/装饰器模式/">装饰器模式</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

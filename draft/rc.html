@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="残差连接
+当神经网络的层数加深时，梯度消失和梯度爆炸的问题会变得更加严重。就像是把 100 张纸堆叠在一起，底层很难感受到顶层的压力。
+池化池化是一种降维（Downsampling）技术，目的是减少数据的尺寸，同时保留重要特征，减少计算量，并提高模型的平移不变性（Translation Invari">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/rc.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-13T01:47:23.065Z">
+          2025-02-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>残差连接</p>
+<p>当神经网络的层数加深时，梯度消失和梯度爆炸的问题会变得更加严重。就像是把 100 张纸堆叠在一起，底层很难感受到顶层的压力。</p>
+<h2 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h2><p>池化是一种降维（Downsampling）技术，目的是减少数据的尺寸，同时保留重要特征，减少计算量，并提高模型的平移不变性（Translation Invariance）。</p>
+<p>让我从词源的角度来解释”池化”这个术语。<br>“池化”(Pooling)这个词在英文中的原始含义是”集中到一起”或”汇集”。就像多条小溪汇集成一个水池一样，这个词强调了”将分散的东西集中到一起”这个过程。<br>在深度学习中，”池化”这个名字其实是从英文”Pooling”直译过来的。这个术语选择的原因是：当我们对特征图进行池化操作时，我们实际上是在做一个”汇集”的动作 - 我们把一个区域内的多个数值”汇集”成一个数值。<br>也许用”汇集层”或”聚合层”这样的名字会更容易理解一些，因为这更直接地描述了这一层的功能：将多个特征值聚合成一个特征值。但由于历史原因和约定俗成，我们继续使用”池化”这个术语。<br>所以当你看到”池化”这个词时，可以把它理解为”把多个数据汇集（聚合）成一个数据”的过程。这样可能会比试图理解”池”这个字的具体含义更有帮助。<br>您觉得用”汇集层”或”聚合层”这样的名字是不是会更容易理解一些？</p>
+<p>这种命名方式反映了池化操作的本质：</p>
+<ul>
+<li>它是一个聚合的过程</li>
+<li>它保留了重要的特征（就像水池的深度特征）</li>
+<li>它减少了数据量（就像用一个值代表了一个区域）</li>
+</ul>
+<p>池化的优势：</p>
+<ul>
+<li><p>降维：减少参数数量和计算量，有助于控制过拟合。<br>例如：一个50x50的特征图经过2x2池化后变成25x25，参数量减少了75%。</p>
+</li>
+<li><p>特征不变性：<br>位置不变性：即使特征在图像中的位置略有偏移，池化后的结果仍然相似。<br>尺度不变性：对输入的微小变化不敏感。</p>
+</li>
+<li><p>层次化特征提取：<br>较低层的池化可以提取局部特征。<br>较高层的池化则可以捕获更大范围的特征。</p>
+</li>
+</ul>
+<p>池化（Pooling）不是通过卷积实现的，而是一个独立的操作，尽管它通常与卷积层一起使用。</p>
+<p>池化的基本概念</p>
+<p>池化是一种降维（Downsampling）技术，目的是减少数据的尺寸，同时保留重要特征，减少计算量，并提高模型的平移不变性（Translation Invariance）。</p>
+<p>池化的常见方式</p>
+<p>池化操作本质上是在一个窗口区域内进行取值运算，最常见的两种方式是：<br>    1.	最大池化（Max Pooling）：取池化窗口内的最大值（用于提取最强特征）。<br>    2.	平均池化（Average Pooling）：取池化窗口内的平均值（用于平滑特征）。</p>
+<p>池化 vs. 卷积</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>池化</th>
+<th>卷积</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算方式</td>
+<td>取最大值&#x2F;平均值</td>
+<td>计算加权和（乘以卷积核权重）</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>降低特征图尺寸，增强鲁棒性</td>
+<td>提取特征</td>
+</tr>
+<tr>
+<td>训练参数</td>
+<td>无需学习参数</td>
+<td>需要学习权重</td>
+</tr>
+<tr>
+<td>影响</td>
+<td>防止过拟合，增强平移不变性</td>
+<td>识别模式和特征</td>
+</tr>
+</tbody></table>
+<p>虽然池化的计算方式与卷积类似（都是在一个窗口区域内操作），但它不使用卷积核，也不涉及参数学习，因此池化不是通过卷积实现的。</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/QMKc_uSyaj302PJazfmmDw">神经网络算法 - 一文搞懂ResNet（残差神经网络）</a> </p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

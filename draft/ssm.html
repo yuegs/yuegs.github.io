@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="状态空间模型是一种强大的数学工具,用于描述动态系统随时间演化的过程。它最早源于控制论和信号处理领域,现在已广泛应用于经济学、生物学、工程等多个领域。状态空间模型的核心思想是：任何动态系统在任意时刻都可以用一组称为”状态”的变量来完整描述。这些状态变量包含了预测系统未来行为所需的所有信息。状态转移的规">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/ssm.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-07T01:54:21.047Z">
+          2025-02-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>状态空间模型是一种强大的数学工具,用于描述<strong>动态系统随时间演化的过程</strong>。它最早源于控制论和信号处理领域,现在已广泛应用于经济学、生物学、工程等多个领域。<br>状态空间模型的核心思想是：任何动态系统在任意时刻都可以用一组称为”状态”的变量来完整描述。这些状态变量包含了预测系统未来行为所需的所有信息。<br>状态转移的规律<br>系统是如何演化的？状态空间模型认为，系统的下一个状态只取决于当前状态和当前的输入（如果有的话）。这就是著名的马尔可夫性质。</p>
+<p>状态空间模型之所以成功，是因为它反映了人类思考问题的方式：我们总是在不完整的信息中寻找规律，在不确定中作出预测。它提供了一个数学框架，让计算机也能像人类一样，在充满不确定性的世界中做出合理的推测。</p>
+<p>状态空间模型的核心思想很简单 - 它认为世界上的任何系统都可以用两个基本概念来描述:</p>
+<ul>
+<li><strong>状态</strong>: 系统内部真实的情况(但我们往往看不见)</li>
+<li><strong>观测</strong>: 我们能实际测量到的数据(但可能有噪声)</li>
+</ul>
+<p>状态空间模型做的事情,就是通过<strong>建立两个数学关系</strong>来描述系统:</p>
+<ol>
+<li><p>状态是如何随时间变化的?<br>现在的状态 &#x3D; f(上一刻的状态) + 随机扰动</p>
+</li>
+<li><p>观测与状态是什么关系?<br>观测值 &#x3D; h(当前状态) + 测量误差</p>
+</li>
+</ol>
+<p>这个模型强大之处在于:</p>
+<ul>
+<li>它承认了”我们永远无法准确知道系统的真实状态”这个现实</li>
+<li>但它提供了一个数学框架,让我们能从带噪声的观测中,尽可能准确地推测出系统状态</li>
+</ul>
+<p>核心概念:<br>状态空间模型主要包含两个关键方程:</p>
+<ol>
+<li>状态方程(State Equation):<br>x(t+1) &#x3D; f(x(t), u(t), w(t))</li>
+</ol>
+<p>x_{t+1} &#x3D; A x_t + B u_t + w_t</p>
+<pre><code>• x_t  是系统的状态向量（state vector）。
+•	 A  是状态转移矩阵（state transition matrix），描述状态的演变关系。
+•	 B  是控制输入矩阵（control/input matrix），描述外部输入  u_t  对状态的影响。
+•	 u_t  是外部输入（control/input）。
+•	 w_t  是过程噪声（process noise），通常假设服从某种分布，如高斯分布  w_t \sim \mathcal&#123;N&#125;(0, Q) 。
+</code></pre>
+<p>A矩阵 - 状态矩阵<br>这是整个系统最核心的矩阵，描述了系统自身的动态特性。</p>
+<ul>
+<li>维度：n×n（n是状态变量的数量）</li>
+<li>物理含义：描述当前状态如何影响下一时刻的状态</li>
+<li>特征值：决定了系统的稳定性</li>
+<li>举例：在弹簧质量系统中，A矩阵包含了质量、弹性系数等系统固有参数</li>
+</ul>
+<p>B矩阵 - 输入矩阵</p>
+<ul>
+<li>维度：n×p（p是输入变量的数量）</li>
+<li>物理含义：描述控制输入如何影响状态变化</li>
+<li>作用：表示我们能够如何通过输入来控制系统</li>
+<li>举例：在电机系统中，B矩阵描述了电压输入如何影响电机的角速度</li>
+</ul>
+<p>C矩阵 - 输出矩阵</p>
+<ul>
+<li>维度：q×n（q是输出变量的数量）</li>
+<li>物理含义：描述如何从状态获得系统输出</li>
+<li>作用：定义了我们能观测到的系统特征</li>
+<li>举例：如果我们只能测量位置而不能测量速度，C矩阵可能是[1 0]</li>
+</ul>
+<p>D矩阵 - 直接传递矩阵</p>
+<ul>
+<li>维度：q×p</li>
+<li>物理含义：描述输入直接对输出的影响</li>
+<li>特点：在很多物理系统中为零矩阵，因为输入常常不会立即影响输出</li>
+<li>举例：在某些电子系统中，输入电压可能直接影响输出电压的一部分</li>
+</ul>
+<p>这个方程描述了系统状态如何从当前时刻t演化到下一时刻t+1。其中:<br>状态方程的本质是描述系统状态如何随时间演化，受自身动态、外部输入和随机扰动的影响。</p>
+<ul>
+<li>x(t)是系统在t时刻的状态变量</li>
+<li>u(t)是控制输入</li>
+<li>w(t)是系统噪声</li>
+<li>f()是状态转移函数</li>
+</ul>
+<ol start="2">
+<li>观测方程(Observation Equation):<br>y(t) &#x3D; h(x(t), v(t))</li>
+</ol>
+<p>y_t &#x3D; C x_t + D u_t + v_t<br>观测方程的本质是描述外部可观测变量如何由系统内部状态和测量噪声决定。</p>
+<p>其中：<br>    •	 y_t  是观测向量（observation vector）。<br>    •	 C  是观测矩阵（observation matrix），描述状态对观测的影响。<br>    •	 D  是控制输入到观测的直接影响（feedthrough matrix）。<br>    •	 v_t  是观测噪声（measurement noise），通常假设服从某种分布，如高斯分布  v_t \sim \mathcal{N}(0, R) 。</p>
+<p>这个方程描述了系统观测值如何从当前状态变量x(t)生成。其中:</p>
+<ul>
+<li>y(t)是观测值</li>
+<li>h()是观测函数</li>
+<li>v(t)是观测噪声</li>
+</ul>
+<p>状态矩阵描述系统状态的时间演化，而观测矩阵则定义如何从状态映射到可观测变量，二者共同决定了系统的动态行为和可观测性。</p>
+<p>从上述方程可以看出，SSM 主要包括以下参数：<br>    1.	状态转移矩阵（State Transition Matrix）  A ：定义系统状态如何从一个时刻转移到下一个时刻。<br>    2.	控制输入矩阵（Control&#x2F;Input Matrix）  B ：描述控制输入对状态变化的影响。<br>    3.	观测矩阵（Observation Matrix）  C ：定义如何从状态映射到可观测变量。<br>    4.	直接传递矩阵（Feedthrough Matrix）  D （可选）：描述输入  u_t  对观测  y_t  的直接影响。<br>    5.	过程噪声协方差矩阵（Process Noise Covariance）  Q ：表示状态噪声的统计特性。<br>    6.	观测噪声协方差矩阵（Measurement Noise Covariance）  R ：表示测量噪声的统计特性。<br>    7.	初始状态均值（Initial State Mean）  x_0 ：表示系统的初始状态。<br>    8.	初始状态协方差（Initial State Covariance）  P_0 （如果状态是随机的）：描述初始状态的不确定性。</p>
+<p>让我通过一个具体的例子来说明。想象我们在追踪一架飞机的运动:</p>
+<ul>
+<li>状态x(t)可以包括飞机的位置、速度和加速度</li>
+<li>观测y(t)可能是雷达站测得的位置数据</li>
+<li>系统噪声w(t)可能来自大气扰动</li>
+<li>观测噪声v(t)则可能是雷达测量误差</li>
+</ul>
+<p>状态空间模型的优势在于:</p>
+<ul>
+<li>统一框架：它提供了一个统一的数学框架来描述各种动态系统,无论是线性还是非线性系统。</li>
+<li>处理不确定性：通过引入系统噪声和观测噪声,模型可以自然地处理现实世界中的不确定性。</li>
+<li>预测能力：基于当前状态,模型可以预测系统的未来行为。</li>
+<li>隐状态估计：即使某些状态变量无法直接观测,也可以通过卡尔曼滤波等算法进行估计。</li>
+</ul>
+<p>再举个具体例子:GPS导航<br>状态:你车子的真实位置和速度(永远无法100%准确知道)<br>观测:GPS接收到的卫星信号(总是有误差)<br>状态空间模型就像一个数学”推理器”,它会:</p>
+<p>根据上一刻的位置和速度,预测下一刻你可能在哪里<br>将预测与GPS信号对比,得到一个最合理的估计<br>不断重复这个过程,让估计越来越准</p>
+<p>这就是为什么即使GPS信号不够准确,导航系统依然能较好地工作。<br>通过这种状态-观测的框架,状态空间模型优雅地解决了现实世界中普遍存在的问题:</p>
+<ul>
+<li>我们想知道的(状态),往往看不见</li>
+<li>我们能看见的(观测),往往有噪声</li>
+<li>但只要建立合适的数学关系,我们就能从不完美的观测中,推测出比较可靠的状态估计</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

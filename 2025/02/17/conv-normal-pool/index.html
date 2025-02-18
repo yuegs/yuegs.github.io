@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>卷积、归一化和池化 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="卷积可以用于特征提取，归一化可以用于提高模型的泛化能力，池化可以用于减少特征的维度。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,卷积,归一化,池化">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="卷积、归一化和池化"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>卷积、归一化和池化</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/02/17/conv-normal-pool/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-17T15:56:57.871Z">
+          2025-02-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/conv-normal-pool/ResNet34.jpeg?raw=true"><br>卷积可以用于特征提取，归一化可以用于提高模型的泛化能力，池化可以用于减少特征的维度。</p>
+<span id="more"></span>
+
+<h2 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h2><p>卷积的目的，在于特征的提取。它的参数包括：</p>
+<ul>
+<li>输入通道数：输入的特征图的通道数，例如RGB图像的通道数为3。</li>
+<li>卷积核的个数 K(Number of Filters)：卷积核的个数，即<strong>输出通道数</strong>。</li>
+<li>卷积核的大小 F(Filter Size)：卷积核的大小，例如3x3。</li>
+<li>步长 S(Stride)：卷积核每次移动的步长，例如1。</li>
+<li>填充 P(Padding)：在特征图的边缘填充0，例如1。</li>
+</ul>
+<p>K&#x3D;1,F&#x3D;3,S&#x3D;1,P&#x3D;0<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/conv-normal-pool/conv1.gif?raw=true"></p>
+<p>K&#x3D;2,F&#x3D;3,S&#x3D;2,P&#x3D;1<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/conv-normal-pool/conv3d.gif?raw=true"></p>
+<h2 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h2><p>归一化的目的，在于提高模型的泛化能力。它就像是给神经网络添加了一个“稳定器”，让模型更好地学习数据的本质特征，而不是被噪声干扰。下面，以 Batch Normalization 为例。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/conv-normal-pool/normal-formual.png?raw=true"></p>
+<p>公式的每个部分都在服务于一个目标：让数据分布更加稳定，同时保持网络的表达能力。这就像是在管理一个复杂的信号处理系统，每个参数都有其特定的调节作用。</p>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/conv-normal-pool/weight.png?raw=true"></p>
+<p>如上图示，如果输入值的尺度相差过大，或者分布不均匀，会导致尺度大的输入值对模型的影响更大，尺度较小的影响可能会被淹没，从而导致模型的训练不稳定。</p>
+<p>正则化和归一化有相似之处，都在某种程度上约束了数值的取值范围。但是它们解决了不同的问题：</p>
+<ul>
+<li>归一化是针对输入数据，让学习过程更加平稳和公平。</li>
+<li>正则化是针对模型参数，让模型更加简单和泛化，解决过拟合问题。</li>
+</ul>
+<h2 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h2><p>池化，本质上就是一个过滤器。它将一个区域的数据压缩（聚合）成一个值，而压缩的本质，就是一个降维的过程。这种处理，有利于减少特征的维度，提高模型的训练速度，同时，也有利于提高模型的泛化能力。</p>
+<p>降维通常可以通过两种方式实现：</p>
+<ol>
+<li>最大池化，即取一个区域的最大值。通常用于提取图像的边缘特征。</li>
+<li>平均池化，即取一个区域的平均值。通常用于提取图像的平均特征。</li>
+</ol>
+<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/conv-normal-pool/pool.gif?raw=true"></p>
+<p>我们可以看到，池化操作将特征图的维度从 4x4 压缩到了 2x2。这个过程中，即使特征在图像中的位置略有偏移，池化后的结果仍然相似。而输入的微小变化，也不会对池化后的结果产生很大的影响。这也体现了池化操作的特征不变性。</p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@muhammadshoaibali/flattening-cnn-layers-for-neural-network-694a232eda6a">Flattening CNN layers for Neural Network and basic concepts</a><br><a target="_blank" rel="noopener" href="https://medium.com/@Suraj_Yadav/in-depth-knowledge-of-convolutional-neural-networks-b4bfff8145ab">In-Depth Knowledge of Convolutional Neural Networks</a><br><a target="_blank" rel="noopener" href="https://cs231n.github.io/convolutional-networks/">Convolutional Neural Networks</a><br><a target="_blank" rel="noopener" href="https://poloclub.github.io/cnn-explainer/">cnn-explainer</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/卷积/">卷积</a><a href="/tags/归一化/">归一化</a><a href="/tags/池化/">池化</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

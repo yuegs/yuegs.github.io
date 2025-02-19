@@ -3,25 +3,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>风雪围城</title>
+  <title>ResNet 残差神经网络 | 风雪围城</title>
 
   
   <meta name="author" content="YueGS">
   
 
   
-  <meta name="description" content="ResNet 残差神经网络
-神经网络的学习过程，亦如我们设置了一系列的函数，通过学习，让参数更加合理化，从而拟合从输入到输出的映射关系。下面，通过 ResNet 结构，来理解神经网络的学习过程。
-原图是一张 224x224 的图片，每个像素由 RGB 三种颜色组成。所以，这样图的原始数据量是 224">
+  <meta name="description" content="神经网络的学习过程，亦如我们设置了一系列的函数，通过学习，让参数更加合理化，从而拟合从输入到输出的映射关系。下面，通过 ResNet 结构，来理解神经网络的学习过程。">
   
 
+  
+  
+  <meta name="keywords" content="AI,卷积,归一化,池化,ResNet,残差连接">
   
 
   <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  
+  <meta property="og:title" content="ResNet 残差神经网络"/>
 
   <meta property="og:site_name" content="风雪围城"/>
 
@@ -68,14 +69,14 @@
 
   
     
-    <h3 class="article-title"><span></span></h3>
+    <h3 class="article-title"><span>ResNet 残差神经网络</span></h3>
     
   
 
   <div class="article-top-meta">
     <span class="posted-on">
-      <a href="/draft/rc.html" rel="bookmark">
-        <time class="entry-date published" datetime="2025-02-19T16:42:37.283Z">
+      <a href="/2025/02/20/resnet/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-19T16:43:03.916Z">
           2025-02-20
         </time>
       </a>
@@ -88,8 +89,9 @@
   <div class="article-content">
     <div class="entry">
       
-        <p>ResNet 残差神经网络</p>
-<p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/resnet/fx.png?raw=true"><br>神经网络的学习过程，亦如我们设置了一系列的函数，通过学习，让参数更加合理化，从而拟合从输入到输出的映射关系。<br>下面，通过 ResNet 结构，来理解神经网络的学习过程。</p>
+        <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/resnet/fx.png?raw=true"><br>神经网络的学习过程，亦如我们设置了一系列的函数，通过学习，让参数更加合理化，从而拟合从输入到输出的映射关系。<br>下面，通过 ResNet 结构，来理解神经网络的学习过程。</p>
+<span id="more"></span>
+
 <p><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/ai/resnet/image.png?raw=true"><br>原图是一张 224x224 的图片，每个像素由 RGB 三种颜色组成。所以，这样图的原始数据量是 224x224x3.</p>
 <h3 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h3><p>我们先通过卷积，提取图片的特征。<br>卷积的输出通道是 64，即卷积核的数量是 64。我们可以选择一个 7<em>7</em>3 的卷积核，来捕捉更大的视觉特征，然后通过 padding 来保持特征图的大小不变，它的尺寸和原图一样，都是 224*224。</p>
 <h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>我们通过池化，降低特征图的维度，更好的提升模型的泛化能力。<br>卷积完成之后，我们选择一个 3*3 的池化窗口，步长为 2，对每个平面进行池化。每个输出值由 9 个特征决定，且相邻的两个窗口存在重叠，共享信息。<br>采样过程经过了 2 次，在第一次，我们把 224x224 的特征图（由于不够大，所以需要 padding, 变成 226x226），采样成了 112x112 的特征图。在第二次，我们把 112x112 的特征图，采样成了 56x56 的特征图。<br>两次池化采样，可以保证特征的连续性。</p>
@@ -102,7 +104,7 @@
 <h3 id="全连接"><a href="#全连接" class="headerlink" title="全连接"></a>全连接</h3><p>池化完成之后，我们把特征图展平成 1x512 个高级特征。然后通过全连接层，把特征图映射到一定数量的类别上。<br>映射的公式是<br><code>output = W × feature_vector + b</code></p>
 <h3 id="损失函数和反向传播"><a href="#损失函数和反向传播" class="headerlink" title="损失函数和反向传播"></a>损失函数和反向传播</h3><p>以上，其实是一个前向传播过程。我们还需要损失函数和反向传播来修正模型参数。</p>
 <p>损失函数，是衡量模型预测值和真实值之间差异的函数。<br>反向传播，是根据损失函数，调整模型参数的过程。</p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/QMKc_uSyaj302PJazfmmDw">神经网络算法 - 一文搞懂ResNet（残差神经网络）</a><br><a target="_blank" rel="noopener" href="https://www.mdpi.com/1424-8220/22/21/8410">A 3D Hand Attitude Estimation Method for Fixed Hand Posture Based on Dual-View RGB Images</a></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/QMKc_uSyaj302PJazfmmDw">神经网络算法 - 一文搞懂ResNet（残差神经网络）</a><br><a target="_blank" rel="noopener" href="https://www.mdpi.com/1424-8220/22/21/8410">A 3D Hand Attitude Estimation Method for Fixed Hand Posture Based on Dual-View RGB Images</a></p>
 
       
     </div>
@@ -113,7 +115,21 @@
     <div class="article-meta pull-left">
 
     
+      
 
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/卷积/">卷积</a><a href="/tags/归一化/">归一化</a><a href="/tags/池化/">池化</a><a href="/tags/ResNet/">ResNet</a><a href="/tags/残差连接/">残差连接</a>
+    </span>
     
 
     </div>

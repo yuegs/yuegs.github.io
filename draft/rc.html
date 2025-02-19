@@ -10,9 +10,9 @@
   
 
   
-  <meta name="description" content="残差连接
-当神经网络的层数加深时，梯度消失和梯度爆炸的问题会变得更加严重。就像是把 100 张纸堆叠在一起，底层很难感受到顶层的压力。
-神经网络算法 - 一文搞懂ResNet（残差神经网络）">
+  <meta name="description" content="ResNet 残差神经网络
+神经网络的学习过程，亦如我们设置了一系列的函数，通过学习，让参数更加合理化，从而拟合从输入到输出的映射关系。下面，通过 ResNet 结构，来理解神经网络的学习过程。
+原图是一张 224x224 的图片，每个像素由 RGB 三种颜色组成。所以，这样图的原始数据量是 224">
   
 
   
@@ -75,8 +75,8 @@
   <div class="article-top-meta">
     <span class="posted-on">
       <a href="/draft/rc.html" rel="bookmark">
-        <time class="entry-date published" datetime="2025-02-18T16:48:44.216Z">
-          2025-02-19
+        <time class="entry-date published" datetime="2025-02-19T16:40:28.736Z">
+          2025-02-20
         </time>
       </a>
     </span>
@@ -88,9 +88,21 @@
   <div class="article-content">
     <div class="entry">
       
-        <p>残差连接</p>
-<p>当神经网络的层数加深时，梯度消失和梯度爆炸的问题会变得更加严重。就像是把 100 张纸堆叠在一起，底层很难感受到顶层的压力。</p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/QMKc_uSyaj302PJazfmmDw">神经网络算法 - 一文搞懂ResNet（残差神经网络）</a></p>
+        <p>ResNet 残差神经网络</p>
+<p><img src="/fx.png"><br>神经网络的学习过程，亦如我们设置了一系列的函数，通过学习，让参数更加合理化，从而拟合从输入到输出的映射关系。<br>下面，通过 ResNet 结构，来理解神经网络的学习过程。</p>
+<p><img src="/./image.png"><br>原图是一张 224x224 的图片，每个像素由 RGB 三种颜色组成。所以，这样图的原始数据量是 224x224x3.</p>
+<h3 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h3><p>我们先通过卷积，提取图片的特征。<br>卷积的输出通道是 64，即卷积核的数量是 64。我们可以选择一个 7<em>7</em>3 的卷积核，来捕捉更大的视觉特征，然后通过 padding 来保持特征图的大小不变，它的尺寸和原图一样，都是 224*224。</p>
+<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>我们通过池化，降低特征图的维度，更好的提升模型的泛化能力。<br>卷积完成之后，我们选择一个 3*3 的池化窗口，步长为 2，对每个平面进行池化。每个输出值由 9 个特征决定，且相邻的两个窗口存在重叠，共享信息。<br>采样过程经过了 2 次，在第一次，我们把 224x224 的特征图（由于不够大，所以需要 padding, 变成 226x226），采样成了 112x112 的特征图。在第二次，我们把 112x112 的特征图，采样成了 56x56 的特征图。<br>两次池化采样，可以保证特征的连续性。</p>
+<h3 id="残差块"><a href="#残差块" class="headerlink" title="残差块"></a>残差块</h3><p>接下来，是一系列的隐藏层，它们的作用是提取更抽象的特征。<br>每个隐藏层都是一个残差块。每个残差块包含两组卷积操作。<br>第一个卷积，走向归一化处理。归一化通过统一特征图的分布，让特征图的分布更加均匀，从而让模型训练的更加稳定。<br>归一化后，通过激活函数，把特征图的分布变成非线性的。<br>重复上述过程，进行第二次卷积和归一化。</p>
+<p>第一次卷积并归一化，可以识别多个边缘特征，第二次卷积归一化，将这些特征片段组合起来，形成更复杂的特征。</p>
+<p>最终，将两次卷积归一化的结果和捷径连接相加，最后经过激活函数，得到最终的特征图。</p>
+<p>为了能够将数据降维并增加通道数，我们可以将数据进一步卷积，向下一层传递。</p>
+<p>最终，得到了 7<em>7</em>512 的特征图。</p>
+<h3 id="全局平均池化"><a href="#全局平均池化" class="headerlink" title="全局平均池化"></a>全局平均池化</h3><p>全局平均池化，将特征图的每个通道的特征图，进行平均池化，得到 1x1x512 的特征图。<br>池化的窗口是 7x7，步长是 1，所以池化后的特征图大小为 1x1。</p>
+<h3 id="全连接"><a href="#全连接" class="headerlink" title="全连接"></a>全连接</h3><p>池化完成之后，我们把特征图展平成 1x512 个高级特征。然后通过全连接层，把特征图映射到一定数量的类别上。<br>映射的公式是<br><code>output = W × feature_vector + b</code></p>
+<h3 id="损失函数和反向传播"><a href="#损失函数和反向传播" class="headerlink" title="损失函数和反向传播"></a>损失函数和反向传播</h3><p>以上，其实是一个前向传播过程。我们还需要损失函数和反向传播来修正模型参数。</p>
+<p>损失函数，是衡量模型预测值和真实值之间差异的函数。<br>反向传播，是根据损失函数，调整模型参数的过程。</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/QMKc_uSyaj302PJazfmmDw">神经网络算法 - 一文搞懂ResNet（残差神经网络）</a><br><a target="_blank" rel="noopener" href="https://www.mdpi.com/1424-8220/22/21/8410">A 3D Hand Attitude Estimation Method for Fixed Hand Posture Based on Dual-View RGB Images</a></p>
 
       
     </div>

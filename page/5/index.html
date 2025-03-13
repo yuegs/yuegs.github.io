@@ -65,6 +65,69 @@
 
   
     
+    <h3 class="article-title"><a href="/2021/11/21/smart-contract-solidity-func-visibility/"><span>Solidity-合约成员可见性</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2021/11/21/smart-contract-solidity-func-visibility/" rel="bookmark">
+        <time class="entry-date published" datetime="2021-11-21T09:46:01.000Z">
+          2021-11-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/master/images/smart-contract/smart-contract-solidity-func-visibility/telescope.jpg"></p>
+<p>在 Solidity 中有两种函数调用：不需要 EVM 调用（或者说“消息调用”）的内部函数调用和需要 EVM 调用的外部调用。由此，对于函数和状态变量存在 4 种可见性。<br>对于函数来说，需要被指定为 external &#x2F; public &#x2F; internal 或者 private。相比于此，状态变量是没有 external 的。</p>
+        
+          <p><a class="excerpt-btn" href="/2021/11/21/smart-contract-solidity-func-visibility/"><span>...More</span></a></p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/智能合约/">智能合约</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/智能合约/">智能合约</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2021/11/20/smart-contract-ERC-20/"><span>TokenMintERC20Token</span></a></h3>
     
   
@@ -596,72 +659,6 @@
 </blockquote>
         
           <p><a class="excerpt-btn" href="/2021/06/27/db-mysql-transaction/"><span>...More</span></a></p>
-        
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-      
-
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/数据库/">数据库</a>
-    </span>
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/数据库/">数据库</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2021/06/18/db-isolation/"><span>再谈数据库隔离</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2021/06/18/db-isolation/" rel="bookmark">
-        <time class="entry-date published" datetime="2021-06-18T15:01:28.000Z">
-          2021-06-18
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>本篇是译文，<a target="_blank" rel="noopener" href="https://seanhu93.medium.com/revisit-database-isolation-863b3ca06f5f">原文地址</a></p>
-<p>当两个或跟更多的工作单位（它可以是进程、线程、程序或任何可执行体）同时工作，特别是访问或者修改同一个数据，这时，并发问题就发生了。</p>
-<p>举个现实中的例子，如果在同一个十字路口两辆车同时行进（非同向），没有停止信号或者交通灯，它们彼此看不到对方，最终它们驶向同一个车道，它们相撞了。<br><img src="https://github.com/yuegs/yuegs.github.io/blob/master/images/db/isolation/car_conflict.png?raw=true"></p>
-<p>相似的，两个程序更新数据库中的同一行数据，其中一个程序可能就会覆写了另外一个程序的数据（考虑不使用数据库锁这种机制）。</p>
-<p>即使两个程序都在单线程环境中可以正确执行，并发问题也会影响结果的正确性。</p>
-        
-          <p><a class="excerpt-btn" href="/2021/06/18/db-isolation/"><span>...More</span></a></p>
         
       
     </div>

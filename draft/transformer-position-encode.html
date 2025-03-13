@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="词语的位置决定其语义功能，这是 seq2seq 模型必须解决的核心问题。比如，I saw a saw，两个 saw 在不同位置含义完全不同。
+Transformer 模型并行处理所有输入词汇，失去了序列的内在顺序。位置编码通过将位置信息注入输入表示来解决这一问题。理想的位置编码应具备两个数学特性：位">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/transformer-position-encode.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-03-13T17:03:21.224Z">
+          2025-03-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="/trig-function.png"></p>
+<p>词语的位置决定其语义功能，这是 seq2seq 模型必须解决的核心问题。比如，<code>I saw a saw</code>，两个 <code>saw</code> 在不同位置含义完全不同。</p>
+<p>Transformer 模型并行处理所有输入词汇，失去了序列的内在顺序。位置编码通过将位置信息注入输入表示来解决这一问题。理想的位置编码应具备两个数学特性：<strong>位置的唯一性（不同位置有不同编码）和相对位置的可学习性（位置间的关系可被模型捕捉）。</strong></p>
+<h3 id="位置编码的实现"><a href="#位置编码的实现" class="headerlink" title="位置编码的实现"></a>位置编码的实现</h3><p>在 Transformer 模型中，位置编码是通过三角函数实现的。编码公式如下：<br><img src="/pe-formular.png"></p>
+<p><img src="/pe-formula.png"></p>
+<p>其中，$pos$ 表示词汇在句子中的位置，$dmodel$ 表示词汇的维度数量，$i$ 表示维度索引（从 0 开始）。指数缩放因子为 $\frac{1}{10000^{2i&#x2F;dmodel}}$，对三角函数的频率进行控制。</p>
+<p>我们以 “cat is sleeping on the mat” 为例，来理解位置编码的实现。<br>假设，每个词使用一个维度为 5 的向量表表示，那么，这句话的向量表示如下所示：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lkEJCT38rPLIS86wPRElNw.png"></p>
+<p><img src="/dim5-input.webp"></p>
+<p>结合位置编码公式，”cat” 的位置编码计算过程如下：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*56W25a0pmzgfyqnO-QI8yQ.png"></p>
+<p><img src="/cat-pe.webp"></p>
+<p>句子中每个词的位置编码如下：<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jUhilIC05Xvpo5INbUh9jw.png"></p>
+<p><img src="/word-pe.webp"></p>
+<p>最终，位置编码和 word embedding 相加，得到最终实际的输入向量：</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*NLr3j67p6uHprCM9wonrXA.png"></p>
+<p><img src="/final-input.webp"></p>
+<p>这时，<strong>每个词的输入向量，既包含了词义信息，也包含了词在句子中的位置信息。</strong></p>
+<h3 id="位置编码背后的机制"><a href="#位置编码背后的机制" class="headerlink" title="位置编码背后的机制"></a>位置编码背后的机制</h3><h4 id="为什么要使用-sin-和-cos-函数？"><a href="#为什么要使用-sin-和-cos-函数？" class="headerlink" title="为什么要使用 sin 和 cos 函数？"></a>为什么要使用 <code>sin</code> 和 <code>cos</code> 函数？</h4><h5 id="1-相对位置的线性表达"><a href="#1-相对位置的线性表达" class="headerlink" title="1. 相对位置的线性表达"></a>1. 相对位置的线性表达</h5><p>根据三角恒等式，存在：<br><img src="/sin-cos.png"></p>
+<p><img src="/sin-cos-formula.png"></p>
+<p>在编码计算过程中，同一<code>维度索引</code>下的不同位置向量分量的所对应的函数的频率 $w$，即 $\frac{1}{10000^{2i&#x2F;dmodel}}$ 是相同的。</p>
+<p>因此，通过下述公式，<br><img src="/pe-formula.png"></p>
+<p>可以得到<br><img src="/sin-transform.png"><br><img src="/pk-position-rel.png"></p>
+<p>这表明位置 $pos+k$ 的编码可以通过位置 $pos$ 的编码进行线性变换得到，变换矩阵只依赖于 $k$。<strong>这种变换是有方向性的，从而能够确定词语的前后顺序关系。</strong><br>这使得模型可以学习到<strong>相对位置关系</strong>。相对位置关系，是位置编码的<strong>核心</strong>。词语的相对位置，决定了句子的语义。</p>
+<h5 id="2-每个词汇位置的唯一性"><a href="#2-每个词汇位置的唯一性" class="headerlink" title="2. 每个词汇位置的唯一性"></a>2. 每个词汇位置的唯一性</h5><p><img src="/pos1-pos2-proof.png"></p>
+<h5 id="3-平滑的距离度量"><a href="#3-平滑的距离度量" class="headerlink" title="3. 平滑的距离度量"></a>3. 平滑的距离度量</h5><p>三角函数编码创建了一个平滑的位置表示。相邻位置的编码非常相似，而相隔较远的词汇的编码差异较大。这也符合自然语言中语义关系的特性。</p>
+<h5 id="4-无限长度的外推能力"><a href="#4-无限长度的外推能力" class="headerlink" title="4. 无限长度的外推能力"></a>4. 无限长度的外推能力</h5><p>如题图所示，三角函数编码具有无限长度的外推能力。这意味着，当需要处理更长的句子时，位置编码仍然能够保持良好的性能。</p>
+<h4 id="缩放因子的作用"><a href="#缩放因子的作用" class="headerlink" title="缩放因子的作用"></a>缩放因子的作用</h4><p>缩放因子可以控制三角函数的频率。</p>
+<p>在位置编码公式中：<br>$$PE_{(pos,2i)} &#x3D; \sin(pos \cdot \frac{1}{10000^{2i&#x2F;dmodel}})$$<br>$$PE_{(pos,2i+1)} &#x3D; \cos(pos \cdot \frac{1}{10000^{2i&#x2F;dmodel}})$$<br>这里的 $\frac{1}{10000^{2i&#x2F;dmodel}}$ 就是角频率 $\omega$，它决定了正弦&#x2F;余弦函数完成一个周期所需的位置变化量。<br>可以看到，这个缩放因子随着维度索引 $i$ 的增加而指数级减小：<br>当 $i&#x3D;0$ 时，频率为 $\frac{1}{10000^{0}} &#x3D; 1$<br>当 $i&#x3D;dmodel&#x2F;2-1$ (最大维度索引) 时，频率接近 $\frac{1}{10000}$<br>这种指数级的变化创建了一个频率梯度，使得不同维度能够捕捉不同尺度的位置关系：</p>
+<ul>
+<li>低维度（小的 $i$ 值）：高频，捕捉局部、短距离的位置关系</li>
+<li>高维度（大的 $i$ 值）：低频，捕捉全局、长距离的位置关系<br>当然，虽然频率提供了表达不同尺度位置关系的能力，但最终这些信息的有效利用，确是需要依赖模型参数矩阵来调节和学习。</li>
+</ul>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://www.desmos.com/calculator?lang=zh-CN">Sin 函数可视化</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7">Understanding Transformer Architecture Using Simple Math</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

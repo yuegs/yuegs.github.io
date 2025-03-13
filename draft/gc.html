@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="分代垃圾回收
+
+
+
+GC 类型
+作用区域
+触发条件
+影响
+
+
+
+Minor GC
+年轻代（Eden + Survivor）
+Eden 区满了
+速度快，影响小
+
+
+Major GC（Old GC）
+老年代
+老年代对象不足时触发
+速度慢，可能会引发 Full GC
+
+
+Full GC
+整个堆（年轻代+老">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/gc.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-24T05:13:42.349Z">
+          2025-02-24
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>分代垃圾回收</p>
+<table>
+<thead>
+<tr>
+<th>GC 类型</th>
+<th>作用区域</th>
+<th>触发条件</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Minor GC</td>
+<td>年轻代（Eden + Survivor）</td>
+<td>Eden 区满了</td>
+<td>速度快，影响小</td>
+</tr>
+<tr>
+<td>Major GC（Old GC）</td>
+<td>老年代</td>
+<td>老年代对象不足时触发</td>
+<td>速度慢，可能会引发 Full GC</td>
+</tr>
+<tr>
+<td>Full GC</td>
+<td>整个堆（年轻代+老年代+元空间）</td>
+<td>内存不足、大对象分配失败等</td>
+<td>影响最大，可能会造成应用卡顿</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://nimafarzin-pr.medium.com/garbage-collection-in-dart-and-its-implications-in-flutter-aef9de51bfc4">Garbage Collection in Dart and Its Implications in Flutter</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/yavar/how-does-dart-vm-work-65039356e708">How does dart VM work?</a></p>
+<p><a target="_blank" rel="noopener" href="https://mrale.ph/dartvm/">Introduction to Dart VM</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

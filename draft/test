@@ -1,0 +1,37 @@
+[root@hw-mex-prod-nginx-3 domains]# pwd
+/usr/local/openresty/nginx/conf/domains
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# openresty -t
+-bash: openresty: command not found
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/nginx/sbin/nginx -t
+nginx: the configuration file /usr/local/openresty/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test is successful
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/bin/openresty -t
+nginx: the configuration file /usr/local/openresty/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test is successful
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/nginx/sbin/nginx -s reload
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# vim mex-credit-app
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/bin/openresty -t
+nginx: the configuration file /usr/local/openresty/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test is successful
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/nginx/sbin/nginx -s reload
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# vim mex-credit-app
+[root@hw-mex-prod-nginx-3 domains]# vim mex-credit-app
+[root@hw-mex-prod-nginx-3 domains]# vim mex-credit-app
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/bin/openresty -t
+nginx: the configuration file /usr/local/openresty/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test is successful
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/nginx/sbin/nginx -s reload
+[root@hw-mex-prod-nginx-3 domains]# 
+[root@hw-mex-prod-nginx-3 domains]# vim mex-credit-app
+[root@hw-mex-prod-nginx-3 domains]# /usr/local/openresty/bin/openresty -t
+nginx: the configuration file /usr/local/openresty/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test is successful
+[root@hw-mex-prod-nginx-3 domains]#
+
+[root@hw-mex-prod-nginx-3 domains]# Connection Websocket Closed

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="但计算机需要数字向量，不是简单的数字计算机不能直接处理”1号”、”2号”这样的概念，需要将位置转换为数字向量。解决方案：位置”指纹”
+每个位置都有一个独特的数字组合（向量），就像指纹一样例如：
+位置1的”指纹”可能是：[0.84, 0.54, 0.87, 0.49, …]位置2的”指纹”可能是：[0">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/position-encode.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-02-27T05:34:08.081Z">
+          2025-02-27
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>但计算机需要数字向量，不是简单的数字<br>计算机不能直接处理”1号”、”2号”这样的概念，需要将位置转换为数字向量。<br>解决方案：位置”指纹”</p>
+<p>每个位置都有一个独特的数字组合（向量），就像指纹一样<br>例如：</p>
+<p>位置1的”指纹”可能是：[0.84, 0.54, 0.87, 0.49, …]<br>位置2的”指纹”可能是：[0.90, 0.41, 0.76, 0.63, …]<br>位置3的”指纹”可能是：[0.95, 0.28, 0.59, 0.75, …]</p>
+<p>这些”指纹”有什么特点？</p>
+<p>唯一性：每个位置都有独一无二的编码<br>相似性：相近位置的编码相似（位置1和位置2的编码比位置1和位置100的更相似）<br>可计算：使用数学公式生成，不需要人工设计</p>
+<p>这就是位置编码的基本思想：创造独特但有规律的”位置指纹”，让模型能够区分不同位置的单词。</p>
+<p><img src="/simple-positional-encoding.svg"></p>
+<p>位置编码的实现方法<br>既然您已经理解了位置编码的基本概念，让我解释它具体是如何实现的：<br>实现方法：正弦-余弦函数<br>原始Transformer论文使用的是正弦和余弦函数来生成这些位置”指纹”。这种方法有几个优点：</p>
+<ul>
+<li>不需要训练（节省计算资源）</li>
+<li>可以扩展到训练中未见过的序列长度</li>
+<li>数学特性有利于模型学习相对位置</li>
+</ul>
+<p>具体实现步骤</p>
+<h3 id="为每个位置创建向量"><a href="#为每个位置创建向量" class="headerlink" title="为每个位置创建向量"></a>为每个位置创建向量</h3><ul>
+<li>假设我们的嵌入维度是d&#x3D;512（一个常见的选择）</li>
+<li>为序列中的每个位置创建一个512维的向量</li>
+</ul>
+<h3 id="填充向量值"><a href="#填充向量值" class="headerlink" title="填充向量值"></a>填充向量值</h3><ul>
+<li>向量中的每个维度使用不同频率的正弦或余弦函数计算</li>
+<li>偶数维度使用正弦函数</li>
+<li>奇数维度使用余弦函数</li>
+</ul>
+<h3 id="使用不同频率"><a href="#使用不同频率" class="headerlink" title="使用不同频率"></a>使用不同频率</h3><ul>
+<li>低维度使用低频波（变化缓慢）</li>
+<li>高维度使用高频波（变化快速）</li>
+<li>这样既能捕捉长距离关系又能区分相邻位置</li>
+</ul>
+<p>简单示例<br>假设我们有一个很小的模型，嵌入维度只有4：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">位置0的编码 = [sin(0/10000^0), cos(0/10000^0), sin(0/10000^0.5), cos(0/10000^0.5)]</span><br><span class="line">            = [0, 1, 0, 1]</span><br><span class="line"></span><br><span class="line">位置1的编码 = [sin(1/10000^0), cos(1/10000^0), sin(1/10000^0.5), cos(1/10000^0.5)]</span><br><span class="line">            = [0.84, 0.54, 0.01, 0.99]</span><br><span class="line"></span><br><span class="line">位置2的编码 = [sin(2/10000^0), cos(2/10000^0), sin(2/10000^0.5), cos(2/10000^0.5)]</span><br><span class="line">            = [0.91, -0.42, 0.02, 0.99]</span><br></pre></td></tr></table></figure>
+<p>与词嵌入结合<br>位置编码生成后，会直接加到词的嵌入向量上：</p>
+<ul>
+<li>最终输入 &#x3D; 词嵌入 + 位置编码</li>
+<li>这样每个词的表示既包含了词义信息，又包含了位置信息</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/6vuIrIvaVXk8SzVD2a-tAg">https://mp.weixin.qq.com/s/6vuIrIvaVXk8SzVD2a-tAg</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/G-zzBWOkoTg9v4SWF9jEag">https://mp.weixin.qq.com/s/G-zzBWOkoTg9v4SWF9jEag</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/yTd0dH0jJMgeHHOsF-4N7Q">https://mp.weixin.qq.com/s/yTd0dH0jJMgeHHOsF-4N7Q</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/uMICN3Qi4IZJGhtnmuaaGQ">https://mp.weixin.qq.com/s/uMICN3Qi4IZJGhtnmuaaGQ</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

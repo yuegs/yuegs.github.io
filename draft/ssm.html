@@ -73,8 +73,8 @@
   <div class="article-top-meta">
     <span class="posted-on">
       <a href="/draft/ssm.html" rel="bookmark">
-        <time class="entry-date published" datetime="2025-02-07T01:54:21.047Z">
-          2025-02-07
+        <time class="entry-date published" datetime="2025-02-25T01:57:33.607Z">
+          2025-02-25
         </time>
       </a>
     </span>
@@ -110,12 +110,13 @@
 <li>状态方程(State Equation):<br>x(t+1) &#x3D; f(x(t), u(t), w(t))</li>
 </ol>
 <p>x_{t+1} &#x3D; A x_t + B u_t + w_t</p>
-<pre><code>• x_t  是系统的状态向量（state vector）。
-•	 A  是状态转移矩阵（state transition matrix），描述状态的演变关系。
-•	 B  是控制输入矩阵（control/input matrix），描述外部输入  u_t  对状态的影响。
-•	 u_t  是外部输入（control/input）。
-•	 w_t  是过程噪声（process noise），通常假设服从某种分布，如高斯分布  w_t \sim \mathcal&#123;N&#125;(0, Q) 。
-</code></pre>
+<ul>
+<li>x_t  是系统的状态向量（state vector）。</li>
+<li>A  是状态转移矩阵（state transition matrix），描述状态的演变关系。</li>
+<li>B  是控制输入矩阵（control&#x2F;input matrix），描述外部输入  u_t  对状态的影响。</li>
+<li>u_t  是外部输入（control&#x2F;input）。</li>
+<li>w_t  是过程噪声（process noise），通常假设服从某种分布，如高斯分布  w_t \sim \mathcal{N}(0, Q) 。</li>
+</ul>
 <p>A矩阵 - 状态矩阵<br>这是整个系统最核心的矩阵，描述了系统自身的动态特性。</p>
 <ul>
 <li>维度：n×n（n是状态变量的数量）</li>
@@ -155,7 +156,13 @@
 <li>观测方程(Observation Equation):<br>y(t) &#x3D; h(x(t), v(t))</li>
 </ol>
 <p>y_t &#x3D; C x_t + D u_t + v_t<br>观测方程的本质是描述外部可观测变量如何由系统内部状态和测量噪声决定。</p>
-<p>其中：<br>    •	 y_t  是观测向量（observation vector）。<br>    •	 C  是观测矩阵（observation matrix），描述状态对观测的影响。<br>    •	 D  是控制输入到观测的直接影响（feedthrough matrix）。<br>    •	 v_t  是观测噪声（measurement noise），通常假设服从某种分布，如高斯分布  v_t \sim \mathcal{N}(0, R) 。</p>
+<p>其中：</p>
+<ul>
+<li>y_t  是观测向量（observation vector）。</li>
+<li>C  是观测矩阵（observation matrix），描述状态对观测的影响。</li>
+<li>D  是控制输入到观测的直接影响（feedthrough matrix）。</li>
+<li>v_t  是观测噪声（measurement noise），通常假设服从某种分布，如高斯分布  v_t \sim \mathcal{N}(0, R) 。</li>
+</ul>
 <p>这个方程描述了系统观测值如何从当前状态变量x(t)生成。其中:</p>
 <ul>
 <li>y(t)是观测值</li>
@@ -186,6 +193,7 @@
 <li>我们能看见的(观测),往往有噪声</li>
 <li>但只要建立合适的数学关系,我们就能从不完美的观测中,推测出比较可靠的状态估计</li>
 </ul>
+<p><a target="_blank" rel="noopener" href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mamba-and-state">https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mamba-and-state</a></p>
 
       
     </div>

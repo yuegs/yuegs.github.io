@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>多头注意力机制：Transformer 模型的核心设计(二) | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="词语的语义受其上下文影响。例如，”model”一词在”machine learning model”与”fashion model”中表达完全不同的概念。这种影响因素的计算和捕捉，正是 transformer 模型中 self-attention 机制的核心功能之一。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,attention,注意力集中">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="多头注意力机制：Transformer 模型的核心设计(二)"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>多头注意力机制：Transformer 模型的核心设计(二)</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/03/16/attention/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-03-16T14:22:14.696Z">
+          2025-03-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/word-rel-1.png"><br>词语的语义受其上下文影响。例如，”model”一词在”machine learning model”与”fashion model”中表达完全不同的概念。<br>这种影响因素的计算和捕捉，正是 transformer 模型中 self-attention 机制的核心功能之一。</p>
+<span id="more"></span>
+
+<h3 id="什么是-self-attention"><a href="#什么是-self-attention" class="headerlink" title="什么是 self-attention"></a>什么是 self-attention</h3><p>自注意机制，在于让序列中的每个元素都能“关注”到其他元素（包括自己），从而学习到元素之间的相互关系，更好的“理解”这个元素的真正含义。亦如上面的 “model”,到底是指“模型”还是“模特”。</p>
+<h3 id="self-attention-的计算过程"><a href="#self-attention-的计算过程" class="headerlink" title="self-attention 的计算过程"></a>self-attention 的计算过程</h3><p>直观地看，当我们遇到”fashion model”这个短语时，”fashion”自然引导我们理解后面的”model”是指”模特”而非”模型”。这正是上下文词汇对目标词语含义的自然引导作用，也是注意力机制要模拟的语言理解过程。</p>
+<p>对于计算机来说，这种“理解”需要通过计算和量化来实现。在 transformer 模型中，是通过 Q（Query）、K（Key）、V（Value）矩阵来完成上下文感知的。</p>
+<p>对于输入序列，模型通过三个不同的参数矩阵 W^Q、W^K、W^V 将其分别转换为查询(Query)、键(Key)和值(Value)三种不同的表示。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/qkv.png"><br>上图中，我们假设输入分别是 a1,a2,a3,a4。<br>其中，</p>
+<ul>
+<li>Q 是查询向量，用于与所有键向量进行比较。</li>
+<li>K 是键向量，用于与所有查询向量进行比较。</li>
+<li>V 是值向量，用于存储每个输入的值。</li>
+</ul>
+<p>通过 Q 和 K 的点积来计算注意力权重 QK^T<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/attention-socre.png"><br>最终，上面的注意力权重，就是上下文对当前元素的影响因子。</p>
+<p>将注意力权重和 V 向量相乘，得到最终的输出。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/qkv2.png"></p>
+<h3 id="Multi-head-attention"><a href="#Multi-head-attention" class="headerlink" title="Multi-head attention"></a>Multi-head attention</h3><p>上面所展示的是单头注意力的计算过程。一个注意力头，通常用于捕捉序列中一个特定的特征。在实际过程中，通常使用多头注意力机制，来捕捉序列中多个不同的特征。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/multi-head-attention.webp"></p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/multi-head-attention2.webp"></p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/multi-head-attention-concat.webp"></p>
+<p>如上图示，亦如有 h 位专家（h个注意力头），每个专家从不同角度分析同一个问题：</p>
+<ul>
+<li>每个专家（头）给出自己的分析结果（每个头的输出）</li>
+<li>把所有专家的报告拼接在一起（Concat操作）</li>
+<li>但这样拼接的报告可能过于冗长和不统一，所以你雇佣一个编辑（W^O矩阵）</li>
+<li>编辑对拼接的报告进行整理和提炼（线性变换），生成最终的综合报告（多头注意力的输出）</li>
+</ul>
+<h3 id="参数矩阵是从哪里来的？"><a href="#参数矩阵是从哪里来的？" class="headerlink" title="参数矩阵是从哪里来的？"></a>参数矩阵是从哪里来的？</h3><p>在上文中，我们注意到在很多变换的地方，出现多种不同的 W 参数矩阵。这种矩阵是哪里来的？</p>
+<p>通常，这些矩阵是随机初始化的，就像一个没有任何经验的大脑。<br>随着模型不断训练，它会比较预测结果与真实结果之间的差距，通过反向传播算法调整这些参数矩阵中的值。这个过程就像人类通过不断实践和反馈来提升技能一样，参数矩阵逐渐学习到如何更好地处理语言信息，使模型的表现越来越接近人类的理解能力。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=wjZofJX0v4M&t=548s">Transformers (how LLMs work) explained visually | DL5</a><br><a target="_blank" rel="noopener" href="https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7">Understanding Transformer Architecture Using Simple Math</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/attention/">attention</a><a href="/tags/注意力集中/">注意力集中</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

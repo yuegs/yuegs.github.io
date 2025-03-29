@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="前向传播和反向传播
+
+想象一个登山者在下山。每一步探索（前向传播）时，他会计算当前位置的高度（损失函数），评估预测值与目标之间的差距。
+随后的反向传播会计算这个高度对每个之前决策的影响（梯度），指导他如何调整之前的每一个步伐参数，以便下一次探索能走得更好。
+这正是 Transformer 模型的训练">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/front-back.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-03-29T10:08:36.997Z">
+          2025-03-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>前向传播和反向传播</p>
+<p><img src="/desc-mon.png"></p>
+<p>想象一个登山者在下山。每一步探索（前向传播）时，他会计算当前位置的高度（损失函数），评估预测值与目标之间的差距。</p>
+<p>随后的反向传播会计算这个高度对每个之前决策的影响（梯度），指导他如何调整之前的每一个步伐参数，以便下一次探索能走得更好。</p>
+<p>这正是 Transformer 模型的训练过程：前向传播计算预测结果和损失，反向传播计算梯度并更新模型参数，循环往复直至收敛。</p>
+<h3 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h3><p>整个前向传播过程，会涉及：</p>
+<ul>
+<li>数据经过嵌入层处理</li>
+<li>注意力层计算</li>
+<li>前馈层</li>
+<li>输出层</li>
+</ul>
+<p>这里，主要说明下前馈层。<br><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LDSV40PXSpOpfByRmycKfQ.png"></p>
+<p>前馈层的主要作用，在于增强特征的表达能力。即，通过多层神经网络，发现数据中更深层次的模式和关系。</p>
+<p>每个前馈层，都包含两个线性变换和一个激活函数。数学表达式为：</p>
+<p><img src="/fnn.png"></p>
+<p>其中，x 是输入数据，W1 和 W2 是权重矩阵，b1 和 b2 是偏置项。</p>
+<p>激活函数为 ReLU 函数，即：<br><img src="/relu.png"></p>
+<p>每个线性变化，实际上又是一个全连接层。如下图示例：<br><img src="/feed-forward.png"></p>
+<h3 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h3><h3 id="前馈网络-Feed-Forward-Network，FFN"><a href="#前馈网络-Feed-Forward-Network，FFN" class="headerlink" title="前馈网络(Feed-Forward Network，FFN)"></a>前馈网络(Feed-Forward Network，FFN)</h3><h3 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h3><h3 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h3><p><a target="_blank" rel="noopener" href="https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7">https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/665731716/answer/3611802917">为什么transformer的FFN需要先升维再降维？</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

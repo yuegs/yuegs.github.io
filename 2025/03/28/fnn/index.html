@@ -95,11 +95,13 @@
 <p>如下图示，我们可以将 Transformer 看做是一个函数黑盒，它实现了”下一个词”的预测，就像是学会了人类的表达。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/fnn/ftransformer-predict.gif"></p>
 <span id="more"></span>
 
-<p>前馈神经网络是一种强大的函数拟合工具。<br>通过构建非线性网络结构，它能够逼近现实世界中的复杂规律。<br>它就像是一个特征加工车间，通过两道工序处理信息：</p>
+<p>在 Transformer 内部，前馈神经网络是 Transformer 的重要组成部分。它也是一种强大的函数拟合工具。</p>
+<p>通过构建非线性网络结构，它能够逼近现实世界中的复杂规律。<br>它就像是一个特征加工车间，通过两道工序处理信息：</p>
 <ul>
 <li>“特征展开”，为了便于”观察”，将输入信息投射到一个更大的空间，并通过ReLU激活函数突出重要特征，就像在显微镜下观察时调整焦距，让细节更加清晰；</li>
 <li>“特征提炼”，将重要信息提取出来，形成最终的特征表示。这种设计让FFN能够学习到更丰富的特征转换关系。</li>
 </ul>
+<p>“提炼”出来的特征，使得模型能够精准地理解输入信息，并应用于”下一个词”的预测。</p>
 <h3 id="前馈神经网络的数学表达"><a href="#前馈神经网络的数学表达" class="headerlink" title="前馈神经网络的数学表达"></a>前馈神经网络的数学表达</h3><p>以Transformer中的FFN为例，它可以表示为：</p>
 <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/fnn/fnn.png"></p>
 <p>其中：</p>

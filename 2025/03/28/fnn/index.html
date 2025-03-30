@@ -129,10 +129,11 @@
 </ul>
 </li>
 </ol>
-<p>这种”扩展-压缩”的设计遵循了”表征空间转换”的原理：在更高维的空间中，原本难以区分的特征可能变得更容易分离，从而使模型能够学习到更复杂的模式。</p>
+<p>这种”扩展-压缩”的设计遵循了表征空间转换的原理：在更高维的空间中，原本难以区分的特征可能变得更容易分离，从而使模型能够学习到更复杂的模式。</p>
+<p>从数学角度看，表征空间转换的核心操作之一是矩阵乘法，而矩阵乘法本质上就是对象在空间中的运动，将一个点投射到其他维度上。投射到高维时，为特征分离提供了可能，就像将纠缠在一起的线团展开到更大的空间中，使原本重叠的线条能够分开排列，从而更容易识别每条线的走向和特点（流形假设告诉我们，真实世界的高维数据往往分布在低维流形上，而合适的空间转换可以揭示这种结构）；投射到低维时，是将这些特征进一步压缩和提取出来。</p>
 <p>一个实际的矩阵计算是：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/fnn/fnn-formula1.webp"><br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/fnn/fnn-formula2.webp"></p>
 <p>在实际应用中，会使用多个前馈神经网络堆叠，多尺度的进行特征提取。</p>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7">Understanding Transformer Architecture Using Simple Math</a><br><a href="https://yuegs.com/2025/02/20/resnet/">ResNet 残差神经网络</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/665731716/answer/3611802917">为什么transformer的FFN需要先升维再降维？</a></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7">Understanding Transformer Architecture Using Simple Math</a><br><a href="https://yuegs.com/2025/02/20/resnet/">ResNet 残差神经网络</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/665731716/answer/3611802917">为什么transformer的FFN需要先升维再降维？</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/myan/article/details/649018">理解矩阵（二）</a></p>
 
       
     </div>

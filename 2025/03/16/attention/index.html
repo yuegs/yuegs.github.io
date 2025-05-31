@@ -94,7 +94,7 @@
 
 <h3 id="什么是-self-attention"><a href="#什么是-self-attention" class="headerlink" title="什么是 self-attention"></a>什么是 self-attention</h3><p>自注意机制，在于让序列中的每个元素都能“关注”到其他元素（包括自己），从而学习到元素之间的相互关系，更好的“理解”这个元素的真正含义。亦如上面的 “model”,到底是指“模型”还是“模特”。</p>
 <h3 id="self-attention-的计算过程"><a href="#self-attention-的计算过程" class="headerlink" title="self-attention 的计算过程"></a>self-attention 的计算过程</h3><p>直观地看，当我们遇到”fashion model”这个短语时，”fashion”自然引导我们理解后面的”model”是指”模特”而非”模型”。这正是上下文词汇对目标词语含义的自然引导作用，也是注意力机制要模拟的语言理解过程。</p>
-<p>对于计算机来说，这种“理解”需要通过计算和量化来实现。在 transformer 模型中，是通过 Q（Query）、K（Key）、V（Value）矩阵来完成上下文感知的。</p>
+<p><strong>对于计算机来说，这种“理解”需要通过量化和计算来实现。</strong><br>在 transformer 模型中，是通过 Q（Query）、K（Key）、V（Value）矩阵来完成上下文感知的。</p>
 <p>对于输入序列，模型通过三个不同的参数矩阵 W^Q、W^K、W^V 将其分别转换为查询(Query)、键(Key)和值(Value)三种不同的表示。</p>
 <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/attention/qkv.png"><br>上图中，我们假设输入分别是 a1,a2,a3,a4。<br>其中，</p>
 <ul>

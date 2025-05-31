@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="Transformer 模型中，编码器让模型通过特征理解了输入，这种理解，本质上其实是一种空间数据关系的把握。
+接下来，解码器就需要基于这些特征，预测、生成。这种过程，同样是基于数据在空间上的运动。
+解码器结构如上图示，解码器部分包括：
+
+掩码多头注意力机制
+多头注意力机制
+归一化层 
+前馈神经网络">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/transformer-decoder.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-04-04T12:53:08.267Z">
+          2025-04-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="/writer.jpg"></p>
+<p>Transformer 模型中，编码器让模型通过特征理解了输入，这种理解，本质上其实是一种空间数据关系的把握。</p>
+<p>接下来，解码器就需要基于这些特征，预测、生成。这种过程，同样是基于数据在空间上的运动。</p>
+<h3 id="解码器结构"><a href="#解码器结构" class="headerlink" title="解码器结构"></a>解码器结构</h3><p><img src="/decoder-structure.png"><br>如上图示，解码器部分包括：</p>
+<ul>
+<li>掩码多头注意力机制</li>
+<li>多头注意力机制</li>
+<li>归一化层 </li>
+<li>前馈神经网络</li>
+<li>线性层</li>
+</ul>
+<h4 id="掩码多头注意力机制"><a href="#掩码多头注意力机制" class="headerlink" title="掩码多头注意力机制"></a>掩码多头注意力机制</h4><p><img src="https://miro.medium.com/v2/resize:fit:472/format:webp/1*o4F1cBtFw5md6hPSMVDHkw.png"></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7">https://medium.com/@sumith.madupu123/understanding-transformer-architecture-using-simple-math-be6c2e1cdcc7</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

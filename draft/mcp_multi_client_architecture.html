@@ -1,0 +1,622 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="MCP 多Client容器架构
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+        ">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/mcp_multi_client_architecture.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-06-09T16:33:03.059Z">
+          2025-06-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 多Client容器架构</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .architecture-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4299e1;
+            padding-bottom: 15px;
+        }
+
+        .host-container {
+            border: 3px solid #2b6cb0;
+            border-radius: 12px;
+            padding: 25px;
+            background: linear-gradient(145deg, #ebf8ff 0%, #bee3f8 100%);
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .host-title {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #2b6cb0;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .layer {
+            margin-bottom: 20px;
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .application-layer {
+            border-color: #38a169;
+            background: linear-gradient(145deg, #f0fff4 0%, #c6f6d5 100%);
+        }
+
+        .client-layer {
+            border-color: #d69e2e;
+            background: linear-gradient(145deg, #fffbeb 0%, #faf089 100%);
+        }
+
+        .infrastructure-layer {
+            border-color: #805ad5;
+            background: linear-gradient(145deg, #faf5ff 0%, #e9d8fd 100%);
+        }
+
+        .layer-title {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+        }
+
+        .application-layer .layer-title {
+            background: #38a169;
+        }
+
+        .client-layer .layer-title {
+            background: #d69e2e;
+        }
+
+        .infrastructure-layer .layer-title {
+            background: #805ad5;
+        }
+
+        .components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .component {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .component:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .client-manager {
+            background: #fff7ed;
+            border: 2px dashed #f97316;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .client-manager-title {
+            color: #f97316;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .client-box {
+            background: white;
+            border: 2px solid #f97316;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .client-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(249, 115, 22, 0.2);
+        }
+
+        .client-title {
+            font-weight: 600;
+            color: #ea580c;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .client-desc {
+            font-size: 12px;
+            color: #7c2d12;
+            font-style: italic;
+        }
+
+        .servers-section {
+            margin-top: 30px;
+        }
+
+        .servers-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .server-box {
+            background: linear-gradient(145deg, #f7fafc 0%, #edf2f7 100%);
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .server-title {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .server-desc {
+            font-size: 13px;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .server-tools {
+            font-size: 11px;
+            color: #718096;
+            font-style: italic;
+        }
+
+        .connection-lines {
+            position: relative;
+            height: 60px;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                #cbd5e0 10px,
+                #cbd5e0 12px
+            );
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .connection-label {
+            background: white;
+            padding: 8px 16px;
+            border: 2px solid #4299e1;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #2b6cb0;
+            font-size: 14px;
+        }
+
+        .arrows {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #4299e1;
+        }
+
+        .arrow-down {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .legend {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .data-flow {
+            background: linear-gradient(90deg, #4299e1, #63b3ed);
+            height: 4px;
+            border-radius: 2px;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .data-flow::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid #4299e1;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+
+        @media (max-width: 768px) {
+            .architecture-container {
+                padding: 20px;
+            }
+            
+            .clients-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .servers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="architecture-container">
+        <h1 class="title">MCP 多Client容器架构图</h1>
+        
+        <!-- Host 容器 -->
+        <div class="host-container">
+            <div class="host-title">Host Application (完整应用程序)</div>
+            
+            <!-- 应用层 -->
+            <div class="layer application-layer">
+                <div class="layer-title">Application Layer</div>
+                <div class="components">
+                    <div class="component">用户界面 (UI Components)</div>
+                    <div class="component">业务逻辑 (Business Logic)</div>
+                    <div class="component">用户管理 (User Management)</div>
+                    <div class="component">工作流引擎 (Workflow Engine)</div>
+                    <div class="component">数据展示 (Data Presentation)</div>
+                </div>
+            </div>
+            
+            <!-- Client 管理层 -->
+            <div class="layer client-layer">
+                <div class="layer-title">Client Management Layer</div>
+                
+                <div class="client-manager">
+                    <div class="client-manager-title">MCP Client Manager (多Client容器)</div>
+                    <div class="clients-grid">
+                        <div class="client-box">
+                            <div class="client-title">MCP Client #1</div>
+                            <div class="client-desc">开发工具专用</div>
+                            <div class="data-flow"></div>
+                        </div>
+                        <div class="client-box">
+                            <div class="client-title">MCP Client #2</div>
+                            <div class="client-desc">数据操作专用</div>
+                            <div class="data-flow"></div>
+                        </div>
+                        <div class="client-box">
+                            <div class="client-title">MCP Client #3</div>
+                            <div class="client-desc">云服务专用</div>
+                            <div class="data-flow"></div>
+                        </div>
+                        <div class="client-box">
+                            <div class="client-title">MCP Client #4</div>
+                            <div class="client-desc">文件系统专用</div>
+                            <div class="data-flow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 基础设施层 -->
+            <div class="layer infrastructure-layer">
+                <div class="layer-title">Infrastructure Layer</div>
+                <div class="components">
+                    <div class="component">安全认证 (Security & Auth)</div>
+                    <div class="component">数据存储 (Data Storage)</div>
+                    <div class="component">配置管理 (Configuration)</div>
+                    <div class="component">日志监控 (Monitoring)</div>
+                    <div class="component">缓存系统 (Caching)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 连接线 -->
+        <div class="connection-lines">
+            <div class="connection-label">MCP Protocol Communication</div>
+            <div class="arrows">
+                <div class="arrow arrow-down"></div>
+            </div>
+        </div>
+        
+        <!-- Servers 部分 -->
+        <div class="servers-section">
+            <h2 class="servers-title">MCP Servers (外部服务)</h2>
+            <div class="servers-grid">
+                <div class="server-box">
+                    <div class="server-title">Development Server</div>
+                    <div class="server-desc">开发工具和代码管理</div>
+                    <div class="server-tools">Git, IDE Tools, Debugger</div>
+                </div>
+                <div class="server-box">
+                    <div class="server-title">Database Server</div>
+                    <div class="server-desc">数据库操作和查询</div>
+                    <div class="server-tools">SQL, NoSQL, Analytics</div>
+                </div>
+                <div class="server-box">
+                    <div class="server-title">Cloud API Server</div>
+                    <div class="server-desc">云服务和API集成</div>
+                    <div class="server-tools">AWS, Azure, GCP Tools</div>
+                </div>
+                <div class="server-box">
+                    <div class="server-title">File System Server</div>
+                    <div class="server-desc">文件和文档管理</div>
+                    <div class="server-tools">File Ops, Search, Indexing</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 图例 -->
+        <div class="legend">
+            <div class="legend-title">架构图例</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #ebf8ff 0%, #bee3f8 100%); border-color: #2b6cb0;"></div>
+                    <span>Host Application Container</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #f0fff4 0%, #c6f6d5 100%); border-color: #38a169;"></div>
+                    <span>Application Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #fffbeb 0%, #faf089 100%); border-color: #d69e2e;"></div>
+                    <span>Client Management Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #faf5ff 0%, #e9d8fd 100%); border-color: #805ad5;"></div>
+                    <span>Infrastructure Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f97316;"></div>
+                    <span>MCP Client Instance</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #f7fafc 0%, #edf2f7 100%); border-color: #4a5568;"></div>
+                    <span>External MCP Server</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

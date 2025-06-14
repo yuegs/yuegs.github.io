@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MCP 协议完全指南：架构设计 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="Host 就像是一个作战大厅，大厅里主要有三种角色：
+
+LLM Client 扮演者将军的角色，负责作战计划的制定。
+Orchestrator 扮演着作战参谋的角色，负责协调各个 MCP Client 的行动。
+MCP Client 扮演者通信兵的角色，负责与外部 MCP Server 进行通信。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,MCP,架构">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="MCP 协议完全指南：架构设计"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>MCP 协议完全指南：架构设计</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/06/15/mcp/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-06-14T17:07:02.574Z">
+          2025-06-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/mcp/fight.png"></p>
+<p>Host 就像是一个作战大厅，大厅里主要有三种角色：</p>
+<ul>
+<li>LLM Client 扮演者将军的角色，负责作战计划的制定。</li>
+<li>Orchestrator 扮演着作战参谋的角色，负责协调各个 MCP Client 的行动。</li>
+<li>MCP Client 扮演者通信兵的角色，负责与外部 MCP Server 进行通信。<span id="more"></span></li>
+</ul>
+<p>从另一个层面看，Host 是 Client 容器，也负责协调、编排任务的执行，确保任务能够被安全、可靠、高质量的完成。</p>
+<p>接下来，我们看下 MCP(Model Context Protocol) 真正的架构部分：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/mcp/mcp-arch.png"></p>
+<p>以上，是一个标准的 C&#x2F;S 架构。</p>
+<ul>
+<li>Host 是一个完整的 LLM 应用。创建和管理多个 Client 实例、执行安全策略、处理用户授权决策。</li>
+<li>Client 和 Server 保持 1:1 的连接。Client 向 Server 声明自己的能力需求，Server 向 Client 暴露可用的工具和资源。</li>
+<li>Server 提供各种能力：Prompts、Tools、Resources。告诉 Client 我能做什么，我还需要什么。</li>
+<li>Client 和 Server 之间，靠 MCP 标准通信协议保障，实现了能力协商、安全调用的规范。</li>
+</ul>
+<p>MCP 解决了一个关键痛点：M×N 问题 —— 即 M 个不同的大语言模型需要与 N 个不同工具和数据源集成时的组合爆炸式复杂性。</p>
+<p>事实上，让 LLM 具备工具协调能力、规划能力事实上并不一定靠 MCP 解决。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/mcp/auto-agent.png"></p>
+<p>多代理下的 Function call 也可以实现这样的效果。但 MCP 将这种能力标准化，并提供了一个完整的生态系统。</p>
+<h3 id="一、MCP-Host"><a href="#一、MCP-Host" class="headerlink" title="一、MCP Host"></a>一、MCP Host</h3><p>一个完成的 Host 应用通用架构如下所示：<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/mcp/host-arch.png"></p>
+<h4 id="1-1-用户交互层"><a href="#1-1-用户交互层" class="headerlink" title="1.1 用户交互层"></a>1.1 用户交互层</h4><p>用户交互层是 Host 应用的入口，负责与用户进行交互。<br>交互通常应支持多模态。</p>
+<h4 id="1-2-应用业务层"><a href="#1-2-应用业务层" class="headerlink" title="1.2 应用业务层"></a>1.2 应用业务层</h4><p>应用业务层负责实现核心业务目标。</p>
+<p>AI Model Interface 负责智能任务规划：通过 <strong>Prompt 构建</strong>将用户需求与当前可用能力（Client&#x2F;Server 能力）整合为上下文，经 <strong>多模型路由</strong>选择合适的 LLM 进行推理，最终生成可执行的任务列表。</p>
+<p>Task Orchestrator 负责任务执行编排：通过 <strong>工作流引擎</strong>将 AI 意图分解为可执行的操作序列并调用相应 Client，通过 <strong>规则引擎</strong>对执行结果进行安全审查和边界监控。</p>
+<h4 id="1-3-集成协调层"><a href="#1-3-集成协调层" class="headerlink" title="1.3 集成协调层"></a>1.3 集成协调层</h4><p>集成协调层负责 MCP 连接管理：通过 <strong>生命周期管理</strong>确保各 Client 实例正常运行，通过 <strong>高可用机制</strong>提供连接池优化、故障恢复和重试策略等可靠性保障。</p>
+<h4 id="1-4-基础设施层"><a href="#1-4-基础设施层" class="headerlink" title="1.4 基础设施层"></a>1.4 基础设施层</h4><p>基础设施层提供系统运行基础支撑：通过 <strong>存储管理</strong>确保数据持久化和配置服务，通过 <strong>监控安全</strong>提供系统分析和安全基础设施保障。</p>
+<h3 id="二、MCP-Server"><a href="#二、MCP-Server" class="headerlink" title="二、MCP Server"></a>二、MCP Server</h3><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/mcp/server-arch.png"></p>
+<h4 id="2-1-MCP-协议实现层"><a href="#2-1-MCP-协议实现层" class="headerlink" title="2.1 MCP 协议实现层"></a>2.1 MCP 协议实现层</h4><p>协议实现层负责标准通信协议支撑：通过 JSON-RPC 2.0 处理器实现消息解析与响应机制，通过 能力协商器管理客户端能力发现与版本匹配，提供错误处理、进度报告和通知系统等核心协议功能。</p>
+<h4 id="2-2-核心能力"><a href="#2-2-核心能力" class="headerlink" title="2.2 核心能力"></a>2.2 核心能力</h4><p>MCP Server 通过标准协议向客户端暴露三类核心能力：<strong>Resources（数据访问）</strong>、<strong>Tools（功能执行）</strong>、<strong>Prompts（模板交互）</strong>。另外，还提供了一些辅助能力：<strong>Sampling（LLM 推理服务）</strong>、<strong>Roots（文件系统访问权限）</strong>。</p>
+<h5 id="2-2-1-Resources"><a href="#2-2-1-Resources" class="headerlink" title="2.2.1 Resources"></a>2.2.1 Resources</h5><p>受应用控制的只读数据源，为模型提供上下文信息。每个资源具备唯一的 URI 标识，支持通过 <strong>直接发现</strong>（resources&#x2F;list 获取静态列表）和 <strong>模板发现</strong>（URI 模板动态构建）两种方式进行资源发现，通过 resources&#x2F;read 请求访问具体内容。</p>
+<h5 id="2-2-2-Tools"><a href="#2-2-2-Tools" class="headerlink" title="2.2.2 Tools"></a>2.2.2 Tools</h5><p>受模型控制的可执行功能，支持状态修改。LLM 通过工具与外部系统交互、执行计算和现实世界操作。每个工具具备唯一名称标识，支持通过 <strong>工具发现</strong>（tools&#x2F;list 获取可用列表）和 <strong>工具调用</strong>（tools&#x2F;call 执行具体功能）两种标准化操作。</p>
+<h5 id="2-2-3-Prompts"><a href="#2-2-3-Prompts" class="headerlink" title="2.2.3 Prompts"></a>2.2.3 Prompts</h5><p>受用户控制的交互模板，实现业务流程标准化。每个 Prompt 支持 <strong>参数化设计</strong>（定义参数名称、类型和必需性）和 <strong>工作流模板</strong>（预定义业务流程的标准化交互模式），通过 prompts&#x2F;list 和 prompts&#x2F;get 实现模板发现和获取。</p>
+<h5 id="2-2-4-Sampling"><a href="#2-2-4-Sampling" class="headerlink" title="2.2.4 Sampling"></a>2.2.4 Sampling</h5><p>受服务器请求的 LLM 推理服务，使服务器在处理过程中获得 AI 辅助。每个请求具备标准消息格式，支持通过 <strong>模型偏好</strong>（成本、速度、智能优先级配置）和 <strong>上下文包含</strong>（指定服务器上下文范围）两种方式进行请求定制，通过 sampling&#x2F;createMessage 向客户端请求 LLM 生成。</p>
+<h5 id="2-2-5-Roots"><a href="#2-2-5-Roots" class="headerlink" title="2.2.5 Roots"></a>2.2.5 Roots</h5><p>Roots 是 MCP 协议中客户端提供的一个关键安全特性，它定义了服务器在文件系统中可以操作的边界。简单来说，Roots就是”允许访问的目录清单”，类似于给保姆一串特定房间的钥匙。<br>每个目录具备唯一的 file:&#x2F;&#x2F; URI 路径，支持通过 <strong>权限验证</strong>（服务器向客户端请求 roots&#x2F;list 获取允许目录清单）和 <strong>动态调整</strong>（客户端可实时更新访问权限范围并发送 roots&#x2F;list_changed 通知）两种方式进行安全边界管理，确保服务器只能在授权目录内执行文件操作。</p>
+<h4 id="2-3-执行引擎层"><a href="#2-3-执行引擎层" class="headerlink" title="2.3 执行引擎层"></a>2.3 执行引擎层</h4><p>执行引擎层负责业务逻辑执行：通过 工具执行器处理功能调用与生命周期管理，通过 资源提供器实现数据访问与内容缓存，集成参数验证、模板引擎和安全上下文等核心执行组件。</p>
+<h4 id="2-4-传输抽象层"><a href="#2-4-传输抽象层" class="headerlink" title="2.4 传输抽象层"></a>2.4 传输抽象层</h4><p>传输抽象层提供多协议通信支撑：通过 标准传输协议（Stdio、HTTP、WebSocket）实现跨环境通信，通过 自定义传输扩展支持灵活的集成需求和协议适配。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>MCP 通过标准化协议解决了 AI 与外部系统集成的复杂性，提供了一种 AI 应用开发的范式。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2023-06-23-agent/">LLM Powered Autonomous Agents</a><br><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/introduction">Model Context Protocol</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29001189476">MCP (Model Context Protocol)，一篇就够了。</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/MCP/">MCP</a><a href="/tags/架构/">架构</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

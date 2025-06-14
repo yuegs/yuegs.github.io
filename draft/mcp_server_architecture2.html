@@ -1,0 +1,1056 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="MCP Server 架构图 (优化版)
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+   ">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/draft/mcp_server_architecture2.html" rel="bookmark">
+        <time class="entry-date published" datetime="2025-06-09T16:32:57.905Z">
+          2025-06-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Server 架构图 (优化版)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .architecture-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #e53e3e;
+            padding-bottom: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* 协议交互流程 */
+        .protocol-sequence {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border: 3px solid #38b2ac;
+            border-radius: 12px;
+        }
+
+        .sequence-title {
+            text-align: center;
+            font-weight: 700;
+            color: #234e52;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .sequence-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            align-items: center;
+        }
+
+        .sequence-step {
+            background: white;
+            border: 2px solid #38b2ac;
+            border-radius: 8px;
+            padding: 15px 12px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .sequence-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(56, 178, 172, 0.3);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #38b2ac;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #234e52;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .step-desc {
+            font-size: 11px;
+            color: #4a5568;
+        }
+
+        /* 主要 Server 架构 */
+        .main-server {
+            border: 3px solid #c53030;
+            border-radius: 12px;
+            padding: 30px;
+            background: linear-gradient(145deg, #fed7d7 0%, #fc8181 100%);
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .server-title {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #c53030;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .layer {
+            margin-bottom: 25px;
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .protocol-layer {
+            border-color: #3182ce;
+            background: linear-gradient(145deg, #ffffff 0%, #ebf8ff 100%);
+        }
+
+        .capabilities-layer {
+            border-color: #38a169;
+            background: linear-gradient(145deg, #ffffff 0%, #f0fff4 100%);
+        }
+
+        .execution-layer {
+            border-color: #d69e2e;
+            background: linear-gradient(145deg, #ffffff 0%, #fffbeb 100%);
+        }
+
+        .transport-layer {
+            border-color: #805ad5;
+            background: linear-gradient(145deg, #ffffff 0%, #faf5ff 100%);
+        }
+
+        .layer-title {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 15px;
+            color: white;
+        }
+
+        .protocol-layer .layer-title {
+            background: #3182ce;
+        }
+
+        .capabilities-layer .layer-title {
+            background: #38a169;
+        }
+
+        .execution-layer .layer-title {
+            background: #d69e2e;
+        }
+
+        .transport-layer .layer-title {
+            background: #805ad5;
+        }
+
+        /* 核心能力展示 */
+        .core-capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .capability-box {
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #38a169;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .capability-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(56, 161, 105, 0.3);
+        }
+
+        .capability-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .capability-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .capability-desc {
+            font-size: 12px;
+            color: #4a5568;
+            line-height: 1.4;
+        }
+
+        .capability-status {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #48bb78;
+        }
+
+        /* 组件网格 */
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .component-card {
+            background: rgba(255,255,255,0.95);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .component-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: #4299e1;
+        }
+
+        .component-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2d3748;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .component-desc {
+            font-size: 12px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .component-badge {
+            position: absolute;
+            top: -6px;
+            right: 10px;
+            background: #4299e1;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* 轻量级 vs 企业级 */
+        .server-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .server-type {
+            padding: 25px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .lightweight-server {
+            background: linear-gradient(145deg, #f0fff4 0%, #c6f6d5 100%);
+            border: 3px solid #38a169;
+        }
+
+        .enterprise-server {
+            background: linear-gradient(145deg, #faf5ff 0%, #e9d8fd 100%);
+            border: 3px solid #805ad5;
+        }
+
+        .type-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .lightweight-server .type-title {
+            color: #22543d;
+        }
+
+        .enterprise-server .type-title {
+            color: #553c9a;
+        }
+
+        .type-features {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .feature-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .lightweight-server .feature-icon {
+            background: #38a169;
+        }
+
+        .enterprise-server .feature-icon {
+            background: #805ad5;
+        }
+
+        /* 实际示例 */
+        .examples-section {
+            margin: 40px 0;
+            padding: 25px;
+            background: linear-gradient(145deg, #f7fafc 0%, #edf2f7 100%);
+            border: 2px solid #718096;
+            border-radius: 12px;
+        }
+
+        .examples-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .example-card {
+            background: white;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .example-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(74, 85, 104, 0.2);
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .example-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tool-tag {
+            background: #4a5568;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .example-desc {
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.4;
+        }
+
+        /* 协议消息示例 */
+        .protocol-messages {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(145deg, #1a202c 0%, #2d3748 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .messages-title {
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .message-example {
+            background: #4a5568;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        .message-type {
+            color: #90cdf4;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .json-code {
+            color: #e2e8f0;
+            white-space: pre-wrap;
+        }
+
+        /* 图例优化 */
+        .legend {
+            background: linear-gradient(145deg, #f7fafc 0%, #edf2f7 100%);
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .legend-text {
+            font-size: 14px;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .architecture-container {
+                padding: 20px;
+            }
+            
+            .server-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .sequence-flow {
+                grid-template-columns: 1fr;
+            }
+            
+            .core-capabilities {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="architecture-container">
+        <h1 class="title">MCP Server 架构图</h1>
+        <p class="subtitle">基于 Model Context Protocol 规范的完整Server实现架构</p>
+        
+        <!-- MCP 协议交互序列 -->
+        <div class="protocol-sequence">
+            <div class="sequence-title">MCP Protocol Interaction Sequence</div>
+            <div class="sequence-flow">
+                <div class="sequence-step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Initialize</div>
+                    <div class="step-desc">客户端发起连接和能力协商</div>
+                </div>
+                <div class="sequence-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Capabilities</div>
+                    <div class="step-desc">服务器响应支持的功能列表</div>
+                </div>
+                <div class="sequence-step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">List Resources</div>
+                    <div class="step-desc">枚举可用的工具和资源</div>
+                </div>
+                <div class="sequence-step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Execute</div>
+                    <div class="step-desc">执行工具调用或资源请求</div>
+                </div>
+                <div class="sequence-step">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Progress</div>
+                    <div class="step-desc">发送执行进度通知</div>
+                </div>
+                <div class="sequence-step">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Response</div>
+                    <div class="step-desc">返回执行结果和状态</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要 Server 架构 -->
+        <div class="main-server">
+            <div class="server-title">MCP Server Core Architecture</div>
+            
+            <!-- 协议实现层 -->
+            <div class="layer protocol-layer">
+                <div class="layer-title">Protocol Implementation Layer</div>
+                <div class="components-grid">
+                    <div class="component-card">
+                        <div class="component-badge">Core</div>
+                        <div class="component-title">🔌 JSON-RPC 2.0 Handler</div>
+                        <div class="component-desc">处理所有 JSON-RPC 2.0 协议消息的解析、验证和路由</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-badge">MCP</div>
+                        <div class="component-title">📋 Server Information Manager</div>
+                        <div class="component-desc">管理服务器元信息、版本和基本配置</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-badge">Core</div>
+                        <div class="component-title">🤝 Capability Negotiator</div>
+                        <div class="component-desc">处理客户端-服务器能力协商和兼容性检查</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-badge">MCP</div>
+                        <div class="component-title">📊 Progress Reporter</div>
+                        <div class="component-desc">支持长时间运行任务的进度通知机制</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-badge">Core</div>
+                        <div class="component-title">🔔 Notification System</div>
+                        <div class="component-desc">处理服务器主动通知和事件推送</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-badge">Core</div>
+                        <div class="component-title">⚠️ Error Handler</div>
+                        <div class="component-desc">统一的错误处理和标准化错误响应</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 核心能力层 -->
+            <div class="layer capabilities-layer">
+                <div class="layer-title">Core Capabilities Layer</div>
+                <div class="core-capabilities">
+                    <div class="capability-box">
+                        <div class="capability-status"></div>
+                        <div class="capability-icon">🛠️</div>
+                        <div class="capability-title">Tools</div>
+                        <div class="capability-desc">可调用的工具和函数，支持参数验证和执行</div>
+                    </div>
+                    <div class="capability-box">
+                        <div class="capability-status"></div>
+                        <div class="capability-icon">📁</div>
+                        <div class="capability-title">Resources</div>
+                        <div class="capability-desc">可访问的数据资源，支持多种格式和协议</div>
+                    </div>
+                    <div class="capability-box">
+                        <div class="capability-status"></div>
+                        <div class="capability-icon">📝</div>
+                        <div class="capability-title">Prompts</div>
+                        <div class="capability-desc">可重用的提示模板，支持参数化和动态生成</div>
+                    </div>
+                    <div class="capability-box">
+                        <div class="capability-status"></div>
+                        <div class="capability-icon">🎯</div>
+                        <div class="capability-title">Sampling</div>
+                        <div class="capability-desc">支持 LLM 采样请求和模型调用代理</div>
+                    </div>
+                    <div class="capability-box">
+                        <div class="capability-status"></div>
+                        <div class="capability-icon">🌳</div>
+                        <div class="capability-title">Roots</div>
+                        <div class="capability-desc">根资源管理，提供资源层次结构</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 执行引擎层 -->
+            <div class="layer execution-layer">
+                <div class="layer-title">Execution Engine Layer</div>
+                <div class="components-grid">
+                    <div class="component-card">
+                        <div class="component-title">🔧 Tool Executor</div>
+                        <div class="component-desc">工具执行引擎，处理工具调用的生命周期管理</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">📋 Resource Provider</div>
+                        <div class="component-desc">资源提供引擎，处理资源访问和内容返回</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">✅ Parameter Validator</div>
+                        <div class="component-desc">输入参数验证器，确保请求参数的正确性</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">🎨 Template Engine</div>
+                        <div class="component-desc">提示模板渲染引擎，支持变量替换和条件逻辑</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">💾 Content Cache</div>
+                        <div class="component-desc">智能缓存系统，提高资源访问和工具执行性能</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">🔒 Security Context</div>
+                        <div class="component-desc">安全上下文管理，权限控制和访问验证</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 传输抽象层 -->
+            <div class="layer transport-layer">
+                <div class="layer-title">Transport Abstraction Layer</div>
+                <div class="components-grid">
+                    <div class="component-card">
+                        <div class="component-title">📤 Stdio Transport</div>
+                        <div class="component-desc">标准输入输出传输，支持进程间通信</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">🌐 HTTP Transport</div>
+                        <div class="component-desc">HTTP/HTTPS 传输，支持 REST API 和 Webhook</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">⚡ WebSocket Transport</div>
+                        <div class="component-desc">WebSocket 传输，支持实时双向通信</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">🔧 Custom Transport</div>
+                        <div class="component-desc">自定义传输协议扩展接口</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Server 类型对比 -->
+        <div class="server-types">
+            <div class="server-type lightweight-server">
+                <div class="type-title">🪶 Lightweight Server</div>
+                <div class="type-features">
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>单一功能专注，快速启动</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>最小化依赖，易于部署</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>简化的配置和管理</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>适合脚本化和自动化</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>低资源消耗</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="server-type enterprise-server">
+                <div class="type-title">🏢 Enterprise Server</div>
+                <div class="type-features">
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>完整的安全认证体系</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>高可用和负载均衡</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>详细的监控和日志</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>企业级权限管理</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <span>合规性和审计支持</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 实际应用示例 -->
+        <div class="examples-section">
+            <div class="examples-title">实际应用示例</div>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-title">Database Server</div>
+                    <div class="example-tools">
+                        <div class="tool-tag">sql_query</div>
+                        <div class="tool-tag">table_schema</div>
+                        <div class="tool-tag">export_data</div>
+                        <div class="tool-tag">analyze_performance</div>
+                    </div>
+                    <div class="example-desc">
+                        提供数据库查询、分析和管理功能，支持多种数据库类型和复杂查询操作
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">Git Operations Server</div>
+                    <div class="example-tools">
+                        <div class="tool-tag">git_commit</div>
+                        <div class="tool-tag">branch_manage</div>
+                        <div class="tool-tag">merge_request</div>
+                        <div class="tool-tag">code_review</div>
+                    </div>
+                    <div class="example-desc">
+                        提供 Git 版本控制操作，支持代码提交、分支管理和代码审查流程
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">Cloud API Server</div>
+                    <div class="example-tools">
+                        <div class="tool-tag">deploy_service</div>
+                        <div class="tool-tag">scale_resources</div>
+                        <div class="tool-tag">monitor_metrics</div>
+                        <div class="tool-tag">manage_costs</div>
+                    </div>
+                    <div class="example-desc">
+                        集成云服务 API，提供资源部署、扩展和监控功能，支持多云环境
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">Knowledge Base Server</div>
+                    <div class="example-tools">
+                        <div class="tool-tag">search_docs</div>
+                        <div class="tool-tag">extract_info</div>
+                        <div class="tool-tag">generate_summary</div>
+                        <div class="tool-tag">update_index</div>
+                    </div>
+                    <div class="example-desc">
+                        提供企业知识库访问和搜索，支持文档检索、信息提取和智能摘要
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 协议消息示例 -->
+        <div class="protocol-messages">
+            <div class="messages-title">MCP Protocol Messages Examples</div>
+            
+            <div class="message-example">
+                <div class="message-type">Initialize Request:</div>
+                <div class="json-code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "tools": {},
+      "resources": {},
+      "prompts": {}
+    },
+    "clientInfo": {
+      "name": "example-client",
+      "version": "1.0.0"
+    }
+  }
+}</div>
+            </div>
+            
+            <div class="message-example">
+                <div class="message-type">Tool Call Request:</div>
+                <div class="json-code">{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "sql_query",
+    "arguments": {
+      "query": "SELECT * FROM users WHERE active = true",
+      "database": "production"
+    }
+  }
+}</div>
+            </div>
+            
+            <div class="message-example">
+                <div class="message-type">Progress Notification:</div>
+                <div class="json-code">{
+  "jsonrpc": "2.0",
+  "method": "notifications/progress",
+  "params": {
+    "progressToken": "task-123",
+    "progress": 0.7,
+    "total": 1.0
+  }
+}</div>
+            </div>
+        </div>
+
+        <!-- 优化的图例 -->
+        <div class="legend">
+            <div class="legend-title">架构组件图例</div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #ffffff 0%, #ebf8ff 100%); border-color: #3182ce;"></div>
+                    <div class="legend-text">Protocol Implementation Layer</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #ffffff 0%, #f0fff4 100%); border-color: #38a169;"></div>
+                    <div class="legend-text">Core Capabilities Layer</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #ffffff 0%, #fffbeb 100%); border-color: #d69e2e;"></div>
+                    <div class="legend-text">Execution Engine Layer</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #ffffff 0%, #faf5ff 100%); border-color: #805ad5;"></div>
+                    <div class="legend-text">Transport Abstraction Layer</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #f0fff4 0%, #c6f6d5 100%); border-color: #38a169;"></div>
+                    <div class="legend-text">Lightweight Server Type</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(145deg, #faf5ff 0%, #e9d8fd 100%); border-color: #805ad5;"></div>
+                    <div class="legend-text">Enterprise Server Type</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

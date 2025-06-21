@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>从单体智能到群体智慧：A2A 协议解析 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="AI模型已然从文字走向多模态，能力边界不断拓展。从斯坦福小镇到 ChatDev，再到 AutoGen 和 LangGraph，多 Agent 协作模式也在不断发展。个体越聪明，协作越复杂，群体智慧越强大——人类如此，AI亦然。当个体 LLM 成熟到一定程度，协作复杂度达到新的临界点，A2A（Agent to Agent）协议的出现，为智能体互联提供标准化规范。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,A2A">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="从单体智能到群体智慧：A2A 协议解析"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>从单体智能到群体智慧：A2A 协议解析</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/06/22/a2a/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-06-21T16:34:31.527Z">
+          2025-06-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><img src="https://google-a2a.github.io/A2A/latest/assets/a2a-actors.png"><br>AI模型已然从文字走向多模态，能力边界不断拓展。从斯坦福小镇到 ChatDev，再到 AutoGen 和 LangGraph，多 Agent 协作模式也在不断发展。<br>个体越聪明，协作越复杂，群体智慧越强大——人类如此，AI亦然。<br>当个体 LLM 成熟到一定程度，协作复杂度达到新的临界点，A2A（Agent to Agent）协议的出现，为智能体互联提供标准化规范。</p>
+<span id="more"></span>
+
+<h3 id="一、A2A-是什么"><a href="#一、A2A-是什么" class="headerlink" title="一、A2A 是什么"></a>一、A2A 是什么</h3><p>A2A (Agent to Agent) 是 Google 于 2025 年 4 月推出的智能体间协作协议，解决异构AI智能体的互操作问题。其核心是使智能体能够具备：</p>
+<ul>
+<li>发现能力：通过 Agent Card 了解其他智能体的技能</li>
+<li>协商交互：选择合适的通信模态和格式</li>
+<li>管理任务：处理有状态的、长期的协作工作流</li>
+<li>安全协作：在不暴露内部实现的前提下交换信息</li>
+</ul>
+<p>这种协议，是对 MCP 协议的补充，MCP 是面向上下文的协议，极大的扩展了 Agent 的能力，增强了 LLM 和外部系统的交互能力。A2A 是面向 Agent 互通的协议。两者结合，为 LLM 处理更加复杂任务提供的技术框架。</p>
+<p>五大设计原则：</p>
+<ul>
+<li>简单原则：基于 HTTP、JSON-RPC 2.0、SSE 等成熟标准，降低实施门槛</li>
+<li>企业就绪：协议架构兼容企业级身份验证、授权、安全、隐私、审计、监控标准，支持与现有企业基础设施无缝集成</li>
+<li>异步优先：原生支持长期任务执行和人机协作循环，通过状态管理和多种通信模式实现异步协作。</li>
+<li>模态无关：协议在设计上不偏向特定模态，通过统一的 Part 类型系统支持文本、文件、结构化数据、多媒体等多种内容类型的交换</li>
+<li>不透明执行：基于能力声明进行协作，隐藏内部实现细节</li>
+</ul>
+<p>A2A 是为 AI 智能体生态设计的”网络协议”，实现了标准化、安全化、产业化的智能体协作机制。</p>
+<h3 id="二、核心概念"><a href="#二、核心概念" class="headerlink" title="二、核心概念"></a>二、核心概念</h3><p>A2A 核心协议实体，涉及 Agent 本身以及通信所需的数据对象。</p>
+<h4 id="2-1-Agent"><a href="#2-1-Agent" class="headerlink" title="2.1 Agent"></a>2.1 Agent</h4><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/a2a/autonomous-agent-system.png"><br>一个 Agent 系统，如上所示。它是一个独立的、能够自主决策的智能系统，可以规划、调用工具、完成动作，具备记忆。<br>在 A2A 协议中，其被赋予了更多能力，比如 Remote Agent 的通信与协作。</p>
+<ul>
+<li>Client Agent：一次交互中的用户意图代理执行者，通过 AgentCard 发现和匹配合适的 Remote Agent，明确期待的结果格式，但无需了解具体实现方式。</li>
+<li>Remote Agent：一次交互中的专业服务提供者，通过 A2A 标准接口接收请求，以不透明方式处理任务并交付结果，内部实现对 Client 完全隐藏。</li>
+</ul>
+<p>Client Agent 和 Remote Agent 的身份本身是相对的。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/a2a/a2a.png"></p>
+<h4 id="2-2-数据对象"><a href="#2-2-数据对象" class="headerlink" title="2.2 数据对象"></a>2.2 数据对象</h4><ul>
+<li>AgentCard：Agent的”身份证”和”能力说明书”，即我是谁，我能干什么。它被用于服务发现和能力匹配。本质上，它是 Agent 向外界声明自己身份、技能和接入方式的标准化元数据的 json 文档。<br>核心字段：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;翻译专家Agent&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;支持多语言翻译服务&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://translate-agent.example.com/a2a/v1&quot;</span><span class="punctuation">,</span>  <span class="comment">//Agent的HTTP服务地址</span></span><br><span class="line">  <span class="attr">&quot;capabilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;streaming&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>  <span class="comment">// 支持Server-Sent Events流式更新</span></span><br><span class="line">    <span class="attr">&quot;pushNotifications&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span> <span class="comment">// 不支持webhook异步推送</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;securitySchemes&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>  <span class="comment">// 声明Agent支持哪些认证方式</span></span><br><span class="line">    <span class="attr">&quot;oauth2&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;oauth2&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;flows&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>...<span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;oauth2&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;translate&quot;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span>  <span class="comment">// 声明访问该Agent的安全要求：必须使用oauth2方案并具备translate权限</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="attr">&quot;skills&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text-translation&quot;</span><span class="punctuation">,</span>  <span class="comment">// 技能ID</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;文本翻译&quot;</span><span class="punctuation">,</span>  <span class="comment">// 技能名称</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;多语言文本翻译&quot;</span><span class="punctuation">,</span>  <span class="comment">// 技能描述</span></span><br><span class="line">      <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;translation&quot;</span><span class="punctuation">]</span>  <span class="comment">// 技能标签，支持基于标签的模糊匹配和分类搜索</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>Message：Agent 间通信的基本载体，承载一次对话回合的完整信息，包括发送者身份、内容和上下文。<br>核心字段：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;messageId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;msg-12345&quot;</span><span class="punctuation">,</span> <span class="comment">// 每次消息传递都必须唯一</span></span><br><span class="line">  <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span>  <span class="comment">// &quot;user&quot; 或 &quot;agent&quot;</span></span><br><span class="line">  <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>  <span class="comment">// 多模态内容数组</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;请帮我分析这个数据文件&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file&quot;</span><span class="punctuation">,</span> </span><br><span class="line">      <span class="attr">&quot;file&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;data.csv&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;mimeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text/csv&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bytes&quot;</span><span class="punctuation">:</span> <span class="string">&quot;base64编码内容...&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;taskId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;task-67890&quot;</span><span class="punctuation">,</span>     <span class="comment">// 可选，任务关联标识</span></span><br><span class="line">  <span class="attr">&quot;contextId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ctx-abc123&quot;</span><span class="punctuation">,</span>  <span class="comment">// 可选，会话上下文标识。唯一表示一次请求的一个业务流程</span></span><br><span class="line">  <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;message&quot;</span> <span class="comment">// message, task, status-update 等</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>Part：Message 和 Artifact 的最小内容单元，通过统一的类型系统表示多模态数据，支持在 A2A 协议中进行序列化传输。<br>核心字段：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;file&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;image.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;mimeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;image/png&quot;</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;bytes&quot;</span><span class="punctuation">:</span> <span class="string">&quot;iVBORw0KGgoAAAANSUhEUgAAAAUA...&quot;</span>  <span class="comment">// base64编码</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>Task：复杂请求的生命周期管理容器，跟踪任务状态、存储交互历史、管理执行上下文。<br>核心字段：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;task-987654&quot;</span><span class="punctuation">,</span>  <span class="comment">// Task的全局唯一标识符</span></span><br><span class="line">  <span class="attr">&quot;contextId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ctx-abc123&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;state&quot;</span><span class="punctuation">:</span> <span class="string">&quot;working&quot;</span><span class="punctuation">,</span>           <span class="comment">// Task 的生命周期：submitted/working/completed/failed等</span></span><br><span class="line">    <span class="attr">&quot;timestamp&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-06-17T10:35:30Z&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;history&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>  <span class="comment">// 历史记录</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;messageId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;msg-12345&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>...<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;message&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;artifacts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>  <span class="comment">// 任务成果</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;artifactId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;report-001&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;分析报告&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>...<span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;task&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>Artifact：任务执行的最终交付物，包含 Agent 生成的具体成果，支持增量更新和流式传输。<br>核心字段：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;artifactId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;report-001&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;分析报告&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;数据分析结果&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;# 分析报告\n\n本次分析发现...&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;file&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chart.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;mimeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;image/png&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://storage.example.com/chart.png&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<img src="/core-rel.png"></li>
+</ul>
+<h3 id="三、主要流程"><a href="#三、主要流程" class="headerlink" title="三、主要流程"></a>三、主要流程</h3><h4 id="3-1-标准流程"><a href="#3-1-标准流程" class="headerlink" title="3.1 标准流程"></a>3.1 标准流程</h4><ul>
+<li>发现阶段<br>Client Agent 通过获取 Remote Agent 的 AgentCard 了解其身份和能力。AgentCard 包含 agent 的服务端点、认证要求、支持的输入输出模式、具体能力等元数据信息，实现智能体的标准化服务发现。<br>在实践过程中，可以通过注册中心（比如 Nacos）实现 Agent 的自动注册和发现。</li>
+<li>通信阶段<br>Client Agent 基于 AgentCard 中的认证要求，在 HTTP 请求头中携带预先获得的认证凭证（如Bearer token、API Key等），通过 JSON-RPC 2.0 的 <code>message/send</code> 或 <code>message/stream</code> 方法向 Remote Agent 发送Message。Message包含角色标识（user&#x2F;agent）、多模态内容部分（Parts）和元数据，建立标准化的安全通信信道。</li>
+<li>协作阶段<br>Remote Agent 接收 Message 后，根据请求复杂度选择直接返回 Message 响应，或创建 Task 管理复杂的处理过程。对于Task模式，在生命周期内双方通过Message进行多轮交互。每个 Message 由多个 Part 组成以承载具体的多模态内容（文本、文件、结构化数据）。</li>
+<li>交付阶段<br>Remote Agent 通过 Artifact 交付任务成果，支持流式传输（SSE）实现实时更新，以及异步推送通知到 Client 的 webhook 端点。</li>
+</ul>
+<h4 id="3-2-基于-A2A-的应用增强"><a href="#3-2-基于-A2A-的应用增强" class="headerlink" title="3.2 基于 A2A 的应用增强"></a>3.2 基于 A2A 的应用增强</h4><p>基于 A2A 协议的标准化接口，可以在应用层构建以下增强型功能：</p>
+<ul>
+<li><p><strong>智能路由</strong>：Client 通过解析 AgentCard 元数据，根据能力匹配度、负载状况、响应时延等指标，实现任务的智能分发和负载均衡。</p>
+</li>
+<li><p><strong>任务编排</strong>：Client 作为编排引擎，将复杂业务流程分解为多个子任务，通过 A2A 协议协调多个专门 Agent，支持串行、并行、条件分支等执行模式。</p>
+</li>
+<li><p><strong>服务治理</strong>：结合注册中心和监控系统，基于 AgentCard 的标准化描述实现Agent的自动发现、健康检查、故障转移和版本管理。</p>
+</li>
+</ul>
+<h3 id="四、参考链接"><a href="#四、参考链接" class="headerlink" title="四、参考链接"></a>四、参考链接</h3><p><a target="_blank" rel="noopener" href="https://seanfalconer.medium.com/kafka-a2a-mcp-and-flink-the-new-stack-for-ai-agents-4b6cb8b85b72">Kafka, A2A, MCP, and Flink: The New Stack for AI Agents</a><br><a target="_blank" rel="noopener" href="https://medium.com/@the_manoj_desai/smart-routing-the-hidden-secret-behind-10x-more-powerful-ai-systems-bd4258d6813a">Smart Routing: The Hidden Secret Behind 10x More Powerful AI Systems</a><br><a target="_blank" rel="noopener" href="https://google-a2a.github.io/A2A/latest/topics/key-concepts/">Key Concepts in A2A</a><br><a target="_blank" rel="noopener" href="https://google-a2a.github.io/A2A/0.2.2/specification/">Agent2Agent (A2A) Protocol Specification</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/eon4MCCErRWLT7GxSoR70g">万字长文深入浅出教你优雅开发复杂AI Agent</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/A2A/">A2A</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

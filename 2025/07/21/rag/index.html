@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>RAG 技术演进：从朴素检索到智能代理增强 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="LLM 具备强大的分析能力、推理能力、生成能力，但它仍然无法记得上个月的今天发生了什么，哪怕你曾经在上个月告诉过它。
+究其原因，是因为 LLM 基于静态语料库训练，你的个人经历并不在其中。它只具备短期记忆，这种记忆依靠一次对话的上下文维持（历史信息会被携带到下一次对话），当你换个对话窗口，它就忘记了。
+当然，现在的诸多协议已经能够为 LLM 提供很多”外挂”，比如 MCP 协议、A2A 协议，它们在不断扩展 LLM 的认知边界，让 LLM 能够跳出其固有的知识范围。但是，RAG 仍然是一个重要方向，为 LLM 提供长期记忆、让它能够将神经元触达到你的个人数据。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,RAG,Agentic">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="RAG 技术演进：从朴素检索到智能代理增强"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>RAG 技术演进：从朴素检索到智能代理增强</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2025/07/21/rag/" rel="bookmark">
+        <time class="entry-date published" datetime="2025-07-20T16:56:07.682Z">
+          2025-07-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>LLM 具备强大的分析能力、推理能力、生成能力，但它仍然无法记得上个月的今天发生了什么，哪怕你曾经在上个月告诉过它。</p>
+<p>究其原因，是因为 LLM 基于静态语料库训练，你的个人经历并不在其中。它只具备短期记忆，这种记忆依靠一次对话的上下文维持（历史信息会被携带到下一次对话），当你换个对话窗口，它就忘记了。</p>
+<p>当然，现在的诸多协议已经能够为 LLM 提供很多”外挂”，比如 MCP 协议、A2A 协议，它们在不断扩展 LLM 的认知边界，让 LLM 能够跳出其固有的知识范围。但是，RAG 仍然是一个重要方向，为 LLM 提供长期记忆、让它能够将神经元触达到你的个人数据。</p>
+<span id="more"></span>
+
+<h3 id="RAG-是什么"><a href="#RAG-是什么" class="headerlink" title="RAG 是什么"></a>RAG 是什么</h3><p>RAG(Retrieval-Augmented Generation)通过检索关联信息来增强生成效果。它根据当前问题查询相关的知识，为LLM提供补充信息，从而生成更准确的回答。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/rag.png"></p>
+<p>高效、准确的检索依赖于 Embedding 技术。它将一定长度（每种 Embedding 模型对文本长度有要求）的文本转换为固定长度的向量，实现文本的语义表示。通过训练，语义相似的文本在向量空间中会彼此接近，从而支持语义搜索。<br><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/embedding.png"></p>
+<h3 id="二、RAG-范式的演进"><a href="#二、RAG-范式的演进" class="headerlink" title="二、RAG 范式的演进"></a>二、RAG 范式的演进</h3><p>RAG 的演进过程，主要是围绕着用户意图识别、关联信息质量治理两个层面展开。尽可能在有限的上下文窗口中，让 LLM 生成更准确、更符合用户意图。</p>
+<h4 id="2-1-朴素-RAG"><a href="#2-1-朴素-RAG" class="headerlink" title="2.1 朴素 RAG"></a>2.1 朴素 RAG</h4><p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/naive.png"></p>
+<p>早先的 RAG，实现非常简单，就是将用户的问题，通过 Embedding 转换为向量，然后通过向量检索，找到与用户问题最相似的文本，将文本返回给 LLM，让 LLM 生成回答。</p>
+<p>在向量数据库内，已经将现有的知识通过切割分块、向量化并存储。</p>
+<p>但这种方式存在明显问题：当用户表达意图模糊或者知识库的向量化做的不好时，基于语义相似度的检索可能返回不相关的内容。这种情况尤其可能发生在比较专业的领域。</p>
+<h4 id="2-2-进阶-RAG"><a href="#2-2-进阶-RAG" class="headerlink" title="2.2 进阶 RAG"></a>2.2 进阶 RAG</h4><p>进阶版本的 RAG，在朴素 RAG 的基础上，增加了预检索、检索、后检索三个阶段，但是在各个阶段，又所有增强。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/advance.png"></p>
+<h5 id="2-2-1-检索质量增强"><a href="#2-2-1-检索质量增强" class="headerlink" title="2.2.1 检索质量增强"></a>2.2.1 检索质量增强</h5><p>在 Indexing 阶段，内容的质量和分块策略都是检索质量的关键因素。</p>
+<p>就内容质量而言，我们可以对数据进行清洗和标准化，去除和内容主题不相关的部分，统一术语和表达方式。</p>
+<p>对于分块策略，由于 Embedding 模型对输入长度有限制，必须将长文档切分为多个块进行向量化（即使长度符合要求，也需要进行适当分块，我们无法将一个问题的所有线索一次性投递给模型）。不当的分块策略可能导致重要概念被切断，降低检索准确性。</p>
+<p>常见的分块策略包括：</p>
+<p><strong>递归字符分块</strong>：本质上是一种贪心算法。基于文档结构的层次化分割</p>
+<ul>
+<li>按优先级使用分隔符（段落、换行、空格等）进行分割</li>
+<li>当块大小超限时，降级使用下一级分隔符</li>
+<li>适用于结构清晰的文档（如技术文档、学术论文）</li>
+</ul>
+<p><strong>滑动窗口分块</strong>：基于重叠保护的分割</p>
+<ul>
+<li>设定固定块大小和滑动步长，确保相邻块有内容重叠</li>
+<li>在检索准确性和存储效率间取得平衡</li>
+<li>适用于内容连续性要求高的场景（如小说、对话记录）</li>
+</ul>
+<p><strong>语义分块</strong>：基于语义相似度阈值的动态分割</p>
+<ul>
+<li>计算句子间的语义相似度，当相似度低于阈值时开始新块</li>
+<li>计算开销较大，但能保持语义完整性</li>
+<li>适用于语义边界模糊的内容（如自由文本、混合主题文档）</li>
+</ul>
+<h5 id="2-2-2-查询优化"><a href="#2-2-2-查询优化" class="headerlink" title="2.2.2 查询优化"></a>2.2.2 查询优化</h5><p>在 Pre Retrieval 阶段，主要考虑在检索前对查询进行优化，以充分理解用户意图。<br>优化的策略通常包括：</p>
+<ul>
+<li>元数据扩充：可以通过增加元数据，来提升检索的准确性。比如，可以增加文本的来源、作者、发布时间、类型等元数据，从而提升检索的准确性。</li>
+<li>查询重写：让查询更加具体、明确，或者把复杂查询拆分成若干简单查询。意图的识别更加具有明确性和准确性。</li>
+<li>查询扩展：在原查询基础上添加相关词汇或同义词，扩大检索范围。原查询 “Python教程”，扩展后 “Python教程” OR “Python入门” OR “Python编程指南” OR “Python学习资料” OR “Python基础”。</li>
+<li>查询路由：根据查询内容的语义、类型、复杂度等特征，自动选择最优的检索策略、数据源或处理模型。</li>
+<li>自查询：使用 LLM 识别查询中的关键实体和关系（例如，位置、日期、人员），并将此信息用作元数据过滤器，以缩小向量数据库中的搜索空间。</li>
+</ul>
+<h5 id="2-2-3-检索策略优化"><a href="#2-2-3-检索策略优化" class="headerlink" title="2.2.3 检索策略优化"></a>2.2.3 检索策略优化</h5><p>Retrieval 阶段，专注于通过混合搜索、高级检索算法、嵌入模型优化等技术来提升向量搜索的准确性和效率，确保能够精准定位最相关的文档内容。<br><strong>混合搜索</strong>：结合向量搜索和关键词搜索，关键词搜索确保检索文档中存在关键词汇，向量搜索捕获语义相似性，通过权重参数(alpha)平衡每种方法的贡献。解决单一检索方式的局限性，在保证语义理解的同时确保重要术语不被遗漏。<br><strong>高级检索算法</strong>：采用迭代检索、递归检索、自适应检索等技术，突破简单Top-K检索的限制。迭代检索通过多轮检索逐步深入，递归检索将前一步输出作为下一步输入，自适应检索根据查询复杂度动态调整策略，适用于复杂推理和多步查询场景。<br><strong>嵌入模型优化</strong>：通过优化嵌入模型，提升向量搜索的准确性和效率。<br><strong>元数据过滤</strong>：利用数据库的过滤和搜索功能，结合文档属性（时间、作者、类型、标签等）进行预过滤和精确匹配。在语义检索基础上增加结构化约束，提高检索精度并减少计算开销。</p>
+<h5 id="2-2-4-精炼上下文"><a href="#2-2-4-精炼上下文" class="headerlink" title="2.2.4 精炼上下文"></a>2.2.4 精炼上下文</h5><p>Post Retrieval 阶段，专注于通过重排序、上下文压缩、Prompt 优化等技术来精炼检索到的内容，确保只有最相关的信息。<br><strong>重排序</strong>：通过算法甚至模型，对结果的相关性进行进一步计算，进一步排除相关性不高的结果（噪音）。<br><strong>上下文压缩</strong>：去除冗余信息，保留关键内容，控制总长度。<br><strong>Prompt 优化</strong>：将最相关的信息，编辑成 LLM 容易理解的格式，添加必要的指令和结构。</p>
+<h4 id="2-3-模块化-RAG"><a href="#2-3-模块化-RAG" class="headerlink" title="2.3 模块化 RAG"></a>2.3 模块化 RAG</h4><p>RAG 系统可以被解构为多个独立且可组合的功能模块，每个模块专注于检索增强生成流程中的特定任务。这种模块化架构具有以下优势：</p>
+<ol>
+<li><strong>灵活性</strong>：可以根据具体应用场景和需求，动态组合或替换不同的功能模块</li>
+<li><strong>可维护性</strong>：各模块之间职责明确，便于独立优化和升级</li>
+<li><strong>可扩展性</strong>：新的功能模块可以轻松集成到现有系统中</li>
+<li><strong>可复用性</strong>：通用模块可以在不同的 RAG 应用中重复使用</li>
+</ol>
+<p>通过合理的模块化设计，我们可以构建出更加健壮和高效的 RAG 系统，更好地服务于不同的业务场景。</p>
+<p><img src="https://arxiv.org/html/2312.10997v5/extracted/2312.10997v5/images/RAG_FrameCompre_eng.png"></p>
+<h4 id="Graph-RAG"><a href="#Graph-RAG" class="headerlink" title="Graph RAG"></a>Graph RAG</h4><p>Graph RAG 通过引入知识图谱增强检索能力，相比传统的向量检索方法具有显著优势：</p>
+<ol>
+<li><strong>结构化知识表示</strong>：将领域知识编码为实体和关系的图结构，保留了知识之间的逻辑关联</li>
+<li><strong>多跳推理能力</strong>：可以通过图的遍历发现间接相关的知识，支持更复杂的推理任务</li>
+<li><strong>语义关联扩展</strong>：基于图的连接性，可以智能扩展查询范围，发掘潜在相关的知识点</li>
+<li><strong>上下文感知检索</strong>：利用图结构中的关系信息，提供更符合领域上下文的检索结果</li>
+</ol>
+<p>这种基于知识图谱的检索方式特别适用于：</p>
+<ul>
+<li>专业领域问答（如医疗、法律、金融等）</li>
+<li>需要深度推理的复杂查询</li>
+<li>知识之间存在丰富关联关系的场景</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/graph.png"></p>
+<h3 id="Agentic-RAG"><a href="#Agentic-RAG" class="headerlink" title="Agentic RAG"></a>Agentic RAG</h3><p>Agentic RAG 通过引入智能代理（Agent）来模拟人类在信息检索过程中的认知决策模式。这种方法将 RAG 从静态的检索-生成流程提升为具备动态决策能力的智能系统。</p>
+<h4 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h4><ol>
+<li><p><strong>自适应检索策略</strong></p>
+<ul>
+<li>根据查询内容和上下文动态调整检索方法</li>
+<li>智能选择最适合的信息源和检索范围</li>
+<li>自动优化检索参数和阈值</li>
+</ul>
+</li>
+<li><p><strong>多轮交互决策</strong></p>
+<ul>
+<li>支持渐进式信息收集和精炼</li>
+<li>在检索过程中进行实时反馈和调整</li>
+<li>通过多轮对话深化对用户需求的理解</li>
+</ul>
+</li>
+<li><p><strong>智能结果合成</strong></p>
+<ul>
+<li>自动评估和筛选检索结果的相关性</li>
+<li>智能组合和重组来自不同来源的信息</li>
+<li>生成更符合用户意图的综合答案</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/agentic.gif"></p>
+<p>这种基于 Agent 的增强方式使 RAG 系统能够更好地处理复杂查询场景，提供更精准和个性化的响应。再复杂一些，它可以是一个 MCP+RAG 甚至 A2A+RAG 型的应用。</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/rag/agentic-rag.gif"></p>
+<h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3><p>通过 RAG，我们可以将 LLM 的认知边界扩展到自己的知识库。意图识别和精准检索策略的不断升级，让它能够回答更有针对性和个性化。</p>
+<h3 id="四、参考链接"><a href="#四、参考链接" class="headerlink" title="四、参考链接"></a>四、参考链接</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2501.09136">AGENTIC RETRIEVAL-AUGMENTED GENERATION: A SURVEY ON<br>AGENTIC RAG</a><br><a target="_blank" rel="noopener" href="https://arxiv.org/html/2312.10997v5">Retrieval-Augmented Generation for Large Language Models: A Survey</a><br><a target="_blank" rel="noopener" href="https://medium.com/@vipra_singh/ai-agents-agentic-rag-part-10-f1f7d6d5c8a9">AI Agents: Agentic RAG (Part-10)</a><br><a target="_blank" rel="noopener" href="https://medium.com/@santosomar/integrating-agentic-rag-with-mcp-servers-technical-implementation-guide-1aba8fd4e442">Integrating Agentic RAG with MCP Servers: Technical Implementation Guide</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/jTx_ktWeu5Ck8RDZ3b6iRw">一文带你彻底理解AIGC、Agent、MCP的概念和关系</a><br><a target="_blank" rel="noopener" href="https://medium.com/@asimadnan/beyond-vanilla-rag-mastering-advanced-techniques-for-pre-retrieval-retrieval-and-post-retrieval-5ac2a12beff0">Beyond Vanilla RAG: Mastering Advanced Techniques for Pre-Retrieval, Retrieval, and Post-Retrieval Optimization</a><br><a target="_blank" rel="noopener" href="https://www.mdpi.com/2079-9292/14/11/2102">Document GraphRAG: Knowledge Graph Enhanced Retrieval Augmented Generation for Document Question Answering Within the Manufacturing Domain</a><br><a target="_blank" rel="noopener" href="https://medium.com/@hari4om/word-embedding-d816f643140">Word Embedding: Basics</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/RAG/">RAG</a><a href="/tags/Agentic/">Agentic</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2025 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>

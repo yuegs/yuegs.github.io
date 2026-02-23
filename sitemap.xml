@@ -56,6 +56,15 @@
   </url>
   
   <url>
+    <loc>https://yuegs.com/2025/05/22/decoder/</loc>
+    
+    <lastmod>2025-06-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://yuegs.com/draft/mcp/mcp_host_swimlane_diagram.html</loc>
     
     <lastmod>2025-06-10</lastmod>
@@ -101,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2025/05/22/decoder/</loc>
+    <loc>https://yuegs.com/draft/ai-and-cognitive-offloading.html</loc>
     
     <lastmod>2025-06-03</lastmod>
     
@@ -110,9 +119,9 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/draft/ai-and-cognitive-offloading.html</loc>
+    <loc>https://yuegs.com/draft/front-back.html</loc>
     
-    <lastmod>2025-06-03</lastmod>
+    <lastmod>2025-05-27</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -149,15 +158,6 @@
     <loc>https://yuegs.com/2025/03/28/fnn/</loc>
     
     <lastmod>2025-03-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/draft/front-back.html</loc>
-    
-    <lastmod>2025-03-29</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -650,7 +650,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2021/07/07/db-mysql-lock/</loc>
+    <loc>https://yuegs.com/2021/06/27/db-mysql-transaction/</loc>
     
     <lastmod>2022-01-26</lastmod>
     
@@ -659,7 +659,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2021/06/27/db-mysql-transaction/</loc>
+    <loc>https://yuegs.com/2021/07/07/db-mysql-lock/</loc>
     
     <lastmod>2022-01-26</lastmod>
     
@@ -695,7 +695,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2021/11/30/smart-contract-KISHU/</loc>
+    <loc>https://yuegs.com/2021/12/13/smart-contract-about-wallet/</loc>
     
     <lastmod>2022-01-26</lastmod>
     
@@ -704,7 +704,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2021/12/13/smart-contract-about-wallet/</loc>
+    <loc>https://yuegs.com/2021/11/30/smart-contract-KISHU/</loc>
     
     <lastmod>2022-01-26</lastmod>
     
@@ -812,7 +812,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2021/06/18/db-isolation/</loc>
+    <loc>https://yuegs.com/2021/07/04/db-mysql-index/</loc>
     
     <lastmod>2022-01-26</lastmod>
     
@@ -821,7 +821,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/2021/07/04/db-mysql-index/</loc>
+    <loc>https://yuegs.com/2021/06/18/db-isolation/</loc>
     
     <lastmod>2022-01-26</lastmod>
     
@@ -846,14 +846,14 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
+    <loc>https://yuegs.com/tags/AI/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/AI/</loc>
+    <loc>https://yuegs.com/tags/A2A/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -867,14 +867,21 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/Java/</loc>
+    <loc>https://yuegs.com/tags/Workflow/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <loc>https://yuegs.com/tags/Agent/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -902,14 +909,98 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/Workflow/</loc>
+    <loc>https://yuegs.com/tags/Java/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/Agent/</loc>
+    <loc>https://yuegs.com/tags/attention/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%9B%86%E4%B8%AD/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/LLM/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/Python/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/Transformer/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/Decoder/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/PDDL/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/DDD/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E9%A2%86%E5%9F%9F%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/Prompt/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -951,28 +1042,14 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/PDDL/</loc>
+    <loc>https://yuegs.com/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/DDD/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E9%A2%86%E5%9F%9F%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/Prompt/</loc>
+    <loc>https://yuegs.com/tags/FNN/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1001,13 +1078,6 @@
   
   <url>
     <loc>https://yuegs.com/tags/IPFS/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/Gateway/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1049,21 +1119,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/Python/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>https://yuegs.com/tags/Gateway/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1084,21 +1140,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/LLM/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://yuegs.com/tags/OpenAI/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/LCEL/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1113,6 +1155,48 @@
   
   <url>
     <loc>https://yuegs.com/tags/RunnableBranch/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/Lazy-minting/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/NFT/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/EIP712/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1147,27 +1231,6 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://yuegs.com/tags/DAO/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -1196,35 +1259,49 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/ResNet/</loc>
+    <loc>https://yuegs.com/tags/MCP/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/%E6%AE%8B%E5%B7%AE%E8%BF%9E%E6%8E%A5/</loc>
+    <loc>https://yuegs.com/tags/%E6%9E%B6%E6%9E%84/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/Lazy-minting/</loc>
+    <loc>https://yuegs.com/tags/%E8%BF%9B%E7%A8%8B/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/NFT/</loc>
+    <loc>https://yuegs.com/tags/%E7%BA%BF%E7%A8%8B/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/EIP712/</loc>
+    <loc>https://yuegs.com/tags/%E5%8D%8F%E7%A8%8B/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/RAG/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/Agentic/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1252,6 +1329,27 @@
   </url>
   
   <url>
+    <loc>https://yuegs.com/tags/ResNet/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E6%AE%8B%E5%B7%AE%E8%BF%9E%E6%8E%A5/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/LCEL/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://yuegs.com/tags/Order/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -1267,20 +1365,6 @@
   
   <url>
     <loc>https://yuegs.com/tags/OpenSea/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/ERC721/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/ERC721Metadata/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1309,6 +1393,20 @@
   
   <url>
     <loc>https://yuegs.com/tags/%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/ERC721/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/ERC721Metadata/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1406,7 +1504,35 @@
   </url>
   
   <url>
+    <loc>https://yuegs.com/tags/PE/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://yuegs.com/tags/Uniswap/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/%E5%85%91%E6%8D%A2/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/tags/swap/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1427,14 +1553,14 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/%E5%85%91%E6%8D%A2/</loc>
+    <loc>https://yuegs.com/tags/Liquidity/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/swap/</loc>
+    <loc>https://yuegs.com/tags/mint/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1476,20 +1602,6 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/Liquidity/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/mint/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://yuegs.com/tags/Wyvern/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -1525,27 +1637,6 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/tags/%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E7%BA%BF%E7%A8%8B/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E5%8D%8F%E7%A8%8B/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://yuegs.com/tags/%E5%AE%89%E5%85%A8/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -1554,97 +1645,6 @@
   
   <url>
     <loc>https://yuegs.com/tags/Android/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/PE/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/attention/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%9B%86%E4%B8%AD/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/Transformer/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/FNN/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/Decoder/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/MCP/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/A2A/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/RAG/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/tags/Agentic/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1660,14 +1660,14 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
+    <loc>https://yuegs.com/categories/AI/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuegs.com/categories/AI/</loc>
+    <loc>https://yuegs.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1681,7 +1681,7 @@
   </url>
   
   <url>
-    <loc>https://yuegs.com/categories/Ethereum/</loc>
+    <loc>https://yuegs.com/categories/Python/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1689,6 +1689,13 @@
   
   <url>
     <loc>https://yuegs.com/categories/%E6%9E%B6%E6%9E%84/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuegs.com/categories/Ethereum/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1703,13 +1710,6 @@
   
   <url>
     <loc>https://yuegs.com/categories/IPFS/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuegs.com/categories/Python/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

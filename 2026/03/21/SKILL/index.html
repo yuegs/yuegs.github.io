@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>让 SKILL 为 Agent 导航 | 风雪围城</title>
+
+  
+  <meta name="author" content="YueGS">
+  
+
+  
+  <meta name="description" content="初始面对问题时，我们难以把握所有细节和边界。问题域与求解空间构成一座迷宫。当委托 Agent 去解决时，迷宫越大，Agent 面临的方向和不确定因素越多，路径越发散，越容易迷失。对于系统性任务，若无章法和收敛判断，Agent 在前进不远的地方，可能就会陷入困局。
+这正是 SKILL 存在的意义：为迷宫划定边界，并为每一步提供导航，并让 Agent 知道自己何时需要停下来。。">
+  
+
+  
+  
+  <meta name="keywords" content="AI,Agent,SKILL">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="让 SKILL 为 Agent 导航"/>
+
+  <meta property="og:site_name" content="风雪围城"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="风雪围城" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">风雪围城</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>让 SKILL 为 Agent 导航</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2026/03/21/SKILL/" rel="bookmark">
+        <time class="entry-date published" datetime="2026-03-21T12:06:06.000Z">
+          2026-03-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>初始面对问题时，我们难以把握所有细节和边界。问题域与求解空间构成一座迷宫。<br>当委托 Agent 去解决时，迷宫越大，Agent 面临的方向和不确定因素越多，路径越发散，越容易迷失。对于系统性任务，若无章法和收敛判断，Agent 在前进不远的地方，可能就会陷入困局。</p>
+<p>这正是 SKILL 存在的意义：<strong>为迷宫划定边界，并为每一步提供导航，并让 Agent 知道自己何时需要停下来。</strong>。</p>
+<span id="more"></span>
+<p>入口，是我们对问题的初步理解；出口，是我们所需的解决方案；而 SKILL 的核心价值，在于中间的每一步——通过结构化的阶段设计和规则约束，让 Agent 在每一个决策点上都有章可循。</p>
+<p>具体来说，SKILL 提供了两种不同性质的能力：</p>
+<ul>
+<li>护栏：定义边界，防止偏离，是防御性的约束——包括对外部行为的限制，也包括对自身不确定状态的感知与暴露。</li>
+<li>路径知识：提供领域最佳实践或者说技能书，加速收敛，是进攻性的引导</li>
+</ul>
+<p>二者的比重，取决于任务本身的性质。对于高确定性任务（如基于已有项目的开发），护栏主导，路径精确；对于高自由度任务（如探索性技术调研），路径知识提供参考框架，护栏只划定不可逾越的边界，执行空间留给 Agent 自主判断。</p>
+<p>以往，这两种方式可以通过精准的程序设计来实现，现在，我们可以通过 SKILL 作为载体以自然语言的方式来实现。</p>
+<h2 id="SKILL-是什么"><a href="#SKILL-是什么" class="headerlink" title="SKILL 是什么"></a>SKILL 是什么</h2><p>在落地层面，SKILL 是一个文件夹，其中包含一个 SKILL.md 文件以及一些可选的脚本、参考文件、资源文件等。</p>
+<p>SKILL.md 定义了<strong>可重复执行的、标准化的最佳实践或工作流 SOP</strong> —— 告诉 Agent 面对特定问题时，应该遵循什么原则、经过哪些阶段、产出什么结果。文件夹结构的意义在于：SKILL.md 可以按需引用同目录下的脚本或参考文件，将”自然语言指令”与”可执行资源”组合在一起，共同构成一个完整的、可复用的能力单元。</p>
+<p>例如，一个 <code>reviewing-code</code> SKILL 的文件夹结构可能是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">reviewing-code/</span><br><span class="line">├── SKILL.md          # 主指令文件</span><br><span class="line">├── checklist.md      # 评审检查项清单</span><br><span class="line">└── severity-guide.md # 问题严重程度判定标准</span><br></pre></td></tr></table></figure>
+
+<p>其中 SKILL.md 定义：</p>
+<ul>
+<li><strong>原则</strong>：安全问题优先于性能问题，不对风格做主观评价</li>
+<li><strong>阶段</strong>：理解变更意图 → 按 <code>checklist.md</code> 逐项检查 → 依据 <code>severity-guide.md</code> 定级 → 输出报告</li>
+<li><strong>产出</strong>：按严重程度分级的问题列表，每条附带具体代码位置和修改建议</li>
+</ul>
+<blockquote>
+<p>以上为结构示意。实际 SKILL 中，每个维度的内容会复杂得多</p>
+<ul>
+<li>原则需要覆盖边界情况与歧义裁决，阶段往往包含条件分支与状态传递，</li>
+<li>产出也需要定义完成标准与异常处理方式。</li>
+</ul>
+</blockquote>
+<p>站在 Agent 的角度，<strong>原则</strong>约束行为边界，<strong>阶段</strong>提供收敛路径，<strong>产出</strong>定义完成标准——三者共同构成一个 SKILL 的完整行为空间。</p>
+<h2 id="SKILL-如何工作"><a href="#SKILL-如何工作" class="headerlink" title="SKILL 如何工作"></a>SKILL 如何工作</h2><p>一个文件夹，如何能发挥出这么大威力？这里，就涉及了 SKILL 客户端的实现机制。站在客户端的角度，SKILL 本质上就是：</p>
+<blockquote>
+<p>Context Window 给它一个位置，Prompt 解析给它执行力</p>
+</blockquote>
+<h3 id="渐进式加载"><a href="#渐进式加载" class="headerlink" title="渐进式加载"></a>渐进式加载</h3><p>SKILL.md 用 Markdown 编写指令，并在文件开头使用 YAML 格式的元数据。在元数据的描述(description)部分，定义了 SKILL 的触发条件。比如：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"><span class="section">name: consulting-product-requirements: 帮助 PM 做产品决策并将决策转化为开发可执行的 PRD。适用于从零探索产品方向、梳理和验证用户痛点、撰写或打磨 PRD、需求评审准备、识别边界与风险。不适用于仅需按已有 PRD 做开发实现、无需需求分析或文档产出的场景。</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"><span class="section"># 产品需求顾问</span></span><br><span class="line"></span><br><span class="line">职责分三个阶段，每个阶段有明确的进入条件和退出条件：</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="section">## 硬性约束（必须遵守）</span></span><br><span class="line">...</span><br><span class="line"><span class="section">## 核心原则</span></span><br><span class="line">...</span><br><span class="line"><span class="section">## 执行流程</span></span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>每次通过 API 和模型进行交互时，description 部分，都会被加载到系统 prompt 中：description 文本量小，常驻 Context 的Token 成本可控。</p>
+<p>当用户的问题与某个 SKILL 的 description 匹配时，该 SKILL 被触发 —— 正文部分才会被加载进 Context，作为 Prompt 驱动 Agent 按照既定流程执行任务。</p>
+<p>作为决定使用这个 SKILL 的依据。当用户的问题、意图与 SKILL 的描述匹配时，SKILL 会被触发：将正文部分的内容，作为 Prompt 发送给 Agent 执行。</p>
+<p>这就是渐进式加载的核心思路：<strong>description 负责识别，正文负责执行</strong>，按需注入，而非全量常驻。</p>
+<p>这一机制在实际工程层面是如何落地的？以 Claude Code 为例，根据一些逆向分析，一次 API 调用的请求体大致如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;model&quot;: &quot;claude-sonnet-4-...&quot;,</span><br><span class="line">  &quot;system&quot;: &quot;你是一个助手...&quot;,    </span><br><span class="line">  &quot;messages&quot;: [...],              </span><br><span class="line">  &quot;tools&quot;: [                    </span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Bash&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;执行 bash 命令&quot;,</span><br><span class="line">      &quot;input_schema&quot;: &#123;...&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Skill&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;...&lt;available_skills&gt;pdf: Extract PDF...\nxlsx: Spreadsheet...&lt;/available_skills&gt;&quot;,</span><br><span class="line">      &quot;input_schema&quot;: &#123;</span><br><span class="line">        &quot;command&quot;: &quot;string&quot;  ← skill name</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，<code>&lt;available_skills&gt;</code> 标签中包含了所有可用的 SKILL，每个 SKILL 的 name 和 description 都会被注入其中。</p>
+<p>最终，在和模型实际交互的过程中，<code>tools</code>、<code>system</code> 等字段应当会被合并为<br>一个完整的 System Prompt——这是当前主流 AI 编程工具的通用处理方式。</p>
+<h3 id="SKILL-执行引擎"><a href="#SKILL-执行引擎" class="headerlink" title="SKILL 执行引擎"></a>SKILL 执行引擎</h3><p>Claude Code 或 Cursor 内部的具体实现无法完全得知，但基于前文的逆向分析，可以对工程化落地做一个合理的推断。</p>
+<p>SKILL 的执行依赖 Agent 多项核心机制的协同：</p>
+<ul>
+<li><p><strong>Context Management</strong> 是基础——将 SKILL body 按需注入 Context Window，<br>使 SOP 定义的原则、阶段与产出标准对模型可见。没有这一步，SKILL 对当次<br>执行完全不存在。</p>
+</li>
+<li><p>在此之上，Agent 进入执行循环：以 SKILL 定义为约束，结合用户意图自主<br>规划执行路径，通过 <strong>Function Call</strong> 调用工具完成具体操作；对于复杂的<br>子任务，则通过 <strong>Subagent</strong> 委派给独立实例执行——每个 Subagent 拥有独立<br>的 Context Window，执行完成后将结果汇报给主 Agent，主 Agent 据此推进，<br>直至满足 SKILL 定义的产出标准。</p>
+</li>
+<li><p><strong>Hooks</strong> 是执行引擎的硬约束层。SKILL 中定义的原则依赖模型自觉遵守，<br>属于软约束；而 Hooks 在工具调用前后插入拦截，可以在执行层面强制兑现<br>护栏——例如 SKILL 定义了”只读不写”，Hooks 可以在 Bash 执行前拦截所有<br>写操作，将软约束升级为不可绕过的硬约束。</p>
+</li>
+<li><p>对于多阶段的 SKILL，<strong>Todo List</strong> 是规划状态的持久化机制。Agent 将全局<br>计划持续写入 Context 末尾，把执行目标推入模型的近期注意力范围；计划 Markdown 文件形式持久化，在 Context 压缩时也能保留——这解决的是长任务<br>中”执行到一半忘了整体目标”的问题。</p>
+</li>
+</ul>
+<p>各机制的分工如下：</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Context Management</td>
+<td>SKILL body 按需注入，使指令可见</td>
+</tr>
+<tr>
+<td>Agent Loop</td>
+<td>以 SKILL 为约束，自主规划推进</td>
+</tr>
+<tr>
+<td>Function Call</td>
+<td>单步工具调用，完成具体操作</td>
+</tr>
+<tr>
+<td>Subagent</td>
+<td>复杂子任务隔离执行，独立 Context</td>
+</tr>
+<tr>
+<td>Hooks</td>
+<td>工具调用层的硬约束，强制执行护栏</td>
+</tr>
+<tr>
+<td>Todo List</td>
+<td>规划状态持久化，防止长任务目标漂移</td>
+</tr>
+</tbody></table>
+<h2 id="SKILL-实践"><a href="#SKILL-实践" class="headerlink" title="SKILL 实践"></a>SKILL 实践</h2><h3 id="护栏"><a href="#护栏" class="headerlink" title="护栏"></a>护栏</h3><p>护栏，实际上是我们为 Agent 设置的 “防御性自然语言编程” 手段。</p>
+<p>具体来说，我认为护栏由两个层次构成：</p>
+<ul>
+<li><strong>原则</strong>：方向性的取舍规则，有一定弹性，Agent 需结合情境判断如何落地——包括”该怎么做”的行为导向，也包括”该不该继续”的自我审视。当 Agent 察觉自身处于不确定状态时，原则层告诉它：停下来，暴露问题，而不是盲目推进</li>
+<li><strong>硬性约束</strong>：不可逾越的红线，无需判断，直接执行或拒绝</li>
+</ul>
+<p>我们以产品需求顾问的 SKILL 为例：</p>
+<p><img src="https://raw.githubusercontent.com/yuegs/yuegs.github.io/refs/heads/master/images/ai/skills/rules.png"></p>
+<p>在实际项目推进过程中，有些上下文是动态积累的：关键决策、已确认的边界、需要特别注意的事项。这类信息可以让 Agent 维护一个 <code>project-context.md</code>，在任务过程中持续更新，在需要 Check 或 Review 时快速回顾。<strong>这相当于把静态护栏延伸为动态护栏——规则是预设的，但执行上下文是活的</strong>。</p>
+<h3 id="知识路径"><a href="#知识路径" class="headerlink" title="知识路径"></a>知识路径</h3><h4 id="使用工作流执行复杂任务"><a href="#使用工作流执行复杂任务" class="headerlink" title="使用工作流执行复杂任务"></a>使用工作流执行复杂任务</h4><p>对于复杂的任务，我们可以通过自然语言描述实现“可编程式”的工作流。整个流程中，可以包括条件分支、循环、异常处理等。</p>
+<p>同样，以产品需求顾问的 SKILL 为例：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 阶段一：问题定义</span></span><br><span class="line"><span class="section">### 执行流程</span></span><br><span class="line"><span class="strong">**第一步：收集核心痛点**</span></span><br><span class="line">...</span><br><span class="line"><span class="strong">**第二步：从痛点推导业务目标**</span></span><br><span class="line">...</span><br><span class="line"><span class="strong">**第三步：验证痛点与目标之间的逻辑链**</span></span><br><span class="line">...</span><br><span class="line">PM 校对确认后，更新目标全景，进入阶段二。</span><br><span class="line"></span><br><span class="line"><span class="section">## 阶段二：策略共建</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="人机协作节点"><a href="#人机协作节点" class="headerlink" title="人机协作节点"></a>人机协作节点</h4><p>特别是在流程相对复杂时，中间关键环节的误差会被传递、放大，最终导致结果偏离预期。<br>这时，人可以介入，最中间环节做修正，保证结果的准确性。</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">### 策略质疑触发条件</span></span><br><span class="line"></span><br><span class="line">以下情况，须主动踩刹车，说「我认为这个方向有问题」：</span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> 痛点描述的是表象而非根因（如「用户流失」是表象，根因可能是产品价值不足）</span><br><span class="line"><span class="bullet">-</span> 方案与业务目标之间因果链薄弱（如「做积分」→「提升 DAU」，中间逻辑未经验证）</span><br><span class="line"><span class="bullet">-</span> 方案范围远超目标所需（小目标对应大方案，通常意味着需求定义有问题）</span><br><span class="line"><span class="bullet">-</span> 存在更直接、成本更低的替代路径</span><br><span class="line"><span class="bullet">-</span> 多目标之间存在明显冲突，且 PM 尚未意识到（如「提升转化率」与「降低风控损失」方向相悖，需先确认优先级再推进）</span><br><span class="line"></span><br><span class="line">踩刹车时须：说明具体问题所在 + 提出替代思路 + 请 PM 确认是否继续原方向。</span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> PM 调整方向 → 重新执行逻辑链评估，按①②③④判断处理</span><br><span class="line"><span class="bullet">-</span> PM 坚持原方向 → 记录风险，继续推进</span><br></pre></td></tr></table></figure>
+
+<h4 id="模板输出"><a href="#模板输出" class="headerlink" title="模板输出"></a>模板输出</h4><p>为了确保 Agent 输出的内容符合预期，可以设计一个特别的模板，并在 SKILL 中引用这个模板，让 Agent 按照模板输出。</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># [产品名称] 产品需求文档</span></span><br><span class="line"><span class="strong">**版本**</span>：V1.0</span><br><span class="line"><span class="strong">**日期**</span>：[日期]</span><br><span class="line"><span class="strong">**作者**</span>：[作者]</span><br><span class="line"><span class="strong">**状态**</span>：草稿 / 评审中 / 已确认</span><br><span class="line"></span><br><span class="line"><span class="section">## 1. 背景</span></span><br><span class="line">...</span><br><span class="line"><span class="section">## 2. 目标全景</span></span><br><span class="line">...</span><br><span class="line"><span class="section">## 3. 核心痛点</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<h4 id="SKILL-的生长方式"><a href="#SKILL-的生长方式" class="headerlink" title="SKILL 的生长方式"></a>SKILL 的生长方式</h4><p>初始的 SKILL，可以在一次和 Agent 的真实交互中提炼——完成任务后，让 Agent 总结这次交互中反复出现的上下文、规则和模式，直接生成 SKILL 的初稿。</p>
+<p>SKILL 可以从零开始设计，也可以从一次真实交互中提炼初稿 —— 无论哪种方式，在实际使用中持续迭代，往往能让它变得更准确、更可靠。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://mikhail.io/2025/10/claude-code-skills/">Inside Claude Code Skills: Structure, prompts, invocation</a><br><a target="_blank" rel="noopener" href="https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf">The Complete Guide to Building Skills for Claude</a><br><a target="_blank" rel="noopener" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices">Skill authoring best practices</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/AI/">AI</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/AI/">AI</a><a href="/tags/Agent/">Agent</a><a href="/tags/SKILL/">SKILL</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    
+    &copy; 2026 YueGS
+    
+  </p>
+</footer>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116967169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116967169-1');
+</script>
+
+    
+  </div>
+</div>
+</body>
+</html>
